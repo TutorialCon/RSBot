@@ -54,6 +54,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 		whitelist.add(".powerbot.org");
 		whitelist.add(".runescape.com");
 		whitelist.add(".ipcounter.de");
+		whitelist.add(".pastebin.com");
+		whitelist.add(".pastie.org");
 
 		whitelist.add("shadowscripting.org"); // iDungeon
 		whitelist.add("shadowscripting.wordpress.com"); // iDungeon
