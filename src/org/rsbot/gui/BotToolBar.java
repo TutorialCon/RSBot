@@ -31,8 +31,8 @@ public class BotToolBar extends JToolBar {
 	public static final Image IMAGE_CLOSE_OVER;
 
 	private static final int TABINDEX = 1;
-	private static final int BUTTONCOUNT = 6;
-	private static final int OPTIONBUTTONS = 4;
+	private static final int BUTTONCOUNT = 7;
+	private static final int OPTIONBUTTONS = 6;
 
 	static {
 		ICON_HOME = new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_HOME));
@@ -45,6 +45,7 @@ public class BotToolBar extends JToolBar {
 	private final JButton userInputButton;
 	private final JButton runScriptButton;
 	private final JButton stopScriptButton;
+	private final JButton setBreakButton;
 
 	private final ActionListener listener;
 	private int idx;
@@ -110,6 +111,17 @@ public class BotToolBar extends JToolBar {
 		runScriptButton.setToolTipText(runScriptButton.getText());
 		runScriptButton.setText("");
 
+		setBreakButton = new JButton(Messages.SETBREAK, new ImageIcon(
+                                Configuration.getImage(Configuration.Paths.Resources.ICON_BOT)));
+                setBreakButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent arg0) {
+                                menu.doClick(Messages.SETBREAK);
+                        }
+                });
+                setBreakButton.setFocusable(false);
+                setBreakButton.setToolTipText(userInputButton.getText());
+                setBreakButton.setText("");
+
 		final HomeButton home = new HomeButton(ICON_HOME);
 
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -121,6 +133,7 @@ public class BotToolBar extends JToolBar {
 		add(runScriptButton);
 		add(stopScriptButton);
 		add(userInputButton);
+		add(setBreakButton);
 		updateSelection(false);
 	}
 
@@ -175,7 +188,7 @@ public class BotToolBar extends JToolBar {
 	}
 
 	public void setHome(final boolean home) {
-		for (final JButton button : new JButton[]{screenshotButton, stopScriptButton, userInputButton, runScriptButton}) {
+		for (final JButton button : new JButton[]{screenshotButton, stopScriptButton, userInputButton, runScriptButton, setBreakButton}) {
 			button.setEnabled(!home);
 			button.setVisible(!home);
 		}
