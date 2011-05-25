@@ -178,10 +178,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					int breakMin = bh.getBreakMin();
 					int breakMax = bh.getBreakMax();
 					//--------------------------
-					String breakTime = (String) JOptionPane.showInputDialog(this, "Time until Break:",
+					String playTime = (String) JOptionPane.showInputDialog(this, "Time until Break:",
 							"BreakHandler", JOptionPane.QUESTION_MESSAGE, null, null, playMin + "," + playMax);
-					if(breakTime != null){
-						st = new StringTokenizer(breakTime, " /,|");
+					if(playTime != null){
+						st = new StringTokenizer(playTime, " /,|");
 						if (st.hasMoreElements()){
 							try{playMin = Integer.parseInt((String)st.nextElement());}
 							catch(NumberFormatException nfe){}
@@ -192,10 +192,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 						}
 						bh.setPlayTime(playMin, playMax);
 						//--------------------------
-						String playTime = (String) JOptionPane.showInputDialog(this, "Duration of Break:",
+						String breakTime = (String) JOptionPane.showInputDialog(this, "Duration of Break:",
 								"BreakHandler", JOptionPane.QUESTION_MESSAGE, null, null, breakMin + "," + breakMax);
-						if(playTime != null){
-							st = new StringTokenizer(playTime, " /,|");
+						if(breakTime != null){
+							st = new StringTokenizer(breakTime, " /,|");
 							if (st.hasMoreElements()){
 								try{breakMin = Integer.parseInt((String)st.nextElement());}
 								catch(NumberFormatException nfe){}
