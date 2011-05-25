@@ -18,6 +18,7 @@ public interface Messages {
 	public static final String RESUMESCRIPT = "Resume Script";
 	public static final String STOPSCRIPT = "Stop Script";
 	public static final String PAUSESCRIPT = "Pause Script";
+	public static final String SETBREAK = "Set Breaks";
 	public static final String SAVESCREENSHOT = "Screenshot";
 	public static final String EXIT = "Exit";
 
