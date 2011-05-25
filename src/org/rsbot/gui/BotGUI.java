@@ -165,51 +165,51 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				}
 			} else if (option.equals(Messages.SETBREAK)) {
 				Bot current = getCurrentBot();
-			if (current != null) {
-				BreakHandler bh = current.getBreakHandler();
-				if(bh != null){
-					/*
-					 * Presents the user with the option to set their own break times. (and play times)
-					 * @author lom109
-					 */
-					StringTokenizer st;
-					int playMin = bh.getPlayMin();
-					int playMax = bh.getPlayMax();
-					int breakMin = bh.getBreakMin();
-					int breakMax = bh.getBreakMax();
-					//--------------------------
-					String playTime = (String) JOptionPane.showInputDialog(this, "Time until Break:",
-							"BreakHandler", JOptionPane.QUESTION_MESSAGE, null, null, playMin + "," + playMax);
-					if(playTime != null){
-						st = new StringTokenizer(playTime, " /,|");
-						if (st.hasMoreElements()){
-							try{playMin = Integer.parseInt((String)st.nextElement());}
-							catch(NumberFormatException nfe){}
-						}
-						if (st.hasMoreElements()){
-							try{playMax = Integer.parseInt((String)st.nextElement());}
-							catch(NumberFormatException nfe){}
-						}
-						bh.setPlayTime(playMin, playMax);
+				if (current != null) {
+					BreakHandler bh = current.getBreakHandler();
+					if(bh != null){
+						/*
+						 * Presents the user with the option to set their own break times. (and play 	times)
+						 * @author lom109
+						 */
+						StringTokenizer st;
+						int playMin = bh.getPlayMin();
+						int playMax = bh.getPlayMax();
+						int breakMin = bh.getBreakMin();
+						int breakMax = bh.getBreakMax();
 						//--------------------------
-						String breakTime = (String) JOptionPane.showInputDialog(this, "Duration of Break:",
+						String playTime = (String) JOptionPane.showInputDialog(this, "Time until Break:",
+							"BreakHandler", JOptionPane.QUESTION_MESSAGE, null, null, playMin + "," + playMax);
+						if(playTime != null){
+							st = new StringTokenizer(playTime, " /,|");
+							if (st.hasMoreElements()){
+								try{playMin = Integer.parseInt((String)st.nextElement());}
+								catch(NumberFormatException nfe){}
+							}
+							if (st.hasMoreElements()){
+								try{playMax = Integer.parseInt((String)st.nextElement());}
+								catch(NumberFormatException nfe){}
+							}
+							bh.setPlayTime(playMin, playMax);
+							//--------------------------
+							String breakTime = (String) JOptionPane.showInputDialog(this, "Duration of Break:",
 								"BreakHandler", JOptionPane.QUESTION_MESSAGE, null, null, breakMin + "," + breakMax);
-						if(breakTime != null){
-							st = new StringTokenizer(breakTime, " /,|");
-							if (st.hasMoreElements()){
-								try{breakMin = Integer.parseInt((String)st.nextElement());}
-								catch(NumberFormatException nfe){}
-							}
-							if (st.hasMoreElements()){
-								try{breakMax = Integer.parseInt((String)st.nextElement());}
-								catch(NumberFormatException nfe){}
-							}
+							if(breakTime != null){
+								st = new StringTokenizer(breakTime, " /,|");
+								if (st.hasMoreElements()){
+									try{breakMin = Integer.parseInt((String)st.nextElement());}
+									catch(NumberFormatException nfe){}
+								}
+								if (st.hasMoreElements()){
+									try{breakMax = Integer.parseInt((String)st.nextElement());}
+									catch(NumberFormatException nfe){}
+								}
 							bh.setBreakFor(breakMin, breakMax);
 							bh.resetTimers();
+							}
 						}
 					}
 				}
-			}
 			} else if (option.equals(Messages.HIDEBOT)) {
 				setTray();
 			} else if (option.equals(Messages.EXIT)) {
