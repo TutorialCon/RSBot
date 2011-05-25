@@ -15,6 +15,7 @@ import java.net.URL;
 
 /**
  * @author Paris
+ * @author lom109
  */
 public class BotToolBar extends JToolBar {
 
@@ -32,7 +33,7 @@ public class BotToolBar extends JToolBar {
 
 	private static final int TABINDEX = 1;
 	private static final int BUTTONCOUNT = 7;
-	private static final int OPTIONBUTTONS = 6;
+	private static final int OPTIONBUTTONS = 5;
 
 	static {
 		ICON_HOME = new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_HOME));
@@ -130,10 +131,10 @@ public class BotToolBar extends JToolBar {
 		add(addTabButton = new AddButton(listener));
 		add(Box.createHorizontalGlue());
 		add(screenshotButton);
+		add(setBreakButton);
 		add(runScriptButton);
 		add(stopScriptButton);
 		add(userInputButton);
-		add(setBreakButton);
 		updateSelection(false);
 	}
 
