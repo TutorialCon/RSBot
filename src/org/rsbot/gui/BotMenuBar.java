@@ -62,6 +62,7 @@ public class BotMenuBar extends JMenuBar {
 						Messages.ADDSCRIPT,
 						Messages.RUNSCRIPT, Messages.STOPSCRIPT,
 						Messages.PAUSESCRIPT, Messages.MENUSEPERATOR,
+						Messages.SETBREAK,
 						Messages.SAVESCREENSHOT, Messages.MENUSEPERATOR,
 						Messages.HIDEBOT, Messages.EXIT},
 				{Messages.ACCOUNTS, Messages.MENUSEPERATOR,
@@ -116,6 +117,7 @@ public class BotMenuBar extends JMenuBar {
 		map.put(Messages.RUNSCRIPT, Configuration.Paths.Resources.ICON_PLAY);
 		map.put(Messages.STOPSCRIPT, Configuration.Paths.Resources.ICON_DELETE);
 		map.put(Messages.PAUSESCRIPT, Configuration.Paths.Resources.ICON_PAUSE);
+                map.put(Messages.SETBREAK, Configuration.Paths.Resources.ICON_BOT);
 		map.put(Messages.SAVESCREENSHOT, Configuration.Paths.Resources.ICON_PHOTO);
 		map.put(Messages.HIDEBOT, Configuration.Paths.Resources.ICON_ARROWIN);
 		map.put(Messages.EXIT, Configuration.Paths.Resources.ICON_CLOSE);
@@ -176,6 +178,7 @@ public class BotMenuBar extends JMenuBar {
 			commandMenuItem.get(Messages.RUNSCRIPT).setEnabled(false);
 			commandMenuItem.get(Messages.STOPSCRIPT).setEnabled(false);
 			commandMenuItem.get(Messages.PAUSESCRIPT).setEnabled(false);
+                        commandMenuItem.get(Messages.SETBREAK).setEnabled(false);
 			commandMenuItem.get(Messages.SAVESCREENSHOT).setEnabled(false);
 			for (final JCheckBoxMenuItem item : eventCheckMap.values()) {
 				item.setSelected(false);
@@ -187,6 +190,7 @@ public class BotMenuBar extends JMenuBar {
 			commandMenuItem.get(Messages.RUNSCRIPT).setEnabled(true);
 			commandMenuItem.get(Messages.STOPSCRIPT).setEnabled(true);
 			commandMenuItem.get(Messages.PAUSESCRIPT).setEnabled(true);
+                        commandMenuItem.get(Messages.SETBREAK).setEnabled(true);
 			commandMenuItem.get(Messages.SAVESCREENSHOT).setEnabled(true);
 			int selections = 0;
 			for (final Map.Entry<String, JCheckBoxMenuItem> entry : eventCheckMap.entrySet()) {
