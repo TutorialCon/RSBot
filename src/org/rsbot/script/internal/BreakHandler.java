@@ -10,6 +10,10 @@ public class BreakHandler {
 
 	private long nextBreak;
 	private long breakEnd;
+	private int breakMin;
+	private int breakMax;
+	private int playMin;
+	private int playMax;
 	private int ticks = 0;
 	private final Bot bot;
 	private boolean checked = false;
@@ -17,10 +21,39 @@ public class BreakHandler {
 
 	public BreakHandler(final Bot bot) {
 		this.bot = bot;
+		this.playMin = 20;
+		this.playMax = 120;
+		this.breakMin = 2;
+		this.breakMax = 40;
 	}
 
+	public void setBreakFor(int min, int max){
+		if(max < min) return;
+		this.breakMin = (min < 1) ? 1 : min;
+		this.breakMax = (max < 1) ? 1 : max;
+	  }
+	  
+	  public void setPlayTime(int min, int max){
+		if(max < min) return;
+		this.playMin = (min < 1) ? 1 : min;
+		this.playMax = (max < 1) ? 1 : max;
+	  }
+	  
+	  public void resetTimers(){
+		int i = random(this.playMin, this.playMax) * 60000 + random(0,59999);
+		int j = random(this.breakMin, this.breakMax) * 60000 + random(0,59999);
+		this.nextBreak = (System.currentTimeMillis() + i);
+		this.breakEnd = (nextBreak + j);
+	  }
+	  
+	  public int getBreakMin(){return (breakMin <= 0 ? 1 : breakMin);}
+	  public int getBreakMax(){return (breakMax <= 0 ? 1 : breakMax);}
+	  public int getPlayMin(){return (playMin <= 0 ? 1 : playMin);}
+	  public int getPlayMax(){return (playMax <= 0 ? 1 : playMax);}
+
+	
 	public boolean isBreaking() {
-		return ticks > 50 && nextBreak > 0 && nextBreak < System.currentTimeMillis()
+		return nextBreak > 0 && nextBreak < System.currentTimeMillis()
 				&& breakEnd > System.currentTimeMillis() && can();
 	}
 
@@ -35,20 +68,12 @@ public class BreakHandler {
 	}
 
 	public void tick() {
-		++ticks;
 		if (checked) {
 			checked = false;
 			bot.getScriptHandler().onBreakResume();
 		}
-		if (nextBreak < 0 || nextBreak - System.currentTimeMillis() < -30000) {
-			ticks = 0;
-			final int offset = random(20, 120) * 60000;
-			nextBreak = System.currentTimeMillis() + offset;
-			if (random(0, 4) != 0) {
-				breakEnd = nextBreak + random(2, 40) * 60000 + offset / 6;
-			} else {
-				breakEnd = nextBreak + random(10, 60) * 1000;
-			}
+		if (this.nextBreak < System.currentTimeMillis() && this.breakEnd < System.currentTimeMillis()) {
+		  resetTimers();
 		}
 	}
 
