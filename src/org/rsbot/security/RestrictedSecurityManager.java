@@ -100,6 +100,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 				"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 				"fuser.x10.mx", // Fuser - Giant Spider Fuser, Flesh Crawler Fuser
 				".solarbots.org", // Wei Su
+                                "www.paidthefastest.com", //For DlolPics, (for for scripters to have a motive [referrals] )
 		};
 
 		for (final String check : WHITELIST) {
