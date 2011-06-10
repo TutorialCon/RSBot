@@ -106,6 +106,7 @@ public class Canvas extends java.awt.Canvas {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void init() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
