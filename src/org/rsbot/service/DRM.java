@@ -28,7 +28,7 @@ public class DRM {
 			final URL source = new URL(Configuration.Paths.URLs.SERVICELOGIN + "?u=" + URLEncoder.encode(user, "UTF-8") + "&p=" + URLEncoder.encode(pass, "UTF-8"));
 			final String key = HttpClient.downloadAsString(source);
 			if (key == null || key.length() == 0) {
-				log.warning("Invalid service username or password");
+				log.warning("Invalid service username or password!");
 				return false;
 			}
 			final BufferedWriter out = new BufferedWriter(new FileWriter(Configuration.Paths.getServiceKey()));
