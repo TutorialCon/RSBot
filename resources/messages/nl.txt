@@ -7,15 +7,15 @@ TOOLS=Tools
 HELP=Help
 
 NEWBOT=Nieuwe Bot
-CLOSEBOT=Bot Sluiten
+CLOSEBOT=Sluit Bot
 HIDEBOT=Verbergen
 ADDSCRIPT=Voeg Script toe
-RUNSCRIPT=Voer Script uit
+RUNSCRIPT=Start Script
 RESUMESCRIPT=Hervat Script
 STOPSCRIPT=Stop Script
 PAUSESCRIPT=Pauzeer Script
 SAVESCREENSHOT=Screenshot
-EXIT=Sluit
+EXIT=Sluiten
 
 ACCOUNTS=Accounts
 FORCEINPUT=Force Input
@@ -27,14 +27,14 @@ BINDTO=Bind to address:
 USEPASSWORD=Use password:
 LESSCPU=Minder CPU
 EXTDVIEWS=Uitgebreide Weergave
-AUTOSHUTDOWN=Sluit Bot in (mins):
+AUTOSHUTDOWN=Sluit af in (mins):
 BETAPATCH=Gebruik beta client patch
 
 HIDETOOLBAR=Verberg Toolbar
 HIDELOGPANE=Verberg Log Paneel
 ALLDEBUGGING=All Debugging
 
-CLEARCACHE=Verwijder Cache
+CLEARCACHE=Leeg Cache
 OPTIONS=Opties
 
 SITE=Site
