@@ -1,13 +1,13 @@
 package org.rsbot.locale;
 
+import org.rsbot.Configuration;
+import org.rsbot.util.io.IniParser;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
-
-import org.rsbot.Configuration;
-import org.rsbot.util.io.IniParser;
 
 public class Messages {
 	private static HashMap<String, String> map;
@@ -19,7 +19,7 @@ public class Messages {
 			URL src = Configuration.getResourceURL(Configuration.Paths.Resources.MESSAGES + defaultLang + ".txt");
 			map = IniParser.deserialise(src.openStream()).get(IniParser.emptySection);
 			if (!lang.startsWith(defaultLang)) {
-				for (final String avail : new String[] {"de", "hi", "nl", "sv"}) {
+				for (final String avail : new String[]{"de", "hi", "nl", "sv"}) {
 					if (lang.startsWith(avail)) {
 						src = Configuration.getResourceURL(Configuration.Paths.Resources.MESSAGES + avail + ".txt");
 						final HashMap<String, String> mapNative = IniParser.deserialise(src.openStream()).get(IniParser.emptySection);

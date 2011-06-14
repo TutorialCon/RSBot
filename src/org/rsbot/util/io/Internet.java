@@ -10,30 +10,39 @@ import java.util.ArrayList;
 public class Internet {
 
 	public static URLConnection createConnection(URL url, String accept,
-			String accept_charset, String accept_encoding,
-			String accept_language, String connection, String host,
-			String keep_alive, String referer, String user_agent) {
+	                                             String accept_charset, String accept_encoding,
+	                                             String accept_language, String connection, String host,
+	                                             String keep_alive, String referer, String user_agent) {
 		try {
 			URLConnection uc = url.openConnection();
 
-			if (accept != null)
+			if (accept != null) {
 				uc.addRequestProperty("Accept", accept);
-			if (accept_charset != null)
+			}
+			if (accept_charset != null) {
 				uc.addRequestProperty("Accept-Charset", accept_charset);
-			if (accept_encoding != null)
+			}
+			if (accept_encoding != null) {
 				uc.addRequestProperty("Accept-Encoding", accept_encoding);
-			if (accept_language != null)
+			}
+			if (accept_language != null) {
 				uc.addRequestProperty("Accept-Language", accept_language);
-			if (connection != null)
+			}
+			if (connection != null) {
 				uc.addRequestProperty("Connection", connection);
-			if (host != null)
+			}
+			if (host != null) {
 				uc.addRequestProperty("Host", host);
-			if (keep_alive != null)
+			}
+			if (keep_alive != null) {
 				uc.addRequestProperty("Keep-Alive", keep_alive);
-			if (referer != null)
+			}
+			if (referer != null) {
 				uc.addRequestProperty("Referer", referer);
-			if (user_agent != null)
+			}
+			if (user_agent != null) {
 				uc.addRequestProperty("User-Agent", user_agent);
+			}
 
 			return uc;
 		} catch (Exception e) {
@@ -44,7 +53,7 @@ public class Internet {
 	}
 
 	public static URLConnection createConnection(URL url, String host,
-			String referer) {
+	                                             String referer) {
 		return createConnection(
 				url,
 				"text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
@@ -74,13 +83,15 @@ public class Internet {
 
 				byte data;
 
-				while ((data = (byte) br.read()) != -1)
+				while ((data = (byte) br.read()) != -1) {
 					bytes.add(data);
+				}
 
 				byte[] result = new byte[bytes.size()];
 
-				for (int i = 0; i < result.length; i++)
+				for (int i = 0; i < result.length; i++) {
 					result[i] = bytes.get(i);
+				}
 
 				return result;
 			}

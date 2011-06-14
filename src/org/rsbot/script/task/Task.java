@@ -21,9 +21,10 @@ public interface Task extends Runnable {
 	 */
 	void join();
 
-    /**
-     * Provides the future for this Task
-     * @param f The future
-     */
-    void init(Future<?> f);
+	/**
+	 * Provides the future for this Task
+	 *
+	 * @param f The future
+	 */
+	void init(Future<?> f);
 }

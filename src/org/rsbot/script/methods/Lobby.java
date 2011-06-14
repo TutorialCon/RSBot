@@ -1,18 +1,18 @@
 package org.rsbot.script.methods;
 
+import org.rsbot.script.util.Filter;
+import org.rsbot.script.wrappers.RSComponent;
+import org.rsbot.script.wrappers.RSInterface;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.rsbot.script.util.Filter;
-import org.rsbot.script.wrappers.RSComponent;
-import org.rsbot.script.wrappers.RSInterface;
-
 /**
  * Methods for lobby interface
- * 
+ *
  * @author Debauchery
  */
 public class Lobby extends MethodProvider {
@@ -52,12 +52,12 @@ public class Lobby extends MethodProvider {
 	public boolean inLobby() {
 		return methods.game.getClientState() == Game.INDEX_LOBBY_SCREEN;
 	}
-	
+
 	public class World {
 		private String world, players, activity, lootShare, type;
 
 		public World(String world, String players, String activity,
-				String lootShare, String type) {
+		             String lootShare, String type) {
 			this.world = world;
 			this.players = players;
 			this.activity = activity;
@@ -116,10 +116,10 @@ public class Lobby extends MethodProvider {
 					Pattern.UNICODE_CASE);
 			Matcher regexMatcher = regex.matcher(HTML);
 			while (regexMatcher.find()) {
-				worldData.add(new Object[] { regexMatcher.group(1),
+				worldData.add(new Object[]{regexMatcher.group(1),
 						regexMatcher.group(2), regexMatcher.group(3),
 						(regexMatcher.group(4).equals("Y") ? "Yes" : "No"),
-						regexMatcher.group(5) });
+						regexMatcher.group(5)});
 			}
 		} catch (Exception e) {
 		}
@@ -170,8 +170,9 @@ public class Lobby extends MethodProvider {
 
 	public RSComponent getComponent(int index) {
 		RSInterface face = getInterface();
-		if (face != null && face.isValid())
+		if (face != null && face.isValid()) {
 			return face.getComponent(index);
+		}
 		return null;
 	}
 
@@ -181,25 +182,28 @@ public class Lobby extends MethodProvider {
 	}
 
 	public int getSelectedTab() {
-		int[] ids = new int[] { TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN,
-				TAB_OPTIONS, TAB_FRIENDS_CHAT };
+		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN,
+				TAB_OPTIONS, TAB_FRIENDS_CHAT};
 		for (int id : ids) {
 			final RSComponent c = getComponent(id);
-			if (c != null && c.isValid() && c.getBackgroundColor() == 4671)
+			if (c != null && c.isValid() && c.getBackgroundColor() == 4671) {
 				return id;
+			}
 		}
 		return -1;
 	}
 
 	public boolean open(final int tab) {
-		if (getSelectedTab() == tab)
+		if (getSelectedTab() == tab) {
 			return true;
+		}
 		final RSComponent c = getComponent(tab);
-		if (c != null && c.isValid())
+		if (c != null && c.isValid()) {
 			c.doClick();
+		}
 		return getSelectedTab() == tab;
 	}
-	
+
 	public int getSelectedWorld() {
 		if (!inLobby()) {
 			return -1;
@@ -215,15 +219,16 @@ public class Lobby extends MethodProvider {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Enters a world from the lobby.
 	 *
 	 * @param world The world to switch to.
+	 * @param enter To enter the world or not.
 	 * @return <tt>true</tt> If correctly entered the world else <tt>false</tt>
 	 * @see org.rsbot.script.methods.Game switchWorld(int world)
 	 */
-	public boolean switchWorlds(final int world) {
+	public boolean switchWorlds(final int world, final boolean enter) {
 		if (!inLobby() || methods.game.getClientState() == 9 || methods.game.getClientState() == 11) {
 			return false;
 		}
@@ -232,20 +237,35 @@ public class Lobby extends MethodProvider {
 			sleep(random(600, 800));
 		}
 		if (getSelectedWorld() == world) {
-			methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
-		}
-			final RSComponent comp = getWorldComponent(world);
-			if (comp != null) {
-				methods.interfaces.scrollTo(comp, methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-						WORLD_SELECT_INTERFACE_SCROLL_AREA));
-				comp.doClick();
-				sleep(random(500, 800));
-				if (getSelectedWorld() == world) {
-					methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
-					return true;
-				}
+			if (enter) {
+				methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
 			}
+			return true;
+		}
+		final RSComponent comp = getWorldComponent(world);
+		if (comp != null) {
+			methods.interfaces.scrollTo(comp, methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_SCROLL_AREA));
+			comp.doClick();
+			sleep(random(500, 800));
+			if (getSelectedWorld() == world) {
+				if (enter) {
+					methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
+				}
+				return true;
+			}
+		}
 		return false;
+	}
+
+	/**
+	 * Enters a world from the lobby.
+	 *
+	 * @param world The world to switch to.
+	 * @return <tt>true</tt> If correctly entered the world else <tt>false</tt>
+	 * @see org.rsbot.script.methods.Game switchWorld(int world)
+	 */
+	public boolean switchWorlds(final int world) {
+		return switchWorlds(world, true);
 	}
 
 	/**
