@@ -1,5 +1,6 @@
 package org.rsbot.script.methods;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.regex.Pattern;
 import org.rsbot.script.util.Filter;
 import org.rsbot.script.wrappers.RSComponent;
 import org.rsbot.script.wrappers.RSInterface;
+import org.rsbot.util.io.HttpClient;
 
 /**
  * Methods for lobby interface
@@ -93,10 +95,9 @@ public class Lobby extends MethodProvider {
 	public Object[][] getWorldObjects() {
 		String HTML = null;
 		try {
-			HTML = org.rsbot.util.io.Internet.readPage(new URL(
-					"http://www.runescape.com/slu.ws?order=WPMLA"),
-					"www.runescape.com", null);
-		} catch (Exception e) {
+			HTML = HttpClient.downloadAsString((new URL(
+					"http://www.runescape.com/slu.ws?order=WPMLA")));
+		} catch (IOException e) {
 		}
 
 		try {
