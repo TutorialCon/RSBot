@@ -7,6 +7,7 @@ import org.rsbot.gui.BotGUI;
 import org.rsbot.gui.LoadScreen;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
+import org.rsbot.script.internal.BackgroundScriptHandler;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.provider.ScriptDeliveryNetwork;
 import org.rsbot.util.UpdateChecker;
@@ -115,7 +116,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkAccess(final ThreadGroup g) {
-		if (g.getName().equals(ScriptHandler.THREAD_GROUP_NAME) && !(getCallingClass().equals(ScriptHandler.class.getName()) || getCallingClass().equals(Script.class.getName()))) {
+		if (g.getName().equals(ScriptHandler.THREAD_GROUP_NAME) && !(getCallingClass().equals(ScriptHandler.class.getName()) ||
+				getCallingClass().equals(Script.class.getName()) || getCallingClass().equals(BackgroundScriptHandler.class.getName()))) {
 			throw new SecurityException();
 		}
 	}
