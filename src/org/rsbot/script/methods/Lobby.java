@@ -1,32 +1,33 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.script.wrappers.RSComponent;
-
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.rsbot.script.util.Filter;
+import org.rsbot.script.wrappers.RSComponent;
+import org.rsbot.script.wrappers.RSInterface;
 
 /**
  * Methods for lobby interface
- *
+ * 
  * @author Debauchery
  */
 public class Lobby extends MethodProvider {
-	public Lobby(final MethodContext ctx) {
-		super(ctx);
-	}
 
-	private static final int SELECTED_TEXTURE = 4671;
-
-	public final static int TAB_PLAYER_INFO = 0;
-	public final static int TAB_WORLD_SELECT = 1;
-	public final static int TAB_FRIENDS = 2;
-	public final static int TAB_FRIENDS_CHAT = 3;
-	public final static int TAB_CLAN_CHAT = 4;
-	public final static int TAB_OPTIONS = 5;
-
-	public final static int PLAYER_INFO_INTERFACE = 906;
-	public final static int PLAYER_INFO_INTERFACE_PLAY_BUTTON = 106;
-	public final static int LOGOUT_COMPONENT = 195;
-
+	public static final int INTERFACE = 906;
+	public static final int TAB_WORLDS = 12;
+	public static final int TAB_FRIENDS = 11;
+	public static final int TAB_CLAN = 10;
+	public static final int TAB_OPTIONS = 9;
+	public static final int TAB_FRIENDS_CHAT = 254;
+	public static final int TAB_PLAYERS = 204;
+	public static final int BUTTON_PLAY = 160;
+	public static final int ALERT_TEXT = 224;
+	public static final int ALERT_CLOSE = 232;
+	public static final int BUTTON_LOGOUT = 195;
 	public final static int WORLD_SELECT_INTERFACE = 910;
 	public final static int WORLD_SELECT_INTERFACE_CURRENT_WORLD = 11;
 	public final static int WORLD_SELECT_INTERFACE_WORLD_LIST = 77;
@@ -38,16 +39,10 @@ public class Lobby extends MethodProvider {
 	public final static int WORLD_SELECT_INTERFACE_SCROLL_AREA = 86;
 	public final static int WORLD_SELECT_INTERFACE_SCROLL_BAR = 1;
 
-	public final static int FRIENDS_INTERFACE = 909;
 
-	public final static int FRIENDS_CHAT_INTERFACE = 589;
-
-	public final static int CLAN_CHAT_INTERFACE = 912;
-
-	public final static int OPTIONS_INTERFACE = 978;
-
-	public final static int[] TABS = new int[]{188, 189, 190, 191, 192, 193};
-	public final static int[] TABS_TEXTURE = new int[]{0, 12, 11, 254, 10, 9};
+	public Lobby(final MethodContext ctx) {
+		super(ctx);
+	}
 
 	/**
 	 * Checks that current game is in lobby.
@@ -57,55 +52,159 @@ public class Lobby extends MethodProvider {
 	public boolean inLobby() {
 		return methods.game.getClientState() == Game.INDEX_LOBBY_SCREEN;
 	}
+	
+	public class World {
+		private String world, players, activity, lootShare, type;
 
-	/**
-	 * Gets the currently open tab.
-	 *
-	 * @return The currently open tab or the logout tab by default.
-	 */
-	public int getCurrentTab() {
-		if (!inLobby()) {
-			return -1;
+		public World(String world, String players, String activity,
+				String lootShare, String type) {
+			this.world = world;
+			this.players = players;
+			this.activity = activity;
+			this.lootShare = lootShare;
+			this.type = type;
 		}
-		for (int i = 0; i < TABS.length; i++) {
-			if (methods.interfaces.getComponent(PLAYER_INFO_INTERFACE, TABS_TEXTURE[i]).getBackgroundColor() == SELECTED_TEXTURE) {
-				return i;
-			}
+
+		public int getWorldID() {
+			return Integer.parseInt(this.world);
 		}
-		return 1;
+
+		public int getAmountOfPlayers() {
+			return Integer.parseInt(this.players);
+		}
+
+		public String getActivity() {
+			return this.activity;
+		}
+
+		public boolean isLootShare() {
+			return (this.lootShare.equals("Yes"));
+		}
+
+		public boolean isOnline() {
+			return (!this.players.equals("OFFLINE"));
+		}
+
+		public boolean isMembers() {
+			return (this.type.equals("Members"));
+		}
 	}
 
-	/**
-	 * Opens the specified tab at the specified index.
-	 *
-	 * @param i The tab to open.
-	 * @return <tt>true</tt> if tab successfully selected; otherwise
-	 *         <tt>false</tt>.
-	 */
-	public boolean open(final int i) {
-		if (inLobby()) {
-			if (i == getCurrentTab()) {
-				return true;
-			} else {
-				methods.interfaces.getComponent(PLAYER_INFO_INTERFACE, TABS[i]).doClick();
-				sleep(random(400, 700));
-			}
+	public Object[][] getWorldObjects() {
+		String HTML = null;
+		try {
+			HTML = org.rsbot.util.io.Internet.readPage(new URL(
+					"http://www.runescape.com/slu.ws?order=WPMLA"),
+					"www.runescape.com", null);
+		} catch (Exception e) {
 		}
-		return i == getCurrentTab();
+
+		try {
+			HTML = HTML.split("Type[^<]</td>[^<]</tr>")[1];
+			HTML = HTML.split("</table>")[0].trim();
+		} catch (Exception e) {
+			return new Object[0][0];
+		}
+
+		ArrayList<Object[]> worldData = new ArrayList<Object[]>();
+
+		try {
+			Pattern regex = Pattern.compile(
+					"[^ ]World ([0-9[^ |^<|^\n|^ (]]*)[^0-9|^OF]*"
+							+ "([0-9|A-Z]*)[^=]*[^>]*>([^<]*)"
+							+ "[^Y|^N]*(Y|N)[^F|^M]*(Members|Free)",
+					Pattern.UNICODE_CASE);
+			Matcher regexMatcher = regex.matcher(HTML);
+			while (regexMatcher.find()) {
+				worldData.add(new Object[] { regexMatcher.group(1),
+						regexMatcher.group(2), regexMatcher.group(3),
+						(regexMatcher.group(4).equals("Y") ? "Yes" : "No"),
+						regexMatcher.group(5) });
+			}
+		} catch (Exception e) {
+		}
+
+		Object[][] result = new Object[worldData.size()][5];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = worldData.get(i);
+		}
+
+		return result;
 	}
 
-	/**
-	 * Finds out which world is selected from the lobby interface.
-	 *
-	 * @return The world number that is currently selected
-	 */
+	public World[] getAll(final Filter<World> filter) {
+		List<World> worlds = new ArrayList<World>();
+		for (Object[] worldData : getWorldObjects()) {
+			if (worldData.length == 5) {
+				World world = (new World((String) worldData[0],
+						(String) worldData[1], (String) worldData[2],
+						(String) worldData[3], (String) worldData[4]));
+				if (world != null && filter.accept(world)) {
+					worlds.add(world);
+				}
+			}
+		}
+		return (World[]) worlds.toArray();
+	}
+
+	public static final Filter<World> ALL_FILTER = new Filter<World>() {
+		public boolean accept(final World w) {
+			return true;
+		}
+	};
+
+	public World[] getAllMembersIncluded(final boolean members) {
+		return getAll(new Filter<World>() {
+			public boolean accept(final World world) {
+				if (world != null && (world.isMembers() == members)) {
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
+	public RSInterface getInterface() {
+		return methods.interfaces.get(INTERFACE);
+	}
+
+	public RSComponent getComponent(int index) {
+		RSInterface face = getInterface();
+		if (face != null && face.isValid())
+			return face.getComponent(index);
+		return null;
+	}
+
+	public boolean clickPlay() {
+		RSComponent playComp = getComponent(BUTTON_PLAY);
+		return playComp != null && playComp.isValid() && playComp.doClick();
+	}
+
+	public int getSelectedTab() {
+		int[] ids = new int[] { TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN,
+				TAB_OPTIONS, TAB_FRIENDS_CHAT };
+		for (int id : ids) {
+			final RSComponent c = getComponent(id);
+			if (c != null && c.isValid() && c.getBackgroundColor() == 4671)
+				return id;
+		}
+		return -1;
+	}
+
+	public boolean open(final int tab) {
+		if (getSelectedTab() == tab)
+			return true;
+		final RSComponent c = getComponent(tab);
+		if (c != null && c.isValid())
+			c.doClick();
+		return getSelectedTab() == tab;
+	}
+	
 	public int getSelectedWorld() {
 		if (!inLobby()) {
 			return -1;
 		}
-		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid() || getCurrentTab() != TAB_WORLD_SELECT) {
-			open(TAB_WORLD_SELECT);
-		}
+		open(TAB_WORLDS);
 		if (methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).isValid()) {
 			final String worldText = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
 					WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().substring(
@@ -116,63 +215,7 @@ public class Lobby extends MethodProvider {
 		}
 		return -1;
 	}
-
-	/**
-	 * Finds all available worlds if in lobby.
-	 *
-	 * @param includingFull If true it will include all full worlds when returned
-	 * @return All available worlds as a String array
-	 */
-	public String[] getAvailableWorlds(final boolean includingFull) {
-		final ArrayList<String> tempList = new ArrayList<String>();
-		if (!inLobby()) {
-			return new String[0];
-		}
-		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid() || getCurrentTab() != TAB_WORLD_SELECT) {
-			open(TAB_WORLD_SELECT);
-			sleep(500);
-		}
-		for (int i = 0; i < methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-				WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents().length;
-		     i++) {
-			final String amount = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-					WORLD_SELECT_INTERFACE_AMOUNT_OF_PLAYERS).getComponents()[i].getText();
-			final String number = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-					WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents()[i].getText();
-			if (!amount.contains("OFFLINE") && !amount.contains("0")) {
-				if (!includingFull) {
-					if (!amount.contains("FULL")) {
-						tempList.add(number);
-					}
-				} else {
-					tempList.add(number);
-				}
-			}
-		}
-		{
-			final String[] temp = new String[tempList.size()];
-			tempList.toArray(temp);
-			return temp;
-		}
-	}
-
-
-	/**
-	 * Checks if the chosen world is open.
-	 *
-	 * @param world       The world to check.
-	 * @param includeFull Return even if it's full?
-	 * @return <tt>true</tt> is available, else <tt>false</tt>
-	 */
-	public boolean isAvailable(final int world, final boolean includeFull) {
-		for (final String s : getAvailableWorlds(includeFull)) {
-			if (Integer.parseInt(s) == world) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 	/**
 	 * Enters a world from the lobby.
 	 *
@@ -181,17 +224,16 @@ public class Lobby extends MethodProvider {
 	 * @see org.rsbot.script.methods.Game switchWorld(int world)
 	 */
 	public boolean switchWorlds(final int world) {
-		if (!inLobby()) {
+		if (!inLobby() || methods.game.getClientState() == 9 || methods.game.getClientState() == 11) {
 			return false;
 		}
-		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid() || getCurrentTab() != TAB_WORLD_SELECT) {
-			open(TAB_WORLD_SELECT);
+		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid() || getSelectedTab() != TAB_WORLDS) {
+			open(TAB_WORLDS);
 			sleep(random(600, 800));
 		}
 		if (getSelectedWorld() == world) {
-			methods.interfaces.getComponent(PLAYER_INFO_INTERFACE, PLAYER_INFO_INTERFACE_PLAY_BUTTON).doClick();
+			methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
 		}
-		if (isAvailable(world, false)) {
 			final RSComponent comp = getWorldComponent(world);
 			if (comp != null) {
 				methods.interfaces.scrollTo(comp, methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
@@ -199,11 +241,10 @@ public class Lobby extends MethodProvider {
 				comp.doClick();
 				sleep(random(500, 800));
 				if (getSelectedWorld() == world) {
-					methods.interfaces.getComponent(PLAYER_INFO_INTERFACE, PLAYER_INFO_INTERFACE_PLAY_BUTTON).doClick();
+					methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
 					return true;
 				}
 			}
-		}
 		return false;
 	}
 
@@ -218,7 +259,7 @@ public class Lobby extends MethodProvider {
 			return null;
 		}
 		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid()) {
-			open(TAB_WORLD_SELECT);
+			open(TAB_WORLDS);
 		}
 		for (int i = 0; i < methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
 				WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents().length;
@@ -243,7 +284,7 @@ public class Lobby extends MethodProvider {
 	 */
 	public boolean logout() {
 		if (inLobby()) {
-			methods.interfaces.getComponent(PLAYER_INFO_INTERFACE, LOGOUT_COMPONENT).doClick();
+			methods.interfaces.getComponent(INTERFACE, BUTTON_LOGOUT).doClick();
 		}
 		return !methods.game.isLoggedIn();
 	}
