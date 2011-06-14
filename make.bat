@@ -14,7 +14,6 @@ SET cflags=-g:none -Xlint:deprecation
 SET src=src
 SET lib=lib
 SET res=resources
-SET mes=%res%\messages
 SET out=bin
 SET dist=%name%.jar
 SET lstf=temp.txt
@@ -49,7 +48,7 @@ IF EXIST "%lstf%" DEL /F /Q "%lstf%"
 COPY "%manifest%" "%lstf%" > NUL
 ECHO Specification-Version: "%version%" >> "%lstf%"
 ECHO Implementation-Version: "%version%" >> "%lstf%"
-jar cfm "%dist%" "%lstf%" -C "%out%" . %versionfile% %imgdir%\* %mes%*.txt %res%\*.bat %res%\*.sh
+jar cfm "%dist%" "%lstf%" -C "%out%" . %versionfile% %imgdir%\* %res%\messages\*.txt %res%\*.bat %res%\*.sh
 DEL /F /Q "%lstf%"
 GOTO :eof
 
