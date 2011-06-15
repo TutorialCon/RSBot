@@ -60,20 +60,18 @@ public class IOHelper {
 		return StringUtil.newStringUtf8(read(in));
 	}
 
-	public static void write(final InputStream in, final File out) {
-		OutputStream outStream = null;
+	public static void write(final InputStream in, final OutputStream out) {
 		try {
-			outStream = new FileOutputStream(out);
 			final byte[] buf = new byte[1024];
 			int len;
 			while ((len = in.read(buf)) > 0) {
-				outStream.write(buf, 0, len);
+				out.write(buf, 0, len);
 			}
 		} catch (final IOException ignored) {
 		} finally {
 			try {
-				if (outStream != null) {
-					outStream.close();
+				if (out != null) {
+					out.close();
 				}
 				if (in != null) {
 					in.close();
@@ -81,6 +79,18 @@ public class IOHelper {
 			} catch (final IOException ignored) {
 			}
 		}
+	}
+
+	public static void write(final InputStream in, final File out) {
+		try {
+			write(in, new FileOutputStream(out));
+		} catch (final FileNotFoundException ignored) {
+		}
+	}
+
+	public static void write(final String s, final File out) {
+		final ByteArrayInputStream in = new ByteArrayInputStream(StringUtil.getBytesUtf8(s));
+		write(in, out);
 	}
 
 	public static void recursiveDelete(final File path, final boolean deleteParent) {

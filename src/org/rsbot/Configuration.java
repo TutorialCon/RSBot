@@ -26,6 +26,7 @@ public class Configuration {
 
 	public static class Paths {
 		public static class Resources {
+			public static final String LICENSE = "license.txt";
 			public static final String ROOT = "resources";
 			public static final String SCRIPTS = Paths.SCRIPTS_NAME_SRC + "/";
 			public static final String ROOT_IMG = ROOT + "/images";
@@ -169,6 +170,10 @@ public class Configuration {
 
 		public static String getSettingsDirectory() {
 			return Paths.getHomeDirectory() + File.separator + "Settings";
+		}
+
+		public static String getLicenseAcceptance() {
+			return getSettingsDirectory() + File.separator + "license-accept.txt";
 		}
 
 		public static String getGarbageDirectory() {
