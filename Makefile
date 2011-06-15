@@ -28,7 +28,7 @@ Bundle: Bot
 	@echo "Specification-Version: \"$(VERSION)\"" >> "$(LSTF)"
 	@echo "Implementation-Version: \"$(VERSION)\"" >> "$(LSTF)"
 	@if [ -e "$(DIST)" ]; then rm -fv "$(DIST)"; fi
-	jar cfm "$(DIST)" "$(LSTF)" -C "$(BINDIR)" . "$(VERSIONFILE)" "$(IMGDIR)"/* "$(RES)"/messages/*.txt "$(RES)"/*.bat "$(RES)"/*.sh
+	jar cfm "$(DIST)" "$(LSTF)" -C "$(BINDIR)" . "$(VERSIONFILE)" "$(IMGDIR)"/* "$(RES)"/messages/*.txt "$(RES)"/*.bat "$(RES)"/*.sh license.txt
 	@rm -f "$(LSTF)"
 
 clean:
