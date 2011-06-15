@@ -441,7 +441,7 @@ public class BotToolBar extends JToolBar {
 				public void mouseReleased(final MouseEvent e) {
 					pressed = false;
 					repaint();
-					listener.actionPerformed(new ActionEvent(this, e.getID(), "File.New Bot"));
+					listener.actionPerformed(new ActionEvent(this, e.getID(), Messages.FILE + "." + Messages.NEWBOT));
 				}
 			});
 		}
