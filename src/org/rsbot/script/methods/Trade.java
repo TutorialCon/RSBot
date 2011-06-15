@@ -162,6 +162,12 @@ public class Trade extends MethodProvider {
 					if (inTradeSecond()) {
 						return true;
 					}
+					if (!inTrade()) {
+						sleep(1000);
+						if (!inTrade()) {
+							return false;
+						}
+					}
 					break;
 				case TRADE_TYPE_NONE:
 					if (!inTrade()) {
