@@ -32,7 +32,7 @@ BETAPATCH=Gebruik beta client patch
 
 HIDETOOLBAR=Verberg Toolbar
 HIDELOGPANE=Verberg Log Paneel
-ALLDEBUGGING=Alle Debugs
+ALLDEBUGGING=Alle Debug Opties
 
 CLEARCACHE=Leeg Cache
 OPTIONS=Opties
