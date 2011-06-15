@@ -14,25 +14,25 @@ RUNSCRIPT=Start Script
 RESUMESCRIPT=Hervat Script
 STOPSCRIPT=Stop Script
 PAUSESCRIPT=Pauzeer Script
-SAVESCREENSHOT=Screenshot
+SAVESCREENSHOT=Schermafdruk
 EXIT=Sluiten
 
 ACCOUNTS=Accounts
-FORCEINPUT=Force Input
+FORCEINPUT=Forceer Invoer
 DISABLEANTIRANDOMS=Zet Randoms uit
 DISABLEAUTOLOGIN=Zet Login uit
 DISABLEADS=Geen Advertenties
 DISABLECONFIRMATIONS=Geen Bevestigingen
 BINDTO=Bind to address:
-USEPASSWORD=Use password:
+USEPASSWORD=Gebruik Wachtwoord:
 LESSCPU=Minder CPU
 EXTDVIEWS=Uitgebreide Weergave
-AUTOSHUTDOWN=Sluit af in (mins):
+AUTOSHUTDOWN=Stop over (mins):
 BETAPATCH=Gebruik beta client patch
 
 HIDETOOLBAR=Verberg Toolbar
 HIDELOGPANE=Verberg Log Paneel
-ALLDEBUGGING=All Debugging
+ALLDEBUGGING=Alle Debugs
 
 CLEARCACHE=Leeg Cache
 OPTIONS=Opties
