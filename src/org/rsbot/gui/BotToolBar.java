@@ -59,7 +59,7 @@ public class BotToolBar extends JToolBar {
 
 		this.listener = listener;
 
-		screenshotButton = new JButton("Screenshot", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PHOTO)));
+		screenshotButton = new JButton(Messages.SAVESCREENSHOT, new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PHOTO)));
 		screenshotButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				menu.doClick(Messages.SAVESCREENSHOT);
@@ -69,7 +69,7 @@ public class BotToolBar extends JToolBar {
 		screenshotButton.setToolTipText(screenshotButton.getText());
 		screenshotButton.setText("");
 
-		stopScriptButton = new JButton("Stop", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_DELETE)));
+		stopScriptButton = new JButton(Messages.STOPSCRIPT, new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_DELETE)));
 		stopScriptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menu.doClick(Messages.STOPSCRIPT);
@@ -79,7 +79,7 @@ public class BotToolBar extends JToolBar {
 		stopScriptButton.setToolTipText(stopScriptButton.getText());
 		stopScriptButton.setText("");
 
-		userInputButton = new JButton("Input", new ImageIcon(getInputImage(inputOverride, inputState)));
+		userInputButton = new JButton(Messages.FORCEINPUT, new ImageIcon(getInputImage(inputOverride, inputState)));
 		userInputButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				menu.doTick(Messages.FORCEINPUT);
@@ -89,7 +89,7 @@ public class BotToolBar extends JToolBar {
 		userInputButton.setToolTipText(userInputButton.getText());
 		userInputButton.setText("");
 
-		runScriptButton = new JButton("Run", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PLAY)));
+		runScriptButton = new JButton(Messages.RUNSCRIPT, new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PLAY)));
 		runScriptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switch (getScriptButton()) {
@@ -164,11 +164,11 @@ public class BotToolBar extends JToolBar {
 
 	int getScriptButton() {
 		final String label = runScriptButton.getToolTipText();
-		if (label.equals("Run")) {
+		if (label.equals(Messages.RUNSCRIPT)) {
 			return RUN_SCRIPT;
-		} else if (label.equals("Pause")) {
+		} else if (label.equals(Messages.PAUSESCRIPT)) {
 			return PAUSE_SCRIPT;
-		} else if (label.equals("Resume")) {
+		} else if (label.equals(Messages.RESUMESCRIPT)) {
 			return RESUME_SCRIPT;
 		} else {
 			throw new IllegalStateException("Illegal script button state!");
@@ -200,16 +200,16 @@ public class BotToolBar extends JToolBar {
 
 		switch (state) {
 			case RUN_SCRIPT:
-				text = "Run";
+				text = Messages.RUNSCRIPT;
 				pathResource = Configuration.Paths.Resources.ICON_PLAY;
 				running = false;
 				break;
 			case PAUSE_SCRIPT:
-				text = "Pause";
+				text = Messages.PAUSESCRIPT;
 				pathResource = Configuration.Paths.Resources.ICON_PAUSE;
 				break;
 			case RESUME_SCRIPT:
-				text = "Resume";
+				text = Messages.RESUMESCRIPT;
 				pathResource = Configuration.Paths.Resources.ICON_START;
 				break;
 		}
