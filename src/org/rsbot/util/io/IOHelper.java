@@ -83,6 +83,11 @@ public class IOHelper {
 		}
 	}
 
+	public static void write(final String s, final File out) {
+		final ByteArrayInputStream in = new ByteArrayInputStream(StringUtil.getBytesUtf8(s));
+		write(in, out);
+	}
+
 	public static void recursiveDelete(final File path, final boolean deleteParent) {
 		if (!path.exists()) {
 			return;
