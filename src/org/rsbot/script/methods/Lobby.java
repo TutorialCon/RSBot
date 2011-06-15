@@ -3,7 +3,9 @@ package org.rsbot.script.methods;
 import org.rsbot.script.util.Filter;
 import org.rsbot.script.wrappers.RSComponent;
 import org.rsbot.script.wrappers.RSInterface;
+import org.rsbot.util.io.HttpClient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,6 @@ import java.util.regex.Pattern;
  * @author Debauchery
  */
 public class Lobby extends MethodProvider {
-
 	public static final int INTERFACE = 906;
 	public static final int TAB_WORLDS = 12;
 	public static final int TAB_FRIENDS = 11;
@@ -39,6 +40,11 @@ public class Lobby extends MethodProvider {
 	public final static int WORLD_SELECT_INTERFACE_SCROLL_AREA = 86;
 	public final static int WORLD_SELECT_INTERFACE_SCROLL_BAR = 1;
 
+	public static final Filter<World> ALL_FILTER = new Filter<World>() {
+		public boolean accept(final World w) {
+			return true;
+		}
+	};
 
 	public Lobby(final MethodContext ctx) {
 		super(ctx);
@@ -56,8 +62,7 @@ public class Lobby extends MethodProvider {
 	public class World {
 		private String world, players, activity, lootShare, type;
 
-		public World(String world, String players, String activity,
-		             String lootShare, String type) {
+		public World(String world, String players, String activity, String lootShare, String type) {
 			this.world = world;
 			this.players = players;
 			this.activity = activity;
@@ -93,10 +98,8 @@ public class Lobby extends MethodProvider {
 	public Object[][] getWorldObjects() {
 		String HTML = null;
 		try {
-			HTML = org.rsbot.util.io.Internet.readPage(new URL(
-					"http://www.runescape.com/slu.ws?order=WPMLA"),
-					"www.runescape.com", null);
-		} catch (Exception e) {
+			HTML = HttpClient.downloadAsString((new URL("http://www.runescape.com/slu.ws?order=WPMLA")));
+		} catch (IOException e) {
 		}
 
 		try {
@@ -116,10 +119,8 @@ public class Lobby extends MethodProvider {
 					Pattern.UNICODE_CASE);
 			Matcher regexMatcher = regex.matcher(HTML);
 			while (regexMatcher.find()) {
-				worldData.add(new Object[]{regexMatcher.group(1),
-						regexMatcher.group(2), regexMatcher.group(3),
-						(regexMatcher.group(4).equals("Y") ? "Yes" : "No"),
-						regexMatcher.group(5)});
+				worldData.add(new Object[]{regexMatcher.group(1), regexMatcher.group(2), regexMatcher.group(3),
+						(regexMatcher.group(4).equals("Y") ? "Yes" : "No"), regexMatcher.group(5)});
 			}
 		} catch (Exception e) {
 		}
@@ -136,8 +137,7 @@ public class Lobby extends MethodProvider {
 		List<World> worlds = new ArrayList<World>();
 		for (Object[] worldData : getWorldObjects()) {
 			if (worldData.length == 5) {
-				World world = (new World((String) worldData[0],
-						(String) worldData[1], (String) worldData[2],
+				World world = (new World((String) worldData[0], (String) worldData[1], (String) worldData[2],
 						(String) worldData[3], (String) worldData[4]));
 				if (world != null && filter.accept(world)) {
 					worlds.add(world);
@@ -146,12 +146,6 @@ public class Lobby extends MethodProvider {
 		}
 		return (World[]) worlds.toArray();
 	}
-
-	public static final Filter<World> ALL_FILTER = new Filter<World>() {
-		public boolean accept(final World w) {
-			return true;
-		}
-	};
 
 	public World[] getAllMembersIncluded(final boolean members) {
 		return getAll(new Filter<World>() {
@@ -182,8 +176,7 @@ public class Lobby extends MethodProvider {
 	}
 
 	public int getSelectedTab() {
-		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN,
-				TAB_OPTIONS, TAB_FRIENDS_CHAT};
+		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN, TAB_OPTIONS, TAB_FRIENDS_CHAT};
 		for (int id : ids) {
 			final RSComponent c = getComponent(id);
 			if (c != null && c.isValid() && c.getBackgroundColor() == 4671) {
@@ -211,10 +204,8 @@ public class Lobby extends MethodProvider {
 		open(TAB_WORLDS);
 		if (methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).isValid()) {
 			final String worldText = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-					WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().substring(
-					methods.interfaces.getComponent(
-							WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().indexOf(
-							"World ") + 6);
+					WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().substring(methods.interfaces.getComponent(
+					WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().indexOf("World ") + 6);
 			return Integer.parseInt(worldText);
 		}
 		return -1;
@@ -281,16 +272,12 @@ public class Lobby extends MethodProvider {
 		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid()) {
 			open(TAB_WORLDS);
 		}
-		for (int i = 0; i < methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-				WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents().length;
-		     i++) {
-			final RSComponent comp = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-					WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents()[i];
+		for (int i = 0; i < methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents().length; i++) {
+			final RSComponent comp = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents()[i];
 			if (comp != null) {
 				final String number = comp.getText();
 				if (Integer.parseInt(number) == world) {
-					return methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-							WORLD_SELECT_INTERFACE_WORLD_LIST).getComponents()[i];
+					return methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_LIST).getComponents()[i];
 				}
 			}
 		}
@@ -308,5 +295,4 @@ public class Lobby extends MethodProvider {
 		}
 		return !methods.game.isLoggedIn();
 	}
-
 }
