@@ -65,6 +65,7 @@ public class LicenseDialog extends JDialog implements ActionListener {
 
 		setResizable(false);
 		pack();
+		setAlwaysOnTop(true);
 		setLocationRelativeTo(getOwner());
 		addWindowListener(new WindowAdapter() {
 			@Override
