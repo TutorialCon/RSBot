@@ -1,6 +1,7 @@
 package org.rsbot.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Insets;
@@ -10,7 +11,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -55,8 +55,7 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		accept.addActionListener(this);
 		decline.addActionListener(this);
 
-		final JPanel bar = new JPanel();
-		bar.add(Box.createHorizontalGlue());
+		final JPanel bar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bar.add(accept);
 		bar.add(decline);
 
