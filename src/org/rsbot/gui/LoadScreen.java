@@ -87,9 +87,11 @@ public class LoadScreen extends JFrame {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		log.info("Downloading resources");
+		final String downloading = "Downloading resources";
+		log.info(downloading);
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			try {
+				log.fine(downloading + " (" + item.getValue().getName() + ")");
 				HttpClient.download(new URL(item.getKey()), item.getValue());
 			} catch (final IOException ignored) {
 			}
