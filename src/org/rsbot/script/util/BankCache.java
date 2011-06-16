@@ -15,7 +15,8 @@ import java.util.HashMap;
  * @author Timer
  */
 public class BankCache {
-	private final static File cacheFile = new File(Configuration.Paths.getCacheDirectory(), "bank.dat");
+	public final static String CACHE = Configuration.Paths.getCacheDirectory() + File.separator + "bank.dat";
+	private final static File cacheFile = new File(CACHE);
 	private final static HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>();
 	private static final Object lock = new Object();
 

@@ -1,6 +1,6 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.Configuration;
+import org.rsbot.Configuration.Paths;
 import org.rsbot.script.background.BankMonitor;
 import org.rsbot.script.background.WebData;
 import org.rsbot.script.internal.BackgroundScriptHandler;
@@ -23,6 +23,7 @@ import java.util.*;
  * @author Timer
  */
 public class Web extends MethodProvider {
+	public static final String CACHE = Paths.getSettingsDirectory() + File.separator + "Web.store";
 	public static final HashMap<RSTile, Integer> rs_map = new HashMap<RSTile, Integer>();
 	public static boolean loaded = false;
 	public static boolean webScriptsLoaded = false;
@@ -468,11 +469,11 @@ public class Web extends MethodProvider {
 			Web.rs_map.clear();//Remove residue.
 			lastAccess = System.currentTimeMillis();
 			try {
-				if (!new File(Configuration.Paths.getWebDatabase()).exists()) {
+				if (!new File(CACHE).exists()) {
 					Web.loaded = true;
 					return true;
 				}
-				final BufferedReader bufferedReader = new BufferedReader(new FileReader(Configuration.Paths.getWebDatabase()));
+				final BufferedReader bufferedReader = new BufferedReader(new FileReader(CACHE));
 				String dataLine;
 				final HashMap<RSTile, Integer> mapData = new HashMap<RSTile, Integer>();
 				while ((dataLine = bufferedReader.readLine()) != null) {

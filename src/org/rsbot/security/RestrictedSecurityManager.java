@@ -9,7 +9,9 @@ import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.BackgroundScriptHandler;
 import org.rsbot.script.internal.ScriptHandler;
+import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.ScriptDeliveryNetwork;
+import org.rsbot.script.util.BankCache;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 import sun.font.FontManager;
@@ -354,9 +356,14 @@ public class RestrictedSecurityManager extends SecurityManager {
 						fail = false;
 					}
 				}
-				for (final String prefix : new String[]{Configuration.Paths.getScreenshotsDirectory(),
-						Configuration.Paths.getScriptsDirectory(), Configuration.Paths.getWebDatabase()}) {
+				for (final String prefix : new String[]{Configuration.Paths.getScreenshotsDirectory(), Configuration.Paths.getScriptsDirectory()}) {
 					if (path.startsWith(prefix)) {
+						fail = false;
+						break;
+					}
+				}
+				for (final String prefix : new String[]{Web.CACHE, BankCache.CACHE}) {
+					if (path.equalsIgnoreCase(prefix)) {
 						fail = false;
 						break;
 					}

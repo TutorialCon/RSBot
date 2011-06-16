@@ -1,6 +1,5 @@
 package org.rsbot.script.util.io;
 
-import org.rsbot.Configuration;
 import org.rsbot.script.methods.Web;
 import org.rsbot.script.wrappers.RSTile;
 
@@ -22,7 +21,7 @@ public class WebQueue {
 	private static final Object queueLock = new Object(), bufferLock = new Object(), removeLock = new Object();
 
 	static {
-		writer = new QueueWriter(Configuration.Paths.getWebDatabase());
+		writer = new QueueWriter(Web.CACHE);
 	}
 
 	/**

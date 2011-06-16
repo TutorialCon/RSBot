@@ -160,10 +160,6 @@ public class Configuration {
 			return Paths.getCacheDirectory() + File.separator + "info.dat";
 		}
 
-		public static String getWebDatabase() {
-			return Paths.getSettingsDirectory() + File.separator + "Web.store";
-		}
-
 		public static String getServiceKey() {
 			return Paths.getSettingsDirectory() + File.separator + "service.key";
 		}
