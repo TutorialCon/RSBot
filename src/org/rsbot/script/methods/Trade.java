@@ -25,6 +25,8 @@ public class Trade extends MethodProvider {
 	public static final int INTERFACE_TRADE_MAIN_DECLINE = 19;
 	public static final int INTERFACE_TRADE_SECOND_ACCEPT = 36;
 	public static final int INTERFACE_TRADE_SECOND_DECLINE = 37;
+	public static final int INTERFACE_TRADE_OUR_AMOUNT = 43;
+	public static final int INTERFACE_TRADE_THEIR_AMOUNT = 44;
 
 	private final static int INTERFACE_TRADE_MAIN_INV_SLOTS = 21;
 
@@ -251,5 +253,66 @@ public class Trade extends MethodProvider {
 			}
 		}
 		return 0;
+	}
+	
+	/**
+	 * Checks if you have offered any item.
+	 *
+	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
+	 */
+	public boolean isWealthOffered() {
+		if(!inTradeMain()) return false;
+		return methods.interfaces.get(INTERFACE_TRADE_MAIN)
+			.getComponent(INTERFACE_TRADE_OUR_AMOUNT).getText().indexOf("Nothing") == -1; 
+	}
+	
+	/**
+	 * Checks if other player has offered any item.
+	 *
+	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
+	 */
+	public boolean isWealthReceived() {
+		if(!inTradeMain()) return false;
+		return methods.interfaces.get(INTERFACE_TRADE_MAIN)
+			.getComponent(INTERFACE_TRADE_THEIR_AMOUNT).getText().indexOf("Nothing") == -1; 
+	}
+	
+	/**
+	 * If trade main is open, offers specified amount of an item.
+	 *
+	 * @param itemID The ID of the item.
+	 * @param number The amount to offer. 0 deposits All. 1,5,10 offer
+	 *               corresponding amount while other numbers offer X.
+	 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>.
+	 */
+	private boolean offer(final int itemID, final int number) {
+		if (!inTradeMain()) return false;
+		if (number < 0) {
+			throw new IllegalArgumentException("number < 0 (" + number + ")");
+		}	
+		RSComponent item = methods.inventory.getItem(itemID).getComponent();
+		final int itemCount = methods.inventory.getCount(true, itemID);
+		if(item == null) {
+			return true;
+		}
+		switch (number) {
+			case 0:
+				item.interact(itemCount > 1 ? "Offer-All" : "Offer");
+				break;
+			case 1:
+				item.interact("Offer");
+				break;
+			default:
+				if(!item.interact("Offer-" + number)) {
+					if (item.interact("Offer-X")) {
+						sleep(random(1000, 1300));
+						methods.inputManager.sendKeys(String.valueOf(number), true);
+					}
+				}
+				break;
+		}
+		sleep(300);
+		return (methods.inventory.getCount(itemID) < itemCount)
+				|| (methods.inventory.getCount() == 0);
 	}
 }
