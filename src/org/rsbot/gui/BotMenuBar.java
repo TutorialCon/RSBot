@@ -9,7 +9,9 @@ import org.rsbot.locale.Messages;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
@@ -21,6 +23,7 @@ import java.util.Map.Entry;
 public class BotMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 971579975301998332L;
 	public static final Map<String, Class<?>> DEBUG_MAP = new LinkedHashMap<String, Class<?>>();
+	public static final HashMap<String, KeyStroke> SHORTCUTS = new HashMap<String, KeyStroke>();
 	private static final String[] TITLES;
 	private static final String[][] ELEMENTS;
 
@@ -56,6 +59,9 @@ public class BotMenuBar extends JMenuBar {
 		DEBUG_MAP.put("Calc Test", DrawBoundaries.class);
 		DEBUG_MAP.put("Settings", DrawSettings.class);
 		DEBUG_MAP.put("Web", DrawWeb.class);
+		
+		// Keyboard Shortcuts		
+		SHORTCUTS.put("File.New Bot", KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK));
 
 		// Other
 		DEBUG_MAP.put("Log Messages", MessageLogger.class);
@@ -274,10 +280,29 @@ public class BotMenuBar extends JMenuBar {
 					commandMenuItem.put(e, jmi);
 				}
 				jmi.addActionListener(listener);
-				jmi.setActionCommand(title + "." + e);
+				String command = title + "." + e;
+				jmi.setActionCommand(command);				
+				if (SHORTCUTS.containsKey(command)){										
+					jmi.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(SHORTCUTS.get(command), command);					
+					jmi.getActionMap().put(command, new ShortcutPress());
+				}
 				menu.add(jmi);
 			}
-		}
-		return menu;
+		}		
+		return menu;		
+		
 	}
+	
+	class ShortcutPress extends AbstractAction {
+
+		private static final long serialVersionUID = 1861861543819184211L;
+
+		public void actionPerformed(ActionEvent evt) {
+			Object source = evt.getSource();
+			String text = ((JMenuItem) source).getText();			
+			if (text.equals("New Bot")){				
+				commandMenuItem.get(Messages.NEWBOT).doClick();
+			}
+		}		
+	}	
 }
