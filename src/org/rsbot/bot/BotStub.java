@@ -19,8 +19,7 @@ import java.util.logging.Logger;
 
 public class BotStub implements AppletStub, AppletContext {
 	private final Map<URL, WeakReference<Image>> IMAGE_CACHE = new HashMap<URL, WeakReference<Image>>();
-	private final Map<String, InputStream> INPUT_CACHE = Collections.synchronizedMap(
-			new HashMap<String, InputStream>(2));
+	private final Map<String, InputStream> INPUT_CACHE = Collections.synchronizedMap(new HashMap<String, InputStream>(2));
 
 	private final Logger log = Logger.getLogger(BotStub.class.getName());
 	private final Applet applet;
