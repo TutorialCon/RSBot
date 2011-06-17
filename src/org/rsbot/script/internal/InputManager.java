@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class InputManager {
-
 	private final java.util.Random random = new java.util.Random();
 	private final MouseHandler mouseHandler = new MouseHandler(this);
 	private final Bot bot;
@@ -95,19 +94,16 @@ public class InputManager {
 		getClient().getKeyboard()._keyPressed(ke);
 
 		if (ms > 500) {
-			ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + 500, 0, keyCode,
-					(char) keyCode);
+			ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + 500, 0, keyCode, (char) keyCode);
 			getClient().getKeyboard()._keyPressed(ke);
 			final int ms2 = ms - 500;
 			for (int i = 37; i < ms2; i += random(20, 40)) {
-				ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + i + 500, 0, keyCode,
-						(char) keyCode);
+				ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + i + 500, 0, keyCode, (char) keyCode);
 				getClient().getKeyboard()._keyPressed(ke);
 			}
 		}
 		final int delay2 = ms + random(-30, 30);
-		ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis() + delay2, 0, keyCode,
-				(char) keyCode);
+		ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis() + delay2, 0, keyCode, (char) keyCode);
 		getClient().getKeyboard()._keyReleased(ke);
 	}
 
@@ -233,8 +229,7 @@ public class InputManager {
 
 	public void releaseKey(final char ch) {
 		KeyEvent ke;
-		ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis(), InputEvent.ALT_DOWN_MASK, ch,
-				getKeyChar(ch));
+		ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis(), InputEvent.ALT_DOWN_MASK, ch, getKeyChar(ch));
 		getClient().getKeyboard()._keyReleased(ke);
 	}
 
@@ -269,12 +264,10 @@ public class InputManager {
 		}
 		KeyEvent ke;
 		if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN) {
-			ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + delay, 0, code,
-					getKeyChar(ch), KeyEvent.KEY_LOCATION_STANDARD);
+			ke = new KeyEvent(getTarget(), KeyEvent.KEY_PRESSED, System.currentTimeMillis() + delay, 0, code, getKeyChar(ch), KeyEvent.KEY_LOCATION_STANDARD);
 			getClient().getKeyboard()._keyPressed(ke);
 			final int delay2 = random(50, 120) + random(0, 100);
-			ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis() + delay2, 0, code,
-					getKeyChar(ch), KeyEvent.KEY_LOCATION_STANDARD);
+			ke = new KeyEvent(getTarget(), KeyEvent.KEY_RELEASED, System.currentTimeMillis() + delay2, 0, code,	getKeyChar(ch), KeyEvent.KEY_LOCATION_STANDARD);
 			getClient().getKeyboard()._keyReleased(ke);
 		} else {
 			if (!shift) {

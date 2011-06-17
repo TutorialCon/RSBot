@@ -5,7 +5,6 @@ import org.rsbot.bot.Bot;
 import java.util.Random;
 
 public class BreakHandler {
-
 	private final Random random = new Random();
 
 	private long nextBreak;
@@ -20,8 +19,7 @@ public class BreakHandler {
 	}
 
 	public boolean isBreaking() {
-		return ticks > 50 && nextBreak > 0 && nextBreak < System.currentTimeMillis()
-				&& breakEnd > System.currentTimeMillis() && can();
+		return ticks > 50 && nextBreak > 0 && nextBreak < System.currentTimeMillis() && breakEnd > System.currentTimeMillis() && can();
 	}
 
 	private boolean can() {
@@ -60,5 +58,4 @@ public class BreakHandler {
 		final int n = Math.abs(max - min);
 		return Math.min(min, max) + (n == 0 ? 0 : random.nextInt(n));
 	}
-
 }

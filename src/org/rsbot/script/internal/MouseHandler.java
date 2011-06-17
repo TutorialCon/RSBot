@@ -6,12 +6,11 @@ import java.awt.*;
  * @author BenLand100
  */
 public class MouseHandler {
-
 	/**
 	 * The default mouse speed. This is the delay in ms between actual mouse
 	 * moves. Lower is faster.
 	 */
-	public static final int DEFAULT_MOUSE_SPEED = 10;
+	public static final int DEFAULT_MOUSE_SPEED = 12;
 
 	/**
 	 * The maximum distance (in pixels) to move the mouse after clicks in either
@@ -33,6 +32,12 @@ public class MouseHandler {
 	public static final int reactionTime = 0;
 
 	private static final java.util.Random staticRandom = new java.util.Random();
+	private final InputManager inputManager;
+	private final java.util.Random random = new java.util.Random();
+
+	MouseHandler(final InputManager inputManager) {
+		this.inputManager = inputManager;
+	}
 
 	/**
 	 * Applies a midpoint algorithm to the Vector of points to ensure pixel to
@@ -140,7 +145,7 @@ public class MouseHandler {
 
 	/**
 	 * Satisfies Integral[gaussian(t),t,0,1] == 1D Therefore can distribute a
-	 * value as a bell curve over the intervel 0 to 1
+	 * value as a bell curve over the interval 0 to 1
 	 *
 	 * @param t = A value, 0 to 1, representing a percent along the curve
 	 * @return The value of the gaussian curve at this position
@@ -174,10 +179,10 @@ public class MouseHandler {
 	/**
 	 * Creates random control points for a spline. Written by Benland100
 	 *
-	 * @param sx           Begining X position
-	 * @param sy           Begining Y position
-	 * @param ex           Begining X position
-	 * @param ey           Begining Y position
+	 * @param sx           Beginning X position
+	 * @param sy           Beginning Y position
+	 * @param ex           Beginning X position
+	 * @param ey           Beginning Y position
 	 * @param ctrlSpacing  Distance between control origins
 	 * @param ctrlVariance Max X or Y variance of each control point from its origin
 	 * @return An array of Points that represents the control points of the
@@ -229,8 +234,7 @@ public class MouseHandler {
 			double x = 0;
 			double y = 0;
 			for (double index = 0; index <= degree; index++) {
-				final double probPoly = MouseHandler.nCk((int) degree, (int) index) * Math.pow(theta, index) * Math.pow(
-						1D - theta, degree - index);
+				final double probPoly = MouseHandler.nCk((int) degree, (int) index) * Math.pow(theta, index) * Math.pow(1D - theta, degree - index);
 				x += probPoly * controls[(int) index].x;
 				y += probPoly * controls[(int) index].y;
 			}
@@ -251,14 +255,6 @@ public class MouseHandler {
 		return spline.toArray(new Point[spline.size()]);
 	}
 
-	private final InputManager inputManager;
-
-	private final java.util.Random random = new java.util.Random();
-
-	MouseHandler(final InputManager inputManager) {
-		this.inputManager = inputManager;
-	}
-
 	/**
 	 * Moves the mouse from a position to another position with randomness
 	 * applied.
@@ -273,11 +269,7 @@ public class MouseHandler {
 	 * @param randY randomness in the y direction
 	 */
 	public void moveMouse(final int speed, final int x1, final int y1, final int x2, final int y2, int randX, int randY) {
-		if (x2 == -1 && y2 == -1)
-		// MouseHandler.log
-		// .warning("Non-fatal error. Please post log on forums. ("
-		// + x2 + "," + y2 + ")");
-		{
+		if (x2 == -1 && y2 == -1) {
 			return;
 		}
 		if (randX <= 0) {
@@ -290,8 +282,7 @@ public class MouseHandler {
 			if (x2 == x1 && y2 == y1) {
 				return;
 			}
-			final Point[] controls = MouseHandler.generateControls(x1, y1, x2 + random.nextInt(randX),
-					y2 + random.nextInt(randY), 50, 120);
+			final Point[] controls = MouseHandler.generateControls(x1, y1, x2 + random.nextInt(randX), y2 + random.nextInt(randY), 50, 120);
 			final Point[] spline = MouseHandler.generateSpline(controls);
 			final long timeToMove = MouseHandler.fittsLaw(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)), 10);
 			final Point[] path = MouseHandler.applyDynamism(spline, (int) timeToMove, MouseHandler.DEFAULT_MOUSE_SPEED);
@@ -304,11 +295,6 @@ public class MouseHandler {
 				}
 			}
 		} catch (final Exception e) {
-			// MouseHandler.log.info("Error moving mouse: " + e);
-			// MouseHandler.log.info("Source: " + x1 + "," + y1);
-			// MouseHandler.log.info("Dest:   " + x2 + "," + y2);
-			// MouseHandler.log.info("Randx/Randy: " + randX + "/" + randY);
-			// e.printStackTrace();
 		}
 	}
 
