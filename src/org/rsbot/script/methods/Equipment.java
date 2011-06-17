@@ -8,7 +8,6 @@ import org.rsbot.script.wrappers.RSItem;
  * Equipment related operations.
  */
 public class Equipment extends MethodProvider {
-
 	public static final int ITEM_SLOTS = 11;
 	public static final int INTERFACE_EQUIPMENT = 387;
 	public static final int HELMET = 8;
@@ -53,6 +52,21 @@ public class Equipment extends MethodProvider {
 		final RSItem[] items = new RSItem[ITEM_SLOTS];
 		for (int i = 0; i < items.length; i++) {
 			items[i] = new RSItem(methods, equip[i * 3 + 8]);
+		}
+		return items;
+	}
+
+	/**
+	 * Gets the worn equipment array.
+	 * This method excludes stack sizes.
+	 *
+	 * @return An array containing all equipped items
+	 */
+	public RSItem[] getWornItems() {
+		final int[] equip = methods.players.getMyPlayer().getEquipment();
+		final RSItem[] items = new RSItem[ITEM_SLOTS];
+		for (int i = 0; i < items.length; i++) {
+			items[i] = new RSItem(methods, equip[i], 1);
 		}
 		return items;
 	}
@@ -151,5 +165,4 @@ public class Equipment extends MethodProvider {
 		}
 		return false;
 	}
-
 }

@@ -66,7 +66,7 @@ public class Combat extends MethodProvider {
 	 */
 	public int getLifePoints() {
 		try {
-			return Integer.parseInt(methods.interfaces.get(748).getComponent(8).getText());
+			return Integer.parseInt(methods.interfaces.get(748).getComponent(8).getText().trim());
 		} catch (final NumberFormatException ex) {
 			return 0;
 		}
