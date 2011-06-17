@@ -423,8 +423,7 @@ public class Calculations extends MethodProvider {
 					* z + renderData.xZ * y)) / _z);
 			final int _y = (int) (render.yMultiplier * ((int) renderData.yOff + (int) (renderData.yX * x + renderData.yY
 					* z + renderData.yZ * y)) / _z);
-			if (_x >= render.absoluteX1 && _x <= render.absoluteX2 && _y >= render.absoluteY1 && _y <=
-					render.absoluteY2) {
+			if (_x >= render.absoluteX1 && _x <= render.absoluteX2 && _y >= render.absoluteY1 && _y <= render.absoluteY2) {
 				if (methods.game.isFixed()) {
 					return new Point((int) (_x - render.absoluteX1) + 4, (int) (_y - render.absoluteY1) + 4);
 				} else {
@@ -437,14 +436,14 @@ public class Calculations extends MethodProvider {
 	}
 
 	/**
-	 * @param startX   the startX (0 < startX < 104)
-	 * @param startY   the startY (0 < startY < 104)
-	 * @param destX    the destX (0 < destX < 104)
-	 * @param destY    the destY (0 < destY < 104)
-	 * @param isObject if it's an object, it will find path which touches it.
+	 * @param startX       the startX (0 < startX < 104)
+	 * @param startY       the startY (0 < startY < 104)
+	 * @param destX        the destX (0 < destX < 104)
+	 * @param destY        the destY (0 < destY < 104)
+	 * @param findAdjacent if it's an object, it will find path which touches it.
 	 * @return The distance of the shortest path to the destination; or -1 if no valid path to the destination was found.
 	 */
-	private int dijkstraDist(final int startX, final int startY, final int destX, final int destY, final boolean isObject) {
+	private int dijkstraDist(final int startX, final int startY, final int destX, final int destY, final boolean findAdjacent) {
 		try {
 			final int[][] prev = new int[104][104];
 			final int[][] dist = new int[104][104];
@@ -470,7 +469,7 @@ public class Calculations extends MethodProvider {
 			while (step_ptr != path_ptr) {
 				curr_x = path_x[step_ptr];
 				curr_y = path_y[step_ptr];
-				if (Math.abs(curr_x - destX) + Math.abs(curr_y - destY) == (isObject ? 1 : 0)) {
+				if (Math.abs(curr_x - destX) + Math.abs(curr_y - destY) == (findAdjacent ? 1 : 0)) {
 					foundPath = true;
 					break;
 				}

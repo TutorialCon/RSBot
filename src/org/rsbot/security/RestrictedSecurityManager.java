@@ -61,7 +61,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su
 			"www.paidthefastest.com", // https://github.com/powerbot/RSBot/pull/237
-                        "greencowzsms.site50.net", // GreenCowz - SMS/Email PHP script
+			"greencowzsms.site50.net", // GreenCowz - SMS/Email PHP script
 	};
 
 	private String getCallingClass() {
