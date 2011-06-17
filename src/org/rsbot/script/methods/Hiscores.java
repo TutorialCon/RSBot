@@ -33,8 +33,7 @@ public class Hiscores extends MethodProvider {
 		if (username != null && !username.isEmpty()) {
 			try {
 				final URL url = new URL(Hiscores.HOST + Hiscores.GET + username);
-				final BufferedReader br = new BufferedReader(new InputStreamReader(
-						url.openStream()));
+				final BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 				String[] html;
 				final int[] exps = new int[26];
 				final int[] lvls = new int[26];
@@ -56,10 +55,9 @@ public class Hiscores extends MethodProvider {
 	/**
 	 * Provides access to High Scores Information.
 	 *
-	 * @author Jacmob, Aut0r
+	 * @author Jacmob
 	 */
 	public static class Stats {
-
 		private final String username;
 
 		private final int[] exps;
@@ -81,8 +79,7 @@ public class Hiscores extends MethodProvider {
 		 */
 		public int getExperience(final int index) {
 			if (index < 0 || index >= exps.length - 1) {
-				throw new IllegalArgumentException("Illegal skill index: "
-						+ index);
+				throw new IllegalArgumentException("Illegal skill index: " + index);
 			}
 			return exps[index + 1];
 		}
@@ -95,8 +92,7 @@ public class Hiscores extends MethodProvider {
 		 */
 		public int getLevel(final int index) {
 			if (index < 0 || index >= exps.length - 1) {
-				throw new IllegalArgumentException("Illegal skill index: "
-						+ index);
+				throw new IllegalArgumentException("Illegal skill index: " + index);
 			}
 			return lvls[index + 1];
 		}
@@ -109,8 +105,7 @@ public class Hiscores extends MethodProvider {
 		 */
 		public int getRank(final int index) {
 			if (index < 0 || index >= exps.length - 1) {
-				throw new IllegalArgumentException("Illegal skill index: "
-						+ index);
+				throw new IllegalArgumentException("Illegal skill index: " + index);
 			}
 			return ranks[index + 1];
 		}

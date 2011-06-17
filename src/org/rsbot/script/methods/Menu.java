@@ -317,7 +317,7 @@ public class Menu extends MethodProvider {
 	 * Returns an array of the second parts of each item in the current menu
 	 * context.
 	 *
-	 * @return The second half. "<user name>".
+	 * @return The second half, (Use <tt>Bank</tt>).
 	 */
 	public String[] getOptions() {
 		return getMenuItemPart(false);
@@ -335,8 +335,7 @@ public class Menu extends MethodProvider {
 	/**
 	 * Returns the submenu's location.
 	 *
-	 * @return The screen space point of the submenu if the menu is collapsed;
-	 *         otherwise null.
+	 * @return The screen space point of the submenu if the menu is collapsed; otherwise null.
 	 */
 	public Point getSubMenuLocation() {
 		if (isCollapsed()) {
