@@ -87,7 +87,7 @@ public class GroundItems extends MethodProvider {
 	 * @return The nearest item that is accepted by the provided Filter; or null.
 	 */
 	public RSGroundItem getNearest(final Filter<RSGroundItem> filter) {
-		int dist = 9999999;
+		int dist = Integer.MAX_VALUE;
 		final int pX = methods.players.getMyPlayer().getLocation().getX();
 		final int pY = methods.players.getMyPlayer().getLocation().getY();
 		final int minX = pX - 52, minY = pY - 52;

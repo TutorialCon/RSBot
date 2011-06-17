@@ -1,51 +1,44 @@
 package org.rsbot.script.internal.wrappers;
 
+import org.rsbot.client.NodeSub;
 import org.rsbot.client.NodeSubQueue;
 
 @SuppressWarnings("unchecked")
-public class Queue<N extends org.rsbot.client.NodeSub> {
+public class Queue<N extends NodeSub> {
+	private final NodeSubQueue nodeSubQueue;
+	private NodeSub current;
 
-	private final NodeSubQueue nl;
-	private org.rsbot.client.NodeSub current;
-
-	public Queue(final NodeSubQueue nl) {
-		this.nl = nl;
+	public Queue(final NodeSubQueue nodeSubQueue) {
+		this.nodeSubQueue = nodeSubQueue;
 	}
 
 	public int size() {
 		int size = 0;
-		org.rsbot.client.NodeSub node = nl.getTail().getPrevSub();
-
-		while (node != nl.getTail()) {
+		NodeSub node = nodeSubQueue.getTail().getPrevSub();
+		while (node != nodeSubQueue.getTail()) {
 			node = node.getPrevSub();
 			size++;
 		}
-
 		return size;
 	}
 
 	public N getHead() {
-		final org.rsbot.client.NodeSub node = nl.getTail().getNextSub();
-
-		if (node == nl.getTail()) {
+		final NodeSub node = nodeSubQueue.getTail().getNextSub();
+		if (node == nodeSubQueue.getTail()) {
 			current = null;
 			return null;
 		}
 		current = node.getNextSub();
-
 		return (N) node;
 	}
 
 	public N getNext() {
-		final org.rsbot.client.NodeSub node = current;
-
-		if (node == nl.getTail()) {
+		final NodeSub node = current;
+		if (node == nodeSubQueue.getTail()) {
 			current = null;
 			return null;
 		}
 		current = node.getNextSub();
-
 		return (N) node;
 	}
-
 }
