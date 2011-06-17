@@ -1,63 +1,54 @@
 package org.rsbot.script.internal.wrappers;
 
+import org.rsbot.client.Node;
 import org.rsbot.client.NodeDeque;
 
 @SuppressWarnings("unchecked")
 public class Deque<N> {
+	private final NodeDeque nodeDeque;
+	private Node current;
 
-	private final NodeDeque nl;
-	private org.rsbot.client.Node current;
-
-	public Deque(final NodeDeque nl) {
-		this.nl = nl;
+	public Deque(final NodeDeque nodeDeque) {
+		this.nodeDeque = nodeDeque;
 	}
 
 	public int size() {
 		int size = 0;
-		org.rsbot.client.Node node = nl.getTail().getPrevious();
-
-		while (node != nl.getTail()) {
+		Node node = nodeDeque.getTail().getPrevious();
+		while (node != nodeDeque.getTail()) {
 			node = node.getPrevious();
 			size++;
 		}
-
 		return size;
 	}
 
 	public N getHead() {
-		final org.rsbot.client.Node node = nl.getTail().getNext();
-
-		if (node == nl.getTail()) {
+		final Node node = nodeDeque.getTail().getNext();
+		if (node == nodeDeque.getTail()) {
 			current = null;
 			return null;
 		}
 		current = node.getNext();
-
 		return (N) node;
 	}
 
 	public N getTail() {
-		final org.rsbot.client.Node node = nl.getTail().getPrevious();
-
-		if (node == nl.getTail()) {
+		final Node node = nodeDeque.getTail().getPrevious();
+		if (node == nodeDeque.getTail()) {
 			current = null;
 			return null;
 		}
 		current = node.getPrevious();
-
 		return (N) node;
 	}
 
 	public N getNext() {
-		final org.rsbot.client.Node node = current;
-
-		if (node == nl.getTail()) {
+		final Node node = current;
+		if (node == nodeDeque.getTail()) {
 			current = null;
 			return null;
 		}
 		current = node.getNext();
-
 		return (N) node;
 	}
-
 }

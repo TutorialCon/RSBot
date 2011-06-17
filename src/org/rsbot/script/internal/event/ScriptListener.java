@@ -4,8 +4,6 @@ import org.rsbot.bot.Bot;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 
-/**
- */
 public interface ScriptListener {
 	public void scriptStarted(ScriptHandler handler, Script script);
 
