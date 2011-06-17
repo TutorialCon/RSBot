@@ -34,7 +34,7 @@ public class WebData extends BackgroundScript {
 			}
 			lastMapBase = currentMapBase;
 			lastLevel = currentLevel;
-			final int tileKeys[][] = walking.getCollisionFlags(currentLevel);
+			final int tileKeys[][] = walking.getCollisionFlags(currentLevel).clone();
 			for (int queryX = 3; queryX < 102; queryX++) {
 				for (int queryY = 3; queryY < 102; queryY++) {
 					final RSTile analysisTile = new RSTile(currentMapBase.getX() + queryX, currentMapBase.getY() + queryY, currentLevel);
