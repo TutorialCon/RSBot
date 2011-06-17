@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
  * @author Debauchery
  */
 public class FriendChat extends MethodProvider {
-
 	FriendChat(final MethodContext ctx) {
 		super(ctx);
 	}

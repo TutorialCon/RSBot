@@ -215,7 +215,7 @@ public class Game extends MethodProvider {
 	}
 
 	/**
-	 * Closes the currently open tab if in resizable mode.
+	 * Closes the currently open tab if in re-sizable mode.
 	 */
 	public void closeTab() {
 		final Tab tab = getTab();
