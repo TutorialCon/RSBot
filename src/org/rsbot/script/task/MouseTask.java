@@ -1,6 +1,6 @@
 package org.rsbot.script.task;
 
-import org.rsbot.script.callback.MouseMoveCallback;
+import org.rsbot.script.callback.MouseCallback;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.Methods;
 import org.rsbot.script.wrappers.RSTarget;
@@ -9,22 +9,14 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Jeroen
- * Date: 11-6-11
- * Time: 14:25
- * To change this template use File | Settings | File Templates.
- */
 public class MouseTask extends AbstractTask {
-
 	private RSTarget target;
 	private MethodContext ctx;
-	private MouseMoveCallback callback;
+	private MouseCallback callback;
 	protected List<ForceModifier> forceModifiers = new ArrayList<ForceModifier>(5);
 	protected Vector2D velocity = new Vector2D();
 
-	public MouseTask(RSTarget target, MouseMoveCallback callback, MethodContext ctx) {
+	public MouseTask(RSTarget target, MouseCallback callback, MethodContext ctx) {
 		this.target = target;
 		this.callback = callback;
 		this.ctx = ctx;
@@ -38,7 +30,7 @@ public class MouseTask extends AbstractTask {
 				break;
 			}
 
-			if (target.contains(ctx.client.getMouse().getX(), ctx.client.getMouse().getY()) && callback.onMouseOver()) {
+			if (target.contains(ctx.client.getMouse().getX(), ctx.client.getMouse().getY()) && callback.performAction()) {
 				break;
 			}
 			double deltaTime = Methods.random(8D, 10D) / 1000D;
@@ -241,5 +233,4 @@ public class MouseTask extends AbstractTask {
 			return Math.atan2(yUnits, xUnits);
 		}
 	}
-
 }

@@ -19,21 +19,21 @@ EXIT=Beenden
 
 ACCOUNTS=Konten
 FORCEINPUT=Eingabe erzwingen
-DISABLEANTIRANDOMS=Zufälle deaktivieren
+DISABLEANTIRANDOMS=Zufallsereignisse deaktivieren
 DISABLEAUTOLOGIN=Login deaktivieren
 DISABLEADS=Werbung deaktivieren
 DISABLECONFIRMATIONS=Bestätigungen deaktivieren
 BINDTO=Auf Addresse binden
 USEPASSWORD=Benutze dieses Passwort:
 LESSCPU=Weniger CPU
-DISABLECANVAS=Deaktivieren Leinwand
-EXTDVIEWS=Extended views
-AUTOSHUTDOWN=Herunterfahren (mins):
-BETAPATCH=Beta Client patch verwenden
+DISABLECANVAS=Leinwand deaktivieren
+EXTDVIEWS=Ansicht erweitern
+AUTOSHUTDOWN=Herunterfahren (min):
+BETAPATCH=Beta Client-Patch verwenden
 
 HIDETOOLBAR=Toolbar verstecken
 HIDELOGPANE=Log-Panel verstecken
-ALLDEBUGGING=Alle Debugging-nachrichten
+ALLDEBUGGING=Alle Debugging-Nachrichten
 
 CLEARCACHE=Cache Leeren
 OPTIONS=Optionen

@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 @ScriptManifest(name = "Web Data Collector", authors = {"Timer"})
 public class WebData extends BackgroundScript {
-	private RSTile lastBase = null;
-	private int lastPlane = -1;
+	private RSTile lastMapBase = null;
+	private int lastLevel = -1;
 	public final HashMap<RSTile, Integer> collectionMap = new HashMap<RSTile, Integer>();
 	private static final Object botCollectionLock = new Object();
 
@@ -19,40 +19,40 @@ public class WebData extends BackgroundScript {
 	public boolean activateCondition() {
 		final RSTile curr_base = game.getMapBase();
 		final int curr_plane = game.getPlane();
-		return Web.isLoaded() && game.isLoggedIn() && ((lastBase == null || !lastBase.equals(curr_base)) || (lastPlane == -1 || lastPlane != curr_plane));
+		return Web.isLoaded() && game.isLoggedIn() && ((lastMapBase == null || !lastMapBase.equals(curr_base)) || (lastLevel == -1 || lastLevel != curr_plane));
 	}
 
 	@Override
 	public int loop() {
 		try {
 			sleep(5000);
-			final RSTile curr_base = game.getMapBase();
-			final int curr_plane = game.getPlane();
+			final RSTile currentMapBase = game.getMapBase();
+			final int currentLevel = game.getPlane();
 			collectionMap.clear();
-			if (!curr_base.equals(game.getMapBase())) {
+			if (!currentMapBase.equals(game.getMapBase())) {
 				return -1;
 			}
-			lastBase = curr_base;
-			lastPlane = curr_plane;
-			final int flags[][] = walking.getCollisionFlags(curr_plane);
-			for (int i = 3; i < 102; i++) {
-				for (int j = 3; j < 102; j++) {
-					final RSTile collectingTile = new RSTile(curr_base.getX() + i, curr_base.getY() + j, curr_plane);
-					final int base_x = game.getBaseX(), base_y = game.getBaseY();
-					final int curr_x = collectingTile.getX() - base_x, curr_y = collectingTile.getY() - base_y;
-					final RSTile offset = walking.getCollisionOffset(curr_plane);
-					final int off_x = offset.getX();
-					final int off_y = offset.getY();
-					final int flagIndex_x = curr_x - off_x, flagIndex_y = curr_y - off_y;
-					final int here = flags[flagIndex_x][flagIndex_y];
+			lastMapBase = currentMapBase;
+			lastLevel = currentLevel;
+			final int tileKeys[][] = walking.getCollisionFlags(currentLevel).clone();
+			final RSTile collisionOffset = walking.getCollisionOffset(currentLevel);
+			final int xOffset = collisionOffset.getX();
+			final int yOffset = collisionOffset.getY();
+			final int xBase = currentMapBase.getX(), yBase = currentMapBase.getY();
+			for (int queryX = 3; queryX < 102; queryX++) {
+				for (int queryY = 3; queryY < 102; queryY++) {
+					final RSTile analysisTile = new RSTile(currentMapBase.getX() + queryX, currentMapBase.getY() + queryY, currentLevel);
+					final int localX = analysisTile.getX() - xBase, localY = analysisTile.getY() - yBase;
+					final int keyIndex_x = localX - xOffset, keyIndex_y = localY - yOffset;
+					final int key = tileKeys[keyIndex_x][keyIndex_y];
 					synchronized (botCollectionLock) {
-						if (!Web.rs_map.containsKey(collectingTile) && (!RSTile.Walkable(here) || RSTile.Questionable(here))) {
-							collectionMap.put(collectingTile, here);
+						if (!Web.rs_map.containsKey(analysisTile) && (!RSTile.Walkable(key) || RSTile.Questionable(key))) {
+							collectionMap.put(analysisTile, key);
 						} else {
-							if (Web.rs_map.containsKey(collectingTile) && Web.rs_map.get(collectingTile) != here) {
-								WebQueue.Remove(collectingTile);
-								lastBase = null;
-								lastPlane = -1;
+							if (Web.rs_map.containsKey(analysisTile) && Web.rs_map.get(analysisTile) != key) {
+								WebQueue.Remove(analysisTile);
+								lastMapBase = null;
+								lastLevel = -1;
 							}
 						}
 					}
@@ -67,6 +67,6 @@ public class WebData extends BackgroundScript {
 
 	@Override
 	public int iterationSleep() {
-		return 1000;
+		return 2000;
 	}
 }

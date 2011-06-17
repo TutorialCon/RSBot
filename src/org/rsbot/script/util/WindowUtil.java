@@ -9,7 +9,6 @@ import java.awt.*;
  * @author Enfilade
  */
 public class WindowUtil {
-
 	/**
 	 * Returned from showConfirmDialog when the user hits the "Yes" button.
 	 */
@@ -174,6 +173,4 @@ public class WindowUtil {
 	public static void maximizeWindow() {
 		frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
-
-
 }

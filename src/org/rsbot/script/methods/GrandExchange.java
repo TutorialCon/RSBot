@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
  * @author Aion, Boolean, Debauchery, kyleshay
  */
 public class GrandExchange extends MethodProvider {
-
 	private static final String HOST = "http://services.runescape.com";
 	private static final String GET = "/m=itemdb_rs/viewitem.ws?obj=";
 
@@ -33,8 +32,7 @@ public class GrandExchange extends MethodProvider {
 
 	public static final int[] GRAND_EXCHANGE_CLERK = {6528, 6529};
 
-	private static final Pattern PATTERN = Pattern
-			.compile("(?i)<td><img src=\".+obj_sprite\\.gif\\?id=(\\d+)\" alt=\"(.+)\"");
+	private static final Pattern PATTERN = Pattern.compile("(?i)<td><img src=\".+obj_sprite\\.gif\\?id=(\\d+)\" alt=\"(.+)\"");
 
 	GrandExchange() {
 		super(null);
@@ -67,12 +65,10 @@ public class GrandExchange extends MethodProvider {
 		if (isOpen()) {
 			return true;
 		}
-
 		RSNPC clerk = methods.npcs.getNearest(GRAND_EXCHANGE_CLERK);
 		if (clerk != null) {
 			clerk.interact("Exchange " + clerk.getName());
 		}
-
 		return isOpen();
 	}
 
@@ -102,10 +98,8 @@ public class GrandExchange extends MethodProvider {
 		try {
 			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot];
 			if (isOpen()) {
-				if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(
-						10).isValid()) {
-					return methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(
-							10).getText();
+				if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(10).isValid()) {
+					return methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(10).getText();
 				} else {
 					return null;
 				}
@@ -129,8 +123,7 @@ public class GrandExchange extends MethodProvider {
 			if (isOpen()) {
 				if (checkSlotIsEmpty(i)) {
 					final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[i];
-					final String s = methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE,
-							slotComponent).getComponent(18).getText();
+					final String s = methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(18).getText();
 					if (s.equals(name)) {
 						return i;
 					}
@@ -183,19 +176,14 @@ public class GrandExchange extends MethodProvider {
 		}
 		if (isOpen()) {
 			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot];
-			methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).containsAction(
-					"Veiw Offer");
+			methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).containsAction("View Offer");
 			sleep(random(700, 1200));
-			if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE,
-					GRAND_EXCHANGE_COLLECT_BOX_TWO).containsAction("Collect")) {
-				methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE,
-						GRAND_EXCHANGE_COLLECT_BOX_TWO).interact("Collect");
+			if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, GRAND_EXCHANGE_COLLECT_BOX_TWO).containsAction("Collect")) {
+				methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, GRAND_EXCHANGE_COLLECT_BOX_TWO).interact("Collect");
 				sleep(random(400, 900));
 			}
-			if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE,
-					GRAND_EXCHANGE_COLLECT_BOX_ONE).containsAction("Collect")) {
-				methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE,
-						GRAND_EXCHANGE_COLLECT_BOX_ONE).interact("Collect");
+			if (methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, GRAND_EXCHANGE_COLLECT_BOX_ONE).containsAction("Collect")) {
+				methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, GRAND_EXCHANGE_COLLECT_BOX_ONE).interact("Collect");
 				sleep(random(400, 900));
 			}
 		}
@@ -233,9 +221,7 @@ public class GrandExchange extends MethodProvider {
 			return false;
 		}
 
-		final int slotComponent = buy ?
-				INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot] :
-				INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot];
+		final int slotComponent = buy ? INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot] : INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot];
 
 		return methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).interact("Make " + (buy ? "Buy" : "Sell") + " Offer");
 	}
@@ -280,16 +266,14 @@ public class GrandExchange extends MethodProvider {
 	public GEItem lookup(final int itemID) {
 		try {
 			final URL url = new URL(GrandExchange.HOST + GrandExchange.GET + itemID);
-			final BufferedReader br = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+			final BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String input;
 			boolean exists = false;
 			int i = 0;
 			final double[] values = new double[4];
 			String name = "", examine = "";
 			while ((input = br.readLine()) != null) {
-				if (input.contains("<div class=\"brown_box main_ge_page")
-						&& !exists) {
+				if (input.contains("<div class=\"brown_box main_ge_page") && !exists) {
 					if (!input.contains("vertically_spaced")) {
 						return null;
 					}
@@ -321,11 +305,8 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public GEItem lookup(final String itemName) {
 		try {
-			final URL url = new URL(GrandExchange.HOST
-					+ "/m=itemdb_rs/results.ws?query=" + itemName
-					+ "&price=all&members=");
-			final BufferedReader br = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+			final URL url = new URL(GrandExchange.HOST + "/m=itemdb_rs/results.ws?query=" + itemName + "&price=all&members=");
+			final BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String input;
 			while ((input = br.readLine()) != null) {
 				if (input.contains("<div id=\"search_results_text\">")) {
@@ -357,8 +338,7 @@ public class GrandExchange extends MethodProvider {
 				if (!str.endsWith("k") && !str.endsWith("m") && !str.endsWith("b")) {
 					return Double.parseDouble(str);
 				}
-				return Double.parseDouble(str.substring(0, str.length() - 1))
-						* (str.endsWith("b") ? 1000000000 : str.endsWith("m") ? 1000000 : 1000);
+				return Double.parseDouble(str.substring(0, str.length() - 1)) * (str.endsWith("b") ? 1000000000 : str.endsWith("m") ? 1000000 : 1000);
 			}
 			final int k = str.startsWith("+") ? 1 : -1;
 			str = str.substring(1);
@@ -376,10 +356,8 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Provides access to GEItem Information.
-	 * , Aut0r
 	 */
 	public static class GEItem {
-
 		private final String name;
 		private final String examine;
 

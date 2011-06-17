@@ -26,16 +26,13 @@ public class BankMonitor extends BackgroundScript {
 				final long lastTime = updateTimes.get(accountName.toLowerCase());
 				if (System.currentTimeMillis() - lastTime < 30000) {
 					return -1;
-				} else {
-					updateTimes.remove(accountName.toLowerCase());
 				}
 			}
 			if (bank.isOpen()) {
 				final RSItem[] rsItems = bank.getItems();
 				try {
 					BankCache.Save(accountName, rsItems);
-				} catch (final Exception e) {
-					e.printStackTrace();
+				} catch (final Exception ignored) {
 				}
 				updateTimes.put(accountName, System.currentTimeMillis());
 			}

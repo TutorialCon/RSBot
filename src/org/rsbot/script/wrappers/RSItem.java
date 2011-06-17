@@ -12,7 +12,6 @@ import java.awt.*;
  * wrap a component.
  */
 public class RSItem extends MethodProvider implements RSTarget {
-
 	private static final Point M1_POINT = new Point(-1, -1);
 
 	private final int id;
@@ -121,7 +120,6 @@ public class RSItem extends MethodProvider implements RSTarget {
 	public RSItemDef getDefinition() {
 		try {
 			final org.rsbot.client.Node ref = methods.nodes.lookup(methods.client.getRSItemDefLoader(), id);
-
 			if (ref != null) {
 				if (ref instanceof HardReference) {
 					return new RSItemDef((org.rsbot.client.RSItemDef) ((HardReference) ref).get());

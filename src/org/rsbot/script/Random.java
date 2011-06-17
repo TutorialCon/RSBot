@@ -8,17 +8,9 @@ import java.awt.*;
 import java.util.logging.Level;
 
 public abstract class Random extends Methods implements PaintListener {
-
 	protected String name;
-
 	private volatile boolean enabled = true;
-
-	public int i = 50;
-
-	public boolean up = false;
-
 	private Script script;
-
 	private final long timeout = random(240, 300);
 
 	/**
@@ -129,17 +121,10 @@ public abstract class Random extends Methods implements PaintListener {
 		}
 	}
 
-	@Override
 	public final void onRepaint(final Graphics g) {
 		final Point p = mouse.getLocation();
 		final int w = game.getWidth(), h = game.getHeight();
-		if (i >= 70 && !up) {
-			i--;
-		} else {
-			i++;
-			up = i < 130;
-		}
-		g.setColor(new Color(0, 255, 0, i));
+		g.setColor(new Color(28, 107, 160, 100));
 		g.fillRect(0, 0, p.x - 1, p.y - 1);
 		g.fillRect(p.x + 1, 0, w - (p.x + 1), p.y - 1);
 		g.fillRect(0, p.y + 1, p.x - 1, h - (p.y - 1));

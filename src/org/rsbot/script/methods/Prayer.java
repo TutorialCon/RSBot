@@ -11,7 +11,6 @@ import java.util.List;
  * @author Debauchery
  */
 public class Prayer extends MethodProvider {
-
 	public static final int INTERFACE_PRAYER = 271;
 	public static final int INTERFACE_PRAYER_ORB = 749;
 

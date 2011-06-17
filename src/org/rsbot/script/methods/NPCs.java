@@ -112,7 +112,6 @@ public class NPCs extends MethodProvider {
 		int min = 20;
 		RSNPC closest = null;
 		final int[] indices = methods.client.getRSNPCIndexArray();
-
 		for (final int index : indices) {
 			final Node node = methods.nodes.lookup(methods.client.getRSNPCNC(), index);
 			if (node instanceof RSNPCNode) {

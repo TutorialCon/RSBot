@@ -111,6 +111,9 @@ public class Environment extends MethodProvider {
 		}
 	}
 
+	/**
+	 * Disables all random event solvers.
+	 */
 	public void disableRandoms() {
 		for (final Random random : methods.bot.getScriptHandler().getRandoms()) {
 			if (random.isEnabled()) {
