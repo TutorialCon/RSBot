@@ -1,6 +1,6 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.script.callback.MouseMoveCallback;
+import org.rsbot.script.callback.MouseCallback;
 import org.rsbot.script.internal.MouseHandler;
 import org.rsbot.script.task.MouseTask;
 import org.rsbot.script.wrappers.RSTarget;
@@ -497,7 +497,7 @@ public class Mouse extends MethodProvider {
 		return mouse != null && mouse.isPressed();
 	}
 
-	public MouseTask create(RSTarget target, MouseMoveCallback callback) {
+	public MouseTask create(RSTarget target, MouseCallback callback) {
 		MouseTask task = new MouseTask(target, callback, methods);
 		task.init(methods.service.submit(task, task));
 		return task;
