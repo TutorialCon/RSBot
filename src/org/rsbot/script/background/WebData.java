@@ -35,14 +35,14 @@ public class WebData extends BackgroundScript {
 			lastMapBase = currentMapBase;
 			lastLevel = currentLevel;
 			final int tileKeys[][] = walking.getCollisionFlags(currentLevel).clone();
+			final RSTile collisionOffset = walking.getCollisionOffset(currentLevel);
+			final int xOffset = collisionOffset.getX();
+			final int yOffset = collisionOffset.getY();
+			final int xBase = currentMapBase.getX(), yBase = currentMapBase.getY();
 			for (int queryX = 3; queryX < 102; queryX++) {
 				for (int queryY = 3; queryY < 102; queryY++) {
 					final RSTile analysisTile = new RSTile(currentMapBase.getX() + queryX, currentMapBase.getY() + queryY, currentLevel);
-					final int xBase = currentMapBase.getX(), yBase = currentMapBase.getY();
 					final int localX = analysisTile.getX() - xBase, localY = analysisTile.getY() - yBase;
-					final RSTile collisionOffset = walking.getCollisionOffset(currentLevel);
-					final int xOffset = collisionOffset.getX();
-					final int yOffset = collisionOffset.getY();
 					final int keyIndex_x = localX - xOffset, keyIndex_y = localY - yOffset;
 					final int key = tileKeys[keyIndex_x][keyIndex_y];
 					synchronized (botCollectionLock) {
