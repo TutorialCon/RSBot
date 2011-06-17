@@ -3,7 +3,6 @@ package org.rsbot.script.task;
 import java.util.concurrent.Future;
 
 public interface Task extends Runnable {
-
 	/**
 	 * Checks if the current task is still running.
 	 *

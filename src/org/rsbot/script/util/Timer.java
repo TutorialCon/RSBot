@@ -1,10 +1,11 @@
 package org.rsbot.script.util;
 
 /**
- * A Timer
+ * A Timer utility.
+ *
+ * @author Jacmob
  */
 public class Timer {
-
 	private long end;
 	private final long start;
 	private final long period;
