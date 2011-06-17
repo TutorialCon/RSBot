@@ -10,12 +10,18 @@ public class Account extends MethodProvider {
 		super(ctx);
 	}
 
+	/**
+	 * Sets the current bot's account name.
+	 *
+	 * @param name The account name.
+	 * @return <tt>true</tt> if the account existed.
+	 */
 	public boolean setAccount(final String name) {
 		return methods.bot.setAccount(name);
 	}
 
 	/**
-	 * The account name.
+	 * The account's name.
 	 *
 	 * @return The currently selected account's name.
 	 */
@@ -24,7 +30,7 @@ public class Account extends MethodProvider {
 	}
 
 	/**
-	 * The account display name.
+	 * The account's display name.
 	 *
 	 * @return The currently selected account's display name.
 	 */
@@ -33,7 +39,7 @@ public class Account extends MethodProvider {
 	}
 
 	/**
-	 * The account password.
+	 * The account's password.
 	 *
 	 * @return The currently selected account's password.
 	 */
@@ -42,7 +48,7 @@ public class Account extends MethodProvider {
 	}
 
 	/**
-	 * The account pin.
+	 * The account's pin.
 	 *
 	 * @return The currently selected account's pin.
 	 */
@@ -51,7 +57,7 @@ public class Account extends MethodProvider {
 	}
 
 	/**
-	 * The account reward.
+	 * The account's selected reward.
 	 *
 	 * @return The currently selected account's reward.
 	 */
