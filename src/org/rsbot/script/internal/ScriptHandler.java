@@ -9,7 +9,6 @@ import org.rsbot.script.randoms.*;
 import java.util.*;
 
 public class ScriptHandler {
-
 	private final ArrayList<org.rsbot.script.Random> randoms = new ArrayList<org.rsbot.script.Random>();
 	private final HashMap<Integer, Script> scripts = new HashMap<Integer, Script>();
 	private final HashMap<Integer, Thread> scriptThreads = new HashMap<Integer, Thread>();
@@ -208,5 +207,4 @@ public class ScriptHandler {
 			l.inputChanged(bot, mask);
 		}
 	}
-
 }

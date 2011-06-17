@@ -34,14 +34,6 @@ public class BackgroundScriptHandler {
 		return scripts.size();
 	}
 
-	public Bot getBot() {
-		return bot;
-	}
-
-	public Map<Integer, BackgroundScript> getRunningScripts() {
-		return Collections.unmodifiableMap(scripts);
-	}
-
 	public void stopScript(final int id) {
 		final BackgroundScript script = scripts.get(id);
 		if (script != null) {
