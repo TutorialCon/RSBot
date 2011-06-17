@@ -5,10 +5,10 @@ import org.rsbot.script.wrappers.*;
 /**
  * Magic tab and spell related operations.
  *
+ * @author Dunnkers
  * @author Timer
  */
 public class Magic extends MethodProvider {
-
 	/**
 	 * Provides Magic Book(s) Information.
 	 */
@@ -34,8 +34,6 @@ public class Magic extends MethodProvider {
 	 * <p>
 	 * <i>Note that the experience of combat spells is based on the minimum gained.</i>
 	 * </p>
-	 *
-	 * @author Dunnkers
 	 */
 	public static enum Spell {
 		/*MODERN*/

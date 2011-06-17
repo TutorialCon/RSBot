@@ -112,11 +112,8 @@ public class Lobby extends MethodProvider {
 		ArrayList<Object[]> worldData = new ArrayList<Object[]>();
 
 		try {
-			Pattern regex = Pattern.compile(
-					"[^ ]World ([0-9[^ |^<|^\n|^ (]]*)[^0-9|^OF]*"
-							+ "([0-9|A-Z]*)[^=]*[^>]*>([^<]*)"
-							+ "[^Y|^N]*(Y|N)[^F|^M]*(Members|Free)",
-					Pattern.UNICODE_CASE);
+			Pattern regex = Pattern.compile("[^ ]World ([0-9[^ |^<|^\n|^ (]]*)[^0-9|^OF]*([0-9|A-Z]*)[^=]*[^>]*>([^<]*)"
+					+ "[^Y|^N]*(Y|N)[^F|^M]*(Members|Free)", Pattern.UNICODE_CASE);
 			Matcher regexMatcher = regex.matcher(HTML);
 			while (regexMatcher.find()) {
 				worldData.add(new Object[]{regexMatcher.group(1), regexMatcher.group(2), regexMatcher.group(3),
@@ -129,7 +126,6 @@ public class Lobby extends MethodProvider {
 		for (int i = 0; i < result.length; i++) {
 			result[i] = worldData.get(i);
 		}
-
 		return result;
 	}
 

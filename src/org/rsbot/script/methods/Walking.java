@@ -66,8 +66,7 @@ public class Walking extends MethodProvider {
 	 *         <tt>false</tt>.
 	 */
 	public boolean walkTo(final RSTile destination) {
-		if (destination.equals(lastDestination)
-				&& methods.calc.distanceTo(lastStep) < 10) {
+		if (destination.equals(lastDestination) && methods.calc.distanceTo(lastStep) < 10) {
 			return lastPath.traverse();
 		}
 		lastDestination = destination;

@@ -4,7 +4,6 @@ package org.rsbot.script.methods;
  * Keyboard related operations.
  */
 public class Keyboard extends MethodProvider {
-
 	Keyboard(final MethodContext ctx) {
 		super(ctx);
 	}
