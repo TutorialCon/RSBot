@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public abstract class AbstractTask implements Task {
-
 	private Future<?> f;
 
 	public boolean isDone() {

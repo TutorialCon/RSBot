@@ -5,7 +5,6 @@ package org.rsbot.script.util;
  * a given input should be filtered out of a collection.
  */
 public interface Filter<T> {
-
 	/**
 	 * Determines whether a given input
 	 * should be included or excluded.
@@ -15,5 +14,4 @@ public interface Filter<T> {
 	 *         <tt>false</tt> to exclude.
 	 */
 	public boolean accept(T t);
-
 }

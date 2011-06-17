@@ -9,15 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Jeroen
- * Date: 11-6-11
- * Time: 14:25
- * To change this template use File | Settings | File Templates.
- */
 public class MouseTask extends AbstractTask {
-
 	private RSTarget target;
 	private MethodContext ctx;
 	private MouseCallback callback;
@@ -241,5 +233,4 @@ public class MouseTask extends AbstractTask {
 			return Math.atan2(yUnits, xUnits);
 		}
 	}
-
 }

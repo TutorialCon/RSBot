@@ -15,7 +15,6 @@ import java.util.logging.Logger;
  */
 public class WebQueue {
 	public static boolean weAreBuffering = false;
-	public static int bufferingCount = 0;
 	private static final List<String> queue = new ArrayList<String>(), queueOutList = new ArrayList<String>(), removeQueue = new ArrayList<String>(), removeStack = new ArrayList<String>();
 	private static QueueWriter writer;
 	private static final Logger log = Logger.getLogger(WebQueue.class.getName());
@@ -32,14 +31,12 @@ public class WebQueue {
 	 */
 	public static void Add(final HashMap<RSTile, Integer> gameTiles) {
 		Web.rs_map.putAll(gameTiles);
-		final int count = gameTiles.size();
 		new Thread() {
 			@Override
 			public void run() {
 				try {
 					final HashMap<RSTile, Integer> safeMapData = new HashMap<RSTile, Integer>();
 					safeMapData.putAll(gameTiles);
-					bufferingCount = bufferingCount + count;
 					for (Map.Entry<RSTile, Integer> rsTileIntegerEntry : safeMapData.entrySet()) {
 						final Map.Entry<RSTile, Integer> tileData = rsTileIntegerEntry;
 						final RSTile tile = tileData.getKey();
@@ -49,7 +46,6 @@ public class WebQueue {
 								queue.add(tile.getX() + "," + tile.getY() + "," + tile.getZ() + "k" + key);
 							}
 							synchronized (bufferLock) {
-								bufferingCount--;
 								try {
 									weAreBuffering = true;
 									Thread.sleep(1);
@@ -58,15 +54,8 @@ public class WebQueue {
 							}
 						}
 					}
-					if (bufferingCount < 0) {
-						bufferingCount = 0;
-					}
 					weAreBuffering = false;
 				} catch (final Exception e) {
-					bufferingCount = count;
-					if (bufferingCount < 0) {
-						bufferingCount = 0;
-					}
 					e.printStackTrace();
 				}
 			}
