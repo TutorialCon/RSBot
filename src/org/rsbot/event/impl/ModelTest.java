@@ -4,6 +4,7 @@ import org.rsbot.bot.Bot;
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.wrappers.RSModel;
+import org.rsbot.script.wrappers.RSObject;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -27,7 +28,8 @@ public class ModelTest implements PaintListener, MouseMotionListener {
 
 	public void onRepaint(Graphics render) {
 		render.setColor(Color.green);
-		for (final org.rsbot.script.wrappers.RSObject o : ctx.objects.getAll()) {
+		final RSObject[] rsObjects = ctx.objects.getAll(10).clone();
+		for (final RSObject o : rsObjects) {
 			final RSModel model = o.getModel();
 			if (model != null && model.contains(mousePoint)) {
 				model.drawWireFrame(render);
