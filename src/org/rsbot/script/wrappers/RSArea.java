@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Represents a shape made of RSTiles.
  *
- * @author SpeedWing
+ * @author SpeedWing,Emeleo
  */
 public class RSArea {
 	private final Polygon area;
@@ -158,7 +158,7 @@ public class RSArea {
 		for (int x = getX(); x <= getX() + getWidth(); x++) {
 			for (int y = getY(); y <= getY() + getHeight(); y++) {
 				if (area.contains(x, y)) {
-					list.add(new RSTile(x, y));
+					list.add(new RSTile(x, y, plane));
 				}
 			}
 		}
