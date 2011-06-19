@@ -12,6 +12,8 @@ public class RSTilePath extends RSPath {
 	protected RSTile[] tiles;
 	protected RSTile[] orig;
 
+	private boolean end;
+
 	public RSTilePath(final MethodContext ctx, final RSTile[] tiles) {
 		super(ctx);
 		orig = tiles;
@@ -28,9 +30,12 @@ public class RSTilePath extends RSPath {
 			return false;
 		}
 		if (next.equals(getEnd())) {
-			if (methods.calc.distanceTo(next) <= 5 || next.equals(methods.walking.getDestination())) {
+			if (methods.calc.distanceTo(next) <= 1 || end && methods.players.getMyPlayer().isMoving() || next.equals(methods.walking.getDestination())) {
 				return false;
 			}
+			end = true;
+		} else {
+			end = false;
 		}
 		if (options != null && options.contains(TraversalOption.HANDLE_RUN) && !methods.walking.isRunEnabled() && methods.walking.getEnergy() > 50) {
 			methods.walking.setRun(true);

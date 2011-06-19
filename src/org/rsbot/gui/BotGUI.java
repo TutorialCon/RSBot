@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  * @author Paris
  */
 public class BotGUI extends JFrame implements ActionListener, ScriptListener {
-
 	public static final int PANEL_WIDTH = 765, PANEL_HEIGHT = 503, LOG_HEIGHT = 120;
 	public static final int MAX_BOTS = 6;
 	private static final long serialVersionUID = -5411033752001988794L;
@@ -46,7 +45,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private BotToolBar toolBar;
 	private BotMenuBar menuBar;
 	private JScrollPane textScroll;
-	private BotHome home;	
+	private BotHome home;
 	private final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
 	private java.util.Timer shutdown = null;
@@ -460,7 +459,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		toolBar = new BotToolBar(this, menuBar);
 		panel.setFocusTraversalKeys(0, new HashSet<AWTKeyStroke>());
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		new KeyboardShortcuts(manager,this);		
+		new KeyboardShortcuts(manager, this);
 		menuBar.setBot(null);
 		setJMenuBar(menuBar);
 		textScroll = new JScrollPane(TextAreaLogHandler.TEXT_AREA, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
