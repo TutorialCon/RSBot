@@ -9,11 +9,17 @@ import org.rsbot.util.io.IOHelper;
 import java.awt.*;
 import java.io.File;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 public class Application {
 	private static BotGUI gui;
 	final static File licenseFile = new File(Configuration.Paths.getLicenseAcceptance());
 
 	public static void main(final String[] args) {
+		if (Configuration.isSkinAvailable()) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
+		}
 		if (!isLicenseAccepted()) {
 			if (!LicenseDialog.showDialog(null)) {
 				return;
@@ -22,9 +28,13 @@ public class Application {
 		IOHelper.write(Integer.toString(Configuration.getVersion()), licenseFile);
 		final LoadScreen loader = new LoadScreen();
 		if (!loader.error) {
-			gui = new BotGUI();
-			loader.dispose();
-			gui.setVisible(true);
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					gui = new BotGUI();
+					loader.dispose();
+					gui.setVisible(true);
+				}
+			});
 		}
 	}
 

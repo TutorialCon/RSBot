@@ -31,9 +31,22 @@ public class LoadScreen extends JFrame {
 	public final boolean error;
 
 	public LoadScreen() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (final Exception ignored) {
+		if (Configuration.isSkinAvailable()) {
+			final LoadScreen instance = this;
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+						SwingUtilities.updateComponentTreeUI(instance);
+					} catch (final Exception ignored) {
+					}
+				}
+			});
+		} else {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (final Exception ignored) {
+			}
 		}
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

@@ -1,5 +1,6 @@
 package org.rsbot;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 
@@ -44,6 +45,15 @@ public class Boot {
 				param.append(s);
 				param.append(flags);
 				break;
+		}
+
+		if (Configuration.isSkinAvailable()) {
+			for (final String path : new String[] { Configuration.Paths.URLs.TRIDENT, Configuration.Paths.URLs.SUBSTANCE }) {
+				final File jar = new File(Configuration.Paths.getCachableResources().get(path).getAbsolutePath());
+				if (jar.exists() && jar.canRead()) {
+					location += File.pathSeparatorChar + jar.getAbsolutePath();
+				}
+			}
 		}
 
 		param.append(s);

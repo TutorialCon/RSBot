@@ -224,7 +224,7 @@ public class Configuration {
 	public static final String NAME_LOWERCASE = NAME.toLowerCase();
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
-	public static final boolean SKINNED = false;
+	public static final boolean SKINNED = true;
 	public static final boolean GOOGLEDNS = true;
 
 	public static class Twitter {
@@ -232,6 +232,11 @@ public class Configuration {
 		public static final String NAME = "rsbotorg";
 		public static final String HASHTAG = "#" + NAME_LOWERCASE;
 		public static final int MESSAGES = 3;
+	}
+
+	@SuppressWarnings("unused")
+	public static boolean isSkinAvailable() {
+		return SKINNED && Paths.getCachableResources().get(Paths.URLs.TRIDENT).exists() && Paths.getCachableResources().get(Paths.URLs.SUBSTANCE).exists();
 	}
 
 	static final URL resource;
