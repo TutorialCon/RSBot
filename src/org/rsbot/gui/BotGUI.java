@@ -46,7 +46,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private BotToolBar toolBar;
 	private BotMenuBar menuBar;
 	private JScrollPane textScroll;
-	private BotHome home;
+	private BotHome home;	
 	private final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
 	private java.util.Timer shutdown = null;
@@ -459,6 +459,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		menuBar = new BotMenuBar(this);
 		toolBar = new BotToolBar(this, menuBar);
 		panel.setFocusTraversalKeys(0, new HashSet<AWTKeyStroke>());
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		new KeyboardShortcuts(manager,this);		
 		menuBar.setBot(null);
 		setJMenuBar(menuBar);
 		textScroll = new JScrollPane(TextAreaLogHandler.TEXT_AREA, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

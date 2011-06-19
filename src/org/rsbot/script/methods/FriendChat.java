@@ -61,11 +61,12 @@ public class FriendChat extends MethodProvider {
 					break;
 				}
 			}
-			String text = world.getText();
-			isInLobby = text.contains("Lo");
-			if (!text.endsWith(".")) {
+			String text = world.getText();			
+			if (!text.contains("Lo")) {
+				isInLobby = false;				
 				worldNumber = Integer.parseInt(text.substring(text.indexOf(32) + 1));
 			} else {
+				isInLobby = true;
 				worldNumber = -1;
 			}
 		}
@@ -266,8 +267,8 @@ public class FriendChat extends MethodProvider {
 					int componentIndex = c.getComponentIndex();
 					RSComponent rank = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, 6);
 					rank = rank.getComponent(componentIndex);
-					RSComponent world = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, 7);
-					world = world.getComponent(componentIndex);
+					RSComponent world = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, 8);
+					world = world.getComponent(componentIndex*2+1);
 					users.add(new User(name, rank, world));
 				}
 				return users.toArray(new User[users.size()]);
