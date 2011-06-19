@@ -4,9 +4,7 @@ import org.rsbot.bot.Bot;
 import org.rsbot.script.BackgroundScript;
 import org.rsbot.script.ScriptManifest;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class BackgroundScriptHandler {
