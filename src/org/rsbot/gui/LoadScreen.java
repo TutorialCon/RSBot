@@ -25,12 +25,13 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoadScreen extends JFrame {
+public class LoadScreen extends JDialog {
 	private final static Logger log = Logger.getLogger(LoadScreen.class.getName());
 	private static final long serialVersionUID = 5520543482560560389L;
 	public final boolean error;
+	private static LoadScreen instance = null;
 
-	public LoadScreen() {
+	private LoadScreen() {
 		if (Configuration.isSkinAvailable()) {
 			final LoadScreen instance = this;
 			SwingUtilities.invokeLater(new Runnable() {
@@ -77,6 +78,8 @@ public class LoadScreen extends JFrame {
 		setLocationRelativeTo(getOwner());
 		setResizable(false);
 		setVisible(true);
+		setModal(true);
+		setAlwaysOnTop(true);
 
 		log.info("Language: " + Messages.LANGUAGE);
 
@@ -139,6 +142,17 @@ public class LoadScreen extends JFrame {
 			this.error = true;
 			progress.setIndeterminate(false);
 			log.severe(error);
+		}
+	}
+
+	public static boolean showDialog() {
+		instance = new LoadScreen();
+		return !instance.error;
+	}
+
+	public static void quit() {
+		if (instance != null) {
+			instance.dispose();
 		}
 	}
 

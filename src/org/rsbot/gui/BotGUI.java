@@ -52,66 +52,60 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private java.util.Timer shutdown = null;
 
 	public BotGUI() {
+		init();
+		pack();
+		setTitle(null);
+		setLocationRelativeTo(getOwner());
+		setMinimumSize(new Dimension((int) (getSize().width * .8), (int) (getSize().height * .8)));
+		setResizable(true);
+		settings = new SettingsManager(this);
+		preferences = settings.getPreferences();
+		preferences.load();
+		preferences.commit();
 		final BotGUI instance = this;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					init();
-					pack();
-					setTitle(null);
-					setLocationRelativeTo(getOwner());
-					setMinimumSize(new Dimension((int) (getSize().width * .8), (int) (getSize().height * .8)));
-					setResizable(true);
-					settings = new SettingsManager(instance);
-					preferences = settings.getPreferences();
-					preferences.load();
-					preferences.commit();
-					JFrame.setDefaultLookAndFeelDecorated(true);
-					JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-					ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-					if (!preferences.hideAds) {
-						new SplashAd(BotGUI.this).display();
-					}
-					if (Configuration.getVersion() < UpdateChecker.getLatestVersion()) {
-						log.info("New version available - please download from "
-								+ Configuration.Paths.URLs.DOWNLOAD_SHORT);
-					}
-					if (Configuration.Twitter.ENABLED) {
-						TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
-					}
-
-					addBot();
-					updateScriptControls();
-					setShutdownTimer(preferences.shutdown);
-					System.gc();
-
-					new java.util.Timer(true).schedule(new TimerTask() {
-						@Override
-						public void run() {
-							System.gc();
-						}
-					}, 1000 * 60, 1000 * 60 * 10);
-					new java.util.Timer(true).schedule(new TimerTask() {
-
-						@Override
-						public void run() {
-							if (Web.isLoaded() && Web.isInActive()) {
-								Web.free();
-							}
-							if (!WebQueue.isEmpty()) {
-								WebQueue.Start();
-								return;
-							}
-							WebQueue.Destroy();
-						}
-					}, 0, 1000 * 30);
-
-					SwingUtilities.updateComponentTreeUI(instance);
-					instance.setVisible(true);
-				} catch (final Exception ignored) {
+				JFrame.setDefaultLookAndFeelDecorated(true);
+				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+				if (!preferences.hideAds) {
+					new SplashAd(BotGUI.this).display();
 				}
+				if (Configuration.getVersion() < UpdateChecker.getLatestVersion()) {
+					log.info("New version available - please download from "
+							+ Configuration.Paths.URLs.DOWNLOAD_SHORT);
+				}
+				if (Configuration.Twitter.ENABLED) {
+					TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
+				}
+				addBot();
+				updateScriptControls();
+				setShutdownTimer(preferences.shutdown);
+				SwingUtilities.updateComponentTreeUI(instance);
+				LoadScreen.quit();
+				setVisible(true);
+				System.gc();
 			}
 		});
+		new java.util.Timer(true).schedule(new TimerTask() {
+			@Override
+			public void run() {
+				System.gc();
+			}
+		}, 1000 * 60, 1000 * 60 * 10);
+		new java.util.Timer(true).schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (Web.isLoaded() && Web.isInActive()) {
+					Web.free();
+				}
+				if (!WebQueue.isEmpty()) {
+					WebQueue.Start();
+					return;
+				}
+				WebQueue.Destroy();
+			}
+		}, 0, 1000 * 30);
 	}
 
 	@Override

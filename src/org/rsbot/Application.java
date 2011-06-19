@@ -26,12 +26,10 @@ public class Application {
 			}
 		}
 		IOHelper.write(Integer.toString(Configuration.getVersion()), licenseFile);
-		final LoadScreen loader = new LoadScreen();
-		if (!loader.error) {
+		if (LoadScreen.showDialog()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					gui = new BotGUI();
-					loader.dispose();
 				}
 			});
 		}
