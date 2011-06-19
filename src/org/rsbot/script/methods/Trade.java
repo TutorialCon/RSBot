@@ -285,7 +285,7 @@ public class Trade extends MethodProvider {
 	 *               corresponding amount while other numbers offer X.
 	 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>.
 	 */
-	private boolean offer(final int itemID, final int number) {
+	public boolean offer(final int itemID, final int number) {
 		if (!inTradeMain()) return false;
 		if (number < 0) {
 			throw new IllegalArgumentException("number < 0 (" + number + ")");
