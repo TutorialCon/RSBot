@@ -135,12 +135,9 @@ public class RestrictedSecurityManager extends SecurityManager {
 				break;
 			case PORT_HTTP:
 			case PORT_HTTPS:
-
-				if(allowAllHosts)
-					return;
-
+				if (allowAllHosts)
+					break;
 				boolean allowed = !isCallerScript();
-				
 				if (!allowed) {
 					if (isIpAddress(host)) {
 						allowed = resolved.contains(host) || (getClassContext()[1].getName().equals(Socket.class.getName()) && !isCallerScript());
