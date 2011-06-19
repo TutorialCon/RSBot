@@ -41,6 +41,7 @@ OPTIONS=Options
 
 SITE=Site
 PROJECT=Project
+LICENSE=License
 ABOUT=About
 
 TABDEFAULTTEXT=Bot

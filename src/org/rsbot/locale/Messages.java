@@ -77,6 +77,7 @@ public class Messages {
 
 	public static final String SITE = map.get("SITE");
 	public static final String PROJECT = map.get("PROJECT");
+	public static final String LICENSE = map.get("LICENSE");
 	public static final String ABOUT = map.get("ABOUT");
 
 	public static final String TABDEFAULTTEXT = map.get("TABDEFAULTTEXT");

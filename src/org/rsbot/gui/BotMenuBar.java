@@ -78,7 +78,7 @@ public class BotMenuBar extends JMenuBar {
 						Messages.MENUSEPERATOR,
 						Messages.TOGGLEFALSE + Messages.DISABLEANTIRANDOMS,
 						Messages.TOGGLEFALSE + Messages.DISABLEAUTOLOGIN},
-				constructDebugs(), {Messages.CLEARCACHE, Messages.OPTIONS}, {Messages.SITE, Messages.PROJECT, Messages.ABOUT}};
+				constructDebugs(), {Messages.CLEARCACHE, Messages.OPTIONS}, {Messages.SITE, Messages.PROJECT, Messages.LICENSE, Messages.ABOUT}};
 	}
 
 	private static String[] constructDebugs() {
