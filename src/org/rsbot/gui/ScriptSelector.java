@@ -168,7 +168,9 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				} else {
 					color = Color.WHITE;
 				}
-				comp.setBackground(isCellSelected(row, column) ? comp.getBackground() : color);
+				if (!Configuration.isSkinAvailable()) {
+					comp.setBackground(isCellSelected(row, column) ? comp.getBackground() : color);
+				}
 				return comp;
 			}
 		};
