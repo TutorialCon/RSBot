@@ -172,6 +172,14 @@ public class Configuration {
 			return getSettingsDirectory() + File.separator + "license-accept.txt";
 		}
 
+		public static String getBankCache() {
+			return getCacheDirectory() + File.separator + "bank.dat";
+		}
+
+		public static String getWebDatabase() {
+			return getSettingsDirectory() + File.separator + "Web.store";
+		}
+
 		public static String getGarbageDirectory() {
 			final File dir = new File(Configuration.Paths.getScriptCacheDirectory(), ".java");
 			if (!dir.exists()) {

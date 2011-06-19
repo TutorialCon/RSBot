@@ -23,7 +23,7 @@ import java.util.*;
  * @author Timer
  */
 public class Web extends MethodProvider {
-	public static final String CACHE = Paths.getSettingsDirectory() + File.separator + "Web.store";
+	public static final String CACHE = Paths.getWebDatabase();
 	public static final HashMap<RSTile, Integer> rs_map = new HashMap<RSTile, Integer>();
 	public static boolean loaded = false;
 	public static boolean webScriptsLoaded = false;
