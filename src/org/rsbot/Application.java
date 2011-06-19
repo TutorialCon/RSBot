@@ -32,7 +32,6 @@ public class Application {
 				public void run() {
 					gui = new BotGUI();
 					loader.dispose();
-					gui.setVisible(true);
 				}
 			});
 		}
