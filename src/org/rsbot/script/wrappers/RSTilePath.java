@@ -30,7 +30,7 @@ public class RSTilePath extends RSPath {
 			return false;
 		}
 		if (next.equals(getEnd())) {
-			if (methods.calc.distanceTo(next) <= 1 || (end && (!methods.players.getMyPlayer().isMoving() || methods.calc.distanceTo(next) < 3))) {
+			if (methods.calc.distanceTo(next) <= 1 || end && (!methods.players.getMyPlayer().isMoving() || methods.calc.distanceTo(next) < 3)) {
 				return false;
 			}
 			end = true;
