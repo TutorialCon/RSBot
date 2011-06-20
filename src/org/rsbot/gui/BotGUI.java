@@ -70,10 +70,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				if (!preferences.hideAds) {
 					new SplashAd(BotGUI.this).display();
 				}
-				if (Configuration.getVersion() < UpdateChecker.getLatestVersion()) {
-					log.info("New version available - please download from "
-							+ Configuration.Paths.URLs.DOWNLOAD_SHORT);
-				}
 				if (Configuration.Twitter.ENABLED) {
 					TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
 				}
