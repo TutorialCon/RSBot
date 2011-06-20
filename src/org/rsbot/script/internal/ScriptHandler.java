@@ -6,6 +6,7 @@ import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.randoms.*;
 
+import java.awt.EventQueue;
 import java.util.*;
 
 public class ScriptHandler {
@@ -139,7 +140,12 @@ public class ScriptHandler {
 		final ScriptManifest prop = script.getClass().getAnnotation(ScriptManifest.class);
 		final Thread t = new Thread(scriptThreadGroup, script, "Script-" + prop.name());
 		addScriptToPool(script, t);
-		t.start();
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				t.start();
+			}
+		});
 	}
 
 	public void stopAllScripts() {
