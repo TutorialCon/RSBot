@@ -15,7 +15,7 @@ public class LicenseDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 6626607972871221956L;
 	private boolean accepted = false;
 
-	private LicenseDialog(final Frame owner) {
+	private LicenseDialog(final Frame owner, final boolean buttons) {
 		super(owner, owner != null);
 		try {
 			UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
@@ -54,6 +54,10 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		bar.add(accept);
 		bar.add(decline);
 
+		if (!buttons) {
+			decline.setEnabled(false);
+		}
+
 		add(scroll);
 		add(bar, BorderLayout.SOUTH);
 
@@ -69,8 +73,8 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		});
 	}
 
-	public static boolean showDialog(final Frame frame) {
-		final LicenseDialog instance = new LicenseDialog(frame);
+	public static boolean showDialog(final Frame frame, final boolean buttons) {
+		final LicenseDialog instance = new LicenseDialog(frame, buttons);
 		instance.setModal(true);
 		instance.setVisible(true);
 		return instance.accepted;
