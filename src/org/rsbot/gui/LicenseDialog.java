@@ -1,6 +1,7 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
+import org.rsbot.locale.Messages;
 import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class LicenseDialog extends JDialog implements ActionListener {
 			}
 		}
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setTitle(Configuration.NAME + " License");
+		setTitle((owner == null ? Configuration.NAME + " " : "" ) + Messages.LICENSE);
 		setIconImage(Configuration.getImage(Configuration.Paths.Resources.ICON));
 
 		String license = "Could not find license file, please visit http://www.gnu.org/licenses/gpl.html";
