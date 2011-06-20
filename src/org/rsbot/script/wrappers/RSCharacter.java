@@ -115,8 +115,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 			return null;
 		}
 		if (interact < 32768) {
-			final Node node = methods.nodes.lookup(methods.client.getRSNPCNC(),
-					interact);
+			final Node node = methods.nodes.lookup(methods.client.getRSNPCNC(), interact);
 			if (node == null || !(node instanceof RSNPCNode)) {
 				return null;
 			}
@@ -126,8 +125,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 			if (index == methods.client.getSelfInteracting()) {
 				index = 2047;
 			}
-			return new RSPlayer(methods,
-					methods.client.getRSPlayerArray()[index]);
+			return new RSPlayer(methods, methods.client.getRSPlayerArray()[index]);
 		}
 	}
 
@@ -178,7 +176,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	}
 
 	public int getOrientation() {
-		return (int) (270 - (getAccessor().getOrientation() & 0x3fff) / 45.51) % 360;
+		return (int) (180 + (getAccessor().getOrientation() * 45 / 2048)) % 360;
 	}
 
 	public Point getScreenLocation() {
