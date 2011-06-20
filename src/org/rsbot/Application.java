@@ -21,7 +21,7 @@ public class Application {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		}
 		if (!isLicenseAccepted()) {
-			if (!LicenseDialog.showDialog(null)) {
+			if (!LicenseDialog.showDialog(null, true)) {
 				return;
 			}
 		}
