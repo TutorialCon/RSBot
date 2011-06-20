@@ -28,7 +28,7 @@ public class Trade extends MethodProvider {
 	public static final int INTERFACE_TRADE_OUR_AMOUNT = 43;
 	public static final int INTERFACE_TRADE_THEIR_AMOUNT = 44;
 
-	private final static int INTERFACE_TRADE_MAIN_INV_SLOTS = 21;
+	public final static int INTERFACE_TRADE_MAIN_INV_SLOTS = 21;
 
 	public static final int TRADE_TYPE_MAIN = 0;
 	public static final int TRADE_TYPE_SECONDARY = 1;
@@ -254,29 +254,31 @@ public class Trade extends MethodProvider {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Checks if you have offered any item.
 	 *
 	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
 	 */
 	public boolean isWealthOffered() {
-		if(!inTradeMain()) return false;
-		return methods.interfaces.get(INTERFACE_TRADE_MAIN)
-			.getComponent(INTERFACE_TRADE_OUR_AMOUNT).getText().indexOf("Nothing") == -1; 
+		if (!inTradeMain()) {
+			return false;
+		}
+		return methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_OUR_AMOUNT).getText().indexOf("Nothing") == -1;
 	}
-	
+
 	/**
 	 * Checks if other player has offered any item.
 	 *
 	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
 	 */
 	public boolean isWealthReceived() {
-		if(!inTradeMain()) return false;
-		return methods.interfaces.get(INTERFACE_TRADE_MAIN)
-			.getComponent(INTERFACE_TRADE_THEIR_AMOUNT).getText().indexOf("Nothing") == -1; 
+		if (!inTradeMain()) {
+			return false;
+		}
+		return methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_THEIR_AMOUNT).getText().indexOf("Nothing") == -1;
 	}
-	
+
 	/**
 	 * If trade main is open, offers specified amount of an item.
 	 *
@@ -286,13 +288,15 @@ public class Trade extends MethodProvider {
 	 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>.
 	 */
 	public boolean offer(final int itemID, final int number) {
-		if (!inTradeMain()) return false;
+		if (!inTradeMain()) {
+			return false;
+		}
 		if (number < 0) {
 			throw new IllegalArgumentException("number < 0 (" + number + ")");
-		}	
+		}
 		RSComponent item = methods.inventory.getItem(itemID).getComponent();
 		final int itemCount = methods.inventory.getCount(true, itemID);
-		if(item == null) {
+		if (item == null) {
 			return true;
 		}
 		switch (number) {
@@ -303,7 +307,7 @@ public class Trade extends MethodProvider {
 				item.interact("Offer");
 				break;
 			default:
-				if(!item.interact("Offer-" + number)) {
+				if (!item.interact("Offer-" + number)) {
 					if (item.interact("Offer-X")) {
 						sleep(random(1000, 1300));
 						methods.inputManager.sendKeys(String.valueOf(number), true);
@@ -312,7 +316,6 @@ public class Trade extends MethodProvider {
 				break;
 		}
 		sleep(300);
-		return (methods.inventory.getCount(itemID) < itemCount)
-				|| (methods.inventory.getCount() == 0);
+		return (methods.inventory.getCount(itemID) < itemCount) || (methods.inventory.getCount() == 0);
 	}
 }
