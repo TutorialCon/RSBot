@@ -369,6 +369,13 @@ public class RestrictedSecurityManager extends SecurityManager {
 						break;
 					}
 				}
+				for (final String cacheItem : new String[]{Configuration.Paths.URLs.TRIDENT, Configuration.Paths.URLs.SUBSTANCE}) {
+					final String file = Configuration.Paths.getCachableResources().get(cacheItem).getAbsolutePath();
+					if (readOnly && path.equalsIgnoreCase(file)) {
+						fail = false;
+						break;
+					}
+				}
 				final String jre = System.getProperty("java.home");
 				if (readOnly && jre != null && !jre.isEmpty() && path.startsWith(jre)) {
 					fail = false;
