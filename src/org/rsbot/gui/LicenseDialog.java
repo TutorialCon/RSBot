@@ -70,7 +70,8 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(final WindowEvent e) {
-				decline.doClick();
+				final JButton button = owner == null ? decline : accept;
+				button.doClick();
 			}
 		});
 	}
