@@ -33,13 +33,17 @@ public class LoadScreen extends JDialog {
 
 	private LoadScreen() {
 		if (Configuration.isSkinAvailable()) {
-			final LoadScreen instance = this;
+			final LoadScreen subInstance = this;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
 						UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
-						SwingUtilities.updateComponentTreeUI(instance);
+						SwingUtilities.updateComponentTreeUI(subInstance);
 					} catch (final Exception ignored) {
+						try {
+							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						} catch (final Exception ignored2) {
+						}
 					}
 				}
 			});
