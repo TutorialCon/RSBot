@@ -47,11 +47,14 @@ public class Boot {
 				break;
 		}
 
-		if (Configuration.isSkinAvailable()) {
+		if (Configuration.SKINNED) {
 			for (final String path : new String[] { Configuration.Paths.URLs.TRIDENT, Configuration.Paths.URLs.SUBSTANCE }) {
 				final File jar = new File(Configuration.Paths.getCachableResources().get(path).getAbsolutePath());
 				if (jar.exists() && jar.canRead()) {
 					location += File.pathSeparatorChar + jar.getAbsolutePath();
+				} else {
+					Configuration.SKINNED = false;
+					break;
 				}
 			}
 		}

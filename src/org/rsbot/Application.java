@@ -11,14 +11,17 @@ import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class Application {
 	private static BotGUI gui;
 	final static File licenseFile = new File(Configuration.Paths.getLicenseAcceptance());
 
 	public static void main(final String[] args) {
-		if (Configuration.isSkinAvailable()) {
-			JFrame.setDefaultLookAndFeelDecorated(true);
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (final Exception ignored) {
 		}
 		if (!isLicenseAccepted()) {
 			if (!LicenseDialog.showDialog(null)) {

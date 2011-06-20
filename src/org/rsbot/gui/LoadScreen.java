@@ -32,27 +32,10 @@ public class LoadScreen extends JDialog {
 	private static LoadScreen instance = null;
 
 	private LoadScreen() {
-		if (Configuration.isSkinAvailable()) {
-			final LoadScreen subInstance = this;
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
-						SwingUtilities.updateComponentTreeUI(subInstance);
-						JDialog.setDefaultLookAndFeelDecorated(true);
-					} catch (final Exception ignored) {
-						try {
-							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						} catch (final Exception ignored2) {
-						}
-					}
-				}
-			});
-		} else {
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (final Exception ignored) {
-			}
+		JDialog.setDefaultLookAndFeelDecorated(true);
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (final Exception ignored) {
 		}
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
@@ -120,6 +103,21 @@ public class LoadScreen extends JDialog {
 
 		log.info("Downloading network scripts");
 		ScriptDeliveryNetwork.getInstance().sync();
+
+		if (Configuration.isSkinAvailable()) {
+			log.info("Setting theme");
+			final Component instance = this;
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						UIManager.setLookAndFeel(Configuration.SKIN);
+						SwingUtilities.updateComponentTreeUI(instance);
+					} catch (final Exception ignored) {
+					}
+				}
+			});
+		}
 
 		log.info("Checking for updates");
 
