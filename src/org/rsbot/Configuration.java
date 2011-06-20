@@ -233,7 +233,7 @@ public class Configuration {
 	public static final String NAME_LOWERCASE = NAME.toLowerCase();
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
-	public static boolean SKINNED = false;
+	public static boolean SKINNED = true;
 	public static String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel";
 	public static final boolean GOOGLEDNS = true;
 
