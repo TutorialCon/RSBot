@@ -39,6 +39,7 @@ public class LoadScreen extends JDialog {
 					try {
 						UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
 						SwingUtilities.updateComponentTreeUI(subInstance);
+						JDialog.setDefaultLookAndFeelDecorated(true);
 					} catch (final Exception ignored) {
 						try {
 							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

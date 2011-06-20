@@ -18,8 +18,14 @@ public class LicenseDialog extends JDialog implements ActionListener {
 	private LicenseDialog(final Frame owner) {
 		super(owner, owner != null);
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+			SwingUtilities.updateComponentTreeUI(this);
+			JDialog.setDefaultLookAndFeelDecorated(true);
 		} catch (final Exception ignored) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (final Exception ignored2) {
+			}
 		}
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle(Configuration.NAME + " License");
@@ -70,7 +76,6 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		return instance.accepted;
 	}
 
-	@Override
 	public void actionPerformed(final ActionEvent arg0) {
 		final String text = arg0.getActionCommand();
 		if (text.equals("Accept")) {
