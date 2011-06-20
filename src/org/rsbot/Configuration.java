@@ -252,8 +252,6 @@ public class Configuration {
 		resource = Configuration.class.getClassLoader().getResource(Paths.Resources.VERSION);
 		if (resource != null) {
 			Configuration.RUNNING_FROM_JAR = true;
-		} else {
-			Configuration.SKINNED = false;
 		}
 		final String os = System.getProperty("os.name");
 		if (os.contains("Mac")) {
