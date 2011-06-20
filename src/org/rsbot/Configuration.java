@@ -234,6 +234,7 @@ public class Configuration {
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
 	public static boolean SKINNED = false;
+	public static String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel";
 	public static final boolean GOOGLEDNS = true;
 
 	public static class Twitter {
@@ -244,7 +245,15 @@ public class Configuration {
 	}
 
 	public static boolean isSkinAvailable() {
-		return SKINNED && Paths.getCachableResources().get(Paths.URLs.TRIDENT).exists() && Paths.getCachableResources().get(Paths.URLs.SUBSTANCE).exists();
+		if (!SKINNED) {
+			return false;
+		}
+		Class<?> substance = null;
+		try {
+			substance = Class.forName(SKIN);
+		} catch (final ClassNotFoundException ignored) {
+		}
+		return substance != null;
 	}
 
 	static final URL resource;
