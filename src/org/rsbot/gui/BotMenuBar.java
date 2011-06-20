@@ -132,6 +132,7 @@ public class BotMenuBar extends JMenuBar {
 		map.put(Messages.OPTIONS, Configuration.Paths.Resources.ICON_WRENCH);
 		map.put(Messages.SITE, Configuration.Paths.Resources.ICON_WEBLINK);
 		map.put(Messages.PROJECT, Configuration.Paths.Resources.ICON_GITHUB);
+		map.put(Messages.LICENSE, Configuration.Paths.Resources.ICON_LICENSE);
 		map.put(Messages.ABOUT, Configuration.Paths.Resources.ICON_INFO);
 		for (final Entry<String, String> item : map.entrySet()) {
 			final JMenuItem menu = commandMenuItem.get(item.getKey());
