@@ -348,8 +348,7 @@ public class BotToolBar extends JToolBar {
 				public void mouseReleased(final MouseEvent e) {
 					if (hovered && close) {
 						final int idx = getComponentIndex(BotButton.this) - TAB_INDEX;
-						listener.actionPerformed(new ActionEvent(this,
-								ActionEvent.ACTION_PERFORMED, Messages.CLOSEBOT + "." + idx));
+						listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, Messages.CLOSEBOT + "." + idx));
 					} else {
 						setSelection(getComponentIndex(BotButton.this));
 					}
@@ -384,7 +383,8 @@ public class BotToolBar extends JToolBar {
 		public void paintComponent(final Graphics g) {
 			super.paintComponent(g);
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			final int RGB = getComponentIndex(this) == idx ? 255 : hovered ? 230 : 215;
+			final int RGB = Configuration.isSkinAvailable() ? getComponentIndex(this) == idx ? 100 : hovered ? 70 : 35 :
+					getComponentIndex(this) == idx ? 255 : hovered ? 230 : 215;
 			g.setColor(new Color(RGB, RGB, RGB, 200));
 			g.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
 			g.setColor(new Color(180, 180, 180, 200));
@@ -457,6 +457,5 @@ public class BotToolBar extends JToolBar {
 				g.drawImage(ICON, 2, 2, null);
 			}
 		}
-
 	}
 }
