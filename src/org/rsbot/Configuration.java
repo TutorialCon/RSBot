@@ -29,6 +29,9 @@ public class Configuration {
 			public static final String LICENSE = "license.txt";
 			public static final String ROOT = "resources";
 			public static final String SCRIPTS = Paths.SCRIPTS_NAME_SRC + "/";
+			public static final String COMPILE_SCRIPTS_BAT = ROOT + "/Compile-Scripts.bat";
+			public static final String COMPILE_SCRIPTS_SH = ROOT + "/compile-scripts.sh";
+			public static final String COMPILE_FIND_JDK = ROOT + "/FindJDK.bat";
 			public static final String ROOT_IMG = ROOT + "/images";
 			public static final String ICON = ROOT_IMG + "/icon.png";
 			public static final String ICON_APPADD = ROOT_IMG + "/application_add.png";
@@ -88,10 +91,6 @@ public class Configuration {
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
-
-		public static final String COMPILE_SCRIPTS_BAT = "Compile-Scripts.bat";
-		public static final String COMPILE_SCRIPTS_SH = "compile-scripts.sh";
-		public static final String COMPILE_FIND_JDK = "FindJDK.bat";
 
 		public static final String SCRIPTS_NAME_SRC = "scripts";
 		public static final String SCRIPTS_NAME_OUT = "Scripts";

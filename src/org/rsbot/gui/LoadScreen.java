@@ -17,10 +17,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,7 +76,10 @@ public class LoadScreen extends JDialog {
 		RestrictedSecurityManager.fixHosts();
 
 		log.info("Extracting resources");
-		extractResources();
+		try {
+			extractResources();
+		} catch (final IOException ignored) {
+		}
 
 		log.info("Creating directories");
 		Configuration.createDirectories();
@@ -172,24 +173,15 @@ public class LoadScreen extends JDialog {
 		System.setErr(new PrintStream(new LogOutputStream(Logger.getLogger("STDERR"), Level.SEVERE), true));
 	}
 
-	private static void extractResources() {
-		final ArrayList<String> extract = new ArrayList<String>(2);
+	private static void extractResources() throws IOException {
+		final String[] extract;
 		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
-			extract.add(Configuration.Paths.COMPILE_SCRIPTS_BAT);
-			extract.add(Configuration.Paths.COMPILE_FIND_JDK);
+			extract = new String[] { Configuration.Paths.Resources.COMPILE_SCRIPTS_BAT, Configuration.Paths.Resources.COMPILE_FIND_JDK };
 		} else {
-			extract.add(Configuration.Paths.COMPILE_SCRIPTS_SH);
+			extract = new String[] { Configuration.Paths.Resources.COMPILE_SCRIPTS_SH };
 		}
 		for (final String item : extract) {
-			final String path = Configuration.Paths.Resources.ROOT + "/" + item;
-			final InputStream in;
-			try {
-				in = Configuration.getResourceURL(path).openStream();
-			} catch (final IOException ignored) {
-				continue;
-			}
-			final File output = new File(Configuration.Paths.getHomeDirectory(), item);
-			IOHelper.write(in, output);
+			IOHelper.write(Configuration.getResourceURL(item).openStream(), new File(Configuration.Paths.getHomeDirectory(), new File(item).getName()));
 		}
 	}
 }
