@@ -51,6 +51,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			"jtryba.com", // jtryba - autoCook, monkR8per
 			"tehgamer.info", // TehGamer - iMiner
 			"www.universalscripts.org", // Fletch To 99 - UFletch
+			"universalscripts.org", // Fletch To 99 - UFletch, non www
 			"www.dunkscripts.freeiz.com", // Dunnkers
 			"www.dlolpics.com", // DlolPics
 			".logikmedia.co", // countvidal
