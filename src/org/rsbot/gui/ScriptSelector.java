@@ -160,17 +160,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int column) {
 				final Component comp = super.prepareRenderer(renderer, row, column);
 				final ScriptDefinition def = model.getDefinition(row);
-				final Color color;
-				if (ScriptLikes.isLiked(def)) {
-					color = new Color(0xffffcc);
-				} else if (row % 2 == 0) {
-					color = new Color(0xf8f8f8);
-				} else {
-					color = Color.WHITE;
-				}
-				if (!Configuration.isSkinAvailable()) {
-					comp.setBackground(isCellSelected(row, column) ? comp.getBackground() : color);
-				}
+				comp.setFont(comp.getFont().deriveFont(ScriptLikes.isLiked(def) ? Font.BOLD : Font.PLAIN));
 				return comp;
 			}
 		};
