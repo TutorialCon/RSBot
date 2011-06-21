@@ -14,7 +14,7 @@ DIST=$(NAME).jar
 ACCOUNTS=$(HOME)/.$(shell echo $(NAME) | tr '[A-Z]' '[a-z]')acct
 INSTALLDIR=$(HOME)/$(NAME)
 
-.PHONY: all Bot clean remove
+.PHONY: all Bot Bundle clean remove
 
 all: Bundle
 
