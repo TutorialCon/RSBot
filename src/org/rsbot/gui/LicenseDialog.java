@@ -29,7 +29,13 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		}
 
 		final JTextArea licenseText = new JTextArea(license);
-		licenseText.setColumns(48);
+		final Font font = licenseText.getFont();
+		if (font.getName().equals(Font.MONOSPACED)) {
+			licenseText.setFont(new Font(Font.SANS_SERIF, font.getStyle(), font.getSize()));
+			licenseText.setColumns(54);
+		} else {
+			licenseText.setColumns(48);
+		}
 		licenseText.setRows(15);
 		licenseText.setMargin(new Insets(4, 4, 4, 4));
 		licenseText.setEditable(false);
