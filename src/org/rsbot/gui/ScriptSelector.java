@@ -104,7 +104,11 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private void populateCategories() {
 		final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
 		for (final ScriptDefinition def : scripts) {
-			keywords.addAll(def.getKeywords());
+			for (final String item : def.getKeywords()) {
+				if (item.length() > 3) {
+					keywords.add(item);
+				}
+			}
 		}
 		final String[] array = new String[keywords.size()];
 		keywords.toArray(array);
