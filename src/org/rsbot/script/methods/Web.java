@@ -31,6 +31,7 @@ public class Web extends MethodProvider {
 	private static long lastAccess = 0;
 	private long lastLocalAccess = 0;
 	private int webDataId = 0, bankCacheId = 0;
+	private boolean forceLoad = false;
 
 	Web(final MethodContext ctx) {
 		super(ctx);
@@ -398,6 +399,10 @@ public class Web extends MethodProvider {
 	 * @return The <code>TileFlags</code>.
 	 */
 	public static int GetTileFlag(final RSTile tile) {
+		if (!Web.isLoaded()) {
+			Web.loadWeb();
+		}
+		Web.lastAccess = System.currentTimeMillis();
 		return Web.rs_map.get(tile);
 	}
 
@@ -409,6 +414,10 @@ public class Web extends MethodProvider {
 	 * @return <tt>true</tt> if the tile contains flags.
 	 */
 	public static boolean Flag(final RSTile tile, final int key) {
+		if (!Web.isLoaded()) {
+			Web.loadWeb();
+		}
+		Web.lastAccess = System.currentTimeMillis();
 		if (Web.rs_map.containsKey(tile)) {
 			final int theFlag = Web.rs_map.get(tile);
 			return (theFlag & key) != 0;
@@ -521,22 +530,31 @@ public class Web extends MethodProvider {
 	}
 
 	public boolean areScriptsInActive() {
-		return webScriptsLoaded && System.currentTimeMillis() - lastLocalAccess > (1000 * 60 * 5);
+		return webScriptsLoaded && System.currentTimeMillis() - lastLocalAccess > (1000 * 60 * 5) && !forceLoad;
 	}
 
 	public void loadWebScripts() {
-		final BackgroundScriptHandler bsh = methods.bot.getBackgroundScriptHandler();
-		webDataId = bsh.runScript(new WebData());
-		bankCacheId = bsh.runScript(new BankMonitor());
-		webScriptsLoaded = true;
+		if (!webScriptsLoaded) {
+			final BackgroundScriptHandler bsh = methods.bot.getBackgroundScriptHandler();
+			webDataId = bsh.runScript(new WebData());
+			bankCacheId = bsh.runScript(new BankMonitor());
+			webScriptsLoaded = true;
+		}
 	}
 
 	public void unloadWebScripts() {
-		if (webScriptsLoaded) {
+		if (webScriptsLoaded && !forceLoad) {
 			final BackgroundScriptHandler bsh = methods.bot.getBackgroundScriptHandler();
 			bsh.stopScript(webDataId);
 			bsh.stopScript(bankCacheId);
 			webScriptsLoaded = false;
+		}
+	}
+
+	public void setForceLoad(final boolean forceLoad) {
+		this.forceLoad = forceLoad;
+		if (forceLoad) {
+			loadWebScripts();
 		}
 	}
 }
