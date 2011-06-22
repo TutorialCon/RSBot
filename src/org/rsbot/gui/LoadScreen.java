@@ -105,12 +105,10 @@ public class LoadScreen extends JDialog {
 
 		if (Configuration.isSkinAvailable()) {
 			log.info("Setting theme");
-			final Component instance = this;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
 						UIManager.setLookAndFeel(Configuration.SKIN);
-						SwingUtilities.updateComponentTreeUI(instance);
 					} catch (final Exception ignored) {
 					}
 				}
