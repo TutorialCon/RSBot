@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  * @author Alex
  */
 public final class RSClassLoader extends ClassLoader {
-
 	private final Logger log = Logger.getLogger(RSClassLoader.class.getName());
 	private Map<String, byte[]> classes;
 	private ProtectionDomain domain;
@@ -105,11 +104,10 @@ public final class RSClassLoader extends ClassLoader {
 			try {
 				return defineClass(name, buffer, 0, buffer.length, domain);
 			} catch (Throwable throwable) {
-				log.log(Level.SEVERE, "Error occured while loading the game client", throwable);
+				log.log(Level.SEVERE, "Error occurred while loading the game client", throwable);
 			}
 
 		}
 		return super.loadClass(name);
 	}
-
 }

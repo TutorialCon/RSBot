@@ -17,13 +17,11 @@ class Crawler {
 	private final String world_prefix;
 
 	public Crawler(final String root) {
-		final String index = firstMatch("<a id=\"continue\" class=\"barItem\" href=\"([^\"]+)\"\\s+onclick=\"[^\"]+\">Continue to Full Site for News and Game Help",
-				downloadPage(root, null));
+		final String index = firstMatch("<a id=\"continue\" class=\"barItem\" href=\"([^\"]+)\"\\s+onclick=\"[^\"]+\">Continue to Full Site for News and Game Help", downloadPage(root, null));
 
 		final String frame = root + "game.ws";
 
-		final String game = firstMatch("<frame id=\"[^\"]+\" style=\"[^\"]+\" src=\"([^\"]+)\"",
-				downloadPage(frame, index));
+		final String game = firstMatch("<frame id=\"[^\"]+\" style=\"[^\"]+\" src=\"([^\"]+)\"", downloadPage(frame, index));
 
 		world_prefix = game.substring(12, game.indexOf(".runescape"));
 
