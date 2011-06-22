@@ -48,8 +48,7 @@ public class LoginBot extends Random {
 	@Override
 	public boolean activateCondition() {
 		final int idx = game.getClientState();
-		return (idx == INDEX_LOGGED_OUT || idx == INDEX_LOBBY)
-				&& !switchingWorlds() && account.getName() != null;
+		return (idx == INDEX_LOGGED_OUT || idx == INDEX_LOBBY) && !switchingWorlds() && account.getName() != null;
 	}
 
 	@Override

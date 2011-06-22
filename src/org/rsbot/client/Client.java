@@ -6,7 +6,6 @@ import org.rsbot.client.input.Mouse;
 import java.awt.*;
 
 public interface Client {
-
 	ChatLine[] getChatLines();
 
 	boolean isMenuCollapsed();
@@ -152,5 +151,4 @@ public interface Client {
 	ServerData getWorldData();
 
 	void setCallback(Callback cb);
-
 }
