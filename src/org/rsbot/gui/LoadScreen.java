@@ -166,10 +166,17 @@ public class LoadScreen extends JDialog {
 			private final Logger log = Logger.getLogger("EXCEPTION");
 
 			public void uncaughtException(final Thread t, final Throwable e) {
-				log.logp(Level.SEVERE, "EXCEPTION", "", "Unhandled exception in thread " + t.getName() + ": ", e);
+				final String ex = "Exception";
+				if (Configuration.RUNNING_FROM_JAR) {
+					log.logp(Level.SEVERE, ex, "", "Unhandled exception in thread " + t.getName() + ": ", e);
+				} else {
+					Logger.getLogger(ex, e.getMessage());
+				}
 			}
 		});
-		System.setErr(new PrintStream(new LogOutputStream(Logger.getLogger("STDERR"), Level.SEVERE), true));
+		if (!Configuration.RUNNING_FROM_JAR) {
+			System.setErr(new PrintStream(new LogOutputStream(Logger.getLogger("STDERR"), Level.SEVERE), true));
+		}
 	}
 
 	private static void extractResources() throws IOException {
