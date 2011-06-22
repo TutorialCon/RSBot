@@ -45,6 +45,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private final List<ScriptDefinition> scripts;
 	private JButton submit;
 	private boolean connected = true;
+	private boolean likedOnly = false;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -289,6 +290,15 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		submit.setText("");
 		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT)));
 		connect.setToolTipText("Show network scripts");
+		final JButton liked = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_LIKE)));
+		liked.setToolTipText("Show liked scripts only");
+		liked.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				liked.setSelected(likedOnly = !likedOnly);
+				filter();
+			}
+		});
 		submit.setEnabled(false);
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent evt) {
@@ -359,6 +369,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		toolBar.add(Box.createHorizontalStrut(5));
 		toolBar.add(connect);
 		toolBar.add(Box.createHorizontalStrut(5));
+		toolBar.add(liked);
+		toolBar.add(Box.createHorizontalStrut(5));
 		toolBar.add(submit);
 		final JPanel center = new JPanel();
 		center.setLayout(new BorderLayout());
@@ -374,7 +386,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	private void filter() {
-		model.search((search == null || search.getForeground() == searchAltColor) ? "" : search.getText(), categories.getSelectedItems());
+		model.search((search == null || search.getForeground() == searchAltColor) ? "" : search.getText(), categories.getSelectedItems(), likedOnly);
 	}
 
 	private void setColumnWidths(final JTable table, final int... widths) {
@@ -424,9 +436,12 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			matches = new ArrayList<ScriptDefinition>();
 		}
 
-		public void search(final String find, final String[] keys) {
+		public void search(final String find, final String[] keys, final boolean likedOnly) {
 			matches.clear();
 			for (final ScriptDefinition def : scripts) {
+				if (likedOnly && !ScriptLikes.isLiked(def)) {
+					continue;
+				}
 				if (find.length() != 0 && !def.name.toLowerCase().contains(find)) {
 					continue;
 				}
