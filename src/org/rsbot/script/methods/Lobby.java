@@ -19,13 +19,13 @@ import java.util.regex.Pattern;
  */
 public class Lobby extends MethodProvider {
 	public static final int INTERFACE_LOBBY = 906;
-	public static final int INTERFACE_LOBBY_TAB_WORLDS = 12;
-	public static final int INTERFACE_LOBBY_TAB_FRIENDS = 11;
-	public static final int INTERFACE_LOBBY_TAB_CLAN = 10;
-	public static final int INTERFACE_LOBBY_TAB_OPTIONS = 9;
-	public static final int INTERFACE_LOBBY_TAB_FRIENDS_CHAT = 254;
-	public static final int INTERFACE_LOBBY_TAB_PLAYERS = 204;
-	public static final int INTERFACE_LOBBY_BUTTON_PLAY = 160;
+	public static final int TAB_WORLDS = 12;
+	public static final int TAB_FRIENDS = 11;
+	public static final int TAB_CLAN = 10;
+	public static final int TAB_OPTIONS = 9;
+	public static final int TAB_FRIENDS_CHAT = 254;
+	public static final int TAB_PLAYERS = 204;
+	public static final int INTERFACE_LOBBY_BUTTON_PLAY = 171;
 	public static final int INTERFACE_LOBBY_ALERT_TEXT = 235;
 	public static final int INTERFACE_LOBBY_ALERT_CLOSE = 242;
 	public static final int INTERFACE_LOBBY_BUTTON_LOGOUT = 195;
@@ -172,7 +172,7 @@ public class Lobby extends MethodProvider {
 	}
 
 	public int getSelectedTab() {
-		int[] ids = new int[]{INTERFACE_LOBBY_TAB_PLAYERS, INTERFACE_LOBBY_TAB_WORLDS, INTERFACE_LOBBY_TAB_FRIENDS, INTERFACE_LOBBY_TAB_CLAN, INTERFACE_LOBBY_TAB_OPTIONS, INTERFACE_LOBBY_TAB_FRIENDS_CHAT};
+		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN, TAB_OPTIONS, TAB_FRIENDS_CHAT};
 		for (int id : ids) {
 			final RSComponent c = getComponent(id);
 			if (c != null && c.isValid() && c.getBackgroundColor() == 4671) {
@@ -197,7 +197,7 @@ public class Lobby extends MethodProvider {
 		if (!inLobby()) {
 			return -1;
 		}
-		open(INTERFACE_LOBBY_TAB_WORLDS);
+		open(TAB_WORLDS);
 		if (methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_CURRENT_WORLD).isValid()) {
 			final String worldText = methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT,
 					INTERFACE_WORLD_SELECT_CURRENT_WORLD).getText().trim().substring(methods.interfaces.getComponent(
@@ -219,8 +219,8 @@ public class Lobby extends MethodProvider {
 		if (!inLobby() || methods.game.getClientState() == 9 || methods.game.getClientState() == 11) {
 			return false;
 		}
-		if (!methods.interfaces.get(INTERFACE_LOBBY_WORLD_SELECT).isValid() || getSelectedTab() != INTERFACE_LOBBY_TAB_WORLDS) {
-			open(INTERFACE_LOBBY_TAB_WORLDS);
+		if (!methods.interfaces.get(INTERFACE_LOBBY_WORLD_SELECT).isValid() || getSelectedTab() != TAB_WORLDS) {
+			open(TAB_WORLDS);
 			sleep(random(600, 800));
 		}
 		if (getSelectedWorld() == world) {
@@ -266,7 +266,7 @@ public class Lobby extends MethodProvider {
 			return null;
 		}
 		if (!methods.interfaces.get(INTERFACE_LOBBY_WORLD_SELECT).isValid()) {
-			open(INTERFACE_LOBBY_TAB_WORLDS);
+			open(TAB_WORLDS);
 		}
 		for (int i = 0; i < methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_WORLD_NAME).getComponents().length; i++) {
 			final RSComponent comp = methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_WORLD_NAME).getComponents()[i];
