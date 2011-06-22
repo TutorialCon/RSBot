@@ -18,27 +18,27 @@ import java.util.regex.Pattern;
  * @author Debauchery
  */
 public class Lobby extends MethodProvider {
-	public static final int INTERFACE = 906;
-	public static final int TAB_WORLDS = 12;
-	public static final int TAB_FRIENDS = 11;
-	public static final int TAB_CLAN = 10;
-	public static final int TAB_OPTIONS = 9;
-	public static final int TAB_FRIENDS_CHAT = 254;
-	public static final int TAB_PLAYERS = 204;
-	public static final int BUTTON_PLAY = 160;
-	public static final int ALERT_TEXT = 224;
-	public static final int ALERT_CLOSE = 232;
-	public static final int BUTTON_LOGOUT = 195;
-	public final static int WORLD_SELECT_INTERFACE = 910;
-	public final static int WORLD_SELECT_INTERFACE_CURRENT_WORLD = 11;
-	public final static int WORLD_SELECT_INTERFACE_WORLD_LIST = 77;
-	public final static int WORLD_SELECT_INTERFACE_WORLD_NAME = 69;
-	public final static int WORLD_SELECT_INTERFACE_AMOUNT_OF_PLAYERS = 71;
-	public final static int WORLD_SELECT_INTERFACE_WORLD_ACTIVITY = 72;
-	public final static int WORLD_SELECT_INTERFACE_WORLD_TYPE = 74;
-	public final static int WORLD_SELECT_INTERFACE_WORLD_PING = 76;
-	public final static int WORLD_SELECT_INTERFACE_SCROLL_AREA = 86;
-	public final static int WORLD_SELECT_INTERFACE_SCROLL_BAR = 1;
+	public static final int INTERFACE_LOBBY = 906;
+	public static final int INTERFACE_LOBBY_TAB_WORLDS = 12;
+	public static final int INTERFACE_LOBBY_TAB_FRIENDS = 11;
+	public static final int INTERFACE_LOBBY_TAB_CLAN = 10;
+	public static final int INTERFACE_LOBBY_TAB_OPTIONS = 9;
+	public static final int INTERFACE_LOBBY_TAB_FRIENDS_CHAT = 254;
+	public static final int INTERFACE_LOBBY_TAB_PLAYERS = 204;
+	public static final int INTERFACE_LOBBY_BUTTON_PLAY = 160;
+	public static final int INTERFACE_LOBBY_ALERT_TEXT = 235;
+	public static final int INTERFACE_LOBBY_ALERT_CLOSE = 242;
+	public static final int INTERFACE_LOBBY_BUTTON_LOGOUT = 195;
+	public final static int INTERFACE_LOBBY_WORLD_SELECT = 910;
+	public final static int INTERFACE_WORLD_SELECT_CURRENT_WORLD = 11;
+	public final static int INTERFACE_WORLD_SELECT_WORLD_LIST = 77;
+	public final static int INTERFACE_WORLD_SELECT_WORLD_NAME = 69;
+	public final static int INTERFACE_WORLD_SELECT_AMOUNT_OF_PLAYERS = 71;
+	public final static int INTERFACE_WORLD_SELECT_WORLD_ACTIVITY = 72;
+	public final static int INTERFACE_WORLD_SELECT_WORLD_TYPE = 74;
+	public final static int INTERFACE_WORLD_SELECT_WORLD_PING = 76;
+	public final static int INTERFACE_WORLD_SELECT_SCROLL_AREA = 86;
+	public final static int INTERFACE_WORLD_SELECT_SCROLL_BAR = 1;
 
 	public static final Filter<World> ALL_FILTER = new Filter<World>() {
 		public boolean accept(final World w) {
@@ -155,7 +155,7 @@ public class Lobby extends MethodProvider {
 	}
 
 	public RSInterface getInterface() {
-		return methods.interfaces.get(INTERFACE);
+		return methods.interfaces.get(INTERFACE_LOBBY);
 	}
 
 	public RSComponent getComponent(int index) {
@@ -167,12 +167,12 @@ public class Lobby extends MethodProvider {
 	}
 
 	public boolean clickPlay() {
-		RSComponent playComp = getComponent(BUTTON_PLAY);
+		RSComponent playComp = getComponent(INTERFACE_LOBBY_BUTTON_PLAY);
 		return playComp != null && playComp.isValid() && playComp.doClick();
 	}
 
 	public int getSelectedTab() {
-		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN, TAB_OPTIONS, TAB_FRIENDS_CHAT};
+		int[] ids = new int[]{INTERFACE_LOBBY_TAB_PLAYERS, INTERFACE_LOBBY_TAB_WORLDS, INTERFACE_LOBBY_TAB_FRIENDS, INTERFACE_LOBBY_TAB_CLAN, INTERFACE_LOBBY_TAB_OPTIONS, INTERFACE_LOBBY_TAB_FRIENDS_CHAT};
 		for (int id : ids) {
 			final RSComponent c = getComponent(id);
 			if (c != null && c.isValid() && c.getBackgroundColor() == 4671) {
@@ -197,11 +197,11 @@ public class Lobby extends MethodProvider {
 		if (!inLobby()) {
 			return -1;
 		}
-		open(TAB_WORLDS);
-		if (methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).isValid()) {
-			final String worldText = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE,
-					WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().substring(methods.interfaces.getComponent(
-					WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_CURRENT_WORLD).getText().trim().indexOf("World ") + 6);
+		open(INTERFACE_LOBBY_TAB_WORLDS);
+		if (methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_CURRENT_WORLD).isValid()) {
+			final String worldText = methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT,
+					INTERFACE_WORLD_SELECT_CURRENT_WORLD).getText().trim().substring(methods.interfaces.getComponent(
+					INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_CURRENT_WORLD).getText().trim().indexOf("World ") + 6);
 			return Integer.parseInt(worldText);
 		}
 		return -1;
@@ -219,24 +219,24 @@ public class Lobby extends MethodProvider {
 		if (!inLobby() || methods.game.getClientState() == 9 || methods.game.getClientState() == 11) {
 			return false;
 		}
-		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid() || getSelectedTab() != TAB_WORLDS) {
-			open(TAB_WORLDS);
+		if (!methods.interfaces.get(INTERFACE_LOBBY_WORLD_SELECT).isValid() || getSelectedTab() != INTERFACE_LOBBY_TAB_WORLDS) {
+			open(INTERFACE_LOBBY_TAB_WORLDS);
 			sleep(random(600, 800));
 		}
 		if (getSelectedWorld() == world) {
 			if (enter) {
-				methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
+				methods.interfaces.getComponent(INTERFACE_LOBBY, INTERFACE_LOBBY_BUTTON_PLAY).doClick();
 			}
 			return true;
 		}
 		final RSComponent comp = getWorldComponent(world);
 		if (comp != null) {
-			methods.interfaces.scrollTo(comp, methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_SCROLL_AREA));
+			methods.interfaces.scrollTo(comp, methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_SCROLL_AREA));
 			comp.doClick();
 			sleep(random(500, 800));
 			if (getSelectedWorld() == world) {
 				if (enter) {
-					methods.interfaces.getComponent(INTERFACE, BUTTON_PLAY).doClick();
+					methods.interfaces.getComponent(INTERFACE_LOBBY, INTERFACE_LOBBY_BUTTON_PLAY).doClick();
 				}
 				return true;
 			}
@@ -265,15 +265,15 @@ public class Lobby extends MethodProvider {
 		if (!inLobby()) {
 			return null;
 		}
-		if (!methods.interfaces.get(WORLD_SELECT_INTERFACE).isValid()) {
-			open(TAB_WORLDS);
+		if (!methods.interfaces.get(INTERFACE_LOBBY_WORLD_SELECT).isValid()) {
+			open(INTERFACE_LOBBY_TAB_WORLDS);
 		}
-		for (int i = 0; i < methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents().length; i++) {
-			final RSComponent comp = methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_NAME).getComponents()[i];
+		for (int i = 0; i < methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_WORLD_NAME).getComponents().length; i++) {
+			final RSComponent comp = methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_WORLD_NAME).getComponents()[i];
 			if (comp != null) {
 				final String number = comp.getText();
 				if (Integer.parseInt(number) == world) {
-					return methods.interfaces.getComponent(WORLD_SELECT_INTERFACE, WORLD_SELECT_INTERFACE_WORLD_LIST).getComponents()[i];
+					return methods.interfaces.getComponent(INTERFACE_LOBBY_WORLD_SELECT, INTERFACE_WORLD_SELECT_WORLD_LIST).getComponents()[i];
 				}
 			}
 		}
@@ -287,7 +287,7 @@ public class Lobby extends MethodProvider {
 	 */
 	public boolean logout() {
 		if (inLobby()) {
-			methods.interfaces.getComponent(INTERFACE, BUTTON_LOGOUT).doClick();
+			methods.interfaces.getComponent(INTERFACE_LOBBY, INTERFACE_LOBBY_BUTTON_LOGOUT).doClick();
 		}
 		return !methods.game.isLoggedIn();
 	}
