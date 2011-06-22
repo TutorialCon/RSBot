@@ -25,6 +25,8 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOGIN_SCREEN_ALERT_BACK = 68;
 	public static final int INTERFACE_GRAPHICS_NOTICE = 976;
 	public static final int INTERFACE_GRAPHICS_LEAVE_ALONE = 6;
+	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 86;
+	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 93;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
 
@@ -173,11 +175,12 @@ public class ImprovedLoginBot extends Random {
 		}
 	}, new solution() {
 		public boolean canApply(String message) {
-			return false;  //To change body of implemented methods use File | Settings | File Templates.
+			return interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT).getText().toLowerCase().trim().contains("high-risk wilderness world");
 		}
 
 		public int apply() {
-			return 0;  //To change body of implemented methods use File | Settings | File Templates.
+			interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON).doClick();
+			return 500;
 		}
 	}};
 
