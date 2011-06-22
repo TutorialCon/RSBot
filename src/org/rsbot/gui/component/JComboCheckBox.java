@@ -69,7 +69,7 @@ public class JComboCheckBox extends JComboBox implements ActionListener {
 		}
 
 		public void setText(final String label) {
-			none.setText(label);
+			none.setText(" " + label);
 		}
 
 		public Component getListCellRendererComponent(final JList list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
