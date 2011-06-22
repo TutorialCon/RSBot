@@ -72,9 +72,6 @@ public class LoadScreen extends JDialog {
 		log.info("Registering logs");
 		bootstrap();
 
-		log.info("Scanning hosts file for malicious content");
-		RestrictedSecurityManager.fixHosts();
-
 		log.info("Extracting resources");
 		try {
 			extractResources();
