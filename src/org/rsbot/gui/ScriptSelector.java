@@ -201,9 +201,9 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				start.setEnabled(submit.isEnabled());
 
 				final JMenuItem like = new JMenuItem();
-				like.setText(ScriptLikes.isLiked(def) ? "Unlike" : "Like");
+				like.setText(ScriptLikes.isLiked(def) ? "Unfavourite" : "Favourite");
 				like.setIcon(new ImageIcon(Configuration.getImage(
-						ScriptLikes.isLiked(def) ? Configuration.Paths.Resources.ICON_UNLIKE : Configuration.Paths.Resources.ICON_LIKE)));
+						ScriptLikes.isLiked(def) ? Configuration.Paths.Resources.ICON_UNLIKE : Configuration.Paths.Resources.ICON_STAR)));
 				like.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						ScriptLikes.flip(def);
@@ -290,12 +290,12 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		submit.setText("");
 		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT)));
 		connect.setToolTipText("Show network scripts");
-		final JButton liked = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_LIKE)));
-		liked.setToolTipText("Show liked scripts only");
-		liked.addActionListener(new ActionListener() {
+		final JButton favourites = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_STAR)));
+		favourites.setToolTipText("Show favourite scripts only");
+		favourites.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				liked.setSelected(likedOnly = !likedOnly);
+				favourites.setSelected(likedOnly = !likedOnly);
 				filter();
 			}
 		});
@@ -369,7 +369,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		toolBar.add(Box.createHorizontalStrut(5));
 		toolBar.add(connect);
 		toolBar.add(Box.createHorizontalStrut(5));
-		toolBar.add(liked);
+		toolBar.add(favourites);
 		toolBar.add(Box.createHorizontalStrut(5));
 		toolBar.add(submit);
 		final JPanel center = new JPanel();
