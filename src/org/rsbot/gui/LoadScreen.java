@@ -90,10 +90,11 @@ public class LoadScreen extends JDialog {
 		System.setSecurityManager(new RestrictedSecurityManager());
 
 		final String downloading = "Downloading resources";
+		float[] d = new float[] { 0, Configuration.Paths.getCachableResources().size() };
 		log.info(downloading);
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			try {
-				log.fine(downloading + " (" + item.getValue().getName() + ")");
+				log.info(downloading + " (" + Math.round(++d[0] / d[1] * 100) + "%)");
 				HttpClient.download(new URL(item.getKey()), item.getValue());
 			} catch (final IOException ignored) {
 			}
