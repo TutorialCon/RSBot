@@ -397,6 +397,10 @@ public class RestrictedSecurityManager extends SecurityManager {
 					if (path.endsWith(".ttf") && readOnly) {
 						fail = false;
 					}
+				} else {
+					if (readOnly && path.equals("/etc/resolv.conf")) {
+						fail = false;
+					}
 				}
 				if (fail) {
 					log.warning((readOnly ? "Read" : "Write") + " access denied: " + path);
