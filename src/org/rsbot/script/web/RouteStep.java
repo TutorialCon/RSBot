@@ -4,7 +4,7 @@ import org.rsbot.script.Random;
 import org.rsbot.script.Script;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
-import org.rsbot.script.randoms.LoginBot;
+import org.rsbot.script.randoms.ImprovedLoginBot;
 import org.rsbot.script.wrappers.RSPath;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWebTile;
@@ -104,7 +104,7 @@ public class RouteStep extends MethodProvider {
 			return false;
 		}
 		for (final Random random : methods.bot.getScriptHandler().getRandoms()) {
-			if (random.isEnabled() && !(methods.bot.disableAutoLogin && random instanceof LoginBot)) {
+			if (random.isEnabled() && !(methods.bot.disableAutoLogin && random instanceof ImprovedLoginBot)) {
 				if (random.activateCondition()) {
 					return true;
 				}

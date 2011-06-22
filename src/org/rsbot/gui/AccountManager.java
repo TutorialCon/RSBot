@@ -3,7 +3,7 @@ package org.rsbot.gui;
 import org.rsbot.Configuration;
 import org.rsbot.bot.Bot;
 import org.rsbot.script.AccountStore;
-import org.rsbot.script.randoms.LoginBot;
+import org.rsbot.script.randoms.ImprovedLoginBot;
 import org.rsbot.service.DRM;
 
 import javax.swing.*;
@@ -469,7 +469,7 @@ public class AccountManager extends JDialog implements ActionListener {
 								s[3].getClassName().equals(ScriptSelector.class.getName()) ||
 								s[3].getClassName().equals(AccountManager.class.getName()) ||
 								s[3].getClassName().equals(Bot.class.getName()) ||
-								s[3].getClassName().equals(LoginBot.class.getName()))
+								s[3].getClassName().equals(ImprovedLoginBot.class.getName()))
 				) {
 			throw new SecurityException();
 		}

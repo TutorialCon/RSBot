@@ -7,7 +7,7 @@ import org.rsbot.gui.AccountManager;
 import org.rsbot.script.internal.BreakHandler;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.Methods;
-import org.rsbot.script.randoms.LoginBot;
+import org.rsbot.script.randoms.ImprovedLoginBot;
 import org.rsbot.script.util.Timer;
 
 import java.io.File;
@@ -300,7 +300,7 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 			return false;
 		}
 		for (final Random random : ctx.bot.getScriptHandler().getRandoms()) {
-			if (random.isEnabled() && !(ctx.bot.disableAutoLogin && random instanceof LoginBot)) {
+			if (random.isEnabled() && !(ctx.bot.disableAutoLogin && random instanceof ImprovedLoginBot)) {
 				if (random.activateCondition()) {
 					this.random = true;
 					blockEvents(false);

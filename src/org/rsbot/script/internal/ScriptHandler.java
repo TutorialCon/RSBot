@@ -6,7 +6,7 @@ import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.randoms.*;
 
-import java.awt.EventQueue;
+import java.awt.*;
 import java.util.*;
 
 public class ScriptHandler {
@@ -26,7 +26,7 @@ public class ScriptHandler {
 
 	public void init() {
 		try {
-			randoms.add(new LoginBot());
+			randoms.add(new ImprovedLoginBot());
 			randoms.add(new BankPins());
 			randoms.add(new BeehiveSolver());
 			randoms.add(new CapnArnav());
@@ -141,7 +141,6 @@ public class ScriptHandler {
 		final Thread t = new Thread(scriptThreadGroup, script, "Script-" + prop.name());
 		addScriptToPool(script, t);
 		EventQueue.invokeLater(new Runnable() {
-			@Override
 			public void run() {
 				t.start();
 			}

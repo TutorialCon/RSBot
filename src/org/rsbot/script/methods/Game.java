@@ -395,11 +395,11 @@ public class Game extends MethodProvider {
 	 */
 	public Boolean inRandom() {
 		for (final Random random : methods.bot.getScriptHandler().getRandoms()) {
-			if (random.getClass().equals(new LoginBot())
-					|| random.getClass().equals(new BankPins())
-					|| random.getClass().equals(new TeleotherCloser())
-					|| random.getClass().equals(new CloseAllInterface())
-					|| random.getClass().equals(new ImprovedRewardsBox())) {
+			if (random.getClass().equals(new ImprovedLoginBot()) ||
+					random.getClass().equals(new BankPins()) ||
+					random.getClass().equals(new TeleotherCloser()) ||
+					random.getClass().equals(new CloseAllInterface()) ||
+					random.getClass().equals(new ImprovedRewardsBox())) {
 			} else {
 				if (random.activateCondition()) {
 					return true;
@@ -469,12 +469,17 @@ public class Game extends MethodProvider {
 	}
 
 	/**
-	 * Runs the LoginBot random.
+	 * Runs the ImprovedLoginBot random.
 	 *
 	 * @return <tt>true</tt> if random was run; otherwise <tt>false</tt>.
 	 */
 	public boolean login() {
-		return new org.rsbot.script.randoms.LoginBot().activateCondition();
+		org.rsbot.script.randoms.ImprovedLoginBot loginBot = new org.rsbot.script.randoms.ImprovedLoginBot();
+		if (loginBot.activateCondition()) {
+			sleep(loginBot.loop());
+			return true;
+		}
+		return false;
 	}
 
 	/**
