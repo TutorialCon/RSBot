@@ -39,7 +39,7 @@ public class HttpClient {
 		}
 		final StringBuilder buf = new StringBuilder(125);
 		buf.append("Mozilla/5.0 (").append(os).append(")");
-		buf.append(" AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.68 Safari/534.24");
+		buf.append(" AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30");
 		return buf.toString();
 	}
 
