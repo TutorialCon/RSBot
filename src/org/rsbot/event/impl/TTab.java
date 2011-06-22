@@ -20,5 +20,4 @@ public class TTab implements TextPaintListener {
 		StringUtil.drawLine(render, idx++, "Current Tab: " + cTab.description() + " (" + cTab.index() + ")");
 		return idx;
 	}
-
 }

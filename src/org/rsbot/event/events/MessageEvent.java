@@ -9,7 +9,6 @@ import java.util.EventListener;
  * A message event.
  */
 public class MessageEvent extends RSEvent {
-
 	public static final int MESSAGE_SERVER = 0;
 	public static final int MESSAGE_CHAT = 2;
 	public static final int MESSAGE_PRIVATE_IN = 3;
@@ -59,5 +58,4 @@ public class MessageEvent extends RSEvent {
 	public String getMessage() {
 		return message;
 	}
-
 }

@@ -13,7 +13,6 @@ import java.util.EventListener;
  * line of text.
  */
 public class TextPaintEvent extends RSEvent {
-
 	private static final long serialVersionUID = 6634362568916377937L;
 
 	public Graphics graphics;
@@ -60,8 +59,7 @@ public class TextPaintEvent extends RSEvent {
 	}
 
 	@Override
-	public long getMask
-			() {
+	public long getMask() {
 		return EventMulticaster.TEXT_PAINT_EVENT;
 	}
 

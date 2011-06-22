@@ -10,7 +10,6 @@ import java.util.EventListener;
  * A character moved event.
  */
 public class CharacterMovedEvent extends RSEvent {
-
 	private static final long serialVersionUID = 8883312847545757405L;
 
 	private final MethodContext ctx;

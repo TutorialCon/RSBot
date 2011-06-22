@@ -11,7 +11,6 @@ import java.util.EventListener;
  * A paint update event.
  */
 public class PaintEvent extends RSEvent {
-
 	private static final long serialVersionUID = -7404828108740551228L;
 
 	public Graphics graphics;
@@ -57,5 +56,4 @@ public class PaintEvent extends RSEvent {
 	public long getMask() {
 		return EventMulticaster.PAINT_EVENT;
 	}
-
 }

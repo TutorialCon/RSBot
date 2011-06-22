@@ -20,5 +20,4 @@ public class TPlayerPosition implements TextPaintListener {
 		StringUtil.drawLine(render, idx++, "Position: " + position);
 		return idx;
 	}
-
 }

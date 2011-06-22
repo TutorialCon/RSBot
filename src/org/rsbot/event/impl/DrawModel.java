@@ -109,18 +109,14 @@ public class DrawModel implements PaintListener, MouseListener {
 	}
 
 	public void mouseEntered(final MouseEvent arg0) {
-
 	}
 
 	public void mouseExited(final MouseEvent arg0) {
-
 	}
 
 	public void mousePressed(final MouseEvent arg0) {
-
 	}
 
 	public void mouseReleased(final MouseEvent arg0) {
-
 	}
 }

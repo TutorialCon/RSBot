@@ -36,7 +36,7 @@ public class BotMenuBar extends JMenuBar {
 		DEBUG_MAP.put("Login Info", TLogin.class);
 		DEBUG_MAP.put("Camera", TCamera.class);
 		DEBUG_MAP.put("Animation", TAnimation.class);
-		DEBUG_MAP.put("Floor Height", TFloorHeight.class);
+		DEBUG_MAP.put("Current Plane", TPlane.class);
 		DEBUG_MAP.put("Player Position", TPlayerPosition.class);
 		DEBUG_MAP.put("Mouse Position", TMousePosition.class);
 		DEBUG_MAP.put("User Input Allowed", TUserInputAllowed.class);
