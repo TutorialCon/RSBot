@@ -188,10 +188,6 @@ public class SettingsManager extends JDialog {
 		panel.add(panelOptions);
 		panel.add(panelInternal);
 
-		if (!Configuration.RUNNING_FROM_JAR) {
-			panel.add(panelWeb); // hide web options from non-development builds for now
-		}
-
 		add(panel);
 		add(panelAction, BorderLayout.SOUTH);
 
