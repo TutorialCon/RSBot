@@ -346,16 +346,28 @@ public class RSComponent extends MethodProvider implements RSTarget {
 	}
 
 	/**
-	 * Gets the background color of this component
+	 * Gets the texture of this component
 	 *
 	 * @return the background color or -1 if null
 	 */
-	public int getBackgroundColor() {
+	public int getTextureID() {
 		final org.rsbot.client.RSInterface inter = getInterfaceInternal();
 		if (inter != null) {
 			return inter.getTextureID();
 		}
 		return -1;
+	}
+
+	/**
+	 * Gets the background color of this component
+	 *
+	 * @return the background color or -1 if null
+	 * @see RSComponent#getTextureID()
+	 * @deprecated Invalid name.
+	 */
+	@Deprecated
+	public int getBackgroundColor() {
+		return getTextureID();
 	}
 
 	/**

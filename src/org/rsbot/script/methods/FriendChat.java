@@ -53,7 +53,7 @@ public class FriendChat extends MethodProvider {
 
 		public User(String name, RSComponent rank, RSComponent world) {
 			this.name = name;
-			int textureId = rank.getBackgroundColor();
+			int textureId = rank.getTextureID();
 			for (ChatRank chatRank : ChatRank.values()) {
 				if (chatRank.getTextureId() == textureId) {
 					this.rank = chatRank;

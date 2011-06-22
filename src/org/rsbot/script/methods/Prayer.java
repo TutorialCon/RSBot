@@ -178,7 +178,7 @@ public class Prayer extends MethodProvider {
 	 * @return <tt>true</tt> if quick prayer is on; otherwise <tt>false</tt>.
 	 */
 	public boolean isQuickPrayerOn() {
-		return methods.interfaces.getComponent(Game.INTERFACE_PRAYER_ORB, 2).getBackgroundColor() == 782;
+		return methods.interfaces.getComponent(Game.INTERFACE_PRAYER_ORB, 2).getTextureID() == 782;
 	}
 
 	public boolean setQuickPrayer(boolean activate) {
@@ -191,7 +191,7 @@ public class Prayer extends MethodProvider {
 	}
 
 	private boolean isQuickPrayerSet(Book thePrayer) {
-		return methods.interfaces.getComponent(INTERFACE_PRAYER, 42).getComponent(thePrayer.getComponentIndex()).getBackgroundColor() == 181;
+		return methods.interfaces.getComponent(INTERFACE_PRAYER, 42).getComponent(thePrayer.getComponentIndex()).getTextureID() == 181;
 	}
 
 	private boolean isQuickPrayerSet(Book... prayers) {

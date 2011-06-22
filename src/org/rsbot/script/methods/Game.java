@@ -411,7 +411,7 @@ public class Game extends MethodProvider {
 
 	public boolean isButtonSelected(final ChatButton button) {
 		return methods.interfaces.getComponent(CHAT_OPTION, button.selectIdx())
-				.getBackgroundColor() == 1022;
+				.getTextureID() == 1022;
 	}
 
 	/**

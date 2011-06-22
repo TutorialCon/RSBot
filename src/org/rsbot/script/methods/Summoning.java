@@ -188,7 +188,7 @@ public class Summoning extends MethodProvider {
 	 * @return <tt>true</tt> if you have a familiar.
 	 */
 	public boolean isFamiliarSummoned() {
-		return methods.interfaces.getComponent(INTERFACE_TAB_SUMMONING, 3).getBackgroundColor() == 1802;
+		return methods.interfaces.getComponent(INTERFACE_TAB_SUMMONING, 3).getTextureID() == 1802;
 	}
 
 	/**

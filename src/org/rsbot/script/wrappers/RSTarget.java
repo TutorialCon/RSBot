@@ -2,15 +2,7 @@ package org.rsbot.script.wrappers;
 
 import java.awt.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Jeroen
- * Date: 11-6-11
- * Time: 14:26
- * To change this template use File | Settings | File Templates.
- */
 public interface RSTarget {
-
 	/**
 	 * Returns the screen location from this target
 	 *

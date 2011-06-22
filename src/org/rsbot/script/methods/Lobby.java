@@ -176,7 +176,7 @@ public class Lobby extends MethodProvider {
 		int[] ids = new int[]{TAB_PLAYERS, TAB_WORLDS, TAB_FRIENDS, TAB_CLAN, TAB_OPTIONS, TAB_FRIENDS_CHAT};
 		for (int id : ids) {
 			final RSComponent c = getComponent(id);
-			if (c != null && c.isValid() && c.getBackgroundColor() == 4671) {
+			if (c != null && c.isValid() && c.getTextureID() == 4671) {
 				return id;
 			}
 		}
