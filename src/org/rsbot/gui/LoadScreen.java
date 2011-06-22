@@ -166,11 +166,11 @@ public class LoadScreen extends JDialog {
 			private final Logger log = Logger.getLogger("EXCEPTION");
 
 			public void uncaughtException(final Thread t, final Throwable e) {
-				final String ex = "Exception";
+				final String ex = "Exception", msg = t.getName() + ": ";
 				if (Configuration.RUNNING_FROM_JAR) {
-					log.logp(Level.SEVERE, ex, "", "Unhandled exception in thread " + t.getName() + ": ", e);
+					Logger.getLogger(ex).severe(msg + e.toString());
 				} else {
-					Logger.getLogger(ex, e.getMessage());
+					log.logp(Level.SEVERE, ex, "", msg, e);
 				}
 			}
 		});
