@@ -91,7 +91,7 @@ public class Preferences {
 	}
 
 	public void save() {
-		final HashMap<String, String> keys = new HashMap<String, String>(10);
+		final HashMap<String, String> keys = new HashMap<String, String>(11);
 		keys.put("user", user);
 		keys.put("hideAds", Boolean.toString(hideAds));
 		keys.put("confirmations", Boolean.toString(confirmations));

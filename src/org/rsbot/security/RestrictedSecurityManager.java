@@ -135,8 +135,9 @@ public class RestrictedSecurityManager extends SecurityManager {
 				break;
 			case PORT_HTTP:
 			case PORT_HTTPS:
-				if (allowAllHosts)
+				if (allowAllHosts) {
 					break;
+				}
 				boolean allowed = !isCallerScript();
 				if (!allowed) {
 					if (isIpAddress(host)) {

@@ -14,7 +14,7 @@ public class TwitterUpdates {
 	public static void loadTweets(final int count) {
 		final Logger log = Logger.getLogger("@" + Configuration.Twitter.NAME);
 		final Level level = Level.INFO;
-		final Object[] param = new Object[]{new Color(0x1d, 0x83, 0xae)};
+		final Object[] param = new Object[]{new Color(29, 131, 174)};
 
 		final StringBuilder url = new StringBuilder();
 		url.append("http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=");

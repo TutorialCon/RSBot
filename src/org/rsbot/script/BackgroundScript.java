@@ -26,7 +26,6 @@ public abstract class BackgroundScript extends Methods implements EventListener,
 	}
 
 	public void onFinish() {
-
 	}
 
 	@Override
