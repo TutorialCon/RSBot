@@ -158,7 +158,7 @@ public class LoadScreen extends JDialog {
 	}
 
 	private static void bootstrap() {
-		Logger.getLogger("").setLevel(Configuration.RUNNING_FROM_JAR ? Level.INFO : Level.FINE);
+		Logger.getLogger("").setLevel(Level.INFO);
 		Logger.getLogger("").addHandler(new SystemConsoleHandler());
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 			private final Logger log = Logger.getLogger("EXCEPTION");
