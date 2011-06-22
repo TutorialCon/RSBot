@@ -42,8 +42,8 @@ public class Bank extends MethodProvider {
 	public static final int INTERFACE_EQUIPMENT = 667;
 	public static final int INTERFACE_EQUIPMENT_COMPONENT = 7;
 
-	public static final int INTERFACE_COLLECTION_BOX = 105;
-	public static final int INTERFACE_COLLECTION_BOX_CLOSE = 13;
+	public static final int INTERFACE_COLLECTION_BOX = 109;
+	public static final int INTERFACE_COLLECTION_BOX_CLOSE = 14;
 
 	public static final int[] INTERFACE_BANK_TAB = {63, 61, 59, 57, 55, 53, 51, 49, 47};
 	public static final int[] INTERFACE_BANK_TAB_FIRST_ITEM = {78, 79, 80, 81, 82, 83, 84, 85, 86};
