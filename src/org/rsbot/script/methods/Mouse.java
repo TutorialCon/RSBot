@@ -502,5 +502,4 @@ public class Mouse extends MethodProvider {
 		task.init(methods.service.submit(task, task));
 		return task;
 	}
-
 }
