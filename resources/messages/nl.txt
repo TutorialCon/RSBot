@@ -26,9 +26,10 @@ DISABLECONFIRMATIONS=Geen Bevestigingen
 BINDTO=Bind to address:
 USEPASSWORD=Gebruik Wachtwoord:
 LESSCPU=Minder CPU
+DISABLECANVAS=Canvas uit
 EXTDVIEWS=Uitgebreide Weergave
-AUTOSHUTDOWN=Stop over (mins):
-BETAPATCH=Gebruik beta client patch
+AUTOSHUTDOWN=Stop na(minuten):
+ALLOWALLHOSTS=Sta onveilige verbindingen toe
 
 HIDETOOLBAR=Verberg Toolbar
 HIDELOGPANE=Verberg Log Paneel

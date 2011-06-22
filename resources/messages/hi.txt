@@ -29,7 +29,6 @@ LESSCPU=कम सीपीयू
 DISABLECANVAS=निष्क्रिय कैनवास
 EXTDVIEWS=विस्तारित विचार
 AUTOSHUTDOWN=स्वत: बंद (mins):
-BETAPATCH=बीटा पैच client patch
 
 HIDETOOLBAR=उपकरण पट्टी छुपाना
 HIDELOGPANE=फलक लॉग छिपाने
