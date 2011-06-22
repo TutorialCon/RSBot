@@ -175,6 +175,13 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				}
 			}
 
+			@Override
+			public void mouseClicked(final MouseEvent e) {
+				if (e.getClickCount() == 2 && submit.isEnabled()) {
+					submit.doClick();
+				}
+			}
+
 			private void showMenu(final MouseEvent e) {
 				final int row = table.rowAtPoint(e.getPoint());
 				final ScriptDefinition def = model.getDefinition(row);
