@@ -11,8 +11,6 @@ import java.util.HashMap;
  * @author Mothma
  */
 class KeyboardShortcuts {
-	private final KeyboardFocusManager manager;
-	private final BotGUI botgui;
 	private static final HashMap<Object, String> SHORTCUT_MAP = new HashMap<Object, String>();
 
 	static {
@@ -30,8 +28,6 @@ class KeyboardShortcuts {
 	}
 
 	KeyboardShortcuts(KeyboardFocusManager manager, BotGUI botgui) {
-		this.manager = manager;
-		this.botgui = botgui;
 		manager.addKeyEventDispatcher(new KeyDispatcher(manager, botgui));
 	}
 

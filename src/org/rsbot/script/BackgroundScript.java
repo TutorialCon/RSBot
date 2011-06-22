@@ -11,7 +11,6 @@ import java.util.EventListener;
  * @author Timer
  */
 public abstract class BackgroundScript extends Methods implements EventListener, Runnable {
-	private String name = "";
 	private volatile boolean running = false;
 	private int id = -1;
 
@@ -38,7 +37,6 @@ public abstract class BackgroundScript extends Methods implements EventListener,
 	 * Runs the background script.
 	 */
 	public final void run() {
-		name = getClass().getAnnotation(ScriptManifest.class).name();
 		ctx.bot.getEventManager().addListener(this);
 		running = true;
 		try {
