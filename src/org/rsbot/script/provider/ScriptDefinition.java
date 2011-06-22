@@ -19,7 +19,7 @@ public class ScriptDefinition implements Comparable<ScriptDefinition> {
 		return StringUtil.stripHtml(description);
 	}
 
-	public String getAuthors() {
+	String getAuthors() {
 		final StringBuilder s = new StringBuilder(16);
 		for (int i = 0; i < authors.length; i++) {
 			if (i > 0) {

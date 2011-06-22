@@ -17,7 +17,7 @@ public class ModelCapture implements Model {
 	private int numVertices;
 	private int numFaces;
 
-	public ModelCapture(final Model model) {
+	private ModelCapture(final Model model) {
 		if (model == null) {
 			return;
 		}

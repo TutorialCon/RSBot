@@ -10,7 +10,7 @@ import org.rsbot.script.methods.Skills;
  * @author Timer
  */
 public class SkillData extends MethodProvider {
-	private int[] startExp = new int[25], startLvl = new int[25];
+	private final int[] startExp = new int[25], startLvl = new int[25];
 	private Timer runTimer = null;
 
 	public SkillData(final MethodContext ctx, final Timer runTimer) {

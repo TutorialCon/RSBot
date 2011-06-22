@@ -19,7 +19,7 @@ import java.awt.*;
 @ScriptManifest(authors = {"Pwnaz0r", "Velocity"}, name = "BeeHive", version = 2.5)
 public class BeehiveSolver extends Random {
 
-	RSNPC BeehiveKeeper;
+	private RSNPC BeehiveKeeper;
 	private static final int BEEHIVE_KEEPER_ID = 8649;
 	private static final int[] DEST_INTERFACE_IDS = {16, 17, 18, 19};
 	private static final int ID_DOWN = 16034;
@@ -28,7 +28,7 @@ public class BeehiveSolver extends Random {
 	private static final int ID_TOP = 16036;
 	private static final int[] BEEHIVE_ARRAYS = {ID_TOP, ID_MIDUP, ID_MIDDOWN, ID_DOWN};
 	private static final String[] MODEL_NAMES = {"Top", "Middle Up", "Middle Down", "Down"};
-	boolean solved;
+	private boolean solved;
 	private static final int[] START_INTERFACE_IDS = {12, 13, 14, 15};
 	private static final int INTERFACE_BEEHIVE_WINDOW = 420;
 	private static final int BUILD_BEEHIVE = 40;
@@ -65,7 +65,7 @@ public class BeehiveSolver extends Random {
 		return false;
 	}
 
-	public boolean dragInterfaces(final RSComponent child1, final RSComponent child2) {
+	boolean dragInterfaces(final RSComponent child1, final RSComponent child2) {
 		final Point start = returnMidInterface(child1);
 		final Point finish = returnMidInterface(child2);
 
@@ -74,7 +74,7 @@ public class BeehiveSolver extends Random {
 		return true;
 	}
 
-	public RSInterface getBeehiveInterface() {
+	RSInterface getBeehiveInterface() {
 		return interfaces.get(420);
 	}
 
@@ -129,7 +129,7 @@ public class BeehiveSolver extends Random {
 		return random(500, 1000);
 	}
 
-	public boolean myClickContinue() {
+	boolean myClickContinue() {
 		sleep(random(800, 1000));
 		return interfaces.getComponent(243, 7).doClick() || interfaces.getComponent(241,
 				5).doClick() || interfaces.getComponent(
@@ -137,7 +137,7 @@ public class BeehiveSolver extends Random {
 				5).doClick();
 	}
 
-	public int returnDragTo(final int Model) {
+	int returnDragTo(final int Model) {
 		switch (Model) {
 			case 16036:
 				return DEST_INTERFACE_IDS[0];
@@ -152,7 +152,7 @@ public class BeehiveSolver extends Random {
 		}
 	}
 
-	public int returnIdAtSlot(final int slot) {
+	int returnIdAtSlot(final int slot) {
 		if (slot < 1 || slot > 4) {
 			log.info("Invalid Slot.");
 			interfaces.getComponent(INTERFACE_BEEHIVE_WINDOW, CLOSE_WINDOW).doClick();
@@ -175,7 +175,7 @@ public class BeehiveSolver extends Random {
 		return -1;
 	}
 
-	public Point returnMidInterface(final RSComponent child) {
+	Point returnMidInterface(final RSComponent child) {
 		Point point = new Point(-1, -1);
 		final Rectangle rect = child.getArea();
 		if (rect != null) {
@@ -184,7 +184,7 @@ public class BeehiveSolver extends Random {
 		return point;
 	}
 
-	public int returnSlotId(final int slot) {
+	int returnSlotId(final int slot) {
 		switch (slot) {
 			case 1:
 				return 25;

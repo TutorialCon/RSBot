@@ -57,7 +57,7 @@ public class Prayer extends MethodProvider {
 		WRATH(17, 0x20000, 89),
 		SOUL_SPLIT(18, 0x40000, 92),
 		TURMOIL(19, 0x80000, 95);
-		int comp, setting, level;
+		final int comp, setting, level;
 
 		private Curses(int comp, int setting, int level) {
 			this.comp = comp;
@@ -110,7 +110,7 @@ public class Prayer extends MethodProvider {
 		RIGOUR(28, 0x10000000, 74),
 		AUGURY(29, 0x20000000, 77);
 
-		int comp, setting, level;
+		final int comp, setting, level;
 
 		private Normal(int comp, int setting, int level) {
 			this.comp = comp;
@@ -283,8 +283,8 @@ public class Prayer extends MethodProvider {
 		MEELE(Prayer.Normal.PROTECT_FROM_MELEE, Prayer.Curses.DEFLECT_MELEE),
 		MAGE(Prayer.Normal.PROTECT_FROM_MAGIC, Prayer.Curses.DEFLECT_MAGIC),
 		RANGE(Prayer.Normal.PROTECT_FROM_MISSILES, Prayer.Curses.DEFLECT_MISSILE);
-		private Prayer.Book normal;
-		private Prayer.Book curses;
+		private final Prayer.Book normal;
+		private final Prayer.Book curses;
 
 		ProtectPrayer(Prayer.Book normal, Prayer.Book curses) {
 			this.normal = normal;

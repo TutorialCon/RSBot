@@ -176,7 +176,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	}
 
 	public int getOrientation() {
-		return (int) (180 + (getAccessor().getOrientation() * 45 / 2048)) % 360;
+		return (180 + (getAccessor().getOrientation() * 45 / 2048)) % 360;
 	}
 
 	public Point getScreenLocation() {

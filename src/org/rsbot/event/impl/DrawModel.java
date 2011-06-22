@@ -26,7 +26,7 @@ public class DrawModel implements PaintListener, MouseListener {
 	}
 
 	private static final String[] OPTIONS = {"Objects", "Players", "NPCs", "Piles"};
-	private static boolean[] enabled = {true, true, true, true};
+	private static final boolean[] enabled = {true, true, true, true};
 
 	private final MethodContext ctx;
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Represents a shape made of RSTiles.
  *
- * @author SpeedWing,Emeleo
+ * @author SpeedWing, Emeleo
  */
 public class RSArea {
 	private final Polygon area;

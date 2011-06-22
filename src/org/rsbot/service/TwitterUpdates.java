@@ -28,7 +28,7 @@ public class TwitterUpdates {
 		try {
 			stream = new InputStreamReader(new URL(url.toString()).openStream());
 			reader = new BufferedReader(stream);
-			String s = null;
+			String s;
 			int c = 0;
 			while ((s = reader.readLine()) != null) {
 				final String a = "<text>", b = "</text>";
@@ -56,7 +56,7 @@ public class TwitterUpdates {
 					break;
 				}
 			}
-		} catch (final IOException ioe) {
+		} catch (final IOException ignored) {
 		} finally {
 			try {
 				if (reader != null) {
@@ -65,7 +65,7 @@ public class TwitterUpdates {
 				if (stream != null) {
 					stream.close();
 				}
-			} catch (final IOException ioe1) {
+			} catch (final IOException ignored) {
 			}
 		}
 	}

@@ -11,21 +11,21 @@ import java.util.EventListener;
  * @author Timer
  */
 public abstract class BackgroundScript extends Methods implements EventListener, Runnable {
-	protected String name = "";
+	private String name = "";
 	private volatile boolean running = false;
 	private int id = -1;
 
-	public abstract boolean activateCondition();
+	protected abstract boolean activateCondition();
 
-	public abstract int loop();
+	protected abstract int loop();
 
-	public abstract int iterationSleep();
+	protected abstract int iterationSleep();
 
-	public boolean onStart() {
+	boolean onStart() {
 		return true;
 	}
 
-	public void onFinish() {
+	void onFinish() {
 	}
 
 	@Override

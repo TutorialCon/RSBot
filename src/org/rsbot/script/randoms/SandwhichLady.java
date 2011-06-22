@@ -15,14 +15,14 @@ import org.rsbot.script.wrappers.RSObject;
 @ScriptManifest(authors = {"Qauters", "Drizzt1112", "TwistedMind"}, name = "SandwichLady", version = 2.3)
 public class SandwhichLady extends Random {
 
-	final static int ID_InterfaceSandwhichWindow = 297;
-	final static int ID_InterfaceSandwhichWindowText = 48;
-	final static int ID_InterfaceTalk = 243;
-	final static int ID_InterfaceTalkText = 7;
-	final static int[] ID_Items = {10728, 10732, 10727, 10730, 10726, 45666, 10731};
-	final static int ID_SandwhichLady = 8630;
-	final static String[] Name_Items = {"chocolate", "triangle", "roll", "pie", "baguette", "doughnut", "square"};
-	final boolean DEBUG = false; // Set to true for more info!
+	private final static int ID_InterfaceSandwhichWindow = 297;
+	private final static int ID_InterfaceSandwhichWindowText = 48;
+	private final static int ID_InterfaceTalk = 243;
+	private final static int ID_InterfaceTalkText = 7;
+	private final static int[] ID_Items = {10728, 10732, 10727, 10730, 10726, 45666, 10731};
+	private final static int ID_SandwhichLady = 8630;
+	private final static String[] Name_Items = {"chocolate", "triangle", "roll", "pie", "baguette", "doughnut", "square"};
+	private final boolean DEBUG = false; // Set to true for more info!
 
 	@Override
 	public boolean activateCondition() {

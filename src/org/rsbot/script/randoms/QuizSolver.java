@@ -101,14 +101,14 @@ public class QuizSolver extends Random {
 		}
 	}
 
-	public final int quizInterface = 191;
-	public final int[] Fish = {6190, 6189};
-	public final int[] Jewelry = {6198, 6197};
-	public final int[] Weapons = {6192, 6194};
-	public final int[] Farming = {6195, 6196};
-	public final int[][] items = {Fish, Jewelry, Weapons, Farming};
+	private final int quizInterface = 191;
+	private final int[] Fish = {6190, 6189};
+	private final int[] Jewelry = {6198, 6197};
+	private final int[] Weapons = {6192, 6194};
+	private final int[] Farming = {6195, 6196};
+	private final int[][] items = {Fish, Jewelry, Weapons, Farming};
 
-	public final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
+	private final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
 
 	@Override
 	public boolean activateCondition() {
@@ -116,11 +116,11 @@ public class QuizSolver extends Random {
 		return quizMaster != null;
 	}
 
-	public void atRandom() {
+	void atRandom() {
 		atSlot(random(1, 3));
 	}
 
-	public boolean atSlot(final int slot) {
+	boolean atSlot(final int slot) {
 		switch (slot) {
 			case 1:
 				return interfaces.getComponent(quizInterface, 3).doClick();
@@ -133,7 +133,7 @@ public class QuizSolver extends Random {
 		}
 	}
 
-	public int ID_to_Slot(final int id) {
+	int ID_to_Slot(final int id) {
 		if (Slot_to_ID(1) == id) {
 			return 1;
 		} else if (Slot_to_ID(2) == id) {
@@ -170,7 +170,7 @@ public class QuizSolver extends Random {
 		return random(1200, 2000);
 	}
 
-	public int Slot_to_ID(final int slot) {
+	int Slot_to_ID(final int slot) {
 		switch (slot) {
 			case 1:
 				//System.out.println(interfaces.get(quizInterface).getComponent(6).getComponentID());

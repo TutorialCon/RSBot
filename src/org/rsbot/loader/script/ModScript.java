@@ -29,7 +29,7 @@ public class ModScript {
 		int OVERRIDE_CLASS = 10;
 	}
 
-	public static final int MAGIC = 0xFADFAD;
+	private static final int MAGIC = 0xFADFAD;
 
 	private String name;
 	private int version;

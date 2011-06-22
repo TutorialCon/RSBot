@@ -20,8 +20,8 @@ public class FreakyForester extends Random implements MessageListener {
 	private static final int PORTAL_ID = 15645;
 	private static final RSTile WALK_TO_TILE = new RSTile(2610, 4775);
 	private boolean unequip = false;
-	short[] phe = {};
-	final Filter<RSNPC> pheasantFilter = new Filter<RSNPC>() {
+	private short[] phe = {};
+	private final Filter<RSNPC> pheasantFilter = new Filter<RSNPC>() {
 		public boolean accept(final RSNPC npc) {
 			// log("phe.length = " + phe.length);
 			final Filter<RSModel> modelFilter = RSModel.newVertexFilter(phe);
@@ -29,7 +29,7 @@ public class FreakyForester extends Random implements MessageListener {
 		}
 	};
 
-	boolean done = false;
+	private boolean done = false;
 
 	@Override
 	public void onFinish() {
@@ -164,7 +164,7 @@ public class FreakyForester extends Random implements MessageListener {
 		return false;
 	}
 
-	public int getState() {
+	int getState() {
 		if (done) {
 			return 3;
 		} else if (interfaces.canContinue()) {
@@ -305,7 +305,7 @@ public class FreakyForester extends Random implements MessageListener {
 		return random(1000, 1500);
 	}
 
-	public boolean searchText(final int interfac, final String text) {
+	boolean searchText(final int interfac, final String text) {
 		final RSInterface talkFace = interfaces.get(interfac);
 		if (!talkFace.isValid()) {
 			return false;

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MouseTask extends AbstractTask {
-	private RSTarget target;
-	private MethodContext ctx;
-	private MouseCallback callback;
-	protected List<ForceModifier> forceModifiers = new ArrayList<ForceModifier>(5);
-	protected Vector2D velocity = new Vector2D();
+	private final RSTarget target;
+	private final MethodContext ctx;
+	private final MouseCallback callback;
+	protected final List<ForceModifier> forceModifiers = new ArrayList<ForceModifier>(5);
+	protected final Vector2D velocity = new Vector2D();
 
 	public MouseTask(RSTarget target, MouseCallback callback, MethodContext ctx) {
 		this.target = target;

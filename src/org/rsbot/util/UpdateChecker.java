@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public final class UpdateChecker {
 	private static int latest = -1;
-	public static boolean error = false;
+	private static boolean error = false;
 
 	public static boolean isError() {
 		getLatestVersion();

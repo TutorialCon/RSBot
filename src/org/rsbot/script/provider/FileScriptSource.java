@@ -149,11 +149,11 @@ public class FileScriptSource implements ScriptSource {
 		}
 	}
 
-	public static boolean isJar(final File file) {
+	private static boolean isJar(final File file) {
 		return file.getName().endsWith(".jar") || file.getName().endsWith(".dat");
 	}
 
-	public static URL getJarUrl(final File file) throws IOException {
+	private static URL getJarUrl(final File file) throws IOException {
 		URL url = file.toURI().toURL();
 		url = new URL("jar:" + url.toExternalForm() + "!/");
 		return url;

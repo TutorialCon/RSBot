@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class LoadScreen extends JDialog {
 	private final static Logger log = Logger.getLogger(LoadScreen.class.getName());
 	private static final long serialVersionUID = 5520543482560560389L;
-	public final boolean error;
+	private final boolean error;
 	private static LoadScreen instance = null;
 
 	private LoadScreen() {
@@ -109,7 +109,6 @@ public class LoadScreen extends JDialog {
 			log.info("Setting theme");
 			final Component instance = this;
 			SwingUtilities.invokeLater(new Runnable() {
-				@Override
 				public void run() {
 					try {
 						UIManager.setLookAndFeel(Configuration.SKIN);
@@ -176,9 +175,9 @@ public class LoadScreen extends JDialog {
 	private static void extractResources() throws IOException {
 		final String[] extract;
 		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
-			extract = new String[] { Configuration.Paths.Resources.COMPILE_SCRIPTS_BAT, Configuration.Paths.Resources.COMPILE_FIND_JDK };
+			extract = new String[]{Configuration.Paths.Resources.COMPILE_SCRIPTS_BAT, Configuration.Paths.Resources.COMPILE_FIND_JDK};
 		} else {
-			extract = new String[] { Configuration.Paths.Resources.COMPILE_SCRIPTS_SH };
+			extract = new String[]{Configuration.Paths.Resources.COMPILE_SCRIPTS_SH};
 		}
 		for (final String item : extract) {
 			IOHelper.write(Configuration.getResourceURL(item).openStream(), new File(Configuration.Paths.getHomeDirectory(), new File(item).getName()));

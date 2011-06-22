@@ -60,7 +60,11 @@ public class Lobby extends MethodProvider {
 	}
 
 	public class World {
-		private String world, players, activity, lootShare, type;
+		private final String world;
+		private final String players;
+		private final String activity;
+		private final String lootShare;
+		private final String type;
 
 		public World(String world, String players, String activity, String lootShare, String type) {
 			this.world = world;
@@ -99,7 +103,7 @@ public class Lobby extends MethodProvider {
 		String HTML = null;
 		try {
 			HTML = HttpClient.downloadAsString((new URL("http://www.runescape.com/slu.ws?order=WPMLA")));
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 		}
 
 		try {
@@ -119,7 +123,7 @@ public class Lobby extends MethodProvider {
 				worldData.add(new Object[]{regexMatcher.group(1), regexMatcher.group(2), regexMatcher.group(3),
 						(regexMatcher.group(4).equals("Y") ? "Yes" : "No"), regexMatcher.group(5)});
 			}
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		Object[][] result = new Object[worldData.size()][5];
@@ -146,10 +150,7 @@ public class Lobby extends MethodProvider {
 	public World[] getAllMembersIncluded(final boolean members) {
 		return getAll(new Filter<World>() {
 			public boolean accept(final World world) {
-				if (world != null && (world.isMembers() == members)) {
-					return true;
-				}
-				return false;
+				return world != null && (world.isMembers() == members);
 			}
 		});
 	}

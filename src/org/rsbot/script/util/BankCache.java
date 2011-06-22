@@ -70,7 +70,7 @@ public class BankCache {
 		}
 	}
 
-	public static void Load() throws Exception {
+	private static void Load() throws Exception {
 		synchronized (lock) {
 			if (!cacheFile.exists()) {
 				if (!cacheFile.createNewFile()) {

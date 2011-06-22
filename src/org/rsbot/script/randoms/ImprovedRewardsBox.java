@@ -74,7 +74,7 @@ public class ImprovedRewardsBox extends Random {
 		return false;
 	}
 
-	public int getActualY(final RSComponent Component) {
+	int getActualY(final RSComponent Component) {
 		int boxYPos;
 		final RSComponent[] selection = interfaces.get(202).getComponent(15)
 				.getComponents();
@@ -112,7 +112,7 @@ public class ImprovedRewardsBox extends Random {
 		return boxYPos;
 	}
 
-	public Rectangle getBoxArea(final RSComponent Component) {
+	Rectangle getBoxArea(final RSComponent Component) {
 		return new Rectangle(Component.getAbsoluteX(), getActualY(Component),
 				Component.getWidth(), Component.getHeight());
 	}

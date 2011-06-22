@@ -58,7 +58,7 @@ public class ScriptLikes {
 				if (br != null) {
 					br.close();
 				}
-			} catch (final IOException ignored1) {
+			} catch (final IOException ignored2) {
 			}
 		}
 	}
@@ -86,7 +86,7 @@ public class ScriptLikes {
 				if (bw != null) {
 					bw.close();
 				}
-			} catch (final IOException ignored1) {
+			} catch (final IOException ignored2) {
 			}
 		}
 	}

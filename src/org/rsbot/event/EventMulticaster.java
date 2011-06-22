@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.util.*;
 
 public class EventMulticaster implements EventListener {
-
 	public static final long FOCUS_EVENT = 0x10;
 	public static final long KEY_EVENT = 0x08;
 

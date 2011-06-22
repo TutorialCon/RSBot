@@ -151,10 +151,10 @@ public class StringUtil {
 		return byteArrayToHexString(md.digest(getBytesUtf8(data)));
 	}
 
-	public static String byteArrayToHexString(byte[] b) {
+	private static String byteArrayToHexString(byte[] b) {
 		final StringBuilder s = new StringBuilder(b.length * 2);
-		for (int i = 0; i < b.length; i++) {
-			s.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
+		for (byte aB : b) {
+			s.append(Integer.toString((aB & 0xff) + 0x100, 16).substring(1));
 		}
 		return s.toString();
 	}

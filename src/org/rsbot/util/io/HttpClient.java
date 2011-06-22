@@ -111,7 +111,7 @@ public class HttpClient {
 
 	private static byte[] downloadBinary(final URLConnection con) throws IOException {
 		final DataInputStream di = new DataInputStream(con.getInputStream());
-		byte[] buffer = null;
+		byte[] buffer;
 		final int len = con.getContentLength();
 		if (len == -1) {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();

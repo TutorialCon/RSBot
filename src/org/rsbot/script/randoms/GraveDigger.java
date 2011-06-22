@@ -281,7 +281,7 @@ public class GraveDigger extends Random {
 		return random(1400, 1800);
 	}
 
-	public boolean atCloseInterface(final int parent, final int child) {
+	boolean atCloseInterface(final int parent, final int child) {
 		final RSComponent i = interfaces.getComponent(parent, child);
 		if (!i.isValid()) {
 			return false;
@@ -298,7 +298,7 @@ public class GraveDigger extends Random {
 		return true;
 	}
 
-	public boolean setCharacterInScreen(final RSCharacter ch) {
+	boolean setCharacterInScreen(final RSCharacter ch) {
 		// Check if it's on screen, if not make it on screen.
 		for (int i = 0; i < 3; i++) {
 			final Point screenLocation = ch.getScreenLocation();
@@ -323,7 +323,7 @@ public class GraveDigger extends Random {
 		return true;
 	}
 
-	public boolean setObjectInScreen(final RSObject obj) {
+	boolean setObjectInScreen(final RSObject obj) {
 		// Check if it's on screen, if not make it on screen.
 		for (int i = 0; i < 3; i++) {
 			final Point screenLocation = calc.tileToScreen(obj.getLocation());

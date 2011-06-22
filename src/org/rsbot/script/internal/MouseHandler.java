@@ -294,7 +294,7 @@ public class MouseHandler {
 					throw new RuntimeException(e);
 				}
 			}
-		} catch (final Exception e) {
+		} catch (final Exception ignored) {
 		}
 	}
 

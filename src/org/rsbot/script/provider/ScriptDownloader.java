@@ -39,7 +39,7 @@ public class ScriptDownloader {
 		// download the file
 		log.fine("Downloading: " + sourceURL);
 		final File temporaryFile = new File(Configuration.Paths.getGarbageDirectory(), Integer.toString(sourceURL.hashCode()) + ".script.bin");
-		HttpURLConnection httpURLConnection = null;
+		HttpURLConnection httpURLConnection;
 		try {
 			httpURLConnection = HttpClient.download(new URL(sourceURL), temporaryFile);
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class ScriptDownloader {
 		}
 
 		// compile the script
-		boolean result = false;
+		boolean result;
 		if (JavaCompiler.isAvailable()) {
 			String compileClassPath;
 			if (Configuration.RUNNING_FROM_JAR) {

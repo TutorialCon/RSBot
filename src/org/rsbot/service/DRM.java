@@ -14,8 +14,8 @@ import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 public class DRM {
-	private static Logger log = Logger.getLogger(DRM.class.getName());
-	public static final String DEFAULTKEY = "0000000000000000000000000000000000000000";
+	private static final Logger log = Logger.getLogger(DRM.class.getName());
+	private static final String DEFAULTKEY = "0000000000000000000000000000000000000000";
 
 	public static boolean login(final String user, final String pass) {
 		if (user == null || user.length() == 0) {

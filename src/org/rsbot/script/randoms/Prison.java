@@ -445,7 +445,7 @@ public class Prison extends Random {
 		lucky = false;
 	}
 
-	public short[] setItemIDs(final int b2p) {
+	short[] setItemIDs(final int b2p) {
 		// sets the proper balloon id
 		switch (b2p) {
 			case 10749: // skinny bend at end of tail
@@ -460,7 +460,7 @@ public class Prison extends Random {
 		return new short[]{};
 	}
 
-	public boolean interfaceContains(final String s) {
+	boolean interfaceContains(final String s) {
 		final RSInterface[] all = interfaces.getAll();
 		for (final RSInterface iface : all) {
 			if (iface != null) {
@@ -476,7 +476,7 @@ public class Prison extends Random {
 		return false;
 	}
 
-	public boolean atLever() {
+	boolean atLever() {
 		if (interfaces.get(273).getComponent(3).isValid()) {
 			final Filter<RSModel> filter = RSModel
 					.newVertexFilter(setItemIDs(interfaces.get(273)

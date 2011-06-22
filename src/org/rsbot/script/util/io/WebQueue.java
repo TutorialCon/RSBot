@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class WebQueue {
 	public static boolean weAreBuffering = false;
 	private static final List<String> queue = new ArrayList<String>(), queueOutList = new ArrayList<String>(), removeQueue = new ArrayList<String>(), removeStack = new ArrayList<String>();
-	private static QueueWriter writer;
+	private static final QueueWriter writer;
 	private static final Logger log = Logger.getLogger(WebQueue.class.getName());
 	private static final Object queueLock = new Object(), bufferLock = new Object(), removeLock = new Object();
 
@@ -36,8 +36,7 @@ public class WebQueue {
 				try {
 					final HashMap<RSTile, Integer> safeMapData = new HashMap<RSTile, Integer>();
 					safeMapData.putAll(gameTiles);
-					for (Map.Entry<RSTile, Integer> rsTileIntegerEntry : safeMapData.entrySet()) {
-						final Map.Entry<RSTile, Integer> tileData = rsTileIntegerEntry;
+					for (Map.Entry<RSTile, Integer> tileData : safeMapData.entrySet()) {
 						final RSTile tile = tileData.getKey();
 						final int key = tileData.getValue();
 						if (tileData != null) {
@@ -152,7 +151,7 @@ public class WebQueue {
 								final List<String> removeQueueSub = new ArrayList<String>();
 								removeQueueSub.addAll(removeQueue.subList(0, 99));
 								removeStack.addAll(removeQueueSub);
-								removeQueue.remove(removeQueueSub);
+								removeQueue.removeAll(removeQueueSub);
 							} else {
 								removeStack.addAll(removeQueue);
 								removeQueue.clear();

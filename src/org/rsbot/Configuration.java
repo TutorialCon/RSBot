@@ -233,7 +233,7 @@ public class Configuration {
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
 	public static boolean SKINNED = true;
-	public static String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel";
+	public static final String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel";
 	public static final boolean GOOGLEDNS = true;
 
 	public static class Twitter {
@@ -344,7 +344,7 @@ public class Configuration {
 	public static Image getImage(final String resource) {
 		try {
 			return Toolkit.getDefaultToolkit().getImage(getResourceURL(resource));
-		} catch (final Exception e) {
+		} catch (final Exception ignored) {
 		}
 		return null;
 	}

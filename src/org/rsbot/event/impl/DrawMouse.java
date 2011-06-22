@@ -8,7 +8,7 @@ import org.rsbot.event.listeners.PaintListener;
 import java.awt.*;
 
 public class DrawMouse implements PaintListener {
-	private Client client;
+	private final Client client;
 
 	public DrawMouse(Bot bot) {
 		client = bot.getClient();

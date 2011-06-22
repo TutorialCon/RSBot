@@ -55,9 +55,9 @@ public class AccountStore {
 		}
 	}
 
-	public static final String KEY_ALGORITHM = "DESede";
-	public static final String CIPHER_TRANSFORMATION = "DESede/CBC/PKCS5Padding";
-	public static final int FORMAT_VERSION = 2;
+	private static final String KEY_ALGORITHM = "DESede";
+	private static final String CIPHER_TRANSFORMATION = "DESede/CBC/PKCS5Padding";
+	private static final int FORMAT_VERSION = 2;
 
 	private final File file;
 	private byte[] digest;
@@ -232,7 +232,7 @@ public class AccountStore {
 	 * @param name The name of the account
 	 * @return Fixed name
 	 */
-	public static String fixName(String name) {
+	private static String fixName(String name) {
 		if (name.contains("@")) {
 			name = name.toLowerCase().trim();
 		} else {

@@ -641,10 +641,7 @@ public class Magic extends MethodProvider {
 		if (!getCurrentSpellBook().equals(spell.getBook())) {
 			return false;
 		}
-		if (!(methods.skills.getRealLevel(Skills.MAGIC) >= spell.level)) {
-			return false;
-		}
-		return true;
+		return methods.skills.getRealLevel(Skills.MAGIC) >= spell.level;
 	}
 
 	/**

@@ -6,12 +6,9 @@ import org.rsbot.gui.LicenseDialog;
 import org.rsbot.gui.LoadScreen;
 import org.rsbot.util.io.IOHelper;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 public class Application {
 	private static BotGUI gui;

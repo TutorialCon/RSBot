@@ -15,20 +15,20 @@ import java.util.ArrayList;
 @ScriptManifest(authors = {"Zenzie", "Iscream"}, name = "Maze", version = 1.6)
 public class Maze extends Random {
 
-	ArrayList<Door> paths = new ArrayList<Door>();
+	private ArrayList<Door> paths = new ArrayList<Door>();
 
-	String usePath = "None";
+	private String usePath = "None";
 
-	public char doorDir = 'a';
-	public RSTile walkToTile = null;
-	public int doorIndex = 0;
+	private char doorDir = 'a';
+	private RSTile walkToTile = null;
+	private int doorIndex = 0;
 
-	public int tryCount = 0;
-	public long lastTry = 0;
-	public RSTile lastDoor = null;
+	private int tryCount = 0;
+	private long lastTry = 0;
+	private RSTile lastDoor = null;
 
 	//working as of 4/07/2011
-	public void loadGreenPath() {
+	void loadGreenPath() {
 
 		paths.add(new Door(new RSTile(2903, 4555), 's', 0));
 		paths.add(new Door(new RSTile(2890, 4566), 'e', 1));
@@ -52,7 +52,7 @@ public class Maze extends Random {
 	}
 
 	//working as of 1/31/2010
-	public void loadBluePath() {
+	void loadBluePath() {
 
 		paths.add(new Door(new RSTile(2891, 4588), 'w', 0));
 		paths.add(new Door(new RSTile(2889, 4596), 'w', 1));
@@ -74,7 +74,7 @@ public class Maze extends Random {
 	}
 
 	//working as of  4/07/2011
-	public void loadCyanPath() {
+	void loadCyanPath() {
 
 		paths.add(new Door(new RSTile(2930, 4555), 's', 0));
 		paths.add(new Door(new RSTile(2912, 4553), 's', 1));
@@ -96,7 +96,7 @@ public class Maze extends Random {
 	}
 
 	//working as of 2/05/2010
-	public void loadPurplePath() {
+	void loadPurplePath() {
 
 		paths.add(new Door(new RSTile(2932, 4597), 'n', 0));
 		paths.add(new Door(new RSTile(2921, 4599), 'n', 1));
@@ -191,7 +191,7 @@ public class Maze extends Random {
 		return random(300, 350);
 	}
 
-	public void getNewWall() {
+	void getNewWall() {
 		for (final Door door : paths) {
 			if (door.doorID == doorIndex) {
 				walkToTile = new RSTile(door.doorTile.getX(), door.doorTile.getY());
@@ -203,7 +203,7 @@ public class Maze extends Random {
 		}
 	}
 
-	public int turnCameraTo() {
+	int turnCameraTo() {
 		final int doorD = doorDir;
 		if (doorD == 'a') {
 			log("TURNCAMERATO: WALL DIRECTION IS 'A");
@@ -222,7 +222,7 @@ public class Maze extends Random {
 		return random(330, 380);
 	}
 
-	public RSTile tileAfterDoor() {
+	RSTile tileAfterDoor() {
 		final int doorD = doorDir;
 		if (doorD == 'a') {
 			log("TILEAFTERDOOR: doorD = A");
@@ -245,7 +245,7 @@ public class Maze extends Random {
 		return new RSTile(1, 1);
 	}
 
-	public void getPath() {
+	void getPath() {
 		final int x = getMyPlayer().getLocation().getX();
 		final int y = getMyPlayer().getLocation().getY();
 		if (x >= 2920 && x <= 2940 && y >= 4572 && y <= 4600) {
@@ -295,7 +295,7 @@ public class Maze extends Random {
 		log("Random event finished ~ Made By Zenzie");
 	}
 
-	public boolean atDoor(final RSTile location, final char direction) {
+	boolean atDoor(final RSTile location, final char direction) {
 		if (location == null) {
 			return false;
 		}
@@ -327,7 +327,7 @@ public class Maze extends Random {
 		return atDoorTiles(location, new RSTile(x, y));
 	}
 
-	public boolean atDoorTiles(final RSTile a, final RSTile b) {
+	boolean atDoorTiles(final RSTile a, final RSTile b) {
 		if (a != lastDoor) {
 			lastTry = 0;
 			tryCount = 0;

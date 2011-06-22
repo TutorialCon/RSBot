@@ -18,13 +18,13 @@ import java.awt.*;
 @ScriptManifest(authors = {"illusion", "Pwnaz0r"}, name = "Pillory", version = 3.8)
 public class Pillory extends Random implements MessageListener {
 
-	public int fail = 0;
+	private int fail = 0;
 	private final int GameInterface = 189;
-	public boolean inCage = false;
-	public RSTile myLoc;
+	private boolean inCage = false;
+	private RSTile myLoc;
 
-	public final RSTile South = new RSTile(2606, 3105);
-	final RSTile[] cagetiles = {new RSTile(2608, 3105), new RSTile(2606, 3105), new RSTile(2604, 3105),
+	private final RSTile South = new RSTile(2606, 3105);
+	private final RSTile[] cagetiles = {new RSTile(2608, 3105), new RSTile(2606, 3105), new RSTile(2604, 3105),
 			new RSTile(3226, 3407), new RSTile(3228, 3407), new RSTile(3230, 3407),
 			new RSTile(2685, 3489), new RSTile(2683, 3489), new RSTile(2681, 3489)};
 

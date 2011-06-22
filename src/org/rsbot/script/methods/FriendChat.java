@@ -46,9 +46,9 @@ public class FriendChat extends MethodProvider {
 	}
 
 	public static class User implements Friend {
-		private String name;
-		private int worldNumber;
-		private boolean isInLobby;
+		private final String name;
+		private final int worldNumber;
+		private final boolean isInLobby;
 		private ChatRank rank = ChatRank.GUEST;
 
 		public User(String name, RSComponent rank, RSComponent world) {
@@ -366,10 +366,10 @@ public class FriendChat extends MethodProvider {
 
 		public class Friend implements FriendChat.Friend {
 
-			private String name;
-			private int worldNumber;
-			private boolean isOffline;
-			private boolean isInLobby;
+			private final String name;
+			private final int worldNumber;
+			private final boolean isOffline;
+			private final boolean isInLobby;
 
 			public Friend(String name, RSComponent world) {
 				this.name = name;

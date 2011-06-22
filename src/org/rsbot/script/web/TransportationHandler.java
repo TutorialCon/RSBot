@@ -21,7 +21,7 @@ import java.util.List;
  * @author Equinox-
  */
 public class TransportationHandler extends MethodProvider {
-	private List<Teleport> teleports = new ArrayList<Teleport>();
+	private final List<Teleport> teleports = new ArrayList<Teleport>();
 
 	public TransportationHandler(final MethodContext ctx) {
 		super(ctx);
@@ -108,7 +108,7 @@ public class TransportationHandler extends MethodProvider {
 	}
 
 	private class Runes {
-		public TeleportRunes VARROCK, CAMELOT, LUMBRIDGE_HOME;
+		public final TeleportRunes VARROCK, CAMELOT, LUMBRIDGE_HOME;
 
 		public Runes() {
 			VARROCK = new TeleportRunes(methods, Magic.SPELL_VARROCK_TELEPORT, Magic.Book.MODERN, new RSTile(3212, 3428, 0), new Rune[]{Rune.LAW, Rune.FIRE, Rune.AIR}, new int[]{1, 1, 3});

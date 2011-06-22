@@ -9,11 +9,11 @@ import org.rsbot.script.wrappers.RSTile;
 @ScriptManifest(authors = {"Keilgo"}, name = "DrillDemon", version = 0.2)
 public class DrillDemon extends Random {
 
-	public final int demonID = 2790;
-	public int sign1;
-	public int sign2;
-	public int sign3;
-	public int sign4;
+	private final int demonID = 2790;
+	private int sign1;
+	private int sign2;
+	private int sign3;
+	private int sign4;
 
 	@Override
 	public void onFinish() {
@@ -307,7 +307,7 @@ public class DrillDemon extends Random {
 		return random(2000, 2500);
 	}
 
-	public boolean myClickContinue() {
+	boolean myClickContinue() {
 		sleep(random(800, 1000));
 		return interfaces.getComponent(243, 7).doClick()
 				|| interfaces.getComponent(241, 5).doClick()
@@ -316,8 +316,8 @@ public class DrillDemon extends Random {
 				|| interfaces.getComponent(64, 5).doClick();
 	}
 
-	public boolean playerInArea(final int maxX, final int maxY, final int minX,
-	                            final int minY) {
+	boolean playerInArea(final int maxX, final int maxY, final int minX,
+	                     final int minY) {
 		final int x = getMyPlayer().getLocation().getX();
 		final int y = getMyPlayer().getLocation().getY();
 		return x >= minX && x <= maxX && y >= minY && y <= maxY;

@@ -24,7 +24,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 	private static final Logger log = Logger.getLogger("ScriptDelivery");
 	private static ScriptDeliveryNetwork instance;
 	private URL base;
-	final File manifest;
+	private final File manifest;
 
 	private ScriptDeliveryNetwork() {
 		manifest = getFile("manifests");
@@ -76,7 +76,6 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		}
 	}
 
-	@Override
 	public List<ScriptDefinition> list() {
 		final ArrayList<ScriptDefinition> defs = new ArrayList<ScriptDefinition>();
 		refresh(false);
@@ -91,7 +90,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		return defs;
 	}
 
-	public Map<String, ScriptDefinition> listMap() {
+	Map<String, ScriptDefinition> listMap() {
 		final List<ScriptDefinition> list = list();
 		final Map<String, ScriptDefinition> map = new LinkedHashMap<String, ScriptDefinition>(list.size());
 		for (final ScriptDefinition def : list) {
@@ -124,7 +123,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		return store;
 	}
 
-	public void download(final ScriptDefinition def) {
+	void download(final ScriptDefinition def) {
 		final File cache = new File(getCacheDirectory(), def.path);
 		try {
 			HttpClient.download(new URL(base, def.path), cache);
@@ -156,7 +155,6 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		}
 	}
 
-	@Override
 	public Script load(final ScriptDefinition def) throws ServiceException {
 		final File cache = new File(getCacheDirectory(), def.path);
 		final LinkedList<ScriptDefinition> defs = new LinkedList<ScriptDefinition>();

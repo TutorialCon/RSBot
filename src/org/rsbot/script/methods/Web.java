@@ -232,7 +232,7 @@ public class Web extends MethodProvider {
 	 * Node class.
 	 */
 	private static class Node {
-		public int x, y, z;
+		public final int x, y, z;
 		public Node prev;
 		public double g, f;
 

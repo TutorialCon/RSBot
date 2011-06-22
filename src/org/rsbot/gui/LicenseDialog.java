@@ -19,7 +19,7 @@ public class LicenseDialog extends JDialog implements ActionListener {
 	private LicenseDialog(final Frame owner) {
 		super(owner, owner != null);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setTitle((owner == null ? Configuration.NAME + " " : "" ) + Messages.LICENSE);
+		setTitle((owner == null ? Configuration.NAME + " " : "") + Messages.LICENSE);
 		setIconImage(Configuration.getImage(owner == null ? Configuration.Paths.Resources.ICON : Configuration.Paths.Resources.ICON_LICENSE));
 
 		String license = "Could not find license file, please visit http://www.gnu.org/licenses/gpl.html";

@@ -216,6 +216,6 @@ public class RSItem extends MethodProvider implements RSTarget {
 	}
 
 	public boolean contains(int x, int y) {
-		return component != null ? component.contains(x, y) : false;
+		return component != null && component.contains(x, y);
 	}
 }

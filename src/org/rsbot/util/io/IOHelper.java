@@ -22,7 +22,7 @@ public class IOHelper {
 		} catch (final IOException ignored) {
 			try {
 				buffer.close();
-			} catch (final IOException ignored1) {
+			} catch (final IOException ignored2) {
 			}
 			buffer = null;
 		} finally {

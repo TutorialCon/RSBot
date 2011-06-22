@@ -36,7 +36,7 @@ public class Bot {
 	private final BackgroundScriptHandler bsh;
 	private final BreakHandler bh;
 	private final Map<String, EventListener> listeners;
-	public static final String THREADGROUPID = "RSClient-";
+	private static final String THREADGROUPID = "RSClient-";
 
 	/**
 	 * Whether or not user input is allowed despite a script's preference.

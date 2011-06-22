@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.logging.Level;
 
 public abstract class Random extends Methods implements PaintListener {
-	protected String name;
+	private String name;
 	private volatile boolean enabled = true;
 	private Script script;
 	private final long timeout = random(240, 300);
@@ -23,18 +23,18 @@ public abstract class Random extends Methods implements PaintListener {
 	 */
 	public abstract boolean activateCondition();
 
-	public abstract int loop();
+	protected abstract int loop();
 
 
 	/**
 	 * Called after the method providers for this Random
 	 * become available for use in initialization.
 	 */
-	public void onStart() {
+	void onStart() {
 
 	}
 
-	public void onFinish() {
+	protected void onFinish() {
 
 	}
 
@@ -47,7 +47,7 @@ public abstract class Random extends Methods implements PaintListener {
 	 *         detected as having failed. If this time is reached
 	 *         the random and running script will be stopped.
 	 */
-	public long getTimeout() {
+	long getTimeout() {
 		return timeout;
 	}
 

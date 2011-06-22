@@ -178,59 +178,59 @@ public class Exam extends Random {
 		}
 	}
 
-	public static final int nextObjectInterface = 103;
-	public static final int relatedCardsInterface = 559;
+	private static final int nextObjectInterface = 103;
+	private static final int relatedCardsInterface = 559;
 
-	public static final int[] Ranged = {11539, 11540, 11541, 11614, 11615, 11633};
+	private static final int[] Ranged = {11539, 11540, 11541, 11614, 11615, 11633};
 
-	public static final int[] Cooking = {11526, 11529, 11545, 11549, 11550, 11555, 11560,
+	private static final int[] Cooking = {11526, 11529, 11545, 11549, 11550, 11555, 11560,
 			11563, 11564, 11607, 11608, 11616, 11620, 11621, 11622, 11623,
 			11628,
 
 			11629, 11634, 11639, 11641, 11649, 11624};
 
-	public static final int[] Fishing = {11527, 11574, 11578, 11580, 11599, 11600, 11601,
+	private static final int[] Fishing = {11527, 11574, 11578, 11580, 11599, 11600, 11601,
 			11602, 11603,
 
 			11604, 11605, 11606, 11625};
 
-	public static final int[] Combat = {11528, 11531, 11536, 11537, 11579, 11591, 11592,
+	private static final int[] Combat = {11528, 11531, 11536, 11537, 11579, 11591, 11592,
 			11593, 11597, 11627, 11631, 11635, 11636, 11638, 11642, 11648,
 			11617};
 
-	public static final int[] Farming = {11530, 11532, 11547, 11548, 11554, 11556, 11571,
+	private static final int[] Farming = {11530, 11532, 11547, 11548, 11554, 11556, 11571,
 			11581, 11586, 11610, 11645};
 
-	public static final int[] Magic = {11533, 11534, 11538, 11562, 11567, 11582};
+	private static final int[] Magic = {11533, 11534, 11538, 11562, 11567, 11582};
 
-	public static final int[] Firemaking = {11535, 11551, 11552, 11559, 11646};
+	private static final int[] Firemaking = {11535, 11551, 11552, 11559, 11646};
 
-	public static final int[] Hats = {11540, 11557, 11558, 11560, 11570, 11619, 11626,
+	private static final int[] Hats = {11540, 11557, 11558, 11560, 11570, 11619, 11626,
 			11630, 11632, 11637, 11654};
-	public static final int[] Pirate = {11570, 11626, 11558};
+	private static final int[] Pirate = {11570, 11626, 11558};
 
-	public static final int[] Jewellery = {11572, 11576, 11652};
+	private static final int[] Jewellery = {11572, 11576, 11652};
 
-	public static final int[] Jewellery2 = {11572, 11576, 11652};
+	private static final int[] Jewellery2 = {11572, 11576, 11652};
 
-	public static final int[] Drinks = {11542, 11543, 11544, 11644, 11647};
+	private static final int[] Drinks = {11542, 11543, 11544, 11644, 11647};
 
-	public static final int[] Woodcutting = {11573, 11595};
+	private static final int[] Woodcutting = {11573, 11595};
 
-	public static final int[] Boots = {11561, 11618, 11650, 11651};
+	private static final int[] Boots = {11561, 11618, 11650, 11651};
 
-	public static final int[] Crafting = {11546, 11553, 11565, 11566, 11568, 11569, 11572,
+	private static final int[] Crafting = {11546, 11553, 11565, 11566, 11568, 11569, 11572,
 			11575, 11576, 11577, 11581, 11583, 11584, 11585, 11643, 11652,
 			11653};
 
-	public static final int[] Mining = {11587, 11588, 11594, 11596, 11598, 11609, 11610};
+	private static final int[] Mining = {11587, 11588, 11594, 11596, 11598, 11609, 11610};
 
-	public static final int[] Smithing = {11611, 11612, 11613};
-	public static final int[][] items = {Ranged, Cooking, Fishing, Combat, Farming, Magic,
+	private static final int[] Smithing = {11611, 11612, 11613};
+	private static final int[][] items = {Ranged, Cooking, Fishing, Combat, Farming, Magic,
 			Firemaking, Hats, Drinks, Woodcutting, Boots, Crafting, Mining,
 			Smithing};
 
-	public final SimilarObjectQuestion[] simObjects = {
+	private final SimilarObjectQuestion[] simObjects = {
 			new SimilarObjectQuestion("I never leave the house without some sort of jewellery.", Jewellery),
 			new SimilarObjectQuestion("There is no better feeling than", Jewellery2),
 			new SimilarObjectQuestion("I'm feeling dehydrated", Drinks),
@@ -295,7 +295,7 @@ public class Exam extends Random {
 
 	};
 
-	public RSObject door = null;
+	private RSObject door = null;
 
 	@Override
 	public boolean activateCondition() {
@@ -307,7 +307,7 @@ public class Exam extends Random {
 	 * Don't use this with any other monster.I edited for this script only cause
 	 * Mr. Mordaunt doesn't move
 	 */
-	public boolean clickCharacter(final RSCharacter c, final String action) {
+	boolean clickCharacter(final RSCharacter c, final String action) {
 		try {
 			Point screenLoc;
 			screenLoc = c.getScreenLocation();
@@ -337,7 +337,7 @@ public class Exam extends Random {
 	}
 
 	// My clickObject, like clickCharacter, and faster than atObject.
-	public boolean clickObject(final RSObject c, final String action) {
+	boolean clickObject(final RSObject c, final String action) {
 		try {
 			Point screenLoc;
 			int X = (int) calc.tileToScreen(c.getLocation()).getX();
@@ -482,7 +482,7 @@ public class Exam extends Random {
 		return random(800, 1200);
 	}
 
-	public RSComponent searchInterfacesText(final String string) {
+	RSComponent searchInterfacesText(final String string) {
 		final RSInterface[] inters = interfaces.getAll();
 		for (final RSInterface inter : inters) {
 			for (final RSComponent interfaceChild : inter.getComponents()) {

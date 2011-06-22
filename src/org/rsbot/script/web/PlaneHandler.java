@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class PlaneHandler extends MethodProvider {
-	List<PlaneTraverse> traverseList = new ArrayList<PlaneTraverse>();
+	final List<PlaneTraverse> traverseList = new ArrayList<PlaneTraverse>();
 
 	public PlaneHandler(final MethodContext ctx) {
 		super(ctx);

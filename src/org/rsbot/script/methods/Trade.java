@@ -261,10 +261,7 @@ public class Trade extends MethodProvider {
 	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
 	 */
 	public boolean isWealthOffered() {
-		if (!inTradeMain()) {
-			return false;
-		}
-		return methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_OUR_AMOUNT).getText().indexOf("Nothing") == -1;
+		return inTradeMain() && methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_OUR_AMOUNT).getText().indexOf("Nothing") == -1;
 	}
 
 	/**
@@ -273,10 +270,7 @@ public class Trade extends MethodProvider {
 	 * @return <tt>true</tt> if something has been offered; otherwise <tt>false</tt>.
 	 */
 	public boolean isWealthReceived() {
-		if (!inTradeMain()) {
-			return false;
-		}
-		return methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_THEIR_AMOUNT).getText().indexOf("Nothing") == -1;
+		return inTradeMain() && methods.interfaces.get(INTERFACE_TRADE_MAIN).getComponent(INTERFACE_TRADE_THEIR_AMOUNT).getText().indexOf("Nothing") == -1;
 	}
 
 	/**

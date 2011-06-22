@@ -32,15 +32,15 @@ public abstract class RSModel extends MethodProvider implements RSTarget {
 	}
 
 	protected int[] xPoints;
-	protected int[] yPoints;
+	protected final int[] yPoints;
 	protected int[] zPoints;
 
-	protected short[] indices1;
-	protected short[] indices2;
-	protected short[] indices3;
+	protected final short[] indices1;
+	protected final short[] indices2;
+	protected final short[] indices3;
 
-	protected int numVertices;
-	protected int numFaces;
+	protected final int numVertices;
+	protected final int numFaces;
 
 	public RSModel(final MethodContext ctx, final Model model) {
 		super(ctx);

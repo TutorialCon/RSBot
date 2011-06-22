@@ -18,18 +18,18 @@ import java.util.ArrayList;
 @ScriptManifest(authors = {"PwnZ"}, name = "Molly", version = 1.9)
 public class Molly extends Random {
 
-	static final int CLAW_ID = 14976;
-	static final int CONTROL_PANEL_ID = 14978;
-	static final int DOOR_ID = 14982;
-	static final int MOLLY_CHATBOX_INTERFACEGROUP = 228;
-	static final int MOLLY_CHATBOX_NOTHANKS = 3;
-	static final int MOLLY_CHATBOX_SKIP = 2;
-	static final int CONTROL_INTERFACEGROUP = 240;
-	static final int CONTROLS_GRAB = 28;
-	static final int CONTROLS_UP = 29;
-	static final int CONTROLS_DOWN = 30;
-	static final int CONTROLS_LEFT = 31;
-	static final int CONTROLS_RIGHT = 32;
+	private static final int CLAW_ID = 14976;
+	private static final int CONTROL_PANEL_ID = 14978;
+	private static final int DOOR_ID = 14982;
+	private static final int MOLLY_CHATBOX_INTERFACEGROUP = 228;
+	private static final int MOLLY_CHATBOX_NOTHANKS = 3;
+	private static final int MOLLY_CHATBOX_SKIP = 2;
+	private static final int CONTROL_INTERFACEGROUP = 240;
+	private static final int CONTROLS_GRAB = 28;
+	private static final int CONTROLS_UP = 29;
+	private static final int CONTROLS_DOWN = 30;
+	private static final int CONTROLS_LEFT = 31;
+	private static final int CONTROLS_RIGHT = 32;
 	static final int CONTROLS_EXIT = 33;
 
 	private RSNPC molly;
