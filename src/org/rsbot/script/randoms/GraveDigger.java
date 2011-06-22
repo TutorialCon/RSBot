@@ -129,15 +129,15 @@ public class GraveDigger extends Random {
 			}
 			if (interfaces.get(Bank.INTERFACE_DEPOSIT_BOX).isValid()) {
 				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(27).interact("Dep");
+				interfaces.get(11).getComponent(17).getComponent(27).interact("All");
 				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(26).interact("Dep");
+				interfaces.get(11).getComponent(17).getComponent(26).interact("All");
 				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(25).interact("Dep");
+				interfaces.get(11).getComponent(17).getComponent(25).interact("All");
 				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(24).interact("Dep");
+				interfaces.get(11).getComponent(17).getComponent(24).interact("All");
 				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(23).interact("Dep");
+				interfaces.get(11).getComponent(17).getComponent(23).interact("All");
 				sleep(random(700, 1200));
 				interfaces.getComponent(11, 15).doClick();
 				return random(500, 700);
