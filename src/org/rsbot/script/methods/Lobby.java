@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
  */
 public class Lobby extends MethodProvider {
 	public static final int INTERFACE_LOBBY = 906;
-	public static final int TAB_WORLDS = 12;
-	public static final int TAB_FRIENDS = 11;
-	public static final int TAB_CLAN = 10;
-	public static final int TAB_OPTIONS = 9;
-	public static final int TAB_FRIENDS_CHAT = 254;
-	public static final int TAB_PLAYERS = 204;
+	public static final int TAB_WORLDS = 22;
+	public static final int TAB_FRIENDS = 21;
+	public static final int TAB_CLAN = 20;
+	public static final int TAB_OPTIONS = 19;
+	public static final int TAB_FRIENDS_CHAT = 265;
+	public static final int TAB_PLAYERS = 215;
 	public static final int INTERFACE_LOBBY_BUTTON_PLAY = 171;
 	public static final int INTERFACE_LOBBY_ALERT_TEXT = 235;
 	public static final int INTERFACE_LOBBY_ALERT_CLOSE = 242;
