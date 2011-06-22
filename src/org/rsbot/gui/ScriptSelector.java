@@ -190,7 +190,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				});
 
 				final JMenuItem start = new JMenuItem();
-				start.setText(submit.getText());
+				start.setText(submit.getToolTipText());
 				start.setIcon(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PLAY)));
 				start.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -285,6 +285,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			}
 		});
 		submit = new JButton("Start", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PLAY)));
+		submit.setToolTipText(submit.getText());
+		submit.setText("");
 		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT)));
 		connect.setToolTipText("Show network scripts");
 		submit.setEnabled(false);
