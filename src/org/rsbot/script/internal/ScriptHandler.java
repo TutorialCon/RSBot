@@ -149,18 +149,19 @@ public class ScriptHandler {
 		return id;
 	}
 
-	public void runPassiveScript(final Script script) {
+	public int runPassiveScript(final Script script) {
 		script.init(bot.getMethodContext());
 		final ScriptManifest prop = script.getClass().getAnnotation(ScriptManifest.class);
 		final Thread t = new Thread(scriptThreadGroup, script, "PassiveScript-" + prop.name());
 		t.setDaemon(true);
 		t.setPriority(Thread.MIN_PRIORITY);
-		addScriptToPool(script, t);
+		final int id = addScriptToPool(script, t);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				t.start();
 			}
 		});
+		return id;
 	}
 
 	public void stopAllScripts() {

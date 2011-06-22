@@ -536,8 +536,8 @@ public class Web extends MethodProvider {
 	public void loadWebScripts() {
 		if (!webScriptsLoaded) {
 			final ScriptHandler bsh = methods.bot.getScriptHandler();
-			webDataId = bsh.runScript(new WebData());
-			bankCacheId = bsh.runScript(new BankMonitor());
+			webDataId = bsh.runPassiveScript(new WebData());
+			bankCacheId = bsh.runPassiveScript(new BankMonitor());
 			webScriptsLoaded = true;
 		}
 	}
