@@ -29,7 +29,6 @@ public class LicenseDialog extends JDialog implements ActionListener {
 		}
 
 		final JTextArea licenseText = new JTextArea(license);
-		licenseText.setFont(new Font(Font.SANS_SERIF, licenseText.getFont().getStyle(), (int) (licenseText.getFont().getSize() * 0.8)));
 		licenseText.setColumns(48);
 		licenseText.setRows(15);
 		licenseText.setMargin(new Insets(4, 4, 4, 4));
