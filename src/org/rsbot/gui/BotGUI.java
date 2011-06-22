@@ -336,7 +336,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		final int idx = bots.indexOf(bot);
 		bot.getScriptHandler().stopAllScripts();
 		bot.getScriptHandler().removeScriptListener(this);
-		bot.getBackgroundScriptHandler().stopAllScripts();
 		if (idx >= 0) {
 			toolBar.removeTab(idx);
 		}

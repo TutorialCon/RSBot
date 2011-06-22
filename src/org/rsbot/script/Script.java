@@ -19,7 +19,7 @@ import java.util.logging.Level;
 public abstract class Script extends Methods implements EventListener, Runnable {
 	Set<Script> delegates = new HashSet<Script>();
 	MethodContext ctx;
-	private volatile boolean running = false;
+	protected volatile boolean running = false;
 	private volatile boolean paused = false;
 	private volatile boolean random = false;
 	private int id = -1;

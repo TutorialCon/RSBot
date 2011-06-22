@@ -29,7 +29,6 @@ LESSCPU=Mindre CPU
 DISABLECANVAS=Inaktivera canvas
 EXTDVIEWS=Utökad visa-meny
 AUTOSHUTDOWN=Automatisk avstängning (min):
-BETAPATCH=Använd beta client patch
 
 HIDETOOLBAR=Dölj verktygsfält
 HIDELOGPANE=Dölj loggpanel

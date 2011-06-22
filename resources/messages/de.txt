@@ -29,7 +29,6 @@ LESSCPU=Weniger CPU
 DISABLECANVAS=Leinwand deaktivieren
 EXTDVIEWS=Ansicht erweitern
 AUTOSHUTDOWN=Herunterfahren (min):
-BETAPATCH=Beta Client-Patch verwenden
 
 HIDETOOLBAR=Toolbar verstecken
 HIDELOGPANE=Log-Panel verstecken
