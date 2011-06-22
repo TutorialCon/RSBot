@@ -382,6 +382,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		setSize(750, 400);
 		setMinimumSize(getSize());
 		setLocationRelativeTo(getParent());
+		getRootPane().setDefaultButton(submit);
 		search.requestFocus();
 	}
 
