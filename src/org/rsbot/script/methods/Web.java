@@ -398,8 +398,7 @@ public class Web extends MethodProvider {
 	 * @return The <code>TileFlags</code>.
 	 */
 	public static int GetTileFlag(final RSTile tile) {
-		final Short[] theTile = {(short) tile.getX(), (short) tile.getY(), (short) tile.getZ()};
-		return Web.rs_map.get(theTile);
+		return Web.rs_map.get(tile);
 	}
 
 	/**
