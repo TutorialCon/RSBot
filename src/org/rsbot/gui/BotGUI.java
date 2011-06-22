@@ -67,18 +67,18 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				JFrame.setDefaultLookAndFeelDecorated(true);
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-				if (!preferences.hideAds) {
-					new SplashAd(BotGUI.this).display();
-				}
-				if (Configuration.Twitter.ENABLED) {
-					TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
-				}
 				addBot();
 				updateScriptControls();
 				setShutdownTimer(preferences.shutdown);
 				SwingUtilities.updateComponentTreeUI(instance);
 				LoadScreen.quit();
 				setVisible(true);
+				if (!preferences.hideAds) {
+					new SplashAd(BotGUI.this).display();
+				}
+				if (Configuration.Twitter.ENABLED) {
+					TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
+				}
 				System.gc();
 			}
 		});
