@@ -1,41 +1,20 @@
 package org.rsbot.script;
 
-import org.rsbot.script.methods.MethodContext;
-import org.rsbot.script.methods.Methods;
-
-import java.util.EventListener;
-
 /**
  * A background script.
  *
  * @author Timer
  */
-public abstract class BackgroundScript extends Methods implements EventListener, Runnable {
-	private volatile boolean running = false;
-	private int id = -1;
-
+public abstract class BackgroundScript extends Script {
 	protected abstract boolean activateCondition();
-
-	protected abstract int loop();
 
 	protected abstract int iterationSleep();
 
-	boolean onStart() {
-		return true;
-	}
-
-	void onFinish() {
-	}
-
 	@Override
-	public final void init(final MethodContext ctx) {
-		super.init(ctx);
-		onStart();
+	public void stopScript(final boolean logout) {
+		running = false;
 	}
 
-	/**
-	 * Runs the background script.
-	 */
 	public final void run() {
 		ctx.bot.getEventManager().addListener(this);
 		running = true;
@@ -61,47 +40,5 @@ public abstract class BackgroundScript extends Methods implements EventListener,
 		}
 		ctx.bot.getEventManager().removeListener(this);
 		running = false;
-	}
-
-	/**
-	 * Removes the script.
-	 *
-	 * @param id The id to deactivate.
-	 */
-	public final void deactivate(final int id) {
-		if (id != this.id) {
-			throw new IllegalStateException("Invalid id!");
-		}
-		running = false;
-	}
-
-	/**
-	 * Gives the script an id.
-	 *
-	 * @param id The id.
-	 */
-	public final void setID(final int id) {
-		if (this.id != -1) {
-			throw new IllegalStateException("Already added to pool!");
-		}
-		this.id = id;
-	}
-
-	/**
-	 * Gets the id of the script.
-	 *
-	 * @return The ID.
-	 */
-	public final int getID() {
-		return id;
-	}
-
-	/**
-	 * Checks if the script is running.
-	 *
-	 * @return <tt>true</tt> if true.
-	 */
-	public final boolean isRunning() {
-		return running;
 	}
 }

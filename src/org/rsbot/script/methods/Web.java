@@ -3,7 +3,7 @@ package org.rsbot.script.methods;
 import org.rsbot.Configuration.Paths;
 import org.rsbot.script.background.BankMonitor;
 import org.rsbot.script.background.WebData;
-import org.rsbot.script.internal.BackgroundScriptHandler;
+import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.script.web.PlaneHandler;
 import org.rsbot.script.web.PlaneTraverse;
@@ -535,7 +535,7 @@ public class Web extends MethodProvider {
 
 	public void loadWebScripts() {
 		if (!webScriptsLoaded) {
-			final BackgroundScriptHandler bsh = methods.bot.getBackgroundScriptHandler();
+			final ScriptHandler bsh = methods.bot.getScriptHandler();
 			webDataId = bsh.runScript(new WebData());
 			bankCacheId = bsh.runScript(new BankMonitor());
 			webScriptsLoaded = true;
@@ -544,7 +544,7 @@ public class Web extends MethodProvider {
 
 	public void unloadWebScripts() {
 		if (webScriptsLoaded && !forceLoad) {
-			final BackgroundScriptHandler bsh = methods.bot.getBackgroundScriptHandler();
+			final ScriptHandler bsh = methods.bot.getScriptHandler();
 			bsh.stopScript(webDataId);
 			bsh.stopScript(bankCacheId);
 			webScriptsLoaded = false;

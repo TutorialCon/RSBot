@@ -68,18 +68,19 @@ public class ScriptHandler {
 		listeners.remove(l);
 	}
 
-	private void addScriptToPool(final Script ss, final Thread t) {
+	private int addScriptToPool(final Script ss, final Thread t) {
 		for (int off = 0; off < scripts.size(); ++off) {
 			if (!scripts.containsKey(off)) {
 				scripts.put(off, ss);
 				ss.setID(off);
 				scriptThreads.put(off, t);
-				return;
+				return off;
 			}
 		}
 		ss.setID(scripts.size());
 		scripts.put(scripts.size(), ss);
 		scriptThreads.put(scriptThreads.size(), t);
+		return scripts.size() - 1;
 	}
 
 	public Bot getBot() {
@@ -132,13 +133,28 @@ public class ScriptHandler {
 		}
 	}
 
-	public void runScript(final Script script) {
+	public int runScript(final Script script) {
 		script.init(bot.getMethodContext());
 		for (final ScriptListener l : listeners) {
 			l.scriptStarted(this, script);
 		}
 		final ScriptManifest prop = script.getClass().getAnnotation(ScriptManifest.class);
 		final Thread t = new Thread(scriptThreadGroup, script, "Script-" + prop.name());
+		final int id = addScriptToPool(script, t);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				t.start();
+			}
+		});
+		return id;
+	}
+
+	public void runPassiveScript(final Script script) {
+		script.init(bot.getMethodContext());
+		final ScriptManifest prop = script.getClass().getAnnotation(ScriptManifest.class);
+		final Thread t = new Thread(scriptThreadGroup, script, "PassiveScript-" + prop.name());
+		t.setDaemon(true);
+		t.setPriority(Thread.MIN_PRIORITY);
 		addScriptToPool(script, t);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

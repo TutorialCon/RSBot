@@ -7,7 +7,6 @@ import org.rsbot.event.EventManager;
 import org.rsbot.event.events.PaintEvent;
 import org.rsbot.event.events.TextPaintEvent;
 import org.rsbot.gui.AccountManager;
-import org.rsbot.script.internal.BackgroundScriptHandler;
 import org.rsbot.script.internal.BreakHandler;
 import org.rsbot.script.internal.InputManager;
 import org.rsbot.script.internal.ScriptHandler;
@@ -33,7 +32,6 @@ public class Bot {
 	private final InputManager im;
 	private RSLoader loader;
 	private final ScriptHandler sh;
-	private final BackgroundScriptHandler bsh;
 	private final BreakHandler bh;
 	private final Map<String, EventListener> listeners;
 	private static final String THREADGROUPID = "RSClient-";
@@ -84,7 +82,6 @@ public class Bot {
 			}
 		});
 		sh = new ScriptHandler(this);
-		bsh = new BackgroundScriptHandler(this);
 		bh = new BreakHandler(this);
 		backBuffer = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 		image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
@@ -123,7 +120,6 @@ public class Bot {
 	public void stop() {
 		eventManager.killThread(false);
 		sh.stopScript();
-		bsh.stopScript();
 		loader.stop();
 		loader.destroy();
 		loader = null;
@@ -242,10 +238,6 @@ public class Bot {
 
 	public ScriptHandler getScriptHandler() {
 		return sh;
-	}
-
-	public BackgroundScriptHandler getBackgroundScriptHandler() {
-		return bsh;
 	}
 
 	private void setClient(final Client cl) {
