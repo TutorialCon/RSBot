@@ -32,11 +32,12 @@ public class SplashAd extends JDialog implements MouseListener {
 	private URL image;
 	private String text;
 	private int display = 5000;
+	private boolean error = false;
 
 	public SplashAd(final JFrame owner) {
 		super(owner);
 
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setUndecorated(true);
 		setTitle("Advertisement");
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -69,7 +70,9 @@ public class SplashAd extends JDialog implements MouseListener {
 			return;
 		}
 
+		pack();
 		addMouseListener(this);
+		error = false;
 	}
 
 	private boolean sync() {
@@ -110,16 +113,21 @@ public class SplashAd extends JDialog implements MouseListener {
 	}
 
 	public void display() {
-		setLocationRelativeTo(getOwner());
-		setVisible(true);
+		if (error) {
+			dispose();
+			return;
+		}
 
-		final Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
 				dispose();
 			}
 		}, display);
+
+		setLocationRelativeTo(getOwner());
+		setModal(true);
+		setVisible(true);
 	}
 
 	public void mouseClicked(final MouseEvent e) {
