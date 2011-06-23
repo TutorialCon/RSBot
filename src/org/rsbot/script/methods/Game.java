@@ -711,7 +711,7 @@ public class Game extends MethodProvider {
 			return false;
 		}
 		if (!methods.interfaces.get(910).isValid()) {
-			final RSComponent worldSelect = methods.interfaces.getComponent(906, 189);
+			final RSComponent worldSelect = methods.interfaces.getComponent(906, 200);
 			if (worldSelect.doClick()) {
 				sleep(1000);
 			}
