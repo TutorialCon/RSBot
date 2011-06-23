@@ -4,7 +4,6 @@ package org.rsbot.client;
  * GraphicsToolkit
  */
 public interface Render {
-
 	int getAbsoluteX1();
 
 	int getAbsoluteX2();
@@ -20,5 +19,4 @@ public interface Render {
 	int getZFar();
 
 	int getZNear();
-
 }

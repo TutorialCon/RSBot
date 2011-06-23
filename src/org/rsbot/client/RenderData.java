@@ -4,7 +4,6 @@ package org.rsbot.client;
  * Viewport
  */
 public interface RenderData {
-
 	// x calculation values
 	float getXOff();
 
@@ -31,5 +30,4 @@ public interface RenderData {
 	float getZY();
 
 	float getZZ();
-
 }

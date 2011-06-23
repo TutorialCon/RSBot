@@ -1,7 +1,6 @@
 package org.rsbot.client;
 
 public interface RSGround {
-
 	byte getPlane1();
 
 	byte getPlane2();
@@ -23,5 +22,4 @@ public interface RSGround {
 	short getX();
 
 	short getY();
-
 }

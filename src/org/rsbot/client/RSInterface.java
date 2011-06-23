@@ -1,7 +1,6 @@
 package org.rsbot.client;
 
 public interface RSInterface {
-
 	String[] getActions();
 
 	int getBorderThickness();
@@ -95,5 +94,4 @@ public interface RSInterface {
 	boolean isInventoryRSInterface();
 
 	boolean isVerticallyFlipped();
-
 }

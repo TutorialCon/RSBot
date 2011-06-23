@@ -3,7 +3,6 @@ package org.rsbot.client;
 import org.rsbot.bot.Bot;
 
 public interface Callback {
-
 	public Bot getBot();
 
 	public void notifyMessage(int id, String sender, String msg);
