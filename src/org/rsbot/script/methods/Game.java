@@ -695,7 +695,7 @@ public class Game extends MethodProvider {
 	 * @return If worlds were switched.
 	 */
 	public boolean switchWorld(final int world) {
-		methods.env.disableRandom("Login");
+		methods.env.disableRandom("Improved Login");
 		if (methods.game.isLoggedIn()) {
 			methods.game.logout(true);
 			for (int i = 0; i < 50; i++) {
@@ -718,7 +718,7 @@ public class Game extends MethodProvider {
 		}
 		if (methods.lobby.switchWorlds(world)) {
 			sleep(random(1000, 2000));
-			methods.env.enableRandom("Login");
+			methods.env.enableRandom("Improved Login");
 			return true;
 		}
 		return false;
