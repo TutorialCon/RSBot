@@ -1,7 +1,6 @@
 package org.rsbot.client;
 
 public interface RSObject {
-
 	int getID();
 
 	int getType();
@@ -11,5 +10,4 @@ public interface RSObject {
 	int getY();
 
 	Model getModel();
-
 }

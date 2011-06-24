@@ -1,7 +1,6 @@
 package org.rsbot.client;
 
 public interface RSItemDef {
-
 	String[] getActions();
 
 	int getCertID();

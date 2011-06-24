@@ -475,6 +475,7 @@ public class Game extends MethodProvider {
 	 */
 	public boolean login() {
 		org.rsbot.script.randoms.ImprovedLoginBot loginBot = new org.rsbot.script.randoms.ImprovedLoginBot();
+		loginBot.init(methods);
 		if (loginBot.activateCondition()) {
 			sleep(loginBot.loop());
 			return true;
@@ -707,14 +708,8 @@ public class Game extends MethodProvider {
 		}
 
 		if (!methods.interfaces.get(906).isValid()) {
-			methods.env.enableRandom("Login");
+			methods.env.enableRandom("Improved Login");
 			return false;
-		}
-		if (!methods.interfaces.get(910).isValid()) {
-			final RSComponent worldSelect = methods.interfaces.getComponent(906, 200);
-			if (worldSelect.doClick()) {
-				sleep(1000);
-			}
 		}
 		if (methods.lobby.switchWorlds(world)) {
 			sleep(random(1000, 2000));
