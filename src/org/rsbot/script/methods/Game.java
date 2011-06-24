@@ -710,12 +710,6 @@ public class Game extends MethodProvider {
 			methods.env.enableRandom("Login");
 			return false;
 		}
-		if (!methods.interfaces.get(910).isValid()) {
-			final RSComponent worldSelect = methods.interfaces.getComponent(906, 189);
-			if (worldSelect.doClick()) {
-				sleep(1000);
-			}
-		}
 		if (methods.lobby.switchWorlds(world)) {
 			sleep(random(1000, 2000));
 			methods.env.enableRandom("Login");
