@@ -286,7 +286,7 @@ public class Configuration {
 		dirs.add(Paths.getScriptsPrecompiledDirectory());
 		for (final String name : dirs) {
 			final File dir = new File(name);
-			if (!dir.exists()) {
+			if (!dir.isDirectory()) {
 				dir.mkdirs();
 			}
 		}
