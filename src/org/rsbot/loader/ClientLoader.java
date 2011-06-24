@@ -1,22 +1,25 @@
 package org.rsbot.loader;
 
-import org.rsbot.Configuration;
 import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
 import org.rsbot.util.io.HttpClient;
+import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
+ * @author Paris
  */
 public class ClientLoader {
 
@@ -55,98 +58,72 @@ public class ClientLoader {
 		this.script = new ModScript(data);
 	}
 
-	public void load(final File cache, final File version_file) throws IOException {
+	public void load(final File cache, final File versionFile) throws IOException {
 		classes = new HashMap<String, byte[]>();
-		final int version = script.getVersion();
+		final int[] version = { script.getVersion(), -1 };
 		final String target = script.getAttribute("target");
 
-		int cached_version = 0;
-		if (cache.exists() && version_file.exists()) {
-			final BufferedReader reader = new BufferedReader(new FileReader(version_file));
-			cached_version = Integer.parseInt(reader.readLine());
-			reader.close();
+		try {
+			version[1] = Integer.parseInt(IOHelper.readString(versionFile));
+		} catch (final Exception ignored) {
 		}
 
-		if (script.getAttribute("minbotversion") != null) {
-			int botVersion = Configuration.getVersion();
-			int minVersion = Integer.parseInt(script.getAttribute("minbotversion"));
-			if (botVersion < minVersion) {
-				throw new IOException("Client patch requires newer version (" + botVersion + " < " + minVersion + ")");
-			}
-		}
-
-		if (version <= cached_version) {
+		if (version[0] <= version[1]) {
 			final JarFile jar = new JarFile(cache);
-
-			checkVersion(jar.getInputStream(jar.getJarEntry("client.class")));
-
-			log.info("Processing client");
 			final Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
 				final JarEntry entry = entries.nextElement();
 				String name = entry.getName();
 				if (name.endsWith(".class")) {
 					name = name.substring(0, name.length() - 6).replace('/', '.');
-					classes.put(name, script.process(name, jar.getInputStream(entry)));
+					classes.put(name, IOHelper.read(jar.getInputStream(entry)));
 				}
 			}
 		} else {
-			log.info("Downloading client: " + target);
-			final JarFile loader = getJar(target, true);
-			final JarFile client = getJar(target, false);
+			log.info("Downloading game client");
+			final JarFile loader = getJar(target, true), client = getJar(target, false);
 
 			final List<String> replace = Arrays.asList(script.getAttribute("replace").split(" "));
 
-			Enumeration<JarEntry> entries = client.entries();
-			while (entries.hasMoreElements()) {
-				final JarEntry entry = entries.nextElement();
-				String name = entry.getName();
-				if (name.endsWith(".class")) {
-					name = name.substring(0, name.length() - 6).replace('/', '.');
-					classes.put(name, load(client.getInputStream(entry)));
-				}
-			}
-
-			entries = loader.entries();
-			while (entries.hasMoreElements()) {
-				final JarEntry entry = entries.nextElement();
-				String name = entry.getName();
-				if (name.endsWith(".class")) {
-					name = name.substring(0, name.length() - 6).replace('/', '.');
-					if (replace.contains(name)) {
-						classes.put(name, load(loader.getInputStream(entry)));
+			for (final JarFile jar : new JarFile[] { loader, client }) {
+				final Enumeration<JarEntry> entries = jar.entries();
+				while (entries.hasMoreElements()) {
+					final JarEntry entry = entries.nextElement();
+					String name = entry.getName();
+					if (name.endsWith(".class")) {
+						name = name.substring(0, name.length() - 6).replace('/', '.');
+						if (jar == client || replace.contains(name)) {
+							classes.put(name, load(jar.getInputStream(entry)));
+						}
 					}
 				}
 			}
 
-			final FileOutputStream stream = new FileOutputStream(cache);
-			final JarOutputStream out = new JarOutputStream(stream);
-
-			for (final Map.Entry<String, byte[]> entry : classes.entrySet()) {
-				out.putNextEntry(new JarEntry(entry.getKey() + ".class"));
-				out.write(entry.getValue());
-			}
-
-			out.close();
-			stream.close();
-
-			int client_version = 0;
-
 			try {
-				client_version = checkVersion(new ByteArrayInputStream(classes.get("client")));
-			} finally {
-				if (client_version != 0) {
-					final FileWriter writer = new FileWriter(Configuration.Paths.getVersionCache());
-					writer.write(Integer.toString(client_version));
-					writer.close();
-				}
+				version[1] = checkVersion(new ByteArrayInputStream(classes.get("client")));
+			} catch (final IOException ignored) {
 			}
 
-			log.info("Processing client");
 			for (final Map.Entry<String, byte[]> entry : classes.entrySet()) {
 				entry.setValue(script.process(entry.getKey(), entry.getValue()));
 			}
 
+			final ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(cache));
+			zip.setMethod(ZipOutputStream.STORED);
+			zip.setLevel(0);
+			for (final Entry<String, byte[]> item : classes.entrySet()) {
+				final ZipEntry entry = new ZipEntry(item.getKey() + ".class");
+				entry.setMethod(ZipEntry.STORED);
+				final byte[] data = item.getValue();
+				entry.setSize(data.length);
+				entry.setCompressedSize(data.length);
+				entry.setCrc(IOHelper.crc32(new ByteArrayInputStream(data)));
+				zip.putNextEntry(entry);
+				zip.write(item.getValue());
+				zip.closeEntry();
+			}
+			zip.close();
+			IOHelper.write(Integer.toString(version[1]), versionFile);
 		}
 	}
 
