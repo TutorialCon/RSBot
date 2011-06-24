@@ -309,33 +309,6 @@ public class Configuration {
 			LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(logout.toByteArray()));
 		} catch (final Exception ignored) {
 		}
-		if (Configuration.RUNNING_FROM_JAR) {
-			String path = resource.toString();
-			try {
-				path = URLDecoder.decode(path, "UTF-8");
-			} catch (final UnsupportedEncodingException ignored) {
-			}
-			final String prefix = "jar:file:/";
-			if (path.indexOf(prefix) == 0) {
-				path = path.substring(prefix.length());
-				path = path.substring(0, path.indexOf('!'));
-				if (File.separatorChar != '/') {
-					path = path.replace('/', File.separatorChar);
-				}
-				try {
-					final File pathfile = new File(Paths.getPathCache());
-					if (pathfile.exists()) {
-						pathfile.delete();
-					}
-					pathfile.createNewFile();
-					final Writer out = new BufferedWriter(new FileWriter(Paths.getPathCache()));
-					out.write(path);
-					out.close();
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	public static URL getResourceURL(final String path) throws MalformedURLException {

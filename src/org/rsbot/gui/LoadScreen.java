@@ -202,6 +202,9 @@ public class LoadScreen extends JDialog {
 	}
 
 	private static void extractResources() throws IOException {
+		if (Configuration.RUNNING_FROM_JAR) {
+			IOHelper.write(Configuration.Paths.getRunningJarPath(), new File(Configuration.Paths.getPathCache()));
+		}
 		final String[] extract;
 		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
 			extract = new String[]{Configuration.Paths.Resources.COMPILE_SCRIPTS_BAT, Configuration.Paths.Resources.COMPILE_FIND_JDK};
