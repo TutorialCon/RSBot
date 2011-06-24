@@ -475,6 +475,7 @@ public class Game extends MethodProvider {
 	 */
 	public boolean login() {
 		org.rsbot.script.randoms.ImprovedLoginBot loginBot = new org.rsbot.script.randoms.ImprovedLoginBot();
+		loginBot.init(methods);
 		if (loginBot.activateCondition()) {
 			sleep(loginBot.loop());
 			return true;
