@@ -707,7 +707,7 @@ public class Game extends MethodProvider {
 		}
 
 		if (!methods.interfaces.get(906).isValid()) {
-			methods.env.enableRandom("Login");
+			methods.env.enableRandom("Improved Login");
 			return false;
 		}
 		if (methods.lobby.switchWorlds(world)) {

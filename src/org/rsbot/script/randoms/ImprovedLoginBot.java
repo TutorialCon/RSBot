@@ -25,8 +25,8 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOGIN_SCREEN_ALERT_BACK = 68;
 	public static final int INTERFACE_GRAPHICS_NOTICE = 976;
 	public static final int INTERFACE_GRAPHICS_LEAVE_ALONE = 6;
-	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 86;
-	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 93;
+	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
+	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
 
