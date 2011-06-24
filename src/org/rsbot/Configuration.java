@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -276,14 +275,15 @@ public class Configuration {
 	}
 
 	public static void createDirectories() {
-		final ArrayList<String> dirs = new ArrayList<String>();
-		dirs.add(Paths.getHomeDirectory());
-		dirs.add(Paths.getLogsDirectory());
-		dirs.add(Paths.getCacheDirectory());
-		dirs.add(Paths.getSettingsDirectory());
-		dirs.add(Paths.getScriptsDirectory());
-		dirs.add(Paths.getScriptsSourcesDirectory());
-		dirs.add(Paths.getScriptsPrecompiledDirectory());
+		final String[] dirs = {
+			Paths.getHomeDirectory(),
+			Paths.getLogsDirectory(),
+			Paths.getCacheDirectory(),
+			Paths.getSettingsDirectory(),
+			Paths.getScriptsDirectory(),
+			Paths.getScriptsSourcesDirectory(),
+			Paths.getScriptsPrecompiledDirectory(),
+		};
 		for (final String name : dirs) {
 			final File dir = new File(name);
 			if (!dir.isDirectory()) {
