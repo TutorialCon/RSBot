@@ -1,6 +1,7 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
+import org.rsbot.loader.ClientLoader;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
@@ -122,6 +123,17 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
+		log.info("Starting game client");
+		tasks.add(Executors.callable(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ClientLoader.getInstance().setup();
+				} catch (final Exception ignored) {
+				}
+			}
+		}));
+
 		if (Configuration.isSkinAvailable()) {
 			log.info("Setting theme");
 			SwingUtilities.invokeLater(new Runnable() {
@@ -156,6 +168,11 @@ public class LoadScreen extends JDialog {
 			}
 		} else {
 			error = null;
+		}
+
+		log.info("Checking for client updates");
+		if (ClientLoader.getInstance().isOutdated()) {
+			error = "Bot is outdated, please wait and try again later";
 		}
 
 		if (error == null) {
