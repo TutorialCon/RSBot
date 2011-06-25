@@ -20,7 +20,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	 *
 	 * @return The client accessor.
 	 */
-	protected abstract org.rsbot.client.RSCharacter getAccessor();
+	public abstract org.rsbot.client.RSCharacter getAccessor();
 
 	/**
 	 * Performs an action on a humanoid character (tall and skinny).

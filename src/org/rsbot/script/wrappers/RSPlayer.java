@@ -18,7 +18,7 @@ public class RSPlayer extends RSCharacter {
 	}
 
 	@Override
-	protected org.rsbot.client.RSCharacter getAccessor() {
+	public org.rsbot.client.RSCharacter getAccessor() {
 		return p.get();
 	}
 

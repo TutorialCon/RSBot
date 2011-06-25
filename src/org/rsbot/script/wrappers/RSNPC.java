@@ -16,7 +16,7 @@ public class RSNPC extends RSCharacter {
 	}
 
 	@Override
-	protected org.rsbot.client.RSCharacter getAccessor() {
+	public org.rsbot.client.RSCharacter getAccessor() {
 		return npc.get();
 	}
 
