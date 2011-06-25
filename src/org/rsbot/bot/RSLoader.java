@@ -103,8 +103,7 @@ public class RSLoader extends Applet implements Runnable, Loader {
 		try {
 			final ClientLoader cl = new ClientLoader();
 			cl.init(new URL(Configuration.Paths.URLs.CLIENTPATCH), ms);
-			final File client = new File(Configuration.Paths.getCacheDirectory(), "client.dat");
-			cl.load(client, new File(Configuration.Paths.getVersionCache()));
+			cl.load(new File(Configuration.Paths.getCacheDirectory(), "client.jar"), new File(Configuration.Paths.getCacheDirectory(), "client-info.dat"));
 			targetName = cl.getTargetName();
 			classLoader = new RSClassLoader(cl.getClasses(), new URL("http://" + targetName + ".com/"));
 		} catch (final IOException ex) {

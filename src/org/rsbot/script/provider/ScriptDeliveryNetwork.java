@@ -132,25 +132,24 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 	}
 
 	public void sync() {
-		final ArrayList<Callable<Collection<Object>>> tasks = new ArrayList<Callable<Collection<Object>>>();
+		final List<Callable<Object>> tasks = new ArrayList<Callable<Object>>(8);
 		final Map<String, ScriptDefinition> list = listMap();
 		for (final File file : getCacheDirectory().listFiles()) {
 			final String path = file.getName();
 			if (!list.keySet().contains(path)) {
 				file.delete();
 			} else {
-				tasks.add(new Callable<Collection<Object>>() {
-					public Collection<Object> call() throws Exception {
+				tasks.add(Executors.callable(new Runnable() {
+					@Override
+					public void run() {
 						download(list.get(path));
-						return null;
 					}
-				});
+				}));
 			}
 		}
-		final int threads = 2;
-		final ExecutorService executorService = Executors.newFixedThreadPool(threads);
+		final ExecutorService pool = Executors.newCachedThreadPool();
 		try {
-			executorService.invokeAll(tasks);
+			pool.invokeAll(tasks);
 		} catch (final InterruptedException ignored) {
 		}
 	}

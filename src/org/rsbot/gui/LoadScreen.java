@@ -19,7 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,17 +71,24 @@ public class LoadScreen extends JDialog {
 		setVisible(true);
 		setModal(true);
 		setAlwaysOnTop(true);
+		final List<Callable<Object>> tasks = new ArrayList<Callable<Object>>(8);
 
 		log.info("Language: " + Messages.LANGUAGE);
+
 
 		log.info("Registering logs");
 		bootstrap();
 
 		log.info("Extracting resources");
-		try {
-			extractResources();
-		} catch (final IOException ignored) {
-		}
+		tasks.add(Executors.callable(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					extractResources();
+				} catch (final IOException ignored) {
+				}
+			}
+		}));
 
 		log.info("Creating directories");
 		Configuration.createDirectories();
@@ -89,19 +101,26 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		final String downloading = "Downloading resources";
-		float[] d = new float[] { 0, Configuration.Paths.getCachableResources().size() };
-		log.info(downloading);
+		log.info("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
-			try {
-				log.info(downloading + " (" + Math.round(++d[0] / d[1] * 100 - 1) + "%)");
-				HttpClient.download(new URL(item.getKey()), item.getValue());
-			} catch (final IOException ignored) {
-			}
+			tasks.add(Executors.callable(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						HttpClient.download(new URL(item.getKey()), item.getValue());
+					} catch (final IOException ignored) {
+					}
+				}
+			}));
 		}
 
 		log.info("Downloading network scripts");
-		ScriptDeliveryNetwork.getInstance().sync();
+		tasks.add(Executors.callable(new Runnable() {
+			@Override
+			public void run() {
+				ScriptDeliveryNetwork.getInstance().sync();
+			}
+		}));
 
 		if (Configuration.isSkinAvailable()) {
 			log.info("Setting theme");
@@ -113,6 +132,13 @@ public class LoadScreen extends JDialog {
 					}
 				}
 			});
+		}
+
+		log.info("Loading client");
+		final ExecutorService pool = Executors.newCachedThreadPool();
+		try {
+			pool.invokeAll(tasks);
+		} catch (final InterruptedException ignored) {
 		}
 
 		log.info("Checking for updates");
@@ -176,6 +202,9 @@ public class LoadScreen extends JDialog {
 	}
 
 	private static void extractResources() throws IOException {
+		if (Configuration.RUNNING_FROM_JAR) {
+			IOHelper.write(Configuration.Paths.getRunningJarPath(), new File(Configuration.Paths.getPathCache()));
+		}
 		final String[] extract;
 		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
 			extract = new String[]{Configuration.Paths.Resources.COMPILE_SCRIPTS_BAT, Configuration.Paths.Resources.COMPILE_FIND_JDK};

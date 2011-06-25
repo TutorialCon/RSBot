@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -276,17 +275,18 @@ public class Configuration {
 	}
 
 	public static void createDirectories() {
-		final ArrayList<String> dirs = new ArrayList<String>();
-		dirs.add(Paths.getHomeDirectory());
-		dirs.add(Paths.getLogsDirectory());
-		dirs.add(Paths.getCacheDirectory());
-		dirs.add(Paths.getSettingsDirectory());
-		dirs.add(Paths.getScriptsDirectory());
-		dirs.add(Paths.getScriptsSourcesDirectory());
-		dirs.add(Paths.getScriptsPrecompiledDirectory());
+		final String[] dirs = {
+			Paths.getHomeDirectory(),
+			Paths.getLogsDirectory(),
+			Paths.getCacheDirectory(),
+			Paths.getSettingsDirectory(),
+			Paths.getScriptsDirectory(),
+			Paths.getScriptsSourcesDirectory(),
+			Paths.getScriptsPrecompiledDirectory(),
+		};
 		for (final String name : dirs) {
 			final File dir = new File(name);
-			if (!dir.exists()) {
+			if (!dir.isDirectory()) {
 				dir.mkdirs();
 			}
 		}
@@ -308,33 +308,6 @@ public class Configuration {
 			logging.store(logout, "");
 			LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(logout.toByteArray()));
 		} catch (final Exception ignored) {
-		}
-		if (Configuration.RUNNING_FROM_JAR) {
-			String path = resource.toString();
-			try {
-				path = URLDecoder.decode(path, "UTF-8");
-			} catch (final UnsupportedEncodingException ignored) {
-			}
-			final String prefix = "jar:file:/";
-			if (path.indexOf(prefix) == 0) {
-				path = path.substring(prefix.length());
-				path = path.substring(0, path.indexOf('!'));
-				if (File.separatorChar != '/') {
-					path = path.replace('/', File.separatorChar);
-				}
-				try {
-					final File pathfile = new File(Paths.getPathCache());
-					if (pathfile.exists()) {
-						pathfile.delete();
-					}
-					pathfile.createNewFile();
-					final Writer out = new BufferedWriter(new FileWriter(Paths.getPathCache()));
-					out.write(path);
-					out.close();
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
