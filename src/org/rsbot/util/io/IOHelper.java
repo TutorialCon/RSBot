@@ -121,11 +121,7 @@ public class IOHelper {
 		return crc32(new ByteArrayInputStream(data));
 	}
 
-	public static long crc32(final File path) {
-		try {
-			return crc32(new FileInputStream(path));
-		} catch (final IOException ignored) {
-			return 0;
-		}
+	public static long crc32(final File path) throws IOException {
+		return crc32(new FileInputStream(path));
 	}
 }
