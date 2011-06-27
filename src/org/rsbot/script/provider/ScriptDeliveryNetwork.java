@@ -27,7 +27,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 	private final File manifest;
 
 	private ScriptDeliveryNetwork() {
-		manifest = getFile("manifests");
+		manifest = new File(Configuration.Paths.getCacheDirectory(), "sdn-manifests.txt");
 	}
 
 	public static ScriptDeliveryNetwork getInstance() {
@@ -35,10 +35,6 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 			instance = new ScriptDeliveryNetwork();
 		}
 		return instance;
-	}
-
-	private static File getFile(final String name) {
-		return new File(Configuration.Paths.getCacheDirectory(), "sdn-" + name + ".txt");
 	}
 
 	private static void parseManifests(final HashMap<String, HashMap<String, String>> entries, final List<ScriptDefinition> defs) {
@@ -59,17 +55,9 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 	}
 
 	public void refresh(final boolean force) {
-		final File controlFile = getFile("control");
 		if (force || !manifest.exists() || base == null) {
 			try {
-				HttpClient.download(new URL(Configuration.Paths.URLs.SDN_CONTROL), controlFile);
-				final HashMap<String, String> control = IniParser.deserialise(controlFile).get(IniParser.emptySection);
-				if (control == null || !IniParser.parseBool(control.get("enabled")) || !control.containsKey("manifest")) {
-					throw new ServiceException("Service currently disabled");
-				}
-				base = HttpClient.download(new URL(control.get("manifest")), manifest).getURL();
-			} catch (final ServiceException e) {
-				log.severe(e.getMessage());
+				base = HttpClient.download(new URL(Configuration.Paths.URLs.SDN_MANIFEST), manifest).getURL();
 			} catch (final IOException ignored) {
 				log.warning("Unable to load scripts from the network");
 			}
