@@ -54,24 +54,6 @@ public class RSLoader extends Applet implements Runnable, Loader {
 		}
 	}
 
-	@Override
-	public final void paint(final Graphics graphics) {
-		if (client != null) {
-			client.paint(graphics);
-		} else {
-			final Font font = new Font("Helvetica", 1, 13);
-			final FontMetrics fontMetrics = getFontMetrics(font);
-			graphics.setColor(Color.black);
-			graphics.fillRect(0, 0, 768, 503);
-			graphics.setColor(new Color(150, 0, 0));
-			graphics.drawRect(230, 233, 304, 34);
-			final String s = "Loading...";
-			graphics.setFont(font);
-			graphics.setColor(Color.WHITE);
-			graphics.drawString(s, (768 - fontMetrics.stringWidth(s)) / 2, 255);
-		}
-	}
-
 	/**
 	 * The run void of the loader
 	 */
