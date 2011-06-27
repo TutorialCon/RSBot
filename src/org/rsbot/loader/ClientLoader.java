@@ -71,7 +71,7 @@ public class ClientLoader {
 		} catch (final Exception ignored) {
 		}
 
-		if (version[0] <= version[1]) {
+		if (version[0] <= version[1] && cache.exists()) {
 			final JarFile jar = new JarFile(cache);
 			final Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
