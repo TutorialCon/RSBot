@@ -122,7 +122,7 @@ public class ClientLoader {
 				final byte[] data = item.getValue();
 				entry.setSize(data.length);
 				entry.setCompressedSize(data.length);
-				entry.setCrc(IOHelper.crc32(new ByteArrayInputStream(data)));
+				entry.setCrc(IOHelper.crc32(data));
 				zip.putNextEntry(entry);
 				zip.write(item.getValue());
 				zip.closeEntry();
