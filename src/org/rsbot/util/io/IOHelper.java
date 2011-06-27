@@ -117,6 +117,10 @@ public class IOHelper {
 		return cis.getChecksum().getValue();
 	}
 
+	public static long crc32(final byte[] data) throws IOException {
+		return crc32(new ByteArrayInputStream(data));
+	}
+
 	public static long crc32(final File path) {
 		try {
 			return crc32(new FileInputStream(path));
