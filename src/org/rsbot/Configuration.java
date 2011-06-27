@@ -83,7 +83,7 @@ public class Configuration {
 			public static final String VERSION_KILL = BASE + "version-kill";
 			public static final String PROJECT = BASE + "git-project";
 			public static final String SITE = BASE + "site";
-			public static final String SDN_CONTROL = BASE + "sdn-control";
+			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
 			public static final String AD_INFO = BASE + "botad-info";
 			public static final String SERVICELOGIN = BASE + "servicelogin";
 			public static final String TRIDENT = BASE + "trident";
