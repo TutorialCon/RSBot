@@ -75,7 +75,6 @@ public class LoadScreen extends JDialog {
 
 		log.info("Language: " + Messages.LANGUAGE);
 
-
 		log.info("Registering logs");
 		bootstrap();
 
