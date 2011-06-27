@@ -105,7 +105,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
 		for (final ScriptDefinition def : scripts) {
 			for (final String item : def.getKeywords()) {
-				if (item.length() > 3) {
+				if (item.length() > 3 && item.matches("^[a-zA-Z]+")) {
 					keywords.add(item);
 				}
 			}
