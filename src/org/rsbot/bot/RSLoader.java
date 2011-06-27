@@ -28,7 +28,6 @@ public class RSLoader extends Applet implements Runnable, Loader {
 
 	private Runnable loadedCallback;
 	private String targetName;
-	public static boolean runBeta = false;
 	private Dimension size = Application.getPanelSize();
 	/**
 	 * The game class loader
