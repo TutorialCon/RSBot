@@ -82,6 +82,7 @@ public class ClientLoader {
 					classes.put(name, IOHelper.read(jar.getInputStream(entry)));
 				}
 			}
+			jar.close();
 		} else {
 			log.info("Downloading game client");
 			final JarFile loader = getJar(target, true), client = getJar(target, false);
@@ -100,6 +101,7 @@ public class ClientLoader {
 						}
 					}
 				}
+				jar.close();
 			}
 
 			try {
