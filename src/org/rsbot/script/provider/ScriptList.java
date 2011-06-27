@@ -3,6 +3,7 @@ package org.rsbot.script.provider;
 import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 
 public class ScriptList {
@@ -22,7 +23,12 @@ public class ScriptList {
 			out.print("id=");
 			out.println(Integer.toString(item.id));
 			out.print("crc32=");
-			out.println(Long.toString(IOHelper.crc32(file)));
+			long crc32 = 0;
+			try {
+				crc32 = IOHelper.crc32(file);
+			} catch (final IOException ignored) {
+			}
+			out.println(Long.toString(crc32));
 			printValue(out, "name", item.name);
 			out.print("version=");
 			out.println(Double.toString(item.version));
