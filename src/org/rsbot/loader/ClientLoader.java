@@ -165,13 +165,10 @@ public class ClientLoader {
 		while (true) {
 			final int world = 1 + new Random().nextInt(169);
 			try {
-				String s = "jar:http://world" + world + "." + target + ".com/";
-				if (loader) {
-					s += "loader.jar!/";
-				} else {
-					s += target + ".jar!/";
-				}
-				final JarURLConnection juc = (JarURLConnection) new URL(s).openConnection();
+				final StringBuilder sb = new StringBuilder(50);
+				sb.append("jar:http://world").append(world).append(".").append(target).append(".com/");
+				sb.append(loader ? "loader" : target).append(".jar!/");
+				final JarURLConnection juc = (JarURLConnection) new URL(sb.toString()).openConnection();
 				juc.setConnectTimeout(5000);
 				return juc.getJarFile();
 			} catch (final Exception ignored) {
