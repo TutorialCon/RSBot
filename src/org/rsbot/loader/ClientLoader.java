@@ -8,6 +8,7 @@ import org.rsbot.util.io.HttpClient;
 
 import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -16,10 +17,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
 
-/**
- */
 public class ClientLoader {
-
 	private final Logger log = Logger.getLogger(ClientLoader.class.getName());
 
 	private ModScript script;
@@ -163,11 +161,19 @@ public class ClientLoader {
 		final VersionVisitor vv = new VersionVisitor();
 		reader.accept(vv, ClassReader.SKIP_FRAMES);
 		if (vv.getVersion() != script.getVersion()) {
-			JOptionPane.showMessageDialog(
-					null,
-					"The bot is currently oudated, please wait patiently for a new version.",
-					"Outdated",
-					JOptionPane.INFORMATION_MESSAGE);
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						JOptionPane.showMessageDialog(
+								null,
+								"The bot is currently outdated, please wait patiently for a new version.",
+								"Outdated",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				});
+			} catch (InvocationTargetException ignored) {
+			} catch (InterruptedException ignored) {
+			}
 			throw new IOException("ModScript #" + script.getVersion() + " != #" + vv.getVersion());
 		}
 		return vv.getVersion();
