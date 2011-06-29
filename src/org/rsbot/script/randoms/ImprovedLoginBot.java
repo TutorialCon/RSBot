@@ -11,6 +11,9 @@ import org.rsbot.script.wrappers.RSComponent;
 
 import java.awt.*;
 
+import static org.rsbot.script.methods.Environment.LOGIN_GAME;
+import static org.rsbot.script.methods.Environment.LOGIN_LOBBY;
+
 /**
  * A simple script to login to the game.
  *
@@ -29,7 +32,6 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
 	private int world = -1;
-	private static final int LOGIN_LOBBY = 1, LOGIN_GAME = 2;
 	private int stageFlags = LOGIN_LOBBY | LOGIN_GAME;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
