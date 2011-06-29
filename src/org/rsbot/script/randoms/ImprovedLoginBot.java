@@ -204,6 +204,10 @@ public class ImprovedLoginBot extends Random {
 				lobby.open(Lobby.TAB_PLAYERS);
 				return random(500, 800);
 			}
+			if (world != -1 && lobby.getSelectedWorld() != world) {
+				lobby.switchWorlds(world, false);
+				return random(500, 800);
+			}
 			if (lobby.clickPlay()) {
 				for (int i = 0; i < 4 && game.getClientState() == 6; i++) {
 					sleep(500);

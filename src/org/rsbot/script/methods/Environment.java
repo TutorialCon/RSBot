@@ -125,6 +125,11 @@ public class Environment extends MethodProvider {
 		}
 	}
 
+	/**
+	 * Sets the world for the bot to login to.
+	 *
+	 * @param world The world to login to.
+	 */
 	public void setWorld(final int world) {
 		try {
 			methods.bot.getLoginBot().setWorld(world);
