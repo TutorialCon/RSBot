@@ -13,7 +13,9 @@ import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 import sun.font.FontManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;

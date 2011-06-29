@@ -163,6 +163,7 @@ public class BotMenuBar extends JMenuBar {
 		for (String disableFeature : EXTENDED_VIEW_ITEMS) {
 			if (commandCheckMap.containsKey(disableFeature)) {
 				commandCheckMap.get(disableFeature).setVisible(show);
+				commandCheckMap.get(disableFeature).setEnabled(false);
 			}
 		}
 	}

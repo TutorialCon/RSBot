@@ -304,7 +304,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		final JButton favourites = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_STAR)));
 		favourites.setToolTipText("Show favourite scripts only");
 		favourites.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				favourites.setSelected(likedOnly = !likedOnly);
 				filter();
