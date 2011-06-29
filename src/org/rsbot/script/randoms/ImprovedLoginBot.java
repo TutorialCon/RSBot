@@ -4,6 +4,7 @@ import org.rsbot.Configuration;
 import org.rsbot.gui.AccountManager;
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.Environment;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Lobby;
 import org.rsbot.script.wrappers.RSComponent;
@@ -28,6 +29,8 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
 	private int world = -1;
+	private static final int LOGIN_LOBBY = 1, LOGIN_GAME = 2;
+	private int stageFlags = LOGIN_LOBBY | LOGIN_GAME;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
 
@@ -194,12 +197,14 @@ public class ImprovedLoginBot extends Random {
 	@Override
 	public boolean activateCondition() {
 		final int idx = game.getClientState();
-		return (idx == Game.INDEX_LOGIN_SCREEN || idx == Game.INDEX_LOBBY_SCREEN) && !switchingWorlds() && account.getName() != null;
+		return ((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) ||
+				(idx == Game.INDEX_LOBBY_SCREEN) && (stageFlags & Environment.LOGIN_GAME) != 0) &&
+				!switchingWorlds() && account.getName() != null;
 	}
 
 	@Override
 	public int loop() {
-		if (lobby.inLobby()) {
+		if (lobby.inLobby() && (stageFlags & Environment.LOGIN_GAME) != 0) {
 			if (lobby.getSelectedTab() != Lobby.TAB_PLAYERS) {
 				lobby.open(Lobby.TAB_PLAYERS);
 				return random(500, 800);
@@ -223,7 +228,7 @@ public class ImprovedLoginBot extends Random {
 				}
 			}
 		}
-		if (game.getClientState() == Game.INDEX_LOGIN_SCREEN) {
+		if (game.getClientState() == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) {
 			if (interfaces.getComponent(INTERFACE_GRAPHICS_NOTICE, INTERFACE_GRAPHICS_LEAVE_ALONE).isValid()) {
 				interfaces.getComponent(INTERFACE_GRAPHICS_NOTICE, INTERFACE_GRAPHICS_LEAVE_ALONE).doClick();
 				return random(500, 600);
@@ -351,6 +356,14 @@ public class ImprovedLoginBot extends Random {
 	}
 
 	public int getWorld() {
-		return world;
+		return this.world;
+	}
+
+	public void setMask(final int mask) {
+		this.stageFlags = world;
+	}
+
+	public int getMask() {
+		return this.stageFlags;
 	}
 }

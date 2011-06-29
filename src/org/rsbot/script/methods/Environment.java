@@ -11,8 +11,8 @@ import java.util.logging.Logger;
  * Bot environment related operations.
  */
 public class Environment extends MethodProvider {
-	public static final int INPUT_MOUSE = 1;
-	public static final int INPUT_KEYBOARD = 2;
+	public static final int INPUT_MOUSE = 1, INPUT_KEYBOARD = 2;
+	public static final int LOGIN_LOBBY = 1, LOGIN_GAME = 2;
 
 	private static final Logger log = Logger.getLogger("Environment");
 
@@ -133,6 +133,17 @@ public class Environment extends MethodProvider {
 	public void setWorld(final int world) {
 		try {
 			methods.bot.getLoginBot().setWorld(world);
+		} catch (NullPointerException ignored) {
+			log.info("Client is not yet loaded.");
+		}
+	}
+
+	/**
+	 * Set login mask.
+	 */
+	public void setLoginMask(final int mask) {
+		try {
+			methods.bot.getLoginBot().setMask(mask);
 		} catch (NullPointerException ignored) {
 			log.info("Client is not yet loaded.");
 		}
