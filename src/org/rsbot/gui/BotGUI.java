@@ -45,7 +45,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private BotToolBar toolBar;
 	private BotMenuBar menuBar;
 	private JScrollPane textScroll;
-	private BotHome home;
 	private final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
 	private java.util.Timer shutdown = null;
@@ -440,8 +439,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		setIconImage(Configuration.getImage(Configuration.Paths.Resources.ICON));
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		WindowUtil.setFrame(this);
-		home = new BotHome();
-		panel = new BotPanel(home);
+		panel = new BotPanel();
 		menuBar = new BotMenuBar(this);
 		toolBar = new BotToolBar(this, menuBar);
 		panel.setFocusTraversalKeys(0, new HashSet<AWTKeyStroke>());
