@@ -26,7 +26,8 @@ public class ScriptHandler {
 
 	public void init() {
 		try {
-			randoms.add(new ImprovedLoginBot());
+			bot.setLoginBot(new ImprovedLoginBot());
+			randoms.add(bot.getLoginBot());
 			randoms.add(new BankPins());
 			randoms.add(new BeehiveSolver());
 			randoms.add(new CapnArnav());

@@ -5,6 +5,7 @@ import org.rsbot.script.ScriptManifest;
 import org.rsbot.util.io.ScreenshotUtil;
 
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 /**
  * Bot environment related operations.
@@ -12,6 +13,8 @@ import java.awt.image.BufferedImage;
 public class Environment extends MethodProvider {
 	public static final int INPUT_MOUSE = 1;
 	public static final int INPUT_KEYBOARD = 2;
+
+	private static final Logger log = Logger.getLogger("Environment");
 
 	public Environment(final MethodContext ctx) {
 		super(ctx);
@@ -119,6 +122,14 @@ public class Environment extends MethodProvider {
 			if (random.isEnabled()) {
 				random.setEnabled(false);
 			}
+		}
+	}
+
+	public void setWorld(final int world) {
+		try {
+			methods.bot.getLoginBot().setWorld(world);
+		} catch (NullPointerException ignored) {
+			log.info("Client is not yet loaded.");
 		}
 	}
 }

@@ -27,6 +27,7 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_GRAPHICS_LEAVE_ALONE = 6;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
+	private int world = -1;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
 
@@ -339,5 +340,13 @@ public class ImprovedLoginBot extends Random {
 			passWord = ctx.client.getCurrentPassword();
 		}
 		return interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_PASSWORD_TEXT).getText().length() == (passWord == null ? 0 : passWord.length());
+	}
+
+	public void setWorld(final int world) {
+		this.world = world;
+	}
+
+	public int getWorld() {
+		return world;
 	}
 }
