@@ -12,6 +12,7 @@ import org.rsbot.script.internal.InputManager;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.Environment;
 import org.rsbot.script.methods.MethodContext;
+import org.rsbot.script.randoms.ImprovedLoginBot;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ public class Bot {
 	private final BreakHandler bh;
 	private final Map<String, EventListener> listeners;
 	private static final String THREADGROUPID = "RSClient-";
+	private ImprovedLoginBot loginBot = null;
 
 	/**
 	 * Whether or not user input is allowed despite a script's preference.
@@ -260,5 +262,13 @@ public class Bot {
 		} catch (final Exception ignored) {
 		}
 		return null;
+	}
+
+	public void setLoginBot(final ImprovedLoginBot improvedLoginBot) {
+		this.loginBot = improvedLoginBot;
+	}
+
+	public ImprovedLoginBot getLoginBot(){
+		return this.loginBot;
 	}
 }
