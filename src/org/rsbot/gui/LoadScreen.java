@@ -78,9 +78,10 @@ public class LoadScreen extends JDialog {
 		log.info("Registering logs");
 		bootstrap();
 
-		log.info("Extracting resources");
+		log.info("Initializing bot.");
+
+		log.fine("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				try {
 					extractResources();
@@ -89,10 +90,10 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		log.info("Creating directories");
+		log.fine("Creating directories");
 		Configuration.createDirectories();
 
-		log.info("Enforcing security policy");
+		log.fine("Enforcing security policy");
 		if (Configuration.GOOGLEDNS) {
 			System.setProperty("sun.net.spi.nameservice.nameservers", RestrictedSecurityManager.DNSA + "," + RestrictedSecurityManager.DNSB);
 			System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
@@ -100,10 +101,9 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		log.info("Downloading resources");
+		log.fine("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
-				@Override
 				public void run() {
 					try {
 						HttpClient.download(new URL(item.getKey()), item.getValue());
@@ -113,16 +113,15 @@ public class LoadScreen extends JDialog {
 			}));
 		}
 
-		log.info("Downloading network scripts");
+		log.fine("Downloading network scripts");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				ScriptDeliveryNetwork.getInstance().sync();
 			}
 		}));
 
 		if (Configuration.isSkinAvailable()) {
-			log.info("Setting theme");
+			log.fine("Setting theme");
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
@@ -133,7 +132,7 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Loading client");
+		log.info("Loading client resources");
 		final ExecutorService pool = Executors.newCachedThreadPool();
 		try {
 			pool.invokeAll(tasks);
