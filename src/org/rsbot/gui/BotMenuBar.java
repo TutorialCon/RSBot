@@ -30,6 +30,19 @@ public class BotMenuBar extends JMenuBar {
 			"Settings", "Character Moved"};
 
 	static {
+		// Paint
+		DEBUG_MAP.put("Players", DrawPlayers.class);
+		DEBUG_MAP.put("NPCs", DrawNPCs.class);
+		DEBUG_MAP.put("Objects", DrawObjects.class);
+		DEBUG_MAP.put("Models", DrawModel.class);
+		DEBUG_MAP.put("Model Test", ModelTest.class);
+		DEBUG_MAP.put("Mouse", DrawMouse.class);
+		DEBUG_MAP.put("Inventory", DrawInventory.class);
+		DEBUG_MAP.put("Ground Items", DrawItems.class);
+		DEBUG_MAP.put("Calc Test", DrawBoundaries.class);
+		DEBUG_MAP.put("Settings", DrawSettings.class);
+		DEBUG_MAP.put("Web", DrawWeb.class);
+
 		// Text
 		DEBUG_MAP.put("Game State", TLoginIndex.class);
 		DEBUG_MAP.put("Current Tab", TTab.class);
@@ -44,19 +57,6 @@ public class BotMenuBar extends JMenuBar {
 		DEBUG_MAP.put("Menu", TMenu.class);
 		DEBUG_MAP.put("FPS", TFPS.class);
 		DEBUG_MAP.put("Cache", TWebStatus.class);
-
-		// Paint
-		DEBUG_MAP.put("Players", DrawPlayers.class);
-		DEBUG_MAP.put("NPCs", DrawNPCs.class);
-		DEBUG_MAP.put("Objects", DrawObjects.class);
-		DEBUG_MAP.put("Models", DrawModel.class);
-		DEBUG_MAP.put("Model Test", ModelTest.class);
-		DEBUG_MAP.put("Mouse", DrawMouse.class);
-		DEBUG_MAP.put("Inventory", DrawInventory.class);
-		DEBUG_MAP.put("Ground Items", DrawItems.class);
-		DEBUG_MAP.put("Calc Test", DrawBoundaries.class);
-		DEBUG_MAP.put("Settings", DrawSettings.class);
-		DEBUG_MAP.put("Web", DrawWeb.class);
 
 		// Other
 		DEBUG_MAP.put("Log Messages", MessageLogger.class);
@@ -163,6 +163,7 @@ public class BotMenuBar extends JMenuBar {
 		for (String disableFeature : EXTENDED_VIEW_ITEMS) {
 			if (commandCheckMap.containsKey(disableFeature)) {
 				commandCheckMap.get(disableFeature).setVisible(show);
+				commandCheckMap.get(disableFeature).setEnabled(false);
 			}
 		}
 	}

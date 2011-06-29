@@ -13,7 +13,9 @@ import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 import sun.font.FontManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -55,7 +57,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			".logikmedia.co", // countvidal
 			"letthesmokeout.com", // MrByte
 			"zaszmedia.com", // zasz - Frost Dragons Pro, Enchanter Pro, Jars Pro
-			"massacrescripting.net", // ShizZznit - Aviansie Massacre
+			"muscripting.net", // ShizZznit - Aviansie Massacre
 			".ownagebots.com", // Ownageful - OwnageGDK, OwnageBDK, OwnageFDK
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su

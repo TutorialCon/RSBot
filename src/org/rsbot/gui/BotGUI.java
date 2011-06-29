@@ -321,7 +321,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		new Thread(new Runnable() {
 			public void run() {
 				bot.start();
-				home.setBots(bots);
 			}
 		}).start();
 	}
@@ -334,7 +333,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			toolBar.removeTab(idx);
 		}
 		bots.remove(idx);
-		home.setBots(bots);
 		toolBar.setAddTabVisible(bots.size() < MAX_BOTS);
 		new Thread(new Runnable() {
 			public void run() {

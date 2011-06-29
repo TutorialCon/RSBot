@@ -266,7 +266,11 @@ public class ImprovedLoginBot extends Random {
 					}
 					return random(500, 600);
 				}
-				keyboard.sendText(AccountManager.getPassword(account.getName()), false);
+				String passWord = AccountManager.getPassword(account.getName());
+				if (passWord.isEmpty()) {
+					passWord = ctx.client.getCurrentPassword();
+				}
+				keyboard.sendText(passWord, false);
 				return random(500, 600);
 			}
 		}
@@ -330,7 +334,10 @@ public class ImprovedLoginBot extends Random {
 	}
 
 	private boolean isPasswordValid() {
-		final String passWord = AccountManager.getPassword(account.getName());
+		String passWord = AccountManager.getPassword(account.getName());
+		if (passWord.isEmpty()) {
+			passWord = ctx.client.getCurrentPassword();
+		}
 		return interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_PASSWORD_TEXT).getText().length() == (passWord == null ? 0 : passWord.length());
 	}
 }

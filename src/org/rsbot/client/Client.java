@@ -34,6 +34,8 @@ public interface Client {
 
 	String getCurrentUsername();
 
+	String getCurrentPassword();
+
 	int getDestX();
 
 	int getDestY();

@@ -90,10 +90,20 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		log.info("Creating directories");
+		log.fine("Extracting resources");
+		tasks.add(Executors.callable(new Runnable() {
+			public void run() {
+				try {
+					extractResources();
+				} catch (final IOException ignored) {
+				}
+			}
+		}));
+
+		log.fine("Creating directories");
 		Configuration.createDirectories();
 
-		log.info("Enforcing security policy");
+		log.fine("Enforcing security policy");
 		if (Configuration.GOOGLEDNS) {
 			System.setProperty("sun.net.spi.nameservice.nameservers", RestrictedSecurityManager.DNSA + "," + RestrictedSecurityManager.DNSB);
 			System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
@@ -134,7 +144,7 @@ public class LoadScreen extends JDialog {
 		}));
 
 		if (Configuration.isSkinAvailable()) {
-			log.info("Setting theme");
+			log.fine("Setting theme");
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
