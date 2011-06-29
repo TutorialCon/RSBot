@@ -5,6 +5,7 @@ import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
 import org.rsbot.util.io.HttpClient;
+import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;
 import java.io.*;
@@ -36,17 +37,10 @@ public class ClientLoader {
 		}
 
 		try {
-			fis = new FileInputStream(cache);
-			data = load(fis);
-		} catch (final IOException ioe) {
+			data = IOHelper.read(cache);
+		} catch (final Exception ioe) {
 			log.severe("Could not load client patch");
 		} finally {
-			try {
-				if (fis != null) {
-					fis.close();
-				}
-			} catch (final IOException ignored) {
-			}
 		}
 
 		this.script = new ModScript(data);
@@ -100,7 +94,7 @@ public class ClientLoader {
 				String name = entry.getName();
 				if (name.endsWith(".class")) {
 					name = name.substring(0, name.length() - 6).replace('/', '.');
-					classes.put(name, load(client.getInputStream(entry)));
+					classes.put(name, IOHelper.read(client.getInputStream(entry)));
 				}
 			}
 
@@ -111,7 +105,7 @@ public class ClientLoader {
 				if (name.endsWith(".class")) {
 					name = name.substring(0, name.length() - 6).replace('/', '.');
 					if (replace.contains(name)) {
-						classes.put(name, load(loader.getInputStream(entry)));
+						classes.put(name, IOHelper.read(loader.getInputStream(entry)));
 					}
 				}
 			}
@@ -195,15 +189,5 @@ public class ClientLoader {
 
 	private int nextWorld() {
 		return 1 + new Random().nextInt(169);
-	}
-
-	private byte[] load(final InputStream is) throws IOException {
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		final byte[] buffer = new byte[4096];
-		int n;
-		while ((n = is.read(buffer)) != -1) {
-			os.write(buffer, 0, n);
-		}
-		return os.toByteArray();
 	}
 }
