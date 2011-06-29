@@ -353,18 +353,46 @@ public class ImprovedLoginBot extends Random {
 		return interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_PASSWORD_TEXT).getText().length() == (passWord == null ? 0 : passWord.length());
 	}
 
+	/**
+	 * Sets the world to login to.
+	 *
+	 * @param world The world.
+	 */
 	public void setWorld(final int world) {
 		this.world = world;
 	}
 
+	/**
+	 * Gets the current set world.
+	 *
+	 * @return The world currently designated to login to.
+	 */
 	public int getWorld() {
 		return this.world;
 	}
 
+	/**
+	 * Sets the login mask.
+	 * Only lobby:
+	 * env.setLoginFlags(Environment.LOGIN_LOBBY);
+	 * <p/>
+	 * Only game from lobby:
+	 * env.setLoginFlags(Environment.LOGIN_GAME);
+	 * <p/>
+	 * Login to lobby and game:
+	 * env.setLoginFlags(Environment.LOGIN_LOBBY | Environment.LOGIN_GAME);
+	 *
+	 * @param mask The mask
+	 */
 	public void setMask(final int mask) {
-		this.stageFlags = world;
+		this.stageFlags = mask;
 	}
 
+	/**
+	 * The current login mask.
+	 *
+	 * @return The bytes of the mask.
+	 */
 	public int getMask() {
 		return this.stageFlags;
 	}
