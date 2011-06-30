@@ -1,7 +1,6 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
-import org.rsbot.loader.ClientLoader;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
@@ -79,16 +78,7 @@ public class LoadScreen extends JDialog {
 		log.info("Registering logs");
 		bootstrap();
 
-		log.info("Extracting resources");
-		tasks.add(Executors.callable(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					extractResources();
-				} catch (final IOException ignored) {
-				}
-			}
-		}));
+		log.info("Initializing bot.");
 
 		log.fine("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
@@ -111,10 +101,9 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		log.info("Downloading resources");
+		log.fine("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
-				@Override
 				public void run() {
 					try {
 						HttpClient.download(new URL(item.getKey()), item.getValue());
@@ -124,22 +113,10 @@ public class LoadScreen extends JDialog {
 			}));
 		}
 
-		log.info("Downloading network scripts");
+		log.fine("Downloading network scripts");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				ScriptDeliveryNetwork.getInstance().sync();
-			}
-		}));
-
-		log.info("Starting game client");
-		tasks.add(Executors.callable(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					ClientLoader.getInstance().setup();
-				} catch (final Exception ignored) {
-				}
 			}
 		}));
 
@@ -155,7 +132,7 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Loading client");
+		log.info("Loading client resources");
 		final ExecutorService pool = Executors.newCachedThreadPool();
 		try {
 			pool.invokeAll(tasks);
@@ -177,11 +154,6 @@ public class LoadScreen extends JDialog {
 			}
 		} else {
 			error = null;
-		}
-
-		log.info("Checking for client updates");
-		if (ClientLoader.getInstance().isOutdated()) {
-			error = "Bot is outdated, please wait and try again later";
 		}
 
 		if (error == null) {

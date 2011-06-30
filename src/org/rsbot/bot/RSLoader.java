@@ -4,6 +4,7 @@ import org.rsbot.Application;
 import org.rsbot.Configuration;
 import org.rsbot.client.Loader;
 import org.rsbot.loader.ClientLoader;
+import org.rsbot.loader.script.ParseException;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -79,12 +80,22 @@ public class RSLoader extends Applet implements Runnable, Loader {
 	}
 
 	public void load() {
+		final File ms = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH);
 		try {
-			final ClientLoader cl = ClientLoader.getInstance();
+			final ClientLoader cl = new ClientLoader();
+			cl.init(new URL(Configuration.Paths.URLs.CLIENTPATCH), ms);
+			final File client = new File(Configuration.Paths.getCacheDirectory(), "client.dat");
+			cl.load(client, new File(Configuration.Paths.getVersionCache()));
 			targetName = cl.getTargetName();
 			classLoader = new RSClassLoader(cl.getClasses(), new URL("http://" + targetName + ".com/"));
 		} catch (final IOException ex) {
 			log.severe("Unable to load client: " + ex.getMessage());
+		} catch (final ParseException ex) {
+			log.info("Unable to load client: " + ex.toString());
+			if (ms.exists()) {
+				ms.delete();
+			}
+			log.severe("Cached objects deleted, please try restarting the application");
 		}
 	}
 

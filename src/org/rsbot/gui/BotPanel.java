@@ -52,19 +52,23 @@ public class BotPanel extends JPanel {
 	}
 
 	private Bot bot;
+	private final BotHome home;
 	private final HomeUpdater updater;
 	private int offX;
 	private boolean present;
 
-	public BotPanel() {
+	public BotPanel(final BotHome home) {
+		this.home = home;
 		updater = new HomeUpdater();
 		setSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
 		setMinimumSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
 		setPreferredSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
 		setBackground(Color.black);
+		home.setSize(getWidth(), getHeight());
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(final ComponentEvent evt) {
+				BotPanel.this.home.setSize(getWidth(), getHeight());
 				if (bot != null) {
 					bot.resize(getWidth(), getHeight());
 					offset();
@@ -152,7 +156,7 @@ public class BotPanel extends JPanel {
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 		if (bot == null) {
-			// TODO: paint home tab contents
+			home.paint(g);
 		} else {
 			g.drawImage(bot.getImage(), offX, 0, null);
 		}
