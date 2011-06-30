@@ -46,7 +46,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private BotMenuBar menuBar;
 	private JScrollPane textScroll;
 	private BotHome home;
-	private final List<Bot> bots = new ArrayList<Bot>();
+	protected static final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
 	private java.util.Timer shutdown = null;
 

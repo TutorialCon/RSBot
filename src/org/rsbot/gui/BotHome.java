@@ -2,9 +2,6 @@ package org.rsbot.gui;
 
 import java.awt.*;
 
-/**
- * @author Timer
- */
 class BotHome {
 	private int width, height;
 
@@ -14,5 +11,6 @@ class BotHome {
 	}
 
 	public void paint(final Graphics g) {
+		//TODO paint
 	}
 }
