@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StringUtil {
-
 	private static final String[] COLOURS_STR = new String[]{"red", "green", "cyan", "purple", "white"};
 	private static final Map<String, Color> COLOR_MAP = new HashMap<String, Color>();
 
