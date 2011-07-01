@@ -6,6 +6,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
@@ -61,18 +63,55 @@ public class HttpClient {
 		return con;
 	}
 
+	public static URL getFinalURL(final URL url) throws IOException {
+		return getFinalURL(url, true);
+	}
+
+	private static URL getFinalURL(final URL url, final boolean httpHead) throws IOException {
+		final HttpURLConnection con = getConnection(url);
+		con.setInstanceFollowRedirects(false);
+		if (httpHead) {
+			con.setRequestMethod("HEAD");
+		}
+		con.connect();
+		switch (con.getResponseCode()) {
+		case HttpURLConnection.HTTP_MOVED_PERM:
+		case HttpURLConnection.HTTP_MOVED_TEMP:
+		case HttpURLConnection.HTTP_SEE_OTHER:
+			return getFinalURL(new URL(con.getHeaderField("Location")), true);
+		case HttpURLConnection.HTTP_BAD_METHOD:
+			return getFinalURL(url, false);
+		default:
+			return url;
+		}
+	}
+
+	private static HttpURLConnection cloneConnection(final HttpURLConnection con) throws IOException {
+		final HttpURLConnection cloned = (HttpURLConnection) con.getURL().openConnection();
+		for (final Entry<String, List<String>> prop : con.getRequestProperties().entrySet()) {
+			final String key = prop.getKey();
+			for (final String value : prop.getValue()) {
+				cloned.addRequestProperty(key, value);
+			}
+		}
+		return cloned;
+	}
+
 	public static HttpURLConnection download(final URL url, final File file) throws IOException {
-		return download(getConnection(url), file);
+		return download(getConnection(getFinalURL(url)), file);
 	}
 
 	public static HttpURLConnection download(final HttpURLConnection con, final File file) throws IOException {
 		if (file.exists()) {
-			con.setIfModifiedSince(file.lastModified());
-			con.connect();
-			if (con.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
-				log.fine("Using " + file.getName() + " from cache");
+			final HttpURLConnection head = cloneConnection(con);
+			head.setIfModifiedSince(file.lastModified());
+			head.setRequestMethod("HEAD");
+			head.connect();
+			if (head.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
+				log.info("Using " + file.getName() + " from cache");
 				con.disconnect();
-				return con;
+				head.disconnect();
+				return head;
 			}
 		}
 
