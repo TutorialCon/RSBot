@@ -214,7 +214,7 @@ public class Configuration {
 
 		public static Map<String, File> getCachableResources() {
 			if (cachableResources == null) {
-				cachableResources = new HashMap<String, File>(8);
+				cachableResources = new HashMap<String, File>(6);
 				cachableResources.put(URLs.CLIENTPATCH, new File(getCacheDirectory(), "ms.dat"));
 				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
 				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class Boot {
 	public static void main(final String[] args) throws IOException {
+		BootLoader.loadLibrary();
 		String location = Boot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		location = URLDecoder.decode(location, "UTF-8").replaceAll("\\\\", "/");
 		final String app = Application.class.getCanonicalName();
