@@ -3,6 +3,8 @@ package org.rsbot;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -47,10 +49,16 @@ public class Boot {
 				break;
 		}
 
+		final List<String> cp = new ArrayList<String>(3);
+		cp.add(Configuration.Paths.URLs.JNA);
+
 		if (Configuration.SKINNED) {
-			for (final String path : new String[]{Configuration.Paths.URLs.TRIDENT, Configuration.Paths.URLs.SUBSTANCE}) {
-				location += File.pathSeparatorChar + Configuration.Paths.getCachableResources().get(path).getAbsolutePath();
-			}
+			cp.add(Configuration.Paths.URLs.TRIDENT);
+			cp.add(Configuration.Paths.URLs.SUBSTANCE);
+		}
+
+		for (final String path : cp) {
+			location += File.pathSeparatorChar + Configuration.Paths.getCachableResources().get(path).getAbsolutePath();
 		}
 
 		param.append(s);

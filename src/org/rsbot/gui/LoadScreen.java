@@ -1,6 +1,7 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
+import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
@@ -8,6 +9,7 @@ import org.rsbot.log.SystemConsoleHandler;
 import org.rsbot.script.provider.ScriptDeliveryNetwork;
 import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.UpdateChecker;
+import org.rsbot.util.Win32;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
@@ -77,6 +79,7 @@ public class LoadScreen extends JDialog {
 
 		log.info("Registering logs");
 		bootstrap();
+		Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
 
 		log.info("Initializing bot.");
 
@@ -143,17 +146,8 @@ public class LoadScreen extends JDialog {
 
 		String error = null;
 
-		if (UpdateChecker.isError()) {
-			error = "Unable to obtain latest version information";
-		} else if (Configuration.RUNNING_FROM_JAR) {
-			try {
-				if (UpdateChecker.isDeprecatedVersion()) {
-					error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-				}
-			} catch (final IOException ignored) {
-			}
-		} else {
-			error = null;
+		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
+			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
 		}
 
 		if (error == null) {
