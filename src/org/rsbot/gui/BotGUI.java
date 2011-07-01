@@ -3,6 +3,7 @@ package org.rsbot.gui;
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
+import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.script.Script;
@@ -16,6 +17,7 @@ import org.rsbot.script.util.WindowUtil;
 import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
+import org.rsbot.util.Win32;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.IOHelper;
 import org.rsbot.util.io.ScreenshotUtil;
@@ -400,6 +402,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			disableRendering(on || menuBar.isTicked(Messages.LESSCPU));
 			disableGraphics(on || menuBar.isTicked(Messages.DISABLECANVAS));
 		}
+		Win32.setProcessPriority(on ? Kernel32.PROCESS_MODE_BACKGROUND_BEGIN : Kernel32.PROCESS_MODE_BACKGROUND_END);
 	}
 
 	public void disableRendering(final boolean mode) {
