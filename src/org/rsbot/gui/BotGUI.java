@@ -86,6 +86,12 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		new java.util.Timer(true).schedule(new TimerTask() {
 			@Override
 			public void run() {
+				Win32.emptyWorkingSet();
+			}
+		}, 1000 * 25, 1000 * 60 * 3);
+		new java.util.Timer(true).schedule(new TimerTask() {
+			@Override
+			public void run() {
 				if (Web.isLoaded() && Web.isInActive()) {
 					Web.free();
 				}
