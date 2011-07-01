@@ -51,8 +51,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 			"scripts.johnkeech.com", // MrSneaky - SneakyFarmerPro
 			"jtryba.com", // jtryba - autoCook, monkR8per
 			"tehgamer.info", // TehGamer - iMiner
-			".universalscripts.org", // Fletch To 99 - UFletch
-			"www.dunkscripts.freeiz.com", // Dunnkers
 			"www.dlolpics.com", // DlolPics
 			".logikmedia.co", // countvidal
 			"letthesmokeout.com", // MrByte
@@ -61,8 +59,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 			".ownagebots.com", // Ownageful - OwnageGDK, OwnageBDK, OwnageFDK
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su
-			"www.paidthefastest.com", // https://github.com/powerbot/RSBot/pull/237
-			"greencowzsms.site50.net", // GreenCowz - SMS/Email PHP script
 	};
 
 	private String getCallingClass() {
