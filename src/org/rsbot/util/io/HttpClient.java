@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
@@ -104,7 +105,8 @@ public class HttpClient {
 	public static HttpURLConnection download(final HttpURLConnection con, final File file) throws IOException {
 		if (file.exists()) {
 			final HttpURLConnection head = cloneConnection(con);
-			head.setIfModifiedSince(file.lastModified());
+			final int offset = TimeZone.getDefault().getOffset(file.lastModified());
+			head.setIfModifiedSince(file.lastModified() - offset);
 			head.setRequestMethod("HEAD");
 			head.connect();
 			if (head.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
@@ -133,7 +135,10 @@ public class HttpClient {
 			fos.close();
 		}
 
-		file.setLastModified(con.getLastModified());
+		if (con.getLastModified() != 0L) {
+			final int offset = TimeZone.getDefault().getOffset(con.getLastModified());
+			file.setLastModified(con.getLastModified() + offset);
+		}
 
 		con.disconnect();
 		return con;
