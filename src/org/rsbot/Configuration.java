@@ -80,7 +80,6 @@ public class Configuration {
 			public static final String DOWNLOAD_SHORT = HOST + "/download";
 			public static final String CLIENTPATCH = BASE + "modscript";
 			public static final String VERSION = BASE + "version.txt";
-			public static final String VERSION_KILL = BASE + "version-kill";
 			public static final String PROJECT = BASE + "git-project";
 			public static final String SITE = BASE + "site";
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
@@ -218,7 +217,6 @@ public class Configuration {
 				cachableResources = new HashMap<String, File>(8);
 				cachableResources.put(URLs.CLIENTPATCH, new File(getCacheDirectory(), "ms.dat"));
 				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
-				cachableResources.put(URLs.VERSION_KILL, new File(getCacheDirectory(), "version-kill.txt"));
 				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));
 				if (SKINNED) {
 					cachableResources.put(URLs.TRIDENT, new File(getCacheDirectory(), "trident.jar"));

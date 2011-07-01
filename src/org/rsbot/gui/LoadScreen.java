@@ -169,17 +169,8 @@ public class LoadScreen extends JDialog {
 
 		String error = null;
 
-		if (UpdateChecker.isError()) {
-			error = "Unable to obtain latest version information";
-		} else if (Configuration.RUNNING_FROM_JAR) {
-			try {
-				if (UpdateChecker.isDeprecatedVersion()) {
-					error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-				}
-			} catch (final IOException ignored) {
-			}
-		} else {
-			error = null;
+		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
+			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
 		}
 
 		log.info("Checking for client updates");
