@@ -51,7 +51,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 			"scripts.johnkeech.com", // MrSneaky - SneakyFarmerPro
 			"jtryba.com", // jtryba - autoCook, monkR8per
 			"tehgamer.info", // TehGamer - iMiner
-			".universalscripts.org", // Fletch To 99 - UFletch
 			"www.dlolpics.com", // DlolPics
 			".logikmedia.co", // countvidal
 			"letthesmokeout.com", // MrByte
