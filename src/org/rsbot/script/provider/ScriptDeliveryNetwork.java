@@ -2,6 +2,7 @@ package org.rsbot.script.provider;
 
 import org.rsbot.Configuration;
 import org.rsbot.script.Script;
+import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.provider.FileScriptSource.FileScriptDefinition;
 import org.rsbot.service.ServiceException;
 import org.rsbot.util.io.HttpClient;
@@ -49,8 +50,23 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 			def.description = values.get("description");
 			def.authors = values.get("authors").split(ScriptList.DELIMITER);
 			def.keywords = values.get("keywords").split(ScriptList.DELIMITER);
+			def.categories = getCategories(values.get("categories"));
 			def.website = values.get("website");
 			defs.add(def);
+		}
+	}
+
+	private static ScriptManifest.Category[] getCategories(String cats) {
+		try {
+			final String[] categories = cats.split(ScriptList.DELIMITER);
+			final ScriptManifest.Category[] catList = new ScriptManifest.Category[categories.length];
+			int i = -1;
+			for (String categoryName : categories) {
+				catList[i++] = ScriptManifest.Category.value(categoryName);
+			}
+			return catList;
+		} catch (NullPointerException ignored) {
+			return new ScriptManifest.Category[0];
 		}
 	}
 
@@ -128,7 +144,6 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 				file.delete();
 			} else {
 				tasks.add(Executors.callable(new Runnable() {
-					@Override
 					public void run() {
 						download(list.get(path));
 					}
