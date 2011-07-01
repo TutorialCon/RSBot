@@ -88,6 +88,7 @@ public class Configuration {
 			public static final String SERVICELOGIN = BASE + "servicelogin";
 			public static final String TRIDENT = BASE + "trident";
 			public static final String SUBSTANCE = BASE + "substance";
+			public static final String JNA = BASE + "jna";
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
@@ -223,6 +224,7 @@ public class Configuration {
 					cachableResources.put(URLs.TRIDENT, new File(getCacheDirectory(), "trident.jar"));
 					cachableResources.put(URLs.SUBSTANCE, new File(getCacheDirectory(), "substance.jar"));
 				}
+				cachableResources.put(URLs.JNA, new File(getCacheDirectory(), "jna.jar"));
 			}
 			return cachableResources;
 		}
