@@ -16,11 +16,14 @@ public class Win32 {
 			System.gc();
 			return;
 		}
-		final Kernel32 kernel32 = getKernel32Instance();
-		final int dwProcessId = kernel32.GetCurrentProcessId();
-		final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_QUOTA, false, dwProcessId);
-		kernel32.SetProcessWorkingSetSize(hProcess, -1, -1);
-		kernel32.CloseHandle(hProcess);
+		try {
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int dwProcessId = kernel32.GetCurrentProcessId();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_QUOTA, false, dwProcessId);
+			kernel32.SetProcessWorkingSetSize(hProcess, -1, -1);
+			kernel32.CloseHandle(hProcess);
+		} catch (final NoClassDefFoundError ignored) {
+		}
 		System.gc();
 	}
 
@@ -28,10 +31,13 @@ public class Win32 {
 		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
 			return;
 		}
-		final Kernel32 kernel32 = getKernel32Instance();
-		final int dwProcessId = kernel32.GetCurrentProcessId();
-		final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_INFORMATION, false, dwProcessId);
-		kernel32.SetPriorityClass(hProcess, dwPriorityClass);
-		kernel32.CloseHandle(hProcess);
+		try {
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int dwProcessId = kernel32.GetCurrentProcessId();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_INFORMATION, false, dwProcessId);
+			kernel32.SetPriorityClass(hProcess, dwPriorityClass);
+			kernel32.CloseHandle(hProcess);
+		} catch (final NoClassDefFoundError ignored) {
+		}
 	}
 }

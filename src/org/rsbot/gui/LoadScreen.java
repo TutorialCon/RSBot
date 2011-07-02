@@ -80,7 +80,10 @@ public class LoadScreen extends JDialog {
 
 		log.info("Registering logs");
 		bootstrap();
-		Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
+		try {
+			Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
+		} catch (final NoClassDefFoundError ignored) {
+		}
 
 		log.info("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
