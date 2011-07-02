@@ -59,6 +59,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			".ownagebots.com", // Ownageful - OwnageGDK, OwnageBDK, OwnageFDK
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su
+			"www.darius.nl", // Dunnkers
 	};
 
 	private String getCallingClass() {
