@@ -10,7 +10,7 @@ GOTO :eof
 :setvars
 SET name=RSBot
 SET cc=javac
-SET cflags=-g:none -cp resources/jna.jar
+SET cflags=-g:none
 SET src=src
 SET lib=lib
 SET res=resources
