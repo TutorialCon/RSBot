@@ -20,7 +20,7 @@ all: Bundle
 
 Bot:
 	@if [ ! -d "$(BINDIR)" ]; then mkdir "$(BINDIR)"; fi
-	$(CC) $(CFLAGS) -d "$(BINDIR)" `find "$(SRC)" -name \*.java`
+	$(CC) $(CFLAGS) -d "$(BINDIR)" -classpath "$(LIB)/jna.jar" `find "$(SRC)" -name \*.java`
 
 Bundle: Bot
 	@rm -fv "$(LSTF)"
