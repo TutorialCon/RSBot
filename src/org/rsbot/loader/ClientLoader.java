@@ -23,7 +23,6 @@ import org.rsbot.Configuration;
 import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
-import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 /**
@@ -43,22 +42,8 @@ public class ClientLoader {
 	}
 
 	public void setup() throws IOException, ParseException {
-		final File ms = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH);
-		init(new URL(Configuration.Paths.URLs.CLIENTPATCH), ms);
+		script = new ModScript(IOHelper.read(Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH)));
 		load(new File(Configuration.Paths.getCacheDirectory(), "client.jar"), new File(Configuration.Paths.getCacheDirectory(), "client-info.dat"));
-	}
-
-	private void init(final URL script, final File cache) throws IOException, ParseException {
-		try {
-			HttpClient.download(script, cache);
-		} catch (final IOException ioe) {
-			if (cache.exists()) {
-				log.warning("Unable to download client patch, attempting to use cached copy");
-			} else {
-				throw ioe;
-			}
-		}
-		this.script = new ModScript(IOHelper.read(cache));
 	}
 
 	private void load(final File cache, final File versionFile) throws IOException {
