@@ -1,6 +1,5 @@
 package org.rsbot.script.provider;
 
-import org.rsbot.script.ScriptManifest;
 import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
@@ -36,18 +35,8 @@ public class ScriptList {
 			printValue(out, "description", item.description);
 			printValue(out, "authors", item.authors);
 			printValue(out, "keywords", item.keywords);
-			printValue(out, "categories", categoryValues(item.categories));
 			printValue(out, "website", item.website);
 		}
-	}
-
-	private static String[] categoryValues(ScriptManifest.Category[] categories) {
-		final String[] array = new String[categories.length];
-		int i = -1;
-		for (ScriptManifest.Category category : categories) {
-			array[i++] = category.getCategory();
-		}
-		return array;
 	}
 
 	private static void printValue(final PrintStream out, final String key, final String... texts) {
