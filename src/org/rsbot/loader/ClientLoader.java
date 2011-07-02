@@ -4,7 +4,6 @@ import org.rsbot.Configuration;
 import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
-import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;

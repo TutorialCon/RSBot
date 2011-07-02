@@ -110,7 +110,7 @@ public class HttpClient {
 			head.setRequestMethod("HEAD");
 			head.connect();
 			if (head.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
-				log.info("Using " + file.getName() + " from cache");
+				log.fine("Using " + file.getName() + " from cache");
 				con.disconnect();
 				head.disconnect();
 				return head;

@@ -4,16 +4,26 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.jna.win32.Kernel32;
 
+import com.sun.jna.Native;
+
 public class Win32 {
+	private static Kernel32 getKernel32Instance() {
+		return (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
+	}
+
 	public static void emptyWorkingSet() {
 		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
 			System.gc();
 			return;
 		}
-		final int dwProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
-		final int hProcess = Kernel32.INSTANCE.OpenProcess(Kernel32.PROCESS_SET_QUOTA, false, dwProcessId);
-		Kernel32.INSTANCE.SetProcessWorkingSetSize(hProcess, -1, -1);
-		Kernel32.INSTANCE.CloseHandle(hProcess);
+		try {
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int dwProcessId = kernel32.GetCurrentProcessId();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_QUOTA, false, dwProcessId);
+			kernel32.SetProcessWorkingSetSize(hProcess, -1, -1);
+			kernel32.CloseHandle(hProcess);
+		} catch (final NoClassDefFoundError ignored) {
+		}
 		System.gc();
 	}
 
@@ -21,9 +31,13 @@ public class Win32 {
 		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
 			return;
 		}
-		final int dwProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
-		final int hProcess = Kernel32.INSTANCE.OpenProcess(Kernel32.PROCESS_SET_INFORMATION, false, dwProcessId);
-		Kernel32.INSTANCE.SetPriorityClass(hProcess, dwPriorityClass);
-		Kernel32.INSTANCE.CloseHandle(hProcess);
+		try {
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int dwProcessId = kernel32.GetCurrentProcessId();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_INFORMATION, false, dwProcessId);
+			kernel32.SetPriorityClass(hProcess, dwPriorityClass);
+			kernel32.CloseHandle(hProcess);
+		} catch (final NoClassDefFoundError ignored) {
+		}
 	}
 }
