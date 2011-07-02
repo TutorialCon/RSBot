@@ -102,20 +102,18 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	private void populateCategories() {
-		final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
+		final LinkedHashSet<String> categories = new LinkedHashSet<String>(scripts.size());
 		for (final ScriptDefinition def : scripts) {
-			for (final String item : def.getKeywords()) {
-				if (item.length() > 3 && item.matches("^[a-zA-Z]+")) {
-					keywords.add(item);
-				}
+			for (final String item : def.getCategories()) {
+				categories.add(item);
 			}
 		}
-		final String[] array = new String[keywords.size()];
-		keywords.toArray(array);
+		final String[] array = new String[categories.size()];
+		categories.toArray(array);
 		final List<String> list = Arrays.asList(array);
 		Collections.sort(list);
-		categories.populate(list, false);
-		categories.setEnabled(list.size() != 0);
+		this.categories.populate(list, false);
+		this.categories.setEnabled(list.size() != 0);
 	}
 
 	private void init() {
@@ -456,14 +454,14 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				if (find.length() != 0 && !def.name.toLowerCase().contains(find)) {
 					continue;
 				}
-				final List<String> keywords = def.getKeywords();
-				final ArrayList<String> list = new ArrayList<String>(keywords.size());
-				for (final String key : keywords) {
+				final List<String> categories1 = def.getCategories();
+				final ArrayList<String> list = new ArrayList<String>(categories1.size());
+				for (final String key : categories1) {
 					list.add(key.toLowerCase());
 				}
 				boolean hit = true;
 				for (final String key : keys) {
-					if (!list.contains(key)) {
+					if (!list.contains(key.toLowerCase())) {
 						hit = false;
 						break;
 					}
