@@ -27,6 +27,7 @@ public class Preferences {
 	public String webPass = "";
 	public boolean sdnShow = true;
 	public boolean allowAllHosts = false;
+	public boolean likedScriptsOnly = false;
 
 	private Preferences(final File store) {
 		this.store = store;
@@ -88,6 +89,9 @@ public class Preferences {
 		if (keys.containsKey("allowAllHosts")) {
 			allowAllHosts = IniParser.parseBool(keys.get("allowAllHosts"));
 		}
+		if (keys.containsKey("likedScriptsOnly")) {
+			likedScriptsOnly = IniParser.parseBool(keys.get("likedScriptsOnly"));
+		}
 	}
 
 	public void save() {
@@ -103,6 +107,7 @@ public class Preferences {
 		keys.put("webPass", webPass);
 		keys.put("sdnShow", Boolean.toString(sdnShow));
 		keys.put("allowAllHosts", Boolean.toString(allowAllHosts));
+		keys.put("likedScriptsOnly", Boolean.toString(likedScriptsOnly));
 		final HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>(1);
 		data.put(IniParser.emptySection, keys);
 		try {

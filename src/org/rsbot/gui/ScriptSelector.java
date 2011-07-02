@@ -59,6 +59,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		this.bot = bot;
 		scripts = new ArrayList<ScriptDefinition>();
 		connected = Preferences.getInstance().sdnShow;
+		likedOnly = Preferences.getInstance().likedScriptsOnly;
 		model = new ScriptTableModel(scripts);
 		ScriptLikes.load();
 	}
@@ -98,6 +99,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	private void unload() {
+		Preferences.getInstance().likedScriptsOnly = likedOnly;
 		ScriptLikes.save();
 	}
 
@@ -303,6 +305,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		connect.setToolTipText("Show network scripts");
 		final JButton favourites = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_STAR)));
 		favourites.setToolTipText("Show favourite scripts only");
+		favourites.setSelected(likedOnly);
 		favourites.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				favourites.setSelected(likedOnly = !likedOnly);
