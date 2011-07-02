@@ -49,7 +49,6 @@ public class ClientLoader {
 	private void load(final File cache, final File versionFile) throws IOException {
 		classes = new HashMap<String, byte[]>();
 		final int[] version = { script.getVersion(), -1 };
-		final String target = script.getAttribute("target");
 
 		try {
 			version[1] = Integer.parseInt(IOHelper.readString(versionFile));
@@ -70,6 +69,7 @@ public class ClientLoader {
 			jar.close();
 		} else {
 			log.info("Downloading game client");
+			final String target = script.getAttribute("target");
 			final JarFile loader = getJar(target, true), client = getJar(target, false);
 
 			final List<String> replace = Arrays.asList(script.getAttribute("replace").split(" "));
