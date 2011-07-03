@@ -200,7 +200,7 @@ public class ImprovedLoginBot extends Random {
 	public boolean activateCondition() {
 		final int idx = game.getClientState();
 		return ((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) ||
-				(idx == Game.INDEX_LOBBY_SCREEN) && (stageFlags & Environment.LOGIN_GAME) != 0) &&
+				(idx == Game.INDEX_LOBBY_SCREEN && (stageFlags & Environment.LOGIN_GAME) != 0)) &&
 				!switchingWorlds() && account.getName() != null;
 	}
 
@@ -286,7 +286,10 @@ public class ImprovedLoginBot extends Random {
 				return random(500, 600);
 			}
 		}
-		return -1;
+		final int idx = game.getClientState();
+		return ((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) == 0) ||
+				(idx == Game.INDEX_LOBBY_SCREEN && (stageFlags & Environment.LOGIN_GAME) == 0) ||
+				(game.isLoggedIn())) ? -1 : random(100, 500);
 	}
 
 	private boolean switchingWorlds() {
