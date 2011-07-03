@@ -32,6 +32,7 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
 	private int world = -1;
+	private String cachePassword = "";
 	private int stageFlags = LOGIN_LOBBY | LOGIN_GAME;
 	private final solution[] loginSolutions = {new solution() {
 		private int invalidCount = 0;
@@ -199,13 +200,16 @@ public class ImprovedLoginBot extends Random {
 	@Override
 	public boolean activateCondition() {
 		final int idx = game.getClientState();
-		return ((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) ||
+		return (((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) ||
 				(idx == Game.INDEX_LOBBY_SCREEN && (stageFlags & Environment.LOGIN_GAME) != 0)) &&
-				!switchingWorlds() && account.getName() != null;
+				!switchingWorlds() && account.getName() != null) || (idx == Game.INDEX_LOBBY_SCREEN && (cachePassword.isEmpty() || cachePassword == null));
 	}
 
 	@Override
 	public int loop() {
+		if ((cachePassword.isEmpty() || cachePassword == null) && lobby.inLobby()) {
+			cachePassword = ctx.client.getCurrentPassword();
+		}
 		if (lobby.inLobby() && (stageFlags & Environment.LOGIN_GAME) != 0) {
 			if (lobby.getSelectedTab() != Lobby.TAB_PLAYERS) {
 				lobby.open(Lobby.TAB_PLAYERS);
@@ -280,7 +284,7 @@ public class ImprovedLoginBot extends Random {
 				}
 				String passWord = AccountManager.getPassword(account.getName());
 				if (passWord.isEmpty()) {
-					passWord = ctx.client.getCurrentPassword();
+					passWord = cachePassword;
 				}
 				keyboard.sendText(passWord, false);
 				return random(500, 600);
@@ -351,7 +355,7 @@ public class ImprovedLoginBot extends Random {
 	private boolean isPasswordValid() {
 		String passWord = AccountManager.getPassword(account.getName());
 		if (passWord.isEmpty()) {
-			passWord = ctx.client.getCurrentPassword();
+			passWord = cachePassword;
 		}
 		return interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_PASSWORD_TEXT).getText().length() == (passWord == null ? 0 : passWord.length());
 	}
