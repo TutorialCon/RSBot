@@ -395,7 +395,7 @@ public class Magic extends MethodProvider {
 
 	public static final int SPELL_PADDEWWA_TELEPORT = 40;
 	public static final int SPELL_SENNTISTEN_TELEPORT = 41;
-	public static final int SPELL_KHARYRLL_TELEPRT = 42;
+	public static final int SPELL_KHARYRLL_TELEPORT = 42;
 	public static final int SPELL_LASSER_TELEPORT = 43;
 	public static final int SPELL_DAREEYAK_TELEPORT = 44;
 	public static final int SPELL_CARRALLANGER_TELEPORT = 45;
