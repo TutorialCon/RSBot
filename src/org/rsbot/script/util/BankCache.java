@@ -4,10 +4,9 @@ import org.rsbot.Configuration;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.util.io.IniParser;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Bank cache class. Used for web.
@@ -16,7 +15,7 @@ import java.util.HashMap;
  */
 public class BankCache {
 	private final static File cacheFile = new File(Configuration.Paths.getWebDatabase());
-	private final static HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>();
+	private final static Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>();
 	private static final Object lock = new Object();
 
 	/**
@@ -29,24 +28,21 @@ public class BankCache {
 	public static void Save(final String name, final RSItem[] items) throws Exception {
 		synchronized (lock) {
 			Load();// For multiple bot instances.
-			final FileWriter fw = new FileWriter(cacheFile, false);
-			final BufferedWriter bw = new BufferedWriter(fw);
-			HashMap<String, String> newData = BankCache.genMap(name, items);
+			Map<String, String> newData = BankCache.genMap(name, items);
 			if (data.containsKey(name.toLowerCase())) {
 				data.get(name.toLowerCase()).putAll(newData);
 			} else {
 				data.put(name.toLowerCase(), newData);
 			}
-			IniParser.serialise(data, bw);
-			bw.close();
+			IniParser.serialise(data, cacheFile);
 		}
 	}
 
-	private static HashMap<String, String> genMap(final String name, final RSItem[] items) {
+	private static Map<String, String> genMap(final String name, final RSItem[] items) {
 		synchronized (lock) {
-			final HashMap<String, String> newData = new HashMap<String, String>();
+			final Map<String, String> newData = new HashMap<String, String>();
 			if (data.containsKey(name.toLowerCase())) {
-				final HashMap<String, String> oldData = data.get(name.toLowerCase());
+				final Map<String, String> oldData = data.get(name.toLowerCase());
 				for (final RSItem i : items) {
 					if (i != null) {
 						if (oldData.containsKey(i.getName())) {
@@ -94,7 +90,7 @@ public class BankCache {
 			try {
 				Load();// For multiple bot instances.
 				if (data.containsKey(name)) {
-					final HashMap<String, String> userData = data.get(name);
+					final Map<String, String> userData = data.get(name);
 					return userData.containsKey(o) || userData.containsValue(o);
 				}
 			} catch (final Exception ignored) {

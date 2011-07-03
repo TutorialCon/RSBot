@@ -2,30 +2,36 @@ package org.rsbot.util.io;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
  * @author Paris
  */
 public class IniParser {
-
-	private static final char sectionOpen = '[';
-	private static final char sectionClose = ']';
-	private static final char keyBound = '=';
-	private static final char[] comments = {'#', ';'};
-	public static final String emptySection = "";
+	private static final char SECTIONOPEN = '[';
+	private static final char SECTIONCLOSE = ']';
+	private static final char KEYBOUND = '=';
+	private static final char[] COMMENTS = {'#', ';'};
+	public static final String EMPTYSECTION = "";
 
 	private IniParser() {
 	}
 
-	public static void serialise(final HashMap<String, HashMap<String, String>> data, final BufferedWriter out) throws IOException {
-		if (data.containsKey(emptySection)) {
-			writeSection(emptySection, data.get(emptySection), out);
+	public static void serialise(final Map<String, Map<String, String>> data, final File out) throws IOException {
+		final BufferedWriter bw = new BufferedWriter(new FileWriter(out));
+		serialise(data, bw);
+		bw.close();
+	}
+
+	public static void serialise(final Map<String, Map<String, String>> data, final BufferedWriter out) throws IOException {
+		if (data.containsKey(EMPTYSECTION)) {
+			writeSection(EMPTYSECTION, data.get(EMPTYSECTION), out);
 			out.newLine();
 		}
-		for (final Entry<String, HashMap<String, String>> entry : data.entrySet()) {
+		for (final Entry<String, Map<String, String>> entry : data.entrySet()) {
 			final String section = entry.getKey();
-			if (section.equals(emptySection)) {
+			if (section.equals(EMPTYSECTION)) {
 				continue;
 			}
 			writeSection(section, entry.getValue(), out);
@@ -33,38 +39,38 @@ public class IniParser {
 		}
 	}
 
-	private static void writeSection(final String section, final HashMap<String, String> map, final BufferedWriter out) throws IOException {
+	private static void writeSection(final String section, final Map<String, String> map, final BufferedWriter out) throws IOException {
 		if (!(section == null || section.isEmpty())) {
-			out.write(sectionOpen);
+			out.write(SECTIONOPEN);
 			out.write(section);
-			out.write(sectionClose);
+			out.write(SECTIONCLOSE);
 			out.newLine();
 		}
 		for (final Entry<String, String> entry : map.entrySet()) {
 			out.write(entry.getKey());
-			out.write(keyBound);
+			out.write(KEYBOUND);
 			out.write(entry.getValue());
 			out.newLine();
 		}
 	}
 
-	public static HashMap<String, HashMap<String, String>> deserialise(final File input) throws IOException {
+	public static Map<String, Map<String, String>> deserialise(final File input) throws IOException {
 		final BufferedReader reader = new BufferedReader(new FileReader(input));
-		final HashMap<String, HashMap<String, String>> data = deserialise(reader);
+		final Map<String, Map<String, String>> data = deserialise(reader);
 		reader.close();
 		return data;
 	}
 
-	public static HashMap<String, HashMap<String, String>> deserialise(final InputStream in) throws IOException {
+	public static Map<String, Map<String, String>> deserialise(final InputStream in) throws IOException {
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		final HashMap<String, HashMap<String, String>> data = deserialise(reader);
+		final Map<String, Map<String, String>> data = deserialise(reader);
 		reader.close();
 		return data;
 	}
 
-	public static HashMap<String, HashMap<String, String>> deserialise(final BufferedReader input) throws IOException {
-		final HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>();
-		String line, section = emptySection;
+	public static Map<String, Map<String, String>> deserialise(final BufferedReader input) throws IOException {
+		final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>();
+		String line, section = EMPTYSECTION;
 
 		while ((line = input.readLine()) != null) {
 			line = line.trim();
@@ -74,13 +80,13 @@ public class IniParser {
 			int z;
 			final int l = line.length();
 			final char t = line.charAt(0);
-			if (t == sectionOpen) {
-				z = line.indexOf(sectionClose, 1);
+			if (t == SECTIONOPEN) {
+				z = line.indexOf(SECTIONCLOSE, 1);
 				z = z == -1 ? l : z;
 				section = z == 1 ? "" : line.substring(1, z).trim();
 			} else {
 				boolean skip = false;
-				for (final char c : comments) {
+				for (final char c : COMMENTS) {
 					if (t == c) {
 						skip = true;
 						break;
@@ -89,7 +95,7 @@ public class IniParser {
 				if (skip) {
 					continue;
 				}
-				z = line.indexOf(keyBound);
+				z = line.indexOf(KEYBOUND);
 				z = z == -1 ? l : z;
 				String key, value = "";
 				key = line.substring(0, z).trim();

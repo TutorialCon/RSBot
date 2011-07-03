@@ -34,11 +34,11 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		return instance;
 	}
 
-	private static void parseManifests(final HashMap<String, HashMap<String, String>> entries, final List<ScriptDefinition> defs) {
-		for (final Entry<String, HashMap<String, String>> entry : entries.entrySet()) {
+	private static void parseManifests(final Map<String, Map<String, String>> entries, final List<ScriptDefinition> defs) {
+		for (final Entry<String, Map<String, String>> entry : entries.entrySet()) {
 			final ScriptDefinition def = new ScriptDefinition();
 			def.path = entry.getKey();
-			final HashMap<String, String> values = entry.getValue();
+			final Map<String, String> values = entry.getValue();
 			def.id = Integer.parseInt(values.get("id"));
 			def.crc32 = values.containsKey("crc32") ? Long.parseLong(values.get("crc32")) : 0;
 			def.name = values.get("name");
