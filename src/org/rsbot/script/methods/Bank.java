@@ -403,7 +403,7 @@ public class Bank extends MethodProvider {
 				} else if (banker != null) {
 					didAction = banker.interact("Bank", "Banker") || banker.interact("Bank", "Fremennik banker") || banker.interact("Bank", "Emerald Benedict");
 				} else if (bankChest != null) {
-					didAction = bankChest.interact("Open", "Shantay chest") || (bankBooth != null && bankBooth.interact("Use", "Bank chest"));
+					didAction = bankChest.interact("Open", "Shantay chest") || (bankChest != null && bankChest.interact("Use", "Bank chest"));
 				}
 				if (didAction) {
 					int count = 0;
