@@ -96,16 +96,6 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		log.fine("Extracting resources");
-		tasks.add(Executors.callable(new Runnable() {
-			public void run() {
-				try {
-					extractResources();
-				} catch (final IOException ignored) {
-				}
-			}
-		}));
-
 		log.fine("Creating directories");
 		Configuration.createDirectories();
 
