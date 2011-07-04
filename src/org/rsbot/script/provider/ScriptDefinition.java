@@ -1,6 +1,5 @@
 package org.rsbot.script.provider;
 
-import org.rsbot.script.ScriptManifest;
 import org.rsbot.util.StringUtil;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.List;
  * @author Paris
  */
 public class ScriptDefinition implements Comparable<ScriptDefinition> {
+
 	public String getName() {
 		return StringUtil.stripHtml(name);
 	}
@@ -46,17 +46,6 @@ public class ScriptDefinition implements Comparable<ScriptDefinition> {
 		return list;
 	}
 
-	public List<String> getCategories() {
-		final ArrayList<String> list = new ArrayList<String>(categories.length);
-		if (categories == null) {
-			return list;
-		}
-		for (ScriptManifest.Category category : categories) {
-			list.add(category.getCategory());
-		}
-		return list;
-	}
-
 	public int id;
 
 	public long crc32;
@@ -70,8 +59,6 @@ public class ScriptDefinition implements Comparable<ScriptDefinition> {
 	public String[] authors;
 
 	public String[] keywords;
-
-	public ScriptManifest.Category[] categories;
 
 	public String website;
 
