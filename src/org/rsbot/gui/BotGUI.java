@@ -17,8 +17,8 @@ import org.rsbot.script.util.WindowUtil;
 import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
-import org.rsbot.util.Win32;
 import org.rsbot.util.UpdateChecker;
+import org.rsbot.util.Win32;
 import org.rsbot.util.io.IOHelper;
 import org.rsbot.util.io.ScreenshotUtil;
 
@@ -470,12 +470,12 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				final Bot bot = handler.getBot();
+				bot.inputFlags = Environment.INPUT_KEYBOARD;
+				bot.overrideInput = false;
+				final String acct = bot.getAccountName();
+				toolBar.setTabLabel(bots.indexOf(bot), acct == null ? Messages.TABDEFAULTTEXT : acct);
 				if (bot == getCurrentBot()) {
-					bot.inputFlags = Environment.INPUT_KEYBOARD;
-					bot.overrideInput = false;
 					updateScriptControls();
-					final String acct = bot.getAccountName();
-					toolBar.setTabLabel(bots.indexOf(bot), acct == null ? Messages.TABDEFAULTTEXT : acct);
 					setTitle(acct);
 				}
 			}
@@ -483,14 +483,18 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	}
 
 	public void scriptStopped(final ScriptHandler handler, final Script script) {
-		final Bot bot = handler.getBot();
-		if (bot == getCurrentBot()) {
-			bot.inputFlags = Environment.INPUT_KEYBOARD | Environment.INPUT_MOUSE;
-			bot.overrideInput = false;
-			updateScriptControls();
-			toolBar.setTabLabel(bots.indexOf(bot), Messages.TABDEFAULTTEXT);
-			setTitle(null);
-		}
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				final Bot bot = handler.getBot();
+				bot.inputFlags = Environment.INPUT_KEYBOARD | Environment.INPUT_MOUSE;
+				bot.overrideInput = false;
+				toolBar.setTabLabel(bots.indexOf(bot), Messages.TABDEFAULTTEXT);
+				if (bot == getCurrentBot()) {
+					updateScriptControls();
+					setTitle(null);
+				}
+			}
+		});
 	}
 
 	public void scriptResumed(final ScriptHandler handler, final Script script) {
@@ -507,7 +511,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 	public void inputChanged(final Bot bot, final int mask) {
 		bot.inputFlags = mask;
-		toolBar.setInputState(mask);
 		updateScriptControls();
 	}
 
