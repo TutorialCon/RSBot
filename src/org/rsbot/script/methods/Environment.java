@@ -126,7 +126,7 @@ public class Environment extends MethodProvider {
 	}
 
 	/**
-	 * Sets the world for the bot to login to.
+	 * Sets the world for the bot to login to. -1 logs in to the current world.
 	 *
 	 * @param world The world to login to.
 	 */
@@ -139,7 +139,17 @@ public class Environment extends MethodProvider {
 	}
 
 	/**
-	 * Set login mask.
+	 * Sets the login mask.
+	 * Only lobby:
+	 * env.setLoginFlags(Environment.LOGIN_LOBBY);
+	 * <p/>
+	 * Only game from lobby:
+	 * env.setLoginFlags(Environment.LOGIN_GAME);
+	 * <p/>
+	 * Login to lobby and game:
+	 * env.setLoginFlags(Environment.LOGIN_LOBBY | Environment.LOGIN_GAME);
+	 *
+	 * @param mask The mask
 	 */
 	public void setLoginMask(final int mask) {
 		try {
