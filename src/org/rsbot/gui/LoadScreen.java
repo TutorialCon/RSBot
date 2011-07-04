@@ -124,7 +124,7 @@ public class LoadScreen extends JDialog {
 			@Override
 			public void run() {
 				try {
-					ClientLoader.getInstance().setup();
+					ClientLoader.getInstance().load();
 				} catch (final Exception ignored) {
 				}
 			}

@@ -5,6 +5,7 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.gui.BotGUI;
 import org.rsbot.gui.LoadScreen;
+import org.rsbot.loader.ClientLoader;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
@@ -129,6 +130,11 @@ public class RestrictedSecurityManager extends SecurityManager {
 		switch (port) {
 			case PORT_UNKNOWN:
 			case PORT_DNS:
+				break;
+			case ClientLoader.PORT_CLIENT:
+				if (!getCallingClass().equals(ClientLoader.class.getName())) {
+					throw new SecurityException();
+				}
 				break;
 			case PORT_HTTP:
 			case PORT_HTTPS:
