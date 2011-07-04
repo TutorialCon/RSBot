@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -76,11 +76,11 @@ public class SplashAd extends JDialog implements MouseListener {
 	}
 
 	private boolean sync() {
-		HashMap<String, String> keys;
+		Map<String, String> keys;
 
 		try {
 			final File cache = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.AD_INFO);
-			keys = IniParser.deserialise(cache).get(IniParser.emptySection);
+			keys = IniParser.deserialise(cache).get(IniParser.EMPTYSECTION);
 		} catch (final IOException ignored) {
 			return false;
 		}

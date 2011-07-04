@@ -217,6 +217,7 @@ public class Configuration {
 				cachableResources = new HashMap<String, File>(6);
 				cachableResources.put(URLs.CLIENTPATCH, new File(getCacheDirectory(), "ms.dat"));
 				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
+				cachableResources.put(URLs.SDN_MANIFEST, new File(getCacheDirectory(), "sdn-manifests.txt"));
 				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));
 				if (SKINNED) {
 					cachableResources.put(URLs.TRIDENT, new File(getCacheDirectory(), "trident.jar"));
@@ -283,11 +284,18 @@ public class Configuration {
 			Paths.getScriptsDirectory(),
 			Paths.getScriptsSourcesDirectory(),
 			Paths.getScriptsPrecompiledDirectory(),
+			Paths.getScriptsNetworkDirectory(),
 		};
 		for (final String name : dirs) {
 			final File dir = new File(name);
 			if (!dir.isDirectory()) {
 				dir.mkdirs();
+			}
+		}
+		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
+			try {
+				Runtime.getRuntime().exec("attrib +H \"" + new File(Paths.getScriptsNetworkDirectory()).getAbsolutePath() + "\"");
+			} catch (final IOException ignored) {
 			}
 		}
 	}

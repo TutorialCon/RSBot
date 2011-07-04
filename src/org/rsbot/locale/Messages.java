@@ -5,24 +5,24 @@ import org.rsbot.util.io.IniParser;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Messages {
-	private static HashMap<String, String> map;
+	private static Map<String, String> map;
 
 	static {
 		final String defaultLang = "en";
 		final String lang = Locale.getDefault().getLanguage();
 		try {
 			URL src = Configuration.getResourceURL(Configuration.Paths.Resources.MESSAGES + defaultLang + ".txt");
-			map = IniParser.deserialise(src.openStream()).get(IniParser.emptySection);
+			map = IniParser.deserialise(src.openStream()).get(IniParser.EMPTYSECTION);
 			if (!lang.startsWith(defaultLang)) {
 				for (final String avail : new String[]{"de", "hi", "nl", "sv"}) {
 					if (lang.startsWith(avail)) {
 						src = Configuration.getResourceURL(Configuration.Paths.Resources.MESSAGES + avail + ".txt");
-						final HashMap<String, String> mapNative = IniParser.deserialise(src.openStream()).get(IniParser.emptySection);
+						final Map<String, String> mapNative = IniParser.deserialise(src.openStream()).get(IniParser.EMPTYSECTION);
 						for (final Entry<String, String> entry : mapNative.entrySet()) {
 							map.put(entry.getKey(), entry.getValue());
 						}

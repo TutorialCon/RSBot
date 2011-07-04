@@ -46,6 +46,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JButton submit;
 	private boolean connected = true;
 	private boolean likedOnly = false;
+	private static boolean FIXEDCATEGORIES = true;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -104,17 +105,47 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	private void populateCategories() {
-		final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
-		for (final ScriptDefinition def : scripts) {
-			for (final String item : def.getKeywords()) {
-				if (item.length() > 3 && item.matches("^[a-zA-Z]+")) {
-					keywords.add(item);
+		final List<String> list;
+		if (FIXEDCATEGORIES) {
+			list = new ArrayList<String>();
+			list.add("agility");
+			list.add("combat");
+			list.add("construction");
+			list.add("cooking");
+			list.add("crafting");
+			list.add("dungeoneering");
+			list.add("farming");
+			list.add("firemaking");
+			list.add("fishing");
+			list.add("fletching");
+			list.add("herblore");
+			list.add("hunter");
+			list.add("magic");
+			list.add("minigame");
+			list.add("mining");
+			list.add("other");
+			list.add("money making");
+			list.add("prayer");
+			list.add("ranged");
+			list.add("runecrafting");
+			list.add("slayer");
+			list.add("smithing");
+			list.add("summoning");
+			list.add("thieving");
+			list.add("woodcutting");
+		} else {
+			final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
+			for (final ScriptDefinition def : scripts) {
+				for (final String item : def.getKeywords()) {
+					if (item.length() > 3 && item.matches("^[a-zA-Z]+")) {
+						keywords.add(item);
+					}
 				}
 			}
+			final String[] array = new String[keywords.size()];
+			keywords.toArray(array);
+			list = Arrays.asList(array);
 		}
-		final String[] array = new String[keywords.size()];
-		keywords.toArray(array);
-		final List<String> list = Arrays.asList(array);
 		Collections.sort(list);
 		categories.populate(list, false);
 		categories.setEnabled(list.size() != 0);

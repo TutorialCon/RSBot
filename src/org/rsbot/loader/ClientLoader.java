@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.JarURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -24,6 +25,7 @@ import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
 import org.rsbot.util.io.IOHelper;
+import org.rsbot.util.io.IniParser;
 
 /**
  * @author Paris
@@ -31,31 +33,54 @@ import org.rsbot.util.io.IOHelper;
 public class ClientLoader {
 	private final static ClientLoader instance = new ClientLoader();
 	private final Logger log = Logger.getLogger(ClientLoader.class.getName());
-	private ModScript script;
+	private final File manifest, cache;
+	private final static String TARGET = "runescape";
+	public final static int PORT_CLIENT = 43594;
+	private int[] version = { -1, -1, -1 };
 	private Map<String, byte[]> classes;
 
 	private ClientLoader() {
+		manifest = new File(Configuration.Paths.getCacheDirectory(), "client.ini");
+		cache = new File(Configuration.Paths.getCacheDirectory(), "client.jar");
 	}
 
 	public static ClientLoader getInstance() {
 		return instance;
 	}
 
-	public void setup() throws IOException, ParseException {
-		script = new ModScript(IOHelper.read(Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH)));
-		load(new File(Configuration.Paths.getCacheDirectory(), "client.jar"), new File(Configuration.Paths.getCacheDirectory(), "client-info.dat"));
+	private boolean isCacheClean() {
+		if (!manifest.canRead() || !cache.canRead()) {
+			return false;
+		}
+		final Map<String, String> info;
+		try {
+			info = IniParser.deserialise(manifest).get(IniParser.EMPTYSECTION);
+		} catch (final IOException ignored) {
+			ignored.printStackTrace();
+			return false;
+		};
+		if (info != null && info.containsKey("v1")) {
+			try {
+				version[1] = Integer.parseInt(info.get("v1"));
+			} catch (final NumberFormatException ignored) {
+				return false;
+			}
+			try {
+				version[2] = getRemoteVersion(version[1]);
+			} catch (final IOException ignored) {
+				return false;
+			}
+			return version[1] == version[2];
+		} else {
+			return false;
+		}
 	}
 
-	private void load(final File cache, final File versionFile) throws IOException {
+	public void load() throws IOException, ParseException {
 		classes = new HashMap<String, byte[]>();
-		final int[] version = { script.getVersion(), -1 };
 
-		try {
-			version[1] = Integer.parseInt(IOHelper.readString(versionFile));
-		} catch (final Exception ignored) {
-		}
-
-		if (version[0] <= version[1] && cache.exists()) {
+		if (isCacheClean()) {
+			log.info("Reading game client from cache");
 			final JarFile jar = new JarFile(cache);
 			final Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
@@ -68,10 +93,14 @@ public class ClientLoader {
 			}
 			jar.close();
 		} else {
-			log.info("Downloading game client");
-			final String target = script.getAttribute("target");
-			final JarFile loader = getJar(target, true), client = getJar(target, false);
-
+			log.info("Downloading new game client");
+			// TODO: remove modscript as cachable resource
+			final ModScript script = new ModScript(IOHelper.read(Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH)));
+			version[0] = script.getVersion();
+			if (version[2] > version[0]) {
+				throw new ParseException("Patch outdated (" + version[2] + " > " + version[0] + ")");
+			}
+			final JarFile loader = getJar(TARGET, true), client = getJar(TARGET, false);
 			final List<String> replace = Arrays.asList(script.getAttribute("replace").split(" "));
 
 			for (final JarFile jar : new JarFile[] { loader, client }) {
@@ -89,14 +118,14 @@ public class ClientLoader {
 				jar.close();
 			}
 
-			try {
-				version[1] = getClientVersion();
-			} catch (final IOException ignored) {
-			}
-
 			for (final Map.Entry<String, byte[]> entry : classes.entrySet()) {
 				entry.setValue(script.process(entry.getKey(), entry.getValue()));
 			}
+
+			final ClassReader reader = new ClassReader(new ByteArrayInputStream(classes.get("client")));
+			final VersionVisitor vv = new VersionVisitor();
+			reader.accept(vv, ClassReader.SKIP_FRAMES);
+			version[1] = vv.getVersion();
 
 			final ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(cache));
 			zip.setMethod(ZipOutputStream.STORED);
@@ -113,7 +142,12 @@ public class ClientLoader {
 				zip.closeEntry();
 			}
 			zip.close();
-			IOHelper.write(Integer.toString(version[1]), versionFile);
+
+			final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>(1);
+			final Map<String, String> info = new HashMap<String, String>();
+			info.put("v1", Integer.toString(version[1]));
+			data.put(IniParser.EMPTYSECTION, info);
+			IniParser.serialise(data, manifest);
 		}
 	}
 
@@ -126,24 +160,26 @@ public class ClientLoader {
 	}
 
 	public String getTargetName() {
-		return script.getAttribute("target");
+		return TARGET;
 	}
 
 	public boolean isOutdated() {
-		final int cv;
-		try {
-			cv = getClientVersion();
-		} catch (final IOException ignored) {
-			return true;
-		}
-		return cv != script.getVersion();
+		return version[2] > version[1];
 	}
 
-	private int getClientVersion() throws IOException {
-		final ClassReader reader = new ClassReader(new ByteArrayInputStream(classes.get("client")));
-		final VersionVisitor vv = new VersionVisitor();
-		reader.accept(vv, ClassReader.SKIP_FRAMES);
-		return vv.getVersion();
+	public int getRemoteVersion(final int start) throws IOException {
+		for (int i = start; i < start + 50; i++) {
+			final Socket sock = new Socket("world53." + getTargetName() + ".com", PORT_CLIENT);
+			final byte[] payload = new byte[]{15, 0, 0, (byte) (i >> 8), (byte) i};
+			sock.getOutputStream().write(payload, 0, payload.length);
+			if (sock.getInputStream().read() == 0) {
+				sock.close();
+				return i;
+			} else {
+				sock.close();
+			}
+		}
+		return -1;
 	}
 
 	private JarFile getJar(final String target, final boolean loader) {

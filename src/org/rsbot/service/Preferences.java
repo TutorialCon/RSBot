@@ -4,11 +4,10 @@ import org.rsbot.Configuration;
 import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.io.IniParser;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Preferences {
@@ -41,14 +40,14 @@ public class Preferences {
 	}
 
 	public void load() {
-		HashMap<String, String> keys = null;
+		Map<String, String> keys = null;
 		try {
 			if (!store.exists()) {
 				if (!store.createNewFile()) {
 					throw new IOException("Could not create a new file.");
 				}
 			}
-			keys = IniParser.deserialise(store).get(IniParser.emptySection);
+			keys = IniParser.deserialise(store).get(IniParser.EMPTYSECTION);
 		} catch (final IOException ignored) {
 			log.severe("Failed to load preferences");
 		}
@@ -95,7 +94,7 @@ public class Preferences {
 	}
 
 	public void save() {
-		final HashMap<String, String> keys = new HashMap<String, String>(11);
+		final Map<String, String> keys = new HashMap<String, String>(11);
 		keys.put("user", user);
 		keys.put("hideAds", Boolean.toString(hideAds));
 		keys.put("confirmations", Boolean.toString(confirmations));
@@ -108,12 +107,10 @@ public class Preferences {
 		keys.put("sdnShow", Boolean.toString(sdnShow));
 		keys.put("allowAllHosts", Boolean.toString(allowAllHosts));
 		keys.put("likedScriptsOnly", Boolean.toString(likedScriptsOnly));
-		final HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>(1);
-		data.put(IniParser.emptySection, keys);
+		final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>(1);
+		data.put(IniParser.EMPTYSECTION, keys);
 		try {
-			final BufferedWriter out = new BufferedWriter(new FileWriter(store));
-			IniParser.serialise(data, out);
-			out.close();
+			IniParser.serialise(data, store);
 		} catch (final IOException ignored) {
 			log.severe("Could not save preferences");
 		}

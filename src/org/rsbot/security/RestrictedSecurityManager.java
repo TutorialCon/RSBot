@@ -5,10 +5,10 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.gui.BotGUI;
 import org.rsbot.gui.LoadScreen;
+import org.rsbot.loader.ClientLoader;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
-import org.rsbot.script.provider.ScriptDeliveryNetwork;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 import sun.font.FontManager;
@@ -131,6 +131,11 @@ public class RestrictedSecurityManager extends SecurityManager {
 			case PORT_UNKNOWN:
 			case PORT_DNS:
 				break;
+			case ClientLoader.PORT_CLIENT:
+				if (!getCallingClass().equals(ClientLoader.class.getName())) {
+					throw new SecurityException();
+				}
+				break;
 			case PORT_HTTP:
 			case PORT_HTTPS:
 				if (allowAllHosts) {
@@ -203,7 +208,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkExec(final String cmd) {
 		final String calling = getCallingClass();
-		for (final Class<?> c : new Class<?>[]{ScriptDeliveryNetwork.class, BotGUI.class, UpdateChecker.class, JavaCompiler.class}) {
+		for (final Class<?> c : new Class<?>[]{Configuration.class, BotGUI.class, UpdateChecker.class, JavaCompiler.class}) {
 			if (calling.startsWith(c.getName())) {
 				super.checkExec(cmd);
 				return;

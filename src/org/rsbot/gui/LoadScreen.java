@@ -7,7 +7,6 @@ import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
 import org.rsbot.log.SystemConsoleHandler;
-import org.rsbot.script.provider.ScriptDeliveryNetwork;
 import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.Win32;
@@ -96,16 +95,6 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		log.fine("Extracting resources");
-		tasks.add(Executors.callable(new Runnable() {
-			public void run() {
-				try {
-					extractResources();
-				} catch (final IOException ignored) {
-				}
-			}
-		}));
-
 		log.fine("Creating directories");
 		Configuration.createDirectories();
 
@@ -130,20 +119,12 @@ public class LoadScreen extends JDialog {
 			}));
 		}
 
-		log.info("Downloading network scripts");
-		tasks.add(Executors.callable(new Runnable() {
-			@Override
-			public void run() {
-				ScriptDeliveryNetwork.getInstance().sync();
-			}
-		}));
-
 		log.info("Starting game client");
 		tasks.add(Executors.callable(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					ClientLoader.getInstance().setup();
+					ClientLoader.getInstance().load();
 				} catch (final Exception ignored) {
 				}
 			}
