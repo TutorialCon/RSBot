@@ -2,12 +2,14 @@ package org.rsbot.script.randoms;
 
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.Bank;
-import org.rsbot.script.wrappers.*;
+import org.rsbot.script.wrappers.RSComponent;
+import org.rsbot.script.wrappers.RSItem;
+import org.rsbot.script.wrappers.RSNPC;
+import org.rsbot.script.wrappers.RSObject;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -19,269 +21,214 @@ import java.util.Iterator;
  * graveyard. Easy, huh?
  * </p>
  * <p/>
- * Last Update: 1.6 09/05/10 Jacmob.
  *
- * @author Qauters
+ * @author Timer
  */
-@ScriptManifest(authors = {"Qauters"}, name = "GraveDigger", version = 1.6)
+@ScriptManifest(authors = {"Timer"}, name = "GraveDigger", version = 1.6)
 public class GraveDigger extends Random {
+	private static final int
+			DEPOSIT_BOX = 12731,
+			INTERFACE_GRAVE = 143,
+			INTERFACE_GRAVE_ID = 2,
+			INTERFACE_GRAVE_CLOSE = 3,
 
-	class Group {
-		// IDs used later
-		int coffinID = -1;
-		int graveID = -1;
+			INTERFACE_COFFIN = 141,
+			INTERFACE_COFFIN_CLOSE = 12;
+	private static final int[]
+			INTERFACE_COFFIN_IDS = {3, 4, 5, 6, 7, 8, 9, 10, 11};
+	private static final String NPC_NAME = "Leo";
 
-		// General group data
-		final int graveStoneModelID;
-		final int[] coffinModelIDs;
+	private static final int[]
+			GRAVE_STONES = {12716, 12717, 12718, 12719, 12720},
+			FILLED_GRAVES = {12721, 12722, 12723, 12724, 12725},
+			EMPTY_GRAVES = {12726, 12727, 12728, 12729, 12730},
+			COFFINS = {7587, 7588, 7589, 7590, 7591};
 
-		public Group(final int graveStoneModelID, final int[] coffinModelIDs) {
-			this.graveStoneModelID = graveStoneModelID;
-			this.coffinModelIDs = coffinModelIDs;
-		}
+	private Coffin[] coffins = {
+			new Coffin(7614, new int[]{7603, 7605, 7612}),//Woodcutter
+			new Coffin(7615, new int[]{7600, 7601, 7604}),//Chef
+			new Coffin(7616, new int[]{7597, 7606, 7607}),//Miner
+			new Coffin(7617, new int[]{7602, 7609, 7610}),//Farmer
+			new Coffin(7618, new int[]{7599, 7608, 7613})//Crafter
+	};
 
-		public boolean isGroup(final int graveStoneModelID) {
-			return this.graveStoneModelID == graveStoneModelID;
-		}
-
-		public boolean isGroup(final int[] coffinModelIDs) {
-			for (final int modelID : this.coffinModelIDs) {
-				boolean found = false;
-				for (final int coffinModelID : coffinModelIDs) {
-					if (modelID == coffinModelID) {
-						found = true;
-					}
-				}
-				if (!found) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
-	private static final int[] coffinIDs = {7587, 7588, 7589, 7590, 7591};
-	private static final int[] graveStoneIDs = {12716, 12717, 12718, 12719,
-			12720};
-	private static final int[] filledGraveIDs = {12721, 12722, 12723, 12724,
-			12725};
-	private static final int[] emptyGraveIDs = {12726, 12727, 12728, 12729,
-			12730};
-
-	private static final int INTERFACE_READ_GRAVESTONE = 143;
-	private static final int INTERFACE_READ_GRAVESTONE_MODEL = 2;
-	private static final int INTERFACE_READ_GRAVESTONE_CLOSE = 3;
-	private static final int INTERFACE_CHECK_COFFIN = 141;
-	private static final int INTERFACE_CHECK_COFFIN_CLOSE = 12;
-	private static final int[] INTERFACE_CHECK_COFFIN_ITEMS = {3, 4, 5, 6, 7,
-			8, 9, 10, 11};
-
-	@SuppressWarnings("unused")
-	private static final int[] NOT_TO_DEPOSIT = {1351, 1349, 1353, 1361, 1355,
-			1357, 1359, 4031, 6739, 13470, 14108, 1265, 1267, 1269, 1296, 1273,
-			1271, 1275, 15259, 303, 305, 307, 309, 311, 10129, 301, 13431, 313,
-			314, 2347, 995, 10006, 10031, 10008, 10012, 11260, 10150, 10010,
-			556, 558, 555, 557, 554, 559, 562, 560, 565, 8013, 4251, 8011,
-			8010, 8009, 8008, 8007};
-
-	private final ArrayList<Group> groups = new ArrayList<Group>();
-
-	private int tmpID = -1, tmpStatus = -1; // used to store some data across
-	// loops
+	private boolean removedGraves = false, talkToNPC = false;
 
 	@Override
 	public void onFinish() {
-		tmpID = -1;
-		tmpStatus = -1;
-	}
-
-	public GraveDigger() {
-		groups.add(new Group(7614, new int[]{7603, 7605, 7612}));
-		groups.add(new Group(7615, new int[]{7600, 7601, 7604}));
-		groups.add(new Group(7616, new int[]{7597, 7606, 7607}));
-		groups.add(new Group(7617, new int[]{7602, 7609, 7610}));
-		groups.add(new Group(7618, new int[]{7599, 7608, 7613}));
+		removedGraves = false;
+		talkToNPC = false;
+		for (final Coffin coffin : coffins) {//Rinse and reuse data.
+			coffin.setCoffinID(-1);
+			coffin.setStoneID(-1);
+			coffin.set = false;
+		}
 	}
 
 	@Override
 	public boolean activateCondition() {
-		return settings.getSetting(696) != 0 && objects.getNearest(12731) != null;
+		return settings.getSetting(696) != 0 && objects.getNearest(DEPOSIT_BOX) != null;
 	}
 
 	@Override
 	public int loop() {
-		if (npcs.getNearest("Leo") == null) {
+		if (interfaces.get(INTERFACE_GRAVE).isValid()) {
+			atCloseInterface(INTERFACE_GRAVE, INTERFACE_GRAVE_CLOSE);
+			sleep(random(500, 800));
+		}
+		if (interfaces.get(INTERFACE_COFFIN).isValid()) {
+			atCloseInterface(INTERFACE_COFFIN, INTERFACE_COFFIN_CLOSE);
+			sleep(random(500, 800));
+		}
+		RSNPC theNPC;
+		if ((theNPC = npcs.getNearest(NPC_NAME)) == null) {
 			return -1;
 		}
-		if (inventory.getCountExcept(GraveDigger.coffinIDs) > 23) {
-			if (interfaces.canContinue()) {
-				interfaces.clickContinue();
-				sleep(random(1500, 2000));
-			}
-			final RSObject depo = objects.getNearest(12731);
-			if (depo != null) {
-				if (!calc.tileOnScreen(depo.getLocation())) {
-					walking.getPath(depo.getLocation()).traverse();
-					camera.turnTo(depo);
-				} else {
-					depo.interact("Deposit");
-				}
-			}
-			if (interfaces.get(Bank.INTERFACE_DEPOSIT_BOX).isValid()) {
-				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(27).interact("All");
-				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(26).interact("All");
-				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(25).interact("All");
-				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(24).interact("All");
-				sleep(random(700, 1200));
-				interfaces.get(11).getComponent(17).getComponent(23).interact("All");
-				sleep(random(700, 1200));
-				interfaces.getComponent(11, 15).doClick();
-				return random(500, 700);
-			}
-			return random(2000, 3000);
-		}
-		if (getMyPlayer().isMoving()) {
-		} else if (getMyPlayer().getAnimation() == 827) {
-		} else if (interfaces.get(242).isValid()) {
-			// Check if we finished before
-			if (interfaces.get(242).containsText("ready to leave")) {
-				tmpStatus++;
-			}
-			interfaces.getComponent(242, 6).doClick();
-		} else if (interfaces.get(64).isValid()) {
-			interfaces.getComponent(64, 5).doClick();
-		} else if (interfaces.get(241).isValid()) {
-			interfaces.getComponent(241, 5).doClick();
-		} else if (interfaces.get(243).isValid()) {
-			interfaces.getComponent(243, 7).doClick();
-		} else if (interfaces.get(220).isValid()) {
-			interfaces.getComponent(220, 16).doClick();
-		} else if (interfaces.get(236).isValid()) {
-			if (interfaces.get(236).containsText("ready to leave")) {
-				interfaces.getComponent(236, 1).doClick();
-			} else {
+		if (interfaces.get(236).isValid()) {
+			if (interfaces.getComponent(236, 2).getText().trim().contains("know")) {
 				interfaces.getComponent(236, 2).doClick();
+			} else {
+				interfaces.getComponent(236, 1).doClick();
 			}
-		} else if (interfaces.get(GraveDigger.INTERFACE_CHECK_COFFIN).isValid()) {
-			if (tmpID >= 0) {
-				final int[] items = new int[GraveDigger.INTERFACE_CHECK_COFFIN_ITEMS.length];
-				final RSInterface inters = interfaces.get(GraveDigger.INTERFACE_CHECK_COFFIN);
-				for (int i = 0; i < GraveDigger.INTERFACE_CHECK_COFFIN_ITEMS.length; i++) {
-					items[i] = inters.getComponent(GraveDigger.INTERFACE_CHECK_COFFIN_ITEMS[i]).getComponentID();
-				}
-				for (final Iterator<Group> it = groups.iterator(); it.hasNext() && tmpID >= 0;) {
-					final Group g = it.next();
-					if (g.isGroup(items)) {
-						g.coffinID = tmpID;
-						tmpID = -1;
-					}
-				}
-			}
-			atCloseInterface(GraveDigger.INTERFACE_CHECK_COFFIN, GraveDigger.INTERFACE_CHECK_COFFIN_CLOSE);
-		} else if (interfaces.get(GraveDigger.INTERFACE_READ_GRAVESTONE).isValid()) {
-			final int modelID = interfaces.get(GraveDigger.INTERFACE_READ_GRAVESTONE).getComponent(GraveDigger.INTERFACE_READ_GRAVESTONE_MODEL).getComponentID();
-			for (final Group g : groups) {
-				if (g.isGroup(modelID)) {
-					g.graveID = tmpID;
+		}
+		if (interfaces.canContinue()) {
+			final String text = interfaces.getComponent(242, 4).getText().toLowerCase().trim();
+			interfaces.clickContinue();
+			if (text.contains("empty") || text.contains("not")) {
+				removedGraves = false;
+				talkToNPC = false;
+				for (final Coffin coffin : coffins) {//Rinse and reuse data.
+					coffin.setCoffinID(-1);
+					coffin.setStoneID(-1);
+					coffin.set = false;
 				}
 			}
-			atCloseInterface(GraveDigger.INTERFACE_READ_GRAVESTONE, GraveDigger.INTERFACE_READ_GRAVESTONE_CLOSE);
-		} else if (tmpStatus == 0 && tmpID != -1) {
-			for (final Group g : groups) {
-				if (g.graveID == tmpID) {
-					final RSObject obj = objects.getNearest(g.graveID);
-					if (obj == null || !setObjectInScreen(obj)) {
-						log.info("Couldn't find grave, shutting down.");
-						game.logout(false);
-						return -1;
-					}
-					// if (isItemSelected() > 0) {
-					// inventory.atItem(GraveDigger.coffinIDs[g.coffinID],
-					// "Cancel");
-					// }
-
-					inventory.useItem(inventory.getItem(GraveDigger.coffinIDs[g.coffinID]), obj);
-
-					// Wait for about 10s to finish
-					final long cTime = System.currentTimeMillis();
-					while (System.currentTimeMillis() - cTime < 10000) {
-						if (inventory.getItem(GraveDigger.coffinIDs[g.coffinID]) == null) {
+			return random(500, 1200);
+		}
+		if (talkToNPC) {
+			getNPCInView(theNPC);
+			return theNPC.interact("Talk-to") ? random(800, 2000) : 0;
+		}
+		if (interfaces.get(220).isValid()) {
+			return atCloseInterface(220, 16) ? random(500, 800) : 0;
+		}
+		if (getMyPlayer().isMoving() || getMyPlayer().getAnimation() != -1) {
+			return random(100, 200);
+		}
+		RSObject interactionObject;
+		if (!removedGraves && (interactionObject = objects.getNearest(FILLED_GRAVES)) != null) {
+			getObjectInView(interactionObject);
+			interactionObject.interact("Take-coffin");
+			return random(1200, 2000);
+		} else {
+			removedGraves = true;
+		}
+		int undecidedID;
+		if ((undecidedID = getUndecidedGrave()) != -1) {
+			final RSObject theGrave = objects.getNearest(undecidedID);
+			getObjectInView(theGrave);
+			if (theGrave.interact("Read")) {
+				final long systemTime = System.currentTimeMillis();
+				while (System.currentTimeMillis() - systemTime < 8000 && !interfaces.get(INTERFACE_GRAVE).isValid()) {
+					sleep(random(50, 150));
+				}
+				sleep(random(1200, 2500));
+				RSComponent inter;
+				if ((inter = interfaces.getComponent(INTERFACE_GRAVE, INTERFACE_GRAVE_ID)) != null) {
+					final int theID = inter.getComponentID();
+					boolean found = false;
+					for (Coffin coffin : coffins) {
+						if (coffin.modelID == theID) {
+							coffin.setStoneID(undecidedID);
+							found = true;
 							break;
 						}
-						sleep(random(400, 700));
+					}
+					if (!found) {
+						log("IDs have changed, please alert Timer.");
+						return -1;
+					}
+				}
+			}
+			if (interfaces.get(INTERFACE_GRAVE).isValid()) {
+				atCloseInterface(INTERFACE_GRAVE, INTERFACE_GRAVE_CLOSE);
+				sleep(random(500, 800));
+			}
+		} else if ((undecidedID = getUndecidedCoffin()) != -1) {
+			final RSItem item = inventory.getItem(undecidedID);
+			if (item != null) {
+				if (item.interact("Check")) {
+					final long systemTime = System.currentTimeMillis();
+					while (System.currentTimeMillis() - systemTime < 8000 && !interfaces.get(INTERFACE_COFFIN).isValid()) {
+						sleep(random(50, 150));
+					}
+					sleep(random(1200, 2500));
+					if (interfaces.getComponent(INTERFACE_COFFIN) != null) {
+						final Integer[] allItems = new Integer[INTERFACE_COFFIN_IDS.length];
+						final List<Integer> ids = new ArrayList<Integer>();
+						for (final int index : INTERFACE_COFFIN_IDS) {
+							ids.add(interfaces.getComponent(INTERFACE_COFFIN, index).getComponentID());
+						}
+						ids.toArray(allItems);
+						boolean found = false;
+						for (Coffin coffin : coffins) {
+							if (coffin.doesMatch(allItems)) {
+								coffin.setCoffinID(undecidedID);
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							log("IDs have changed, please alert Timer.");
+							return -1;
+						}
+					}
+				}
+				if (interfaces.get(INTERFACE_COFFIN).isValid()) {
+					atCloseInterface(INTERFACE_COFFIN, INTERFACE_COFFIN_CLOSE);
+					sleep(random(500, 800));
+				}
+			}
+		} else {
+			boolean done = true;
+			for (Coffin coffin : coffins) {
+				if (!coffin.set) {
+					done = false;
+					final int graveID = getEmptyGrave(coffin.stoneID);
+					final RSObject grave = objects.getNearest(graveID);
+					if (grave != null) {
+						getObjectInView(grave);
+						final RSItem theCoffin = inventory.getItem(coffin.coffinID);
+						if (theCoffin != null) {
+							if (inventory.useItem(theCoffin, grave)) {
+								final long systemTime = System.currentTimeMillis();
+								while (System.currentTimeMillis() - systemTime < 8000 && !(getMyPlayer().getAnimation() == 827)) {
+									sleep(random(50, 150));
+								}
+								if (getMyPlayer().getAnimation() == 827) {
+									coffin.set();
+								}
+							}
+						}
 					}
 					break;
 				}
 			}
-			tmpID = -1;
-		} else if (tmpStatus == -1 && objects.getNearest(GraveDigger.filledGraveIDs) != null) {
-			final RSObject obj = objects.getNearest(GraveDigger.filledGraveIDs);
-			if (obj == null || !setObjectInScreen(obj)) {
-				log.severe("Couldn't find grave, shutting down.");
-				game.logout(false);
-				return -1;
-			}
-			obj.interact("Take-coffin");
-		} else if (tmpStatus == 0 && objects.getNearest(GraveDigger.emptyGraveIDs) != null) {
-			final RSObject obj = objects.getNearest(GraveDigger.emptyGraveIDs);
-			final int id = obj.getID();
-			for (int i = 0; i < GraveDigger.emptyGraveIDs.length; i++) {
-				if (GraveDigger.emptyGraveIDs[i] == id) {
-					final RSObject objGS = objects.getNearest(GraveDigger.graveStoneIDs[i]);
-					if (objGS == null || !setObjectInScreen(objGS)) {
-						log.severe("Couldn't find grave stone, shutting down.");
-						game.logout(false);
-						return -1;
-					}
-					tmpID = obj.getID();
-					// if (Bot.getClient().isItemSelected() == 1) {
-					// objects.atObject(objGS, "Use");
-					// }
-					objGS.interact("Read");
-				}
-			}
-		} else if (tmpStatus == -1) {
-			final ArrayList<Integer> agc = new ArrayList<Integer>();
-			for (int i = 0; i < GraveDigger.coffinIDs.length; i++) {
-				agc.add(i);
-			}
-			for (final Group g : groups) {
-				if (g.coffinID != -1) {
-					agc.remove(new Integer(g.coffinID));
-				}
-			}
-			if (tmpStatus == -1 && agc.size() == 0) {
-				tmpStatus++;
-			}
-			while (tmpStatus == -1) {
-				final int i = random(0, agc.size());
-				if (inventory.getCount(GraveDigger.coffinIDs[agc.get(i)]) > 0) {
-					tmpID = agc.get(i);
-					inventory.getItem(GraveDigger.coffinIDs[agc.get(i)]).interact("Check");
-					return random(1800, 2400); // We are looking at the model
-				}
-			}
-		} else if (tmpStatus == 0) {
-			// Done
-			final RSNPC leo = npcs.getNearest("Leo");
-			if (leo == null || !setCharacterInScreen(leo)) {
-				log.severe("Couldn't find Leo, shutting down.");
-				game.logout(false);
-				return -1;
-			}
-			//Teleport Ani - 8939
-			if (getMyPlayer().getAnimation() == -1) {
-				leo.interact("Talk-to");
+			if (done) {
+				talkToNPC = true;
 			}
 		}
-		return random(1400, 1800);
+		return random(100, 200);
 	}
 
-	boolean atCloseInterface(final int parent, final int child) {
+	/**
+	 * Clicks the close option of an interface.
+	 *
+	 * @param parent The parent interface.
+	 * @param child  The child interface.
+	 * @return Clicked or not.
+	 */
+	private boolean atCloseInterface(final int parent, final int child) {
 		final RSComponent i = interfaces.getComponent(parent, child);
 		if (!i.isValid()) {
 			return false;
@@ -295,56 +242,122 @@ public class GraveDigger extends Random {
 		final int midx = (int) (pos.getMinX() + pos.getWidth() / 2);
 		final int midy = (int) (pos.getMinY() + pos.getHeight() / 2);
 		mouse.click(midx + random(-dx, dx) - 5, midy + random(-dy, dy), true);
+		sleep(random(500, 800));
 		return true;
 	}
 
-	boolean setCharacterInScreen(final RSCharacter ch) {
-		// Check if it's on screen, if not make it on screen.
-		for (int i = 0; i < 3; i++) {
-			final Point screenLocation = ch.getScreenLocation();
-			if (!calc.pointOnScreen(screenLocation)) {
-				switch (i) {
-					case 0:
-						camera.turnTo(ch);
-						sleep(random(200, 500));
-						break;
-					case 1:
-						walking.walkTileMM(walking.getClosestTileOnMap(ch.getLocation().randomize(2, 2)));
-						sleep(random(1800, 2000));
-						while (getMyPlayer().isMoving()) {
-							sleep(random(200, 500));
-						}
-						break;
-					default:
-						return false;
+	private int getUndecidedGrave() {
+		for (final int graveStone : GRAVE_STONES) {
+			boolean found = false;
+			for (Coffin coffin : coffins) {
+				if (coffin.stoneID == graveStone) {
+					found = true;
 				}
 			}
+			if (!found) {
+				return graveStone;
+			}
 		}
-		return true;
+		return -1;
 	}
 
-	boolean setObjectInScreen(final RSObject obj) {
-		// Check if it's on screen, if not make it on screen.
-		for (int i = 0; i < 3; i++) {
-			final Point screenLocation = calc.tileToScreen(obj.getLocation());
-			if (!calc.pointOnScreen(screenLocation)) {
-				switch (i) {
-					case 0:
-						camera.turnTo(obj);
-						sleep(random(200, 500));
-						break;
-					case 1:
-						walking.walkTileMM(walking.getClosestTileOnMap(obj.getLocation().randomize(2, 2)));
-						sleep(random(1800, 2000));
-						while (getMyPlayer().isMoving()) {
-							sleep(random(200, 500));
-						}
-						break;
-					default:
-						return false;
+	private int getUndecidedCoffin() {
+		for (final int coffinID : COFFINS) {
+			boolean found = false;
+			for (Coffin coffin : coffins) {
+				if (coffin.coffinID == coffinID) {
+					found = true;
 				}
 			}
+			if (!found) {
+				return coffinID;
+			}
 		}
-		return true;
+		return -1;
+	}
+
+	private int getEmptyGrave(final int graveStone) {
+		int i = 0;
+		for (int aGraveStone : GRAVE_STONES) {
+			if (aGraveStone == graveStone) {
+				return EMPTY_GRAVES[i];
+			}
+			i++;
+		}
+		return -1;
+	}
+
+	private class Coffin {
+		private final int modelID;
+		private final int[] coffinItemIDs;
+		private int stoneID = -1, coffinID = -1;
+		private boolean set = false;
+
+		private Coffin(final int modelID, final int[] coffinItemIDs) {
+			this.modelID = modelID;
+			this.coffinItemIDs = coffinItemIDs;
+		}
+
+		private void setStoneID(final int id) {
+			this.stoneID = id;
+		}
+
+		private void setCoffinID(final int id) {
+			this.coffinID = id;
+		}
+
+		private void set() {
+			set = true;
+		}
+
+		private boolean doesMatch(final Integer[] arr) {
+			for (final int checkItem : coffinItemIDs) {
+				boolean cont = false;
+				for (final Integer item : arr) {
+					if (checkItem == item) {
+						cont = true;
+						break;
+					}
+				}
+				if (!cont) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	private boolean getObjectInView(final RSObject object) {
+		for (int i = 0; i < 5; i++) {
+			if (object.isOnScreen()) {
+				break;
+			}
+			tiles.interact(calc.getTileOnScreen(object.getLocation()), "Walk here");
+			sleep(random(500, 800));
+			while (getMyPlayer().isMoving()) {
+				sleep(random(50, 120));
+			}
+			sleep(random(500, 800));
+		}
+		return object.isOnScreen();
+	}
+
+	private boolean getNPCInView(final RSNPC theNpc) {
+		for (int i = 0; i < 5; i++) {
+			if (theNpc.isOnScreen()) {
+				break;
+			}
+			if (i > 1) {
+				camera.setPitch(true);
+				camera.setAngle(random(0, 360));
+			}
+			tiles.interact(calc.getTileOnScreen(theNpc.getLocation()), "Walk here");
+			sleep(random(500, 800));
+			while (getMyPlayer().isMoving()) {
+				sleep(random(50, 120));
+			}
+			sleep(random(500, 800));
+		}
+		return theNpc.isOnScreen();
 	}
 }
