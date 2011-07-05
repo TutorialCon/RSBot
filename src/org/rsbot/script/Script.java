@@ -72,8 +72,8 @@ public abstract class Script extends LoopTask {
 	 * @param script The script to delegate to.
 	 */
 	public final void delegateTo(final Script script) {
-		script.init(ctx);
-		ctx.bot.getEventManager().addListener(script);
+		final int id = container.pool(script);
+		container.invoke(id);
 		delegates.add(script);
 	}
 
@@ -178,10 +178,9 @@ public abstract class Script extends LoopTask {
 		}
 		mouse.moveOffScreen();
 		for (final Script s : delegates) {
-			ctx.bot.getEventManager().removeListener(s);
+			s.stop();
 		}
 		delegates.clear();
-		stop();
 		ctx.bot.getScriptHandler().stopScript(id);
 	}
 

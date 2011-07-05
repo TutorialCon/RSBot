@@ -9,6 +9,7 @@ import java.util.logging.Level;
 public abstract class LoopTask extends Containable implements EventListener {
 	protected int id = -1;
 	private boolean running = false, paused = false;
+	protected TaskContainer container;
 
 	/**
 	 * Checks if this loop task is allowed to run when invoked, DOES NOT LOOP!

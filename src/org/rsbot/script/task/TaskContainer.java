@@ -32,6 +32,7 @@ public class TaskContainer {
 				return off;
 			}
 		}
+		loopTask.container = this;
 		loopTask.setID(tasks.size());
 		tasks.put(tasks.size(), loopTask);
 		return tasks.size() - 1;
