@@ -19,7 +19,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	/**
 	 * Is executed upon task invoking.
 	 */
-	protected void onStart() {
+	protected void onRun() {
 	}
 
 	/**
@@ -50,7 +50,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	public void run() {
 		running = true;
 		try {
-			onStart();
+			onRun();
 		} catch (final ThreadDeath ignored) {
 		} catch (final Throwable ex) {
 			log.log(Level.SEVERE, "Error starting task: ", ex);
