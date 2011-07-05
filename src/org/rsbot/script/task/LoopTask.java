@@ -130,7 +130,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	 *
 	 * @param paused If the task is paused.
 	 */
-	protected void setPaused(final boolean paused) {
+	public void setPaused(final boolean paused) {
 		if (running) {
 			this.paused = paused;
 			if (paused) {
@@ -155,7 +155,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	 *
 	 * @return <tt>true</tt> if paused; otherwise <tt>false</tt>.
 	 */
-	protected final boolean isPaused() {
+	public final boolean isPaused() {
 		return paused;
 	}
 
@@ -164,7 +164,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	 *
 	 * @return <tt>true</tt> if running; otherwise <tt>false</tt>.
 	 */
-	protected final boolean isRunning() {
+	public final boolean isRunning() {
 		return running;
 	}
 
