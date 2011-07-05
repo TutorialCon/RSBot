@@ -602,6 +602,9 @@ public class Inventory extends MethodProvider {
 		if (selItem != null && selItem.getID() == itemID) {
 			return true;
 		}
+		if (selItem != null) {
+			selItem.interact("Use");
+		}
 		if (!item.interact("Use")) {
 			return false;
 		}
