@@ -1,46 +1,136 @@
 package org.rsbot.script.task;
 
-import org.rsbot.script.methods.MethodContext;
-import org.rsbot.script.methods.Methods;
+import java.util.EventListener;
+import java.util.logging.Level;
 
-public abstract class LoopTask extends AbstractTask {
-	private final MethodContext ctx;
+public abstract class LoopTask extends Containable implements EventListener {
+	protected int id = -1;
+	private boolean running = false, paused = false;
 
-	public LoopTask(final MethodContext context) {
-		this.ctx = context;
-	}
-
-	protected boolean executionCondition() {
+	/**
+	 * Checks if this loop task is allowed to run when invoked, DOES NOT LOOP!
+	 *
+	 * @return <tt>true</tt> if the task can be invoked.
+	 */
+	protected boolean doExecution() {
 		return true;
 	}
 
-	protected int executionDelay() {
+	/**
+	 * Is executed upon task invoking.
+	 */
+	protected void onStart() {
+	}
+
+	/**
+	 * Is executed upon task completion.
+	 */
+	protected void onFinish() {
+	}
+
+	/**
+	 * The iteration delay to wait while sleeping.
+	 *
+	 * @return
+	 */
+	protected int pausedIterationDelay() {
 		return 1000;
 	}
 
+	/**
+	 * The main task's loop.
+	 *
+	 * @return
+	 */
 	protected abstract int loop();
 
-	protected void onFinish() {
-
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public void run() {
-		while (true) {
-			if (executionCondition()) {
-				int wait = loop();
-				if (wait != -1) {
-					Methods.sleep(wait);
+		running = true;
+		try {
+			onStart();
+		} catch (final ThreadDeath ignored) {
+		} catch (final Throwable ex) {
+			log.log(Level.SEVERE, "Error starting task: ", ex);
+		}
+		ctx.bot.getEventManager().addListener(this);
+		try {
+			while (running) {
+				if (!paused) {
+					int timeOut = -1;
+					try {
+						timeOut = loop();
+					} catch (final ThreadDeath td) {
+						break;
+					} catch (final Exception ex) {
+						log.log(Level.WARNING, "Uncaught exception from task: ", ex);
+					}
+					if (timeOut == -1) {
+						break;
+					}
+					try {
+						sleep(timeOut);
+					} catch (final ThreadDeath td) {
+						break;
+					}
 				} else {
-					stop();
-					break;
+					try {
+						sleep(pausedIterationDelay());
+					} catch (final ThreadDeath td) {
+						break;
+					}
 				}
-			} else {
-				Methods.sleep(executionDelay());
+			}
+			try {
+				onFinish();
+			} catch (final ThreadDeath ignored) {
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+			}
+		} catch (final Throwable t) {
+			onFinish();
+			if (scriptResume()) {
+				setPaused(false);
 			}
 		}
+		ctx.bot.getEventManager().removeListener(this);
+		super.stop();
 	}
 
-	protected void start() {
-		init(ctx.service.submit(this, this));
+	/**
+	 * Sets the id of this task, INTERNAL USE ONLY.
+	 *
+	 * @param id The id of the task.
+	 */
+	protected void setID(final int id) {
+		this.id = id;
+	}
+
+	/**
+	 * Sets this task paused or not.
+	 *
+	 * @param paused If the task is paused.
+	 */
+	protected void setPaused(final boolean paused) {
+		this.paused = paused;
+	}
+
+	/**
+	 * Allow the script to resume itself.
+	 *
+	 * @return <tt>true</tt> to resume script;
+	 */
+	protected boolean scriptResume() {
+		return false;
+	}
+
+	/**
+	 * Stops the currently running task, doesn't force stop.
+	 */
+	@Override
+	public void stop() {
+		this.running = false;
 	}
 }
