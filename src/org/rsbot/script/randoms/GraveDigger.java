@@ -2,6 +2,7 @@ package org.rsbot.script.randoms;
 
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.Bank;
 import org.rsbot.script.wrappers.RSComponent;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @author Timer
  */
-@ScriptManifest(authors = {"Timer"}, name = "GraveDigger", version = 1.6)
+@ScriptManifest(authors = {"Timer"}, name = "GraveDigger", version = 0.1)
 public class GraveDigger extends Random {
 	private static final int
 			DEPOSIT_BOX = 12731,
@@ -83,6 +84,37 @@ public class GraveDigger extends Random {
 		RSNPC theNPC;
 		if ((theNPC = npcs.getNearest(NPC_NAME)) == null) {
 			return -1;
+		}
+		if (inventory.getCountExcept(GraveDigger.COFFINS) > 23) {
+			if (interfaces.canContinue()) {
+				interfaces.clickContinue();
+				sleep(random(1500, 2000));
+			}
+			final RSObject depo = objects.getNearest(12731);
+			if (depo != null) {
+				if (!calc.tileOnScreen(depo.getLocation())) {
+					walking.getPath(depo.getLocation()).traverse();
+					camera.turnTo(depo);
+				} else {
+					depo.interact("Deposit");
+				}
+			}
+			if (interfaces.get(Bank.INTERFACE_DEPOSIT_BOX).isValid()) {
+				sleep(random(700, 1200));
+				interfaces.get(11).getComponent(17).getComponent(27).interact("Deposit-All");
+				sleep(random(700, 1200));
+				interfaces.get(11).getComponent(17).getComponent(26).interact("Deposit-All");
+				sleep(random(700, 1200));
+				interfaces.get(11).getComponent(17).getComponent(25).interact("Deposit-All");
+				sleep(random(700, 1200));
+				interfaces.get(11).getComponent(17).getComponent(24).interact("Deposit-All");
+				sleep(random(700, 1200));
+				interfaces.get(11).getComponent(17).getComponent(23).interact("Deposit-All");
+				sleep(random(700, 1200));
+				interfaces.getComponent(11, 15).doClick();
+				return random(500, 700);
+			}
+			return random(2000, 3000);
 		}
 		if (interfaces.get(236).isValid()) {
 			if (interfaces.getComponent(236, 2).getText().trim().contains("know")) {
