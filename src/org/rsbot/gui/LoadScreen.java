@@ -86,7 +86,6 @@ public class LoadScreen extends JDialog {
 
 		log.info("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				try {
 					extractResources();
@@ -109,7 +108,6 @@ public class LoadScreen extends JDialog {
 		log.info("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
-				@Override
 				public void run() {
 					try {
 						HttpClient.download(new URL(item.getKey()), item.getValue());
@@ -121,7 +119,6 @@ public class LoadScreen extends JDialog {
 
 		log.info("Starting game client");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				try {
 					ClientLoader.getInstance().load();
