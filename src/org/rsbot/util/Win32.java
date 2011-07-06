@@ -23,6 +23,7 @@ public class Win32 {
 			kernel32.SetProcessWorkingSetSize(hProcess, -1, -1);
 			kernel32.CloseHandle(hProcess);
 		} catch (final NoClassDefFoundError ignored) {
+		} catch (final UnsatisfiedLinkError ignored) {
 		}
 		System.gc();
 	}
@@ -38,6 +39,7 @@ public class Win32 {
 			kernel32.SetPriorityClass(hProcess, dwPriorityClass);
 			kernel32.CloseHandle(hProcess);
 		} catch (final NoClassDefFoundError ignored) {
+		} catch (final UnsatisfiedLinkError ignored) {
 		}
 	}
 }
