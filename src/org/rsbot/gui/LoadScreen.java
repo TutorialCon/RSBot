@@ -119,17 +119,6 @@ public class LoadScreen extends JDialog {
 			}));
 		}
 
-		log.info("Starting game client");
-		tasks.add(Executors.callable(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					ClientLoader.getInstance().load();
-				} catch (final Exception ignored) {
-				}
-			}
-		}));
-
 		if (Configuration.isSkinAvailable()) {
 			log.fine("Setting theme");
 			SwingUtilities.invokeLater(new Runnable() {
@@ -160,6 +149,15 @@ public class LoadScreen extends JDialog {
 		log.info("Checking for client updates");
 		if (ClientLoader.getInstance().isOutdated()) {
 			error = "Bot is outdated, please wait and try again later";
+		}
+
+		if (error == null) {
+			log.info("Starting game client");
+			try {
+				ClientLoader.getInstance().load();
+			} catch (final Exception e) {
+				error = "Client error: " + e.getMessage();
+			}
 		}
 
 		if (error == null) {
