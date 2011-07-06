@@ -99,6 +99,9 @@ public abstract class LoopTask extends Containable implements EventListener {
 					} catch (final ThreadDeath td) {
 						break;
 					}
+					if (scriptResume()) {
+						setPaused(false);
+					}
 				}
 			}
 			try {
@@ -109,9 +112,6 @@ public abstract class LoopTask extends Containable implements EventListener {
 			}
 		} catch (final Throwable t) {
 			onFinish();
-			if (scriptResume()) {
-				setPaused(false);
-			}
 		}
 		super.stop();
 	}
@@ -139,6 +139,10 @@ public abstract class LoopTask extends Containable implements EventListener {
 				unblockEvents();
 			}
 		}
+	}
+
+	public void setRunning(final boolean running) {
+		this.running = running;
 	}
 
 	/**
