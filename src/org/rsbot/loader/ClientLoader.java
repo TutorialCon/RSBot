@@ -49,7 +49,7 @@ public class ClientLoader {
 	}
 
 	private boolean isCacheClean() {
-		if (!manifest.canRead() || !cache.canRead()) {
+		if (!(manifest.exists() && cache.exists())) {
 			return false;
 		}
 		final Map<String, String> info;
