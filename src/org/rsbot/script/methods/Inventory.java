@@ -11,10 +11,10 @@ import java.util.LinkedList;
 /**
  * Inventory related operations.
  *
- * @author kiko
+ * @author Timer
  */
 public class Inventory extends MethodProvider {
-	public static final int INTERFACE_INVENTORY = 149;
+	public static final int INTERFACE_INVENTORY = 679;
 	public static final int INTERFACE_INVENTORY_PRICE_CHECK = 204;
 	public static final int INTERFACE_INVENTORY_SHOP = 621;
 	public static final int INTERFACE_INVENTORY_EQUIPMENT_BONUSES = 670;
