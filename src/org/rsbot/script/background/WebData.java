@@ -66,7 +66,7 @@ public class WebData extends BackgroundScript {
 	}
 
 	@Override
-	public int iterationSleep() {
+	public int pausedIterationDelay() {
 		return 2000;
 	}
 }
