@@ -482,7 +482,6 @@ public class Prison extends Random {
 					.newVertexFilter(setItemIDs(interfaces.get(273)
 							.getComponent(3).getModelID()));
 			balloonToPop = npcs.getNearest(new Filter<RSNPC>() {
-				@Override
 				public boolean accept(final RSNPC n) {
 					return filter.accept(n.getModel());
 				}
