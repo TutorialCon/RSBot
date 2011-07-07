@@ -1,46 +1,196 @@
 package org.rsbot.script.task;
 
-import org.rsbot.script.methods.MethodContext;
-import org.rsbot.script.methods.Methods;
+import org.rsbot.event.EventMulticaster;
+import org.rsbot.event.listeners.PaintListener;
 
-public abstract class LoopTask extends AbstractTask {
-	private final MethodContext ctx;
+import java.util.EventListener;
+import java.util.logging.Level;
 
-	public LoopTask(final MethodContext context) {
-		this.ctx = context;
-	}
+public abstract class LoopTask extends Containable implements EventListener {
+	protected int id = -1;
+	private boolean running = false, paused = false;
+	protected TaskContainer container;
 
-	protected boolean executionCondition() {
+	/**
+	 * Checks if this loop task is allowed to run when invoked, DOES NOT LOOP!
+	 *
+	 * @return <tt>true</tt> if the task can be invoked.
+	 */
+	protected boolean doExecution() {
 		return true;
 	}
 
-	protected int executionDelay() {
+	/**
+	 * Is executed upon task invoking.
+	 */
+	protected void onRun() {
+	}
+
+	/**
+	 * Is executed upon task completion.
+	 */
+	protected void onFinish() {
+	}
+
+	/**
+	 * The iteration delay to wait while sleeping.
+	 *
+	 * @return
+	 */
+	protected int pausedIterationDelay() {
 		return 1000;
 	}
 
+	/**
+	 * The main loop. Called if you return true from doExecution, then continuously until
+	 * a negative integer is returned or the script stopped externally. When this script
+	 * is paused this method will not be called until the script is resumed. Avoid causing
+	 * execution to pause using sleep() within this method in favor of returning the number
+	 * of milliseconds to sleep. This ensures that pausing and anti-randoms perform normally.
+	 *
+	 * @return The number of milliseconds that the manager should sleep before
+	 *         calling it again. Returning a negative number will deactivate the script.
+	 */
 	protected abstract int loop();
 
-	protected void onFinish() {
+	/**
+	 * {@inheritDoc}
+	 */
+	protected boolean runOnce() {
+		int timeOut = -1;
+		try {
+			timeOut = loop();
+		} catch (final ThreadDeath td) {
+			return false;
+		} catch (final Exception ex) {
+			log.log(Level.WARNING, "Uncaught exception from task: ", ex);
+		}
+		if (timeOut == -1) {
+			return false;
+		}
+		try {
+			sleep(timeOut);
+		} catch (final ThreadDeath td) {
+			return false;
+		}
+		return true;
+	}
 
+	protected void register() {
+		ctx.bot.getEventManager().addListener(this);
 	}
 
 	public void run() {
-		while (true) {
-			if (executionCondition()) {
-				int wait = loop();
-				if (wait != -1) {
-					Methods.sleep(wait);
+		running = true;
+		try {
+			onRun();
+		} catch (final ThreadDeath ignored) {
+		} catch (final Throwable ex) {
+			log.log(Level.SEVERE, "Error starting task: ", ex);
+		}
+		try {
+			while (running) {
+				if (!paused) {
+					if (!runOnce()) {
+						break;
+					}
 				} else {
-					stop();
-					break;
+					try {
+						sleep(pausedIterationDelay());
+					} catch (final ThreadDeath td) {
+						break;
+					}
+					if (scriptResume()) {
+						setPaused(false);
+					}
 				}
+			}
+			try {
+				onFinish();
+			} catch (final ThreadDeath ignored) {
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+			}
+		} catch (final Throwable t) {
+			onFinish();
+		}
+		super.stop();
+	}
+
+	/**
+	 * Sets the id of this task, INTERNAL USE ONLY.
+	 *
+	 * @param id The id of the task.
+	 */
+	protected void setID(final int id) {
+		this.id = id;
+	}
+
+	/**
+	 * Sets this task paused or not.
+	 *
+	 * @param paused If the task is paused.
+	 */
+	public void setPaused(final boolean paused) {
+		if (running) {
+			this.paused = paused;
+			if (paused) {
+				blockEvents(true);
 			} else {
-				Methods.sleep(executionDelay());
+				unblockEvents();
 			}
 		}
 	}
 
-	protected void start() {
-		init(ctx.service.submit(this, this));
+	public void setRunning(final boolean running) {
+		this.running = running;
+	}
+
+	/**
+	 * Allow the script to resume itself.
+	 *
+	 * @return <tt>true</tt> to resume script;
+	 */
+	protected boolean scriptResume() {
+		return false;
+	}
+
+	/**
+	 * Returns whether or not this script is paused.
+	 *
+	 * @return <tt>true</tt> if paused; otherwise <tt>false</tt>.
+	 */
+	public final boolean isPaused() {
+		return paused;
+	}
+
+	/**
+	 * Returns whether or not this script has started and not stopped.
+	 *
+	 * @return <tt>true</tt> if running; otherwise <tt>false</tt>.
+	 */
+	public final boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * Stops the currently running task, doesn't force stop.
+	 */
+	@Override
+	public void stop() {
+		this.running = false;
+		ctx.bot.getEventManager().removeListener(this);
+	}
+
+	protected void blockEvents(final boolean paint) {
+		ctx.bot.getEventManager().removeListener(this);
+		if (paint && this instanceof PaintListener) {
+			ctx.bot.getEventManager().addListener(this, EventMulticaster.PAINT_EVENT);
+		}
+	}
+
+	protected void unblockEvents() {
+		ctx.bot.getEventManager().removeListener(this);
+		ctx.bot.getEventManager().addListener(this);
 	}
 }

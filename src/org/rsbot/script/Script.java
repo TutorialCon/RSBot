@@ -1,26 +1,19 @@
 package org.rsbot.script;
 
 import org.rsbot.Configuration;
-import org.rsbot.event.EventMulticaster;
-import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.gui.AccountManager;
 import org.rsbot.script.internal.BreakHandler;
-import org.rsbot.script.methods.MethodContext;
-import org.rsbot.script.methods.Methods;
 import org.rsbot.script.randoms.ImprovedLoginBot;
+import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.Timer;
 
 import java.io.File;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-public abstract class Script extends Methods implements EventListener, Runnable {
+public abstract class Script extends LoopTask {
 	Set<Script> delegates = new HashSet<Script>();
-	MethodContext ctx;
-	protected volatile boolean running = false;
-	private volatile boolean paused = false;
 	private volatile boolean random = false;
 	private int id = -1;
 	private long lastNotice;
@@ -51,7 +44,6 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 	 * Override it to implement in your script.
 	 */
 	public void onBreakFinish() {
-
 	}
 
 	/**
@@ -64,36 +56,8 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 	 * @return The number of milliseconds that the manager should sleep before
 	 *         calling it again. Returning a negative number will deactivate the script.
 	 */
-	public abstract int loop();
-
-	/**
-	 * Override to perform any clean up on script stopScript.
-	 */
-	public void onFinish() {
-
-	}
-
-	/**
-	 * Initializes this script with another script's
-	 * context.
-	 *
-	 * @param script The context providing Script.
-	 * @see #delegateTo(Script)
-	 */
-	public final void init(final Script script) {
-		init(script.ctx);
-	}
-
-	/**
-	 * Initializes this script with a given context.
-	 *
-	 * @param ctx The MethodContext.
-	 */
 	@Override
-	public final void init(final MethodContext ctx) {
-		super.init(ctx);
-		this.ctx = ctx;
-	}
+	public abstract int loop();
 
 	/**
 	 * Initializes the provided script with this script's
@@ -108,68 +72,9 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 	 * @param script The script to delegate to.
 	 */
 	public final void delegateTo(final Script script) {
-		script.init(ctx);
-		ctx.bot.getEventManager().addListener(script);
+		final int id = container.pool(script);
+		container.invoke(id);
 		delegates.add(script);
-	}
-
-	/**
-	 * For internal use only. Deactivates this script if
-	 * the appropriate id is provided.
-	 *
-	 * @param id The id from ScriptHandler.
-	 */
-	public final void deactivate(final int id) {
-		if (id != this.id) {
-			throw new IllegalStateException("Invalid id!");
-		}
-		running = false;
-	}
-
-	/**
-	 * For internal use only. Sets the pool id of this script.
-	 *
-	 * @param id The id from ScriptHandler.
-	 */
-	public final void setID(final int id) {
-		if (this.id != -1) {
-			throw new IllegalStateException("Already added to pool!");
-		}
-		this.id = id;
-	}
-
-	/**
-	 * Pauses/resumes this script.
-	 *
-	 * @param paused <tt>true</tt> to pause; <tt>false</tt> to resume.
-	 */
-	public final void setPaused(final boolean paused) {
-		if (running && !random) {
-			if (paused) {
-				blockEvents(true);
-			} else {
-				unblockEvents();
-			}
-		}
-		this.paused = paused;
-	}
-
-	/**
-	 * Returns whether or not this script is paused.
-	 *
-	 * @return <tt>true</tt> if paused; otherwise <tt>false</tt>.
-	 */
-	public final boolean isPaused() {
-		return paused;
-	}
-
-	/**
-	 * Returns whether or not this script has started and not stopped.
-	 *
-	 * @return <tt>true</tt> if running; otherwise <tt>false</tt>.
-	 */
-	public final boolean isRunning() {
-		return running;
 	}
 
 	/**
@@ -179,7 +84,7 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 	 * @return <tt>true</tt> if active; otherwise <tt>false</tt>.
 	 */
 	public final boolean isActive() {
-		return running && !paused && !random;
+		return isRunning() && !isPaused() && !random;
 	}
 
 	/**
@@ -206,9 +111,10 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 				game.logout(false);
 			}
 		}
-		running = false;
+		stop();
 	}
 
+	@Override
 	public void run() {
 		boolean start = false;
 		try {
@@ -218,12 +124,11 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 			log.log(Level.SEVERE, "Error starting script: ", ex);
 		}
 		if (start) {
-			running = true;
-			ctx.bot.getEventManager().addListener(this);
+			register();
 			log.info("Script started.");
 			try {
-				while (running) {
-					if (!paused) {
+				while (isRunning()) {
+					if (!isPaused()) {
 						if (AccountManager.isTakingBreaks(account.getName())) {
 							final BreakHandler h = ctx.bot.getBreakHandler();
 							if (h.isBreaking()) {
@@ -247,20 +152,7 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 						if (checkForRandoms()) {
 							continue;
 						}
-						int timeOut = -1;
-						try {
-							timeOut = loop();
-						} catch (final ThreadDeath td) {
-							break;
-						} catch (final Exception ex) {
-							log.log(Level.WARNING, "Uncaught exception from script: ", ex);
-						}
-						if (timeOut == -1) {
-							break;
-						}
-						try {
-							sleep(timeOut);
-						} catch (final ThreadDeath td) {
+						if (!runOnce()) {
 							break;
 						}
 					} else {
@@ -280,19 +172,16 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 			} catch (final Throwable t) {
 				onFinish();
 			}
-			running = false;
 			log.info("Script stopped.");
 		} else {
 			log.severe("Failed to start up.");
 		}
 		mouse.moveOffScreen();
 		for (final Script s : delegates) {
-			ctx.bot.getEventManager().removeListener(s);
+			s.stop();
 		}
 		delegates.clear();
-		ctx.bot.getEventManager().removeListener(this);
 		ctx.bot.getScriptHandler().stopScript(id);
-		id = -1;
 	}
 
 	private boolean checkForRandoms() {
@@ -312,28 +201,6 @@ public abstract class Script extends Methods implements EventListener, Runnable 
 			}
 		}
 		return false;
-	}
-
-	private void blockEvents(final boolean paint) {
-		for (final Script s : delegates) {
-			ctx.bot.getEventManager().removeListener(s);
-			if (paint && s instanceof PaintListener) {
-				ctx.bot.getEventManager().addListener(s, EventMulticaster.PAINT_EVENT);
-			}
-		}
-		ctx.bot.getEventManager().removeListener(this);
-		if (paint && this instanceof PaintListener) {
-			ctx.bot.getEventManager().addListener(this, EventMulticaster.PAINT_EVENT);
-		}
-	}
-
-	private void unblockEvents() {
-		for (final Script s : delegates) {
-			ctx.bot.getEventManager().removeListener(s);
-			ctx.bot.getEventManager().addListener(s);
-		}
-		ctx.bot.getEventManager().removeListener(this);
-		ctx.bot.getEventManager().addListener(this);
 	}
 
 	/**
