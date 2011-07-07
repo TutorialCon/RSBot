@@ -30,7 +30,7 @@ public class Web extends MethodProvider {
 	private static final Object lock = new Object();
 	private static long lastAccess = 0;
 	private long lastLocalAccess = 0;
-	private int webDataId = 0, bankCacheId = 0;
+	public int webDataId = 0, bankCacheId = 0;
 	private boolean forceLoad = false;
 
 	Web(final MethodContext ctx) {
