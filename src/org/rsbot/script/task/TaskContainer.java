@@ -2,20 +2,16 @@ package org.rsbot.script.task;
 
 import org.rsbot.script.methods.MethodContext;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TaskContainer {
-	private final MethodContext ctx;
+	private MethodContext ctx;
 	private final Map<Integer, LoopTask> tasks = new HashMap<Integer, LoopTask>();
 
 	/**
 	 * Creates a new container to run tasks in with control.
-	 *
-	 * @param ctx
 	 */
-	public TaskContainer(final MethodContext ctx) {
-		this.ctx = ctx;
+	public TaskContainer() {
 	}
 
 	/**
@@ -121,7 +117,7 @@ public class TaskContainer {
 		final LoopTask task = tasks.get(loopTaskID);
 		if (task != null) {
 			task.stop();
-			tasks.remove(task);
+			tasks.remove(loopTaskID);
 		}
 	}
 
@@ -144,9 +140,22 @@ public class TaskContainer {
 		final LoopTask task = tasks.get(loopTaskID);
 		if (task != null) {
 			task.stop();
-			tasks.remove(task);
+			tasks.remove(loopTaskID);
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Sets this containers context.
+	 *
+	 * @param ctx The context.
+	 */
+	protected void setContext(final MethodContext ctx) {
+		this.ctx = ctx;
+	}
+
+	protected Map<Integer, LoopTask> getTasks() {
+		return Collections.unmodifiableMap(tasks);
 	}
 }

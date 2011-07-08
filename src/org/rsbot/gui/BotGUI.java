@@ -13,6 +13,7 @@ import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.methods.Environment;
 import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.ScriptDownloader;
+import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
 import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.service.Preferences;
@@ -269,8 +270,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		final Bot bot = getCurrentBot();
 
 		if (bot != null) {
-			final Map<Integer, Script> scriptMap = bot.getScriptHandler().getRunningScripts();
-			if ((bot.getMethodContext() == null || (!bot.getMethodContext().web.areScriptsLoaded() || scriptMap.size() > Web.WEB_SCRIPT_COUNT)) &&
+			final Map<Integer, LoopTask> scriptMap = bot.getScriptHandler().getRunningScripts();
+			if ((bot.getMethodContext() == null || !bot.getMethodContext().web.areScriptsLoaded() || scriptMap.size() > Web.WEB_SCRIPT_COUNT) &&
 					scriptMap.size() > 0) {
 				idle = false;
 				paused = scriptMap.values().iterator().next().isPaused();
@@ -352,7 +353,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 	void pauseScript(final Bot bot) {
 		final ScriptHandler sh = bot.getScriptHandler();
-		final Map<Integer, Script> running = sh.getRunningScripts();
+		final Map<Integer, LoopTask> running = sh.getRunningScripts();
 		if (running.size() > 0) {
 			final int id = running.keySet().iterator().next();
 			sh.pauseScript(id);
@@ -380,10 +381,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 	private void showStopScript(final Bot bot) {
 		final ScriptHandler sh = bot.getScriptHandler();
-		final Map<Integer, Script> running = sh.getRunningScripts();
+		final Map<Integer, LoopTask> running = sh.getRunningScripts();
 		if (running.size() > 0) {
 			final int id = running.keySet().iterator().next();
-			final Script s = running.get(id);
+			final Script s = (Script) running.get(id);
 			final ScriptManifest prop = s.getClass().getAnnotation(ScriptManifest.class);
 			final int result = JOptionPane.showConfirmDialog(this, "Would you like to stop the script " + prop.name() + "?", "Script", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (result == JOptionPane.OK_OPTION) {
@@ -467,7 +468,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		add(textScroll, BorderLayout.SOUTH);
 	}
 
-	public void scriptStarted(final ScriptHandler handler, final Script script) {
+	public void scriptStarted(final ScriptHandler handler) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				final Bot bot = handler.getBot();
@@ -483,7 +484,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		});
 	}
 
-	public void scriptStopped(final ScriptHandler handler, final Script script) {
+	public void scriptStopped(final ScriptHandler handler) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				final Bot bot = handler.getBot();
@@ -498,13 +499,13 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		});
 	}
 
-	public void scriptResumed(final ScriptHandler handler, final Script script) {
+	public void scriptResumed(final ScriptHandler handler) {
 		if (handler.getBot() == getCurrentBot()) {
 			updateScriptControls();
 		}
 	}
 
-	public void scriptPaused(final ScriptHandler handler, final Script script) {
+	public void scriptPaused(final ScriptHandler handler) {
 		if (handler.getBot() == getCurrentBot()) {
 			updateScriptControls();
 		}

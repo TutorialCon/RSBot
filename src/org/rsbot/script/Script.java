@@ -15,7 +15,6 @@ import java.util.logging.Level;
 public abstract class Script extends LoopTask {
 	Set<Script> delegates = new HashSet<Script>();
 	private volatile boolean random = false;
-	private int id = -1;
 	private long lastNotice;
 
 	/**
@@ -124,19 +123,20 @@ public abstract class Script extends LoopTask {
 			log.log(Level.SEVERE, "Error starting script: ", ex);
 		}
 		if (start) {
+			final BreakHandler breakHandler = new BreakHandler(this);
+			setRunning(true);
 			register();
 			log.info("Script started.");
 			try {
 				while (isRunning()) {
 					if (!isPaused()) {
 						if (AccountManager.isTakingBreaks(account.getName())) {
-							final BreakHandler h = ctx.bot.getBreakHandler();
-							if (h.isBreaking()) {
+							if (breakHandler.isBreaking()) {
 								if (System.currentTimeMillis() - lastNotice > 600000) {
 									lastNotice = System.currentTimeMillis();
-									log.info("Breaking for " + Timer.format(h.getBreakTime()));
+									log.info("Breaking for " + Timer.format(breakHandler.getBreakTime()));
 								}
-								if (game.isLoggedIn() && h.getBreakTime() > 60000) {
+								if (game.isLoggedIn() && breakHandler.getBreakTime() > 60000) {
 									game.logout(true);
 								}
 								try {
@@ -146,7 +146,7 @@ public abstract class Script extends LoopTask {
 								}
 								continue;
 							} else {
-								h.tick();
+								breakHandler.tick();
 							}
 						}
 						if (checkForRandoms()) {
@@ -165,12 +165,15 @@ public abstract class Script extends LoopTask {
 				}
 				try {
 					onFinish();
-				} catch (final ThreadDeath ignored) {
-				} catch (final RuntimeException e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			} catch (final Throwable t) {
-				onFinish();
+				try {
+					onFinish();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 			log.info("Script stopped.");
 		} else {

@@ -193,4 +193,8 @@ public abstract class LoopTask extends Containable implements EventListener {
 		ctx.bot.getEventManager().removeListener(this);
 		ctx.bot.getEventManager().addListener(this);
 	}
+
+	public int getId() {
+		return id;
+	}
 }

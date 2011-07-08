@@ -443,18 +443,18 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		}
 	}
 
-	public void scriptStarted(final ScriptHandler handler, final Script script) {
+	public void scriptStarted(final ScriptHandler handler) {
 		update();
 	}
 
-	public void scriptStopped(final ScriptHandler handler, final Script script) {
+	public void scriptStopped(final ScriptHandler handler) {
 		update();
 	}
 
-	public void scriptResumed(final ScriptHandler handler, final Script script) {
+	public void scriptResumed(final ScriptHandler handler) {
 	}
 
-	public void scriptPaused(final ScriptHandler handler, final Script script) {
+	public void scriptPaused(final ScriptHandler handler) {
 	}
 
 	public void inputChanged(final Bot bot, final int mask) {

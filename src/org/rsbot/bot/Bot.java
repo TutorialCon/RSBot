@@ -7,7 +7,6 @@ import org.rsbot.event.EventManager;
 import org.rsbot.event.events.PaintEvent;
 import org.rsbot.event.events.TextPaintEvent;
 import org.rsbot.gui.AccountManager;
-import org.rsbot.script.internal.BreakHandler;
 import org.rsbot.script.internal.InputManager;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.Environment;
@@ -33,7 +32,6 @@ public class Bot {
 	private final InputManager im;
 	private RSLoader loader;
 	private final ScriptHandler sh;
-	private final BreakHandler bh;
 	private final Map<String, EventListener> listeners;
 	private static final String THREADGROUPID = "RSClient-";
 	private ImprovedLoginBot loginBot = null;
@@ -84,7 +82,6 @@ public class Bot {
 			}
 		});
 		sh = new ScriptHandler(this);
-		bh = new BreakHandler(this);
 		backBuffer = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 		image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 		paintEvent = new PaintEvent();
@@ -121,7 +118,7 @@ public class Bot {
 
 	public void stop() {
 		eventManager.killThread(false);
-		sh.stopScript();
+		sh.stopAllScripts();
 		loader.stop();
 		loader.destroy();
 		loader = null;
@@ -234,10 +231,6 @@ public class Bot {
 		return im;
 	}
 
-	public BreakHandler getBreakHandler() {
-		return bh;
-	}
-
 	public ScriptHandler getScriptHandler() {
 		return sh;
 	}
@@ -268,7 +261,7 @@ public class Bot {
 		this.loginBot = improvedLoginBot;
 	}
 
-	public ImprovedLoginBot getLoginBot(){
+	public ImprovedLoginBot getLoginBot() {
 		return this.loginBot;
 	}
 }
