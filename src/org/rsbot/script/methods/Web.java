@@ -32,6 +32,7 @@ public class Web extends MethodProvider {
 	private long lastLocalAccess = 0;
 	public int webDataId = 0, bankCacheId = 0;
 	private boolean forceLoad = false;
+	public static final int WEB_SCRIPT_COUNT = 2;
 
 	Web(final MethodContext ctx) {
 		super(ctx);

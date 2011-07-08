@@ -274,7 +274,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				scriptMap.remove(bot.getMethodContext().web.webDataId);
 				scriptMap.remove(bot.getMethodContext().web.bankCacheId);
 			}
-			if (scriptMap.size() > 0) {
+			if ((bot.getMethodContext() == null || (!bot.getMethodContext().web.areScriptsLoaded() || scriptMap.size() > Web.WEB_SCRIPT_COUNT)) &&
+					scriptMap.size() > 0) {
 				idle = false;
 				paused = scriptMap.values().iterator().next().isPaused();
 			} else {
