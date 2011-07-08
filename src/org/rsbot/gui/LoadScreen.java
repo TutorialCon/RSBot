@@ -134,7 +134,7 @@ public class LoadScreen extends JDialog {
 			final int poolSize = pool.getPoolSize();
 			new Thread(new Runnable() {
 				public void run() {
-					while (poolSize != pool.getCompletedTaskCount()) {
+					while (poolSize != pool.getCompletedTaskCount() && count != -1) {
 						if (count != (int) pool.getCompletedTaskCount()) {
 							count = (int) pool.getCompletedTaskCount();
 							log.info("Running tasks (" + Math.round((double) count / (double) poolSize * 100D) + "%)");
@@ -144,6 +144,7 @@ public class LoadScreen extends JDialog {
 			}).start();
 			pool.shutdown();
 			pool.awaitTermination(120L, TimeUnit.SECONDS);
+			count = -1;
 		} catch (final InterruptedException ignored) {
 		}
 
