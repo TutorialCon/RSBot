@@ -1,5 +1,12 @@
 package org.rsbot.loader;
 
+import org.rsbot.Configuration;
+import org.rsbot.loader.asm.ClassReader;
+import org.rsbot.loader.script.ModScript;
+import org.rsbot.loader.script.ParseException;
+import org.rsbot.util.io.IOHelper;
+import org.rsbot.util.io.IniParser;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,25 +14,13 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.Socket;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import org.rsbot.Configuration;
-import org.rsbot.loader.asm.ClassReader;
-import org.rsbot.loader.script.ModScript;
-import org.rsbot.loader.script.ParseException;
-import org.rsbot.util.io.IOHelper;
-import org.rsbot.util.io.IniParser;
 
 /**
  * @author Paris
@@ -36,7 +31,7 @@ public class ClientLoader {
 	private final File manifest, cache;
 	private final static String TARGET = "runescape";
 	public final static int PORT_CLIENT = 43594;
-	private int[] version = { -1, -1, -1 };
+	private int[] version = {-1, -1, -1};
 	private Map<String, byte[]> classes;
 
 	private ClientLoader() {
@@ -58,7 +53,8 @@ public class ClientLoader {
 		} catch (final IOException ignored) {
 			ignored.printStackTrace();
 			return false;
-		};
+		}
+		;
 		if (info != null && info.containsKey("v1")) {
 			try {
 				version[1] = Integer.parseInt(info.get("v1"));
@@ -103,7 +99,7 @@ public class ClientLoader {
 			final JarFile loader = getJar(TARGET, true), client = getJar(TARGET, false);
 			final List<String> replace = Arrays.asList(script.getAttribute("replace").split(" "));
 
-			for (final JarFile jar : new JarFile[] { loader, client }) {
+			for (final JarFile jar : new JarFile[]{loader, client}) {
 				final Enumeration<JarEntry> entries = jar.entries();
 				while (entries.hasMoreElements()) {
 					final JarEntry entry = entries.nextElement();

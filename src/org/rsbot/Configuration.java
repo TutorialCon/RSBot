@@ -277,14 +277,14 @@ public class Configuration {
 
 	public static void createDirectories() {
 		final String[] dirs = {
-			Paths.getHomeDirectory(),
-			Paths.getLogsDirectory(),
-			Paths.getCacheDirectory(),
-			Paths.getSettingsDirectory(),
-			Paths.getScriptsDirectory(),
-			Paths.getScriptsSourcesDirectory(),
-			Paths.getScriptsPrecompiledDirectory(),
-			Paths.getScriptsNetworkDirectory(),
+				Paths.getHomeDirectory(),
+				Paths.getLogsDirectory(),
+				Paths.getCacheDirectory(),
+				Paths.getSettingsDirectory(),
+				Paths.getScriptsDirectory(),
+				Paths.getScriptsSourcesDirectory(),
+				Paths.getScriptsPrecompiledDirectory(),
+				Paths.getScriptsNetworkDirectory(),
 		};
 		for (final String name : dirs) {
 			final File dir = new File(name);
