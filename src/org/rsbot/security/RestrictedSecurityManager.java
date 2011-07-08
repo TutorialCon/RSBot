@@ -221,7 +221,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkExit(final int status) {
 		final String calling = getCallingClass();
-		if (calling.equals(BotGUI.class.getName()) || calling.equals(Application.class.getName()) || calling.startsWith(LoadScreen.class.getName())) {
+		if (calling.equals(BotGUI.class.getName()) || calling.equals(Application.class.getName()) || calling.startsWith(LoadScreen.class.getName()) ||
+				calling.equals(UpdateChecker.class.getName())) {
 			super.checkExit(status);
 		} else {
 			throw new SecurityException();
