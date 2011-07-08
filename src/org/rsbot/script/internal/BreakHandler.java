@@ -1,6 +1,5 @@
 package org.rsbot.script.internal;
 
-import org.rsbot.bot.Bot;
 import org.rsbot.script.Script;
 
 import java.util.Random;

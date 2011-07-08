@@ -76,14 +76,14 @@ public class HttpClient {
 		}
 		con.connect();
 		switch (con.getResponseCode()) {
-		case HttpURLConnection.HTTP_MOVED_PERM:
-		case HttpURLConnection.HTTP_MOVED_TEMP:
-		case HttpURLConnection.HTTP_SEE_OTHER:
-			return getFinalURL(new URL(con.getHeaderField("Location")), true);
-		case HttpURLConnection.HTTP_BAD_METHOD:
-			return getFinalURL(url, false);
-		default:
-			return url;
+			case HttpURLConnection.HTTP_MOVED_PERM:
+			case HttpURLConnection.HTTP_MOVED_TEMP:
+			case HttpURLConnection.HTTP_SEE_OTHER:
+				return getFinalURL(new URL(con.getHeaderField("Location")), true);
+			case HttpURLConnection.HTTP_BAD_METHOD:
+				return getFinalURL(url, false);
+			default:
+				return url;
 		}
 	}
 

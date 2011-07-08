@@ -1,10 +1,9 @@
 package org.rsbot.util;
 
+import com.sun.jna.Native;
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.jna.win32.Kernel32;
-
-import com.sun.jna.Native;
 
 public class Win32 {
 	private static Kernel32 getKernel32Instance() {

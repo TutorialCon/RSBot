@@ -1,16 +1,12 @@
 package org.rsbot.script.web;
 
 import org.rsbot.script.Random;
-import org.rsbot.script.Script;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
 import org.rsbot.script.randoms.ImprovedLoginBot;
-import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.wrappers.RSPath;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWebTile;
-
-import java.util.Collections;
 
 public class RouteStep extends MethodProvider {
 	private final Type type;
@@ -44,18 +40,6 @@ public class RouteStep extends MethodProvider {
 
 	public boolean execute() {
 		try {
-			for (final LoopTask checkScript : Collections.unmodifiableCollection(methods.bot.getScriptHandler().getRunningScripts().values())) {
-				if (checkScript.isDone() || !checkScript.isRunning()) {
-					return false;
-				}
-				if (checkScript.isPaused()) {
-					sleep(500);
-					return true;
-				}
-			}
-			if (methods.bot.getScriptHandler().getRunningScripts().size() == 0) {
-				return false;
-			}
 			switch (type) {
 				case INTERACTION:
 					return specialInteraction.perform();

@@ -20,8 +20,12 @@ public interface Kernel32 extends StdCallLibrary {
 	final int REALTIME_PRIORITY_CLASS = 0x00000100;
 
 	int GetCurrentProcessId();
+
 	boolean CloseHandle(int hObject);
+
 	int OpenProcess(int dwDesiredAccess, boolean bInheritHandle, int dwProcessId);
+
 	boolean SetProcessWorkingSetSize(int hProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
+
 	boolean SetPriorityClass(int hProcess, int dwPriorityClass);
 }

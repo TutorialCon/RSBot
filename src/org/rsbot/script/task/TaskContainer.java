@@ -2,7 +2,9 @@ package org.rsbot.script.task;
 
 import org.rsbot.script.methods.MethodContext;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskContainer {
 	private MethodContext ctx;
