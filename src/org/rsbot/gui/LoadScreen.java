@@ -126,11 +126,12 @@ public class LoadScreen extends JDialog {
 		}
 
 		log.info("Running tasks");
-		final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 30L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+		final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 120L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 		try {
 			for (Callable<?> c : tasks) {
 				pool.submit(c);
 			}
+			pool.shutdown();
 			final int poolSize = pool.getPoolSize();
 			new Thread(new Runnable() {
 				public void run() {
@@ -146,7 +147,6 @@ public class LoadScreen extends JDialog {
 					}
 				}
 			}).start();
-			pool.shutdown();
 			pool.awaitTermination(120L, TimeUnit.SECONDS);
 			count = -1;
 		} catch (final InterruptedException ignored) {
