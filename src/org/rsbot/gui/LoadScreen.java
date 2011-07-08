@@ -20,11 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,7 +67,6 @@ public class LoadScreen extends JDialog {
 		setVisible(true);
 		setModal(true);
 		setAlwaysOnTop(true);
-		final List<Callable<Object>> tasks = new ArrayList<Callable<Object>>(8);
 
 		log.info("Language: " + Messages.LANGUAGE);
 
@@ -80,17 +75,13 @@ public class LoadScreen extends JDialog {
 		try {
 			Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
 		} catch (final NoClassDefFoundError ignored) {
-		} 
+		}
 
 		log.info("Extracting resources");
-		tasks.add(Executors.callable(new Runnable() {
-			public void run() {
-				try {
-					extractResources();
-				} catch (final IOException ignored) {
-				}
-			}
-		}));
+		try {
+			extractResources();
+		} catch (final IOException ignored) {
+		}
 
 		log.fine("Creating directories");
 		Configuration.createDirectories();
@@ -105,14 +96,10 @@ public class LoadScreen extends JDialog {
 
 		log.info("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
-			tasks.add(Executors.callable(new Runnable() {
-				public void run() {
-					try {
-						HttpClient.download(new URL(item.getKey()), item.getValue());
-					} catch (final IOException ignored) {
-					}
-				}
-			}));
+			try {
+				HttpClient.download(new URL(item.getKey()), item.getValue());
+			} catch (final IOException ignored) {
+			}
 		}
 
 		if (Configuration.isSkinAvailable()) {
@@ -133,15 +120,6 @@ public class LoadScreen extends JDialog {
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
 			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-		}
-
-		if (error == null) {
-			log.info("Starting game client");
-			try {
-				ClientLoader.getInstance().load();
-			} catch (final Exception e) {
-				error = "Client error: " + e.getMessage();
-			}
 		}
 
 		if (error == null) {
@@ -202,4 +180,3 @@ public class LoadScreen extends JDialog {
 		}
 	}
 }
-
