@@ -139,6 +139,10 @@ public class LoadScreen extends JDialog {
 							count = (int) pool.getCompletedTaskCount();
 							log.info("Running tasks (" + Math.round((double) count / (double) poolSize * 100D) + "%)");
 						}
+						try {
+							Thread.sleep(150);
+						} catch (final InterruptedException ignored) {
+						}
 					}
 				}
 			}).start();
