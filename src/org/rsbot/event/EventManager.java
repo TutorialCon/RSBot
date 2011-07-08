@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class EventManager implements Runnable {
-
 	public static class KillEvent extends RSEvent {
 		private static final long serialVersionUID = 3426050317048250049L;
 
@@ -71,7 +70,7 @@ public class EventManager implements Runnable {
 	 *
 	 * @return <tt>true</tt> if the thread is an event thread; otherwise <tt>false</tt>.
 	 */
-	public boolean isEventThread() {
+	boolean isEventThread() {
 		synchronized (threadLock) {
 			return Thread.currentThread() == eventThread;
 		}
