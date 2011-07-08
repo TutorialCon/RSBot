@@ -2,7 +2,6 @@ package org.rsbot.gui;
 
 import org.rsbot.Configuration;
 import org.rsbot.jna.win32.Kernel32;
-import org.rsbot.loader.ClientLoader;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,7 +84,6 @@ public class LoadScreen extends JDialog {
 
 		log.info("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
-			@Override
 			public void run() {
 				try {
 					extractResources();
@@ -109,7 +106,6 @@ public class LoadScreen extends JDialog {
 		log.info("Downloading resources");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
-				@Override
 				public void run() {
 					try {
 						HttpClient.download(new URL(item.getKey()), item.getValue());
@@ -131,24 +127,12 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Loading client");
-		final ExecutorService pool = Executors.newCachedThreadPool();
-		try {
-			pool.invokeAll(tasks);
-		} catch (final InterruptedException ignored) {
-		}
-
 		log.info("Checking for updates");
 
 		String error = null;
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
 			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-		}
-
-		log.info("Checking for client updates");
-		if (ClientLoader.getInstance().isOutdated()) {
-			error = "Bot is outdated, please wait and try again later";
 		}
 
 		if (error == null) {
