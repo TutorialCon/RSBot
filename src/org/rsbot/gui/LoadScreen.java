@@ -82,6 +82,9 @@ public class LoadScreen extends JDialog {
 		bootstrap();
 		Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
 
+		log.info("Creating directories");
+		Configuration.createDirectories();
+
 		log.info("Extracting resources");
 		tasks.add(Executors.callable(new Runnable() {
 			public void run() {
@@ -92,9 +95,6 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		log.fine("Creating directories");
-		Configuration.createDirectories();
-
 		log.fine("Enforcing security policy");
 		if (Configuration.GOOGLEDNS) {
 			System.setProperty("sun.net.spi.nameservice.nameservers", RestrictedSecurityManager.DNSA + "," + RestrictedSecurityManager.DNSB);
@@ -103,7 +103,7 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		log.info("Downloading resources");
+		log.info("Queueing resources for download");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
 				public void run() {
@@ -127,7 +127,7 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Loading client");
+		log.info("Running tasks");
 		final ExecutorService pool = Executors.newCachedThreadPool();
 		try {
 			pool.invokeAll(tasks);
@@ -137,24 +137,19 @@ public class LoadScreen extends JDialog {
 		}
 
 		log.info("Checking for updates");
-
 		String error = null;
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
 			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-		}
-
-		log.info("Checking for client updates");
-		if (ClientLoader.getInstance().isOutdated()) {
-			error = "Bot is outdated, please wait and try again later";
-		}
-
-		if (error == null) {
+		} else {
 			log.info("Starting game client");
 			try {
 				ClientLoader.getInstance().load();
 			} catch (final Exception e) {
 				error = "Client error: " + e.getMessage();
+			}
+			if (ClientLoader.getInstance().isOutdated()) {
+				error = "Bot is outdated, please wait and try again later";
 			}
 		}
 
