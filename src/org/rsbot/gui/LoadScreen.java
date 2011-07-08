@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -133,6 +134,8 @@ public class LoadScreen extends JDialog {
 		final ExecutorService pool = Executors.newCachedThreadPool();
 		try {
 			pool.invokeAll(tasks);
+			pool.shutdown();
+			pool.awaitTermination(30, TimeUnit.SECONDS);
 		} catch (final InterruptedException ignored) {
 		}
 
