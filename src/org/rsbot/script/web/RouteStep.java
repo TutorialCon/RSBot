@@ -5,6 +5,7 @@ import org.rsbot.script.Script;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
 import org.rsbot.script.randoms.ImprovedLoginBot;
+import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.wrappers.RSPath;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWebTile;
@@ -43,8 +44,8 @@ public class RouteStep extends MethodProvider {
 
 	public boolean execute() {
 		try {
-			for (final Script checkScript : Collections.unmodifiableCollection(methods.bot.getScriptHandler().getRunningScripts().values())) {
-				if (!checkScript.isActive() || !checkScript.isRunning()) {
+			for (final LoopTask checkScript : Collections.unmodifiableCollection(methods.bot.getScriptHandler().getRunningScripts().values())) {
+				if (checkScript.isDone() || !checkScript.isRunning()) {
 					return false;
 				}
 				if (checkScript.isPaused()) {
