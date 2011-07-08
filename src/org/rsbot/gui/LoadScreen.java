@@ -20,7 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,24 +73,26 @@ public class LoadScreen extends JDialog {
 		setVisible(true);
 		setModal(true);
 		setAlwaysOnTop(true);
+		final List<Callable<Object>> tasks = new ArrayList<Callable<Object>>(8);
 
 		log.info("Language: " + Messages.LANGUAGE);
 
 		log.info("Registering logs");
 		bootstrap();
-		try {
-			Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
-		} catch (final NoClassDefFoundError ignored) {
-		}
+		Win32.setProcessPriority(Kernel32.BELOW_NORMAL_PRIORITY_CLASS);
+
+		log.info("Creating directories");
+		Configuration.createDirectories();
 
 		log.info("Extracting resources");
-		try {
-			extractResources();
-		} catch (final IOException ignored) {
-		}
-
-		log.fine("Creating directories");
-		Configuration.createDirectories();
+		tasks.add(Executors.callable(new Runnable() {
+			public void run() {
+				try {
+					extractResources();
+				} catch (final IOException ignored) {
+				}
+			}
+		}));
 
 		log.fine("Enforcing security policy");
 		if (Configuration.GOOGLEDNS) {
@@ -94,12 +102,16 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
-		log.info("Downloading resources");
+		log.info("Queueing resources for download");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
-			try {
-				HttpClient.download(new URL(item.getKey()), item.getValue());
-			} catch (final IOException ignored) {
-			}
+			tasks.add(Executors.callable(new Runnable() {
+				public void run() {
+					try {
+						HttpClient.download(new URL(item.getKey()), item.getValue());
+					} catch (final IOException ignored) {
+					}
+				}
+			}));
 		}
 
 		if (Configuration.isSkinAvailable()) {
@@ -114,16 +126,20 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Checking for updates");
+		log.info("Running tasks");
+		final ExecutorService pool = Executors.newCachedThreadPool();
+		try {
+			pool.invokeAll(tasks);
+			pool.shutdown();
+			pool.awaitTermination(30, TimeUnit.SECONDS);
+		} catch (final InterruptedException ignored) {
+		}
 
+		log.info("Checking for updates");
 		String error = null;
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
-			setTitle("Updating - new version found");
-			if (!UpdateChecker.downloadLatest()) {
-				setTitle(Configuration.NAME);
-				error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
-			}
+			error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
 		}
 
 		if (error == null) {
