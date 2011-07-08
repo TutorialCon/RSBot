@@ -1,16 +1,12 @@
 package org.rsbot.script.web;
 
 import org.rsbot.script.Random;
-import org.rsbot.script.Script;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
 import org.rsbot.script.randoms.ImprovedLoginBot;
-import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.wrappers.RSPath;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWebTile;
-
-import java.util.Collections;
 
 public class RouteStep extends MethodProvider {
 	private final Type type;

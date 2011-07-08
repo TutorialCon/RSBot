@@ -128,7 +128,7 @@ public class LoadScreen extends JDialog {
 		log.info("Running tasks");
 		final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 30L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 		try {
-			for (Callable c : tasks) {
+			for (Callable<?> c : tasks) {
 				pool.submit(c);
 			}
 			final int poolSize = pool.getPoolSize();

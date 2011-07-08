@@ -13,8 +13,6 @@ import java.util.*;
 public class ScriptHandler extends TaskContainer {
 	private final ArrayList<org.rsbot.script.Random> randoms = new ArrayList<org.rsbot.script.Random>();
 	public final static String THREAD_GROUP_NAME = "Scripts";
-	private final ThreadGroup scriptThreadGroup = new ThreadGroup(THREAD_GROUP_NAME);
-
 	private final Set<ScriptListener> listeners = Collections.synchronizedSet(new HashSet<ScriptListener>());
 
 	private final Bot bot;
@@ -67,10 +65,6 @@ public class ScriptHandler extends TaskContainer {
 
 	public void removeScriptListener(final ScriptListener l) {
 		listeners.remove(l);
-	}
-
-	private int addScriptToPool(final Script ss) {
-		return pool(ss);
 	}
 
 	public Bot getBot() {

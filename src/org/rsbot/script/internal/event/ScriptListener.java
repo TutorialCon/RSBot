@@ -1,7 +1,6 @@
 package org.rsbot.script.internal.event;
 
 import org.rsbot.bot.Bot;
-import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 
 public interface ScriptListener {
