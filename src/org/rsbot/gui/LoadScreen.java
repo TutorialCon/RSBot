@@ -170,8 +170,10 @@ public class LoadScreen extends JDialog {
 						}
 					}
 				}).start();
-				pool.awaitTermination(120L, TimeUnit.SECONDS);
 				count = -1;
+				if (!pool.awaitTermination(5, TimeUnit.MINUTES)) {
+					error = "Could not complete tasks";
+				}
 			} catch (final InterruptedException ignored) {
 			}
 
