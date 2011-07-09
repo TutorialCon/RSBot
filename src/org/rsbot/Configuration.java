@@ -77,7 +77,6 @@ public class Configuration {
 			public static final String HOST = "powerbot.org";
 			private static final String BASE = "http://links." + HOST + "/";
 			public static final String DOWNLOAD = BASE + "download";
-			public static final String DOWNLOAD_SHORT = HOST;
 			public static final String CLIENTPATCH = BASE + "modscript";
 			public static final String VERSION = BASE + "version.txt";
 			public static final String PROJECT = BASE + "git-project";

@@ -5,6 +5,7 @@ import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -38,6 +39,20 @@ public final class UpdateChecker {
 			System.exit(0);
 			return true;
 		} catch (Exception ignored) {
+			return false;
+		}
+	}
+
+	public static boolean checkUp(final String website) {
+		try {
+			final String hostAddress = website;
+			java.net.SocketAddress socketAddress = new java.net.InetSocketAddress(java.net.InetAddress.getByName(hostAddress), 80);
+			java.net.Socket socket = new java.net.Socket();
+			socket.connect(socketAddress, 2500);
+			boolean connected = socket.isConnected();
+			socket.close();
+			return connected;
+		} catch (final IOException ignored) {
 			return false;
 		}
 	}

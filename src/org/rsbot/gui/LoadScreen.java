@@ -155,10 +155,12 @@ public class LoadScreen extends JDialog {
 		String error = null;
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
-			setTitle("Updating - new version found");
-			if (!UpdateChecker.downloadLatest()) {
+			final boolean websiteOnline = UpdateChecker.checkUp("powerbot.org");
+			setTitle(websiteOnline ? "RSBot has been updated" : "Updating - new version found");
+			if (websiteOnline || !UpdateChecker.downloadLatest()) {
+				error = "Please update at " + (websiteOnline ? Configuration.Paths.URLs.HOST : Configuration.Paths.URLs.DOWNLOAD);
+			} else {
 				setTitle(Configuration.NAME);
-				error = "Please update at " + Configuration.Paths.URLs.DOWNLOAD_SHORT;
 			}
 		}
 
