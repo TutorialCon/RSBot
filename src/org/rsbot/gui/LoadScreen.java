@@ -33,6 +33,7 @@ public class LoadScreen extends JDialog {
 	private final boolean error;
 	private static LoadScreen instance = null;
 	private volatile int count = 0;
+	private boolean skinAvailable = false;
 
 	private LoadScreen() {
 		JDialog.setDefaultLookAndFeelDecorated(true);

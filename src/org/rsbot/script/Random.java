@@ -130,6 +130,16 @@ public abstract class Random extends Methods implements PaintListener {
 		g.fillRect(0, p.y + 1, p.x - 1, h - (p.y - 1));
 		g.fillRect(p.x + 1, p.y + 1, w - (p.x + 1), h - (p.y - 1));
 		g.setColor(Color.RED);
-		g.drawString("Random Active: " + name, 540, 20);
+		g.drawString(name, 560, 20);
+		final String[] authors = getClass().getAnnotation(ScriptManifest.class).authors();
+		g.drawString(authors.length > 1 ? "Authors: " + constructStringArray(authors) : authors.length > 0 ? "Author: " + authors[0] : "?", 560, 35);
+	}
+
+	private String constructStringArray(final String[] arrayOfString) {
+		String r = "";
+		for (int i = 0; i < arrayOfString.length; i++) {
+			r += arrayOfString[i] + (i + 1 < arrayOfString.length ? ", " : "");
+		}
+		return r;
 	}
 }
