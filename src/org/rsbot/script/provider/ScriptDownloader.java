@@ -1,16 +1,9 @@
 package org.rsbot.script.provider;
 
-import org.rsbot.Configuration;
-import org.rsbot.util.StringUtil;
-import org.rsbot.util.io.HttpClient;
-import org.rsbot.util.io.IOHelper;
-import org.rsbot.util.io.JavaCompiler;
-
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -18,60 +11,63 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rsbot.Configuration;
+import org.rsbot.util.StringUtil;
+import org.rsbot.util.io.HttpClient;
+import org.rsbot.util.io.IOHelper;
+import org.rsbot.util.io.JavaCompiler;
+
 /**
  * author @Paris
  */
 public class ScriptDownloader {
 	private static final Logger log = Logger.getLogger(ScriptDownloader.class.getName());
 
-	public static void save(String sourceURL) {
+	public static void save(String url) {
 		// check the source URL is valid
-		sourceURL = sourceURL.trim();
-		if (sourceURL.startsWith("https:")) {
-			sourceURL = "http" + sourceURL.substring(5);
+		url = url.trim();
+		if (url.startsWith("https:")) {
+			url = "http" + url.substring(5);
 		}
-		if (!sourceURL.startsWith("http://")) {
+		if (!url.startsWith("http://")) {
 			log.warning("Invalid URL");
 			return;
 		}
-		sourceURL = normalisePastebin(sourceURL);
+		url = normalisePastebin(url);
 
 		// download the file
-		log.fine("Downloading: " + sourceURL);
-		final File temporaryFile = new File(Configuration.Paths.getGarbageDirectory(), Integer.toString(sourceURL.hashCode()) + ".script.bin");
-		HttpURLConnection httpURLConnection;
+		log.info("Downloading script: " + url);
+		final byte[] data;
 		try {
-			httpURLConnection = HttpClient.download(new URL(sourceURL), temporaryFile);
-		} catch (Exception e) {
-			temporaryFile.delete();
+			data = HttpClient.downloadBinary(new URL(url));
+		} catch (final IOException e) {
 			log.warning("Could not download script");
 			return;
 		}
 
 		// if file is a .class then move as precompiled script
-		String className = classFileName(temporaryFile);
+		final ByteArrayInputStream in = new ByteArrayInputStream(data);
+		String className = classFileName(in);
 		if (className != null) {
-			final File saveTo = new File(Configuration.Paths.getScriptsPrecompiledDirectory());
-			if (temporaryFile.renameTo(saveTo)) {
+			final File classFile = new File(Configuration.Paths.getScriptsPrecompiledDirectory());
+			IOHelper.write(in, classFile);
+			if (classFile.exists()) {
 				log.info("Saved precompiled script " + className);
 			} else {
-				temporaryFile.delete();
 				log.warning("Could not save precompiled script " + className);
 			}
 			return;
 		}
 
 		// otherwise read file as plaintext
-		final byte[] scriptBytes = IOHelper.read(temporaryFile);
-		temporaryFile.delete();
-		if (scriptBytes == null) {
+		String source = StringUtil.newStringUtf8(data);
+		if (source == null || source.length() == 0) {
 			log.severe("Could not read downloaded file");
 			return;
 		}
 
 		// parse out any html
-		String source = new String(scriptBytes);
-		if (httpURLConnection.getContentType().contains("html")) {
+		if (source.startsWith("<html") || source.startsWith("<!")) {
 			final int z = source.indexOf("<body");
 			if (z != -1) {
 				source = source.substring(z);
@@ -86,24 +82,21 @@ public class ScriptDownloader {
 		}
 
 		// check that the text represents java code for a script
-		final Matcher m = Pattern.compile("public\\s+class\\s+(\\w+)\\s+extends\\s+Script").matcher(source);
-		if (!m.find()) {
+		final Matcher def = Pattern.compile("public\\s+class\\s+(\\w+)\\s+extends\\s+Script").matcher(source);
+		if (!def.find()) {
 			log.severe("Specified URL is not a script");
 			return;
 		}
-		className = m.group(1);
-		final File saveDirectory = new File(Configuration.Paths.getScriptsSourcesDirectory());
-		if (!saveDirectory.exists()) {
-			saveDirectory.mkdirs();
+		className = def.group(1);
+		final File dir = new File(Configuration.Paths.getScriptsSourcesDirectory());
+		if (!dir.exists()) {
+			dir.mkdirs();
 		}
 
 		// save the code in the folder for source scripts
-		final File classFile = new File(saveDirectory, className + ".java");
-		try {
-			final FileWriter fileWriterOut = new FileWriter(classFile);
-			fileWriterOut.write(source);
-			fileWriterOut.close();
-		} catch (IOException ignored) {
+		final File classFile = new File(dir, className + ".java");
+		IOHelper.write(source, classFile);
+		if (!classFile.exists()) {
 			log.severe("Could not save script " + className);
 			return;
 		}
@@ -123,7 +116,7 @@ public class ScriptDownloader {
 			if (compiledJar.exists()) {
 				compiledJar.delete();
 			}
-			result = JavaCompiler.compileWeb(sourceURL, compiledJar);
+			result = JavaCompiler.compileWeb(url, compiledJar);
 		}
 
 		// notify user of result
@@ -132,27 +125,23 @@ public class ScriptDownloader {
 		} else {
 			log.warning("Could not compile script " + className);
 		}
+		System.gc();
 	}
 
-	private static String classFileName(final File path) {
+	private static String classFileName(final InputStream in) {
 		final int magic = 0xCAFEBABE;
-		if (!path.exists()) {
-			return null;
-		}
-		FileReader reader = null;
 		int header;
 		try {
-			reader = new FileReader(path);
-			header = reader.read();
+			header = in.read();
 			if (header != magic) {
 				return null;
 			}
 			for (int i = 1; i < 16; i++) {
-				reader.read();
+				in.read();
 			}
 			StringBuilder name = new StringBuilder(32);
 			int r;
-			while ((r = reader.read()) != -1) {
+			while ((r = in.read()) != -1) {
 				if (r == 0x7) {
 					return name.length() == 0 ? null : name.toString();
 				}
@@ -163,9 +152,9 @@ public class ScriptDownloader {
 		} catch (IOException ignored) {
 			return null;
 		} finally {
-			if (reader != null) {
+			if (in != null) {
 				try {
-					reader.close();
+					in.close();
 				} catch (IOException ignored) {
 				}
 			}
