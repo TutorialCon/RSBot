@@ -4,7 +4,6 @@ import org.rsbot.Application;
 import org.rsbot.Configuration;
 import org.rsbot.client.Loader;
 import org.rsbot.loader.ClientLoader;
-import org.rsbot.loader.script.ParseException;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -28,7 +27,6 @@ public class RSLoader extends Applet implements Runnable, Loader {
 
 	private Runnable loadedCallback;
 	private String targetName;
-	public static boolean runBeta = false;
 	private Dimension size = Application.getPanelSize();
 	/**
 	 * The game class loader
@@ -51,24 +49,6 @@ public class RSLoader extends Applet implements Runnable, Loader {
 	public final synchronized void init() {
 		if (client != null) {
 			client.init();
-		}
-	}
-
-	@Override
-	public final void paint(final Graphics graphics) {
-		if (client != null) {
-			client.paint(graphics);
-		} else {
-			final Font font = new Font("Helvetica", 1, 13);
-			final FontMetrics fontMetrics = getFontMetrics(font);
-			graphics.setColor(Color.black);
-			graphics.fillRect(0, 0, 768, 503);
-			graphics.setColor(new Color(150, 0, 0));
-			graphics.drawRect(230, 233, 304, 34);
-			final String s = "Loading...";
-			graphics.setFont(font);
-			graphics.setColor(Color.WHITE);
-			graphics.drawString(s, (768 - fontMetrics.stringWidth(s)) / 2, 255);
 		}
 	}
 
@@ -99,21 +79,12 @@ public class RSLoader extends Applet implements Runnable, Loader {
 	}
 
 	public void load() {
-		final File ms = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH);
 		try {
-			final ClientLoader cl = new ClientLoader();
-			cl.init(new URL(Configuration.Paths.URLs.CLIENTPATCH), ms);
-			cl.load(new File(Configuration.Paths.getCacheDirectory(), "client.dat"), new File(Configuration.Paths.getVersionCache()));
+			final ClientLoader cl = ClientLoader.getInstance();
 			targetName = cl.getTargetName();
 			classLoader = new RSClassLoader(cl.getClasses(), new URL("http://" + targetName + ".com/"));
 		} catch (final IOException ex) {
 			log.severe("Unable to load client: " + ex.getMessage());
-		} catch (final ParseException ex) {
-			log.info("Unable to load client: " + ex.toString());
-			if (ms.exists()) {
-				ms.delete();
-			}
-			log.severe("Cached objects deleted, please try restarting the application");
 		}
 	}
 
@@ -172,3 +143,4 @@ public class RSLoader extends Applet implements Runnable, Loader {
 		return classLoader;
 	}
 }
+

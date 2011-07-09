@@ -2,6 +2,7 @@ package org.rsbot.gui;
 
 import org.rsbot.Configuration;
 import org.rsbot.jna.win32.Kernel32;
+import org.rsbot.loader.ClientLoader;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
@@ -23,7 +24,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +38,6 @@ public class LoadScreen extends JDialog {
 	private final boolean error;
 	private static LoadScreen instance = null;
 	private volatile int count = 0;
-	private boolean skinAvailable = false;
 
 	private LoadScreen() {
 		JDialog.setDefaultLookAndFeelDecorated(true);
@@ -126,6 +130,16 @@ public class LoadScreen extends JDialog {
 			}));
 		}
 
+		log.info("Starting game client");
+		tasks.add(Executors.callable(new Runnable() {
+			public void run() {
+				try {
+					ClientLoader.getInstance().load();
+				} catch (final Exception ignored) {
+				}
+			}
+		}));
+
 		if (Configuration.isSkinAvailable()) {
 			log.fine("Setting theme");
 			SwingUtilities.invokeLater(new Runnable() {
@@ -163,6 +177,11 @@ public class LoadScreen extends JDialog {
 			pool.awaitTermination(120L, TimeUnit.SECONDS);
 			count = -1;
 		} catch (final InterruptedException ignored) {
+		}
+
+		log.info("Checking for client updates");
+		if (ClientLoader.getInstance().isOutdated()) {
+			error = "Bot is outdated, please wait and try again later";
 		}
 
 		if (error == null) {
