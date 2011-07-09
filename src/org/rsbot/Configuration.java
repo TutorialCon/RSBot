@@ -233,7 +233,7 @@ public class Configuration {
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
 	public final static boolean SKINNED = true;
-	public static final String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel";
+	public static final String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel";
 	public static final boolean GOOGLEDNS = true;
 
 	public static class Twitter {
