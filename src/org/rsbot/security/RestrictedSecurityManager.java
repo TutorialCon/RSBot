@@ -60,7 +60,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su
 			"www.darius.nl", // Dunnkers
-			"marneusscripts.com",//Marneus901
+			"marneusscripts.com", //Marneus901
+                        "http://aioscripts.com, //Ramy
 	};
 
 	private String getCallingClass() {
