@@ -109,13 +109,7 @@ public class LoadScreen extends JDialog {
 		String error = null;
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
-			final boolean websiteOnline = UpdateChecker.checkUp("powerbot.org");
-			setTitle(websiteOnline ? "RSBot has been updated" : "Updating - new version found");
-			if (websiteOnline || !UpdateChecker.downloadLatest()) {
-				error = "Please update at " + (websiteOnline ? Configuration.Paths.URLs.HOST : Configuration.Paths.URLs.DOWNLOAD);
-			} else {
-				setTitle(Configuration.NAME);
-			}
+			error = "Please update at " + Configuration.Paths.URLs.HOST;
 		}
 
 		log.info("Queueing resources for download");
@@ -152,36 +146,38 @@ public class LoadScreen extends JDialog {
 			});
 		}
 
-		log.info("Running tasks");
-		final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 120L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
-		try {
-			for (Callable<?> c : tasks) {
-				pool.submit(c);
-			}
-			pool.shutdown();
-			final int poolSize = pool.getPoolSize();
-			new Thread(new Runnable() {
-				public void run() {
-					while (poolSize != pool.getCompletedTaskCount() && count != -1) {
-						if (count != (int) pool.getCompletedTaskCount()) {
-							count = (int) pool.getCompletedTaskCount();
-							log.info("Running tasks (" + Math.round((double) count / (double) poolSize * 100D) + "%)");
-						}
-						try {
-							Thread.sleep(150);
-						} catch (final InterruptedException ignored) {
+		if (error == null) {
+			log.info("Running tasks");
+			final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 120L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+			try {
+				for (Callable<?> c : tasks) {
+					pool.submit(c);
+				}
+				pool.shutdown();
+				final int poolSize = pool.getPoolSize();
+				new Thread(new Runnable() {
+					public void run() {
+						while (poolSize != pool.getCompletedTaskCount() && count != -1) {
+							if (count != (int) pool.getCompletedTaskCount()) {
+								count = (int) pool.getCompletedTaskCount();
+								log.info("Running tasks (" + Math.round((double) count / (double) poolSize * 100D) + "%)");
+							}
+							try {
+								Thread.sleep(150);
+							} catch (final InterruptedException ignored) {
+							}
 						}
 					}
-				}
-			}).start();
-			pool.awaitTermination(120L, TimeUnit.SECONDS);
-			count = -1;
-		} catch (final InterruptedException ignored) {
-		}
+				}).start();
+				pool.awaitTermination(120L, TimeUnit.SECONDS);
+				count = -1;
+			} catch (final InterruptedException ignored) {
+			}
 
-		log.info("Checking for client updates");
-		if (ClientLoader.getInstance().isOutdated()) {
-			error = "Bot is outdated, please wait and try again later";
+			log.info("Checking for client updates");
+			if (ClientLoader.getInstance().isOutdated()) {
+				error = "Bot is outdated, please wait and try again later";
+			}
 		}
 
 		if (error == null) {
