@@ -259,13 +259,11 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			} else if (option.equals(Messages.ABOUT)) {
 				JOptionPane.showMessageDialog(this, new String[]{
 						"An open source bot developed by the community.",
-						" ",
+						"",
 						"RuneScape® is a trademark of Jagex © 1999 - 2011 Jagex, Ltd.",
-						"RuneScape content and materials are trademarks",
-						"and copyrights of Jagex or its licensees.",
-						"This program is issued with no warranty and is not affiliated with",
-						"Jagex Ltd., nor do they endorse usage of our software.",
-						" ",
+						"RuneScape content and materials are trademarks and copyrights of Jagex or its licensees.",
+						"This program is issued with no warranty and is not affiliated with Jagex Ltd., nor do they endorse usage of our software.",
+						"",
 						"Visit " + Configuration.Paths.URLs.SITE + "/ for more information."},
 						option,
 						JOptionPane.INFORMATION_MESSAGE);
