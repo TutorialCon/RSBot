@@ -41,4 +41,4 @@ SITE=साइट
 PROJECT=परियोजना
 ABOUT=के बारे में
 
-TABDEFAULTTEXT=RuneScape
+TABDEFAULTTEXT=bot
