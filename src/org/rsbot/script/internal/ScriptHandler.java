@@ -7,7 +7,6 @@ import org.rsbot.script.randoms.*;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.task.TaskContainer;
 
-import java.awt.*;
 import java.util.*;
 
 public class ScriptHandler extends TaskContainer {
@@ -108,22 +107,12 @@ public class ScriptHandler extends TaskContainer {
 		for (final ScriptListener l : listeners) {
 			l.scriptStarted(this);
 		}
-		final int id = pool(script);
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				invoke(id);
-			}
-		});
-		return id;
+		return runDaemonScript(script);
 	}
 
-	public int runPassiveScript(final Script script) {
+	public int runDaemonScript(final Script script) {
 		final int id = pool(script);
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				invoke(id);
-			}
-		});
+		invoke(id);
 		return id;
 	}
 
