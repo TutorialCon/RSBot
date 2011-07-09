@@ -25,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +36,6 @@ public class LoadScreen extends JDialog {
 	private static final long serialVersionUID = 5520543482560560389L;
 	private final boolean error;
 	private static LoadScreen instance = null;
-	private volatile int count = 0;
 
 	private LoadScreen() {
 		JDialog.setDefaultLookAndFeelDecorated(true);
@@ -148,29 +146,11 @@ public class LoadScreen extends JDialog {
 		}
 
 		if (error == null) {
-			log.info("Running tasks");
-			final ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 120L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+			log.info("Running tasks (may take a few minutes)");
+			final ExecutorService pool = Executors.newCachedThreadPool();
 			try {
-				for (Callable<?> c : tasks) {
-					pool.submit(c);
-				}
+				pool.invokeAll(tasks);
 				pool.shutdown();
-				final int poolSize = pool.getPoolSize();
-				new Thread(new Runnable() {
-					public void run() {
-						while (poolSize != pool.getCompletedTaskCount() && count != -1) {
-							if (count != (int) pool.getCompletedTaskCount()) {
-								count = (int) pool.getCompletedTaskCount();
-								log.info("Running tasks (" + Math.round((double) count / (double) poolSize * 100D) + "%)");
-							}
-							try {
-								Thread.sleep(150);
-							} catch (final InterruptedException ignored) {
-							}
-						}
-					}
-				}).start();
-				count = -1;
 				if (!pool.awaitTermination(5, TimeUnit.MINUTES)) {
 					error = "Could not complete tasks";
 				}
