@@ -100,6 +100,19 @@ public class LoadScreen extends JDialog {
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 
+		log.info("Checking for updates");
+		String error = null;
+
+		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
+			final boolean websiteOnline = UpdateChecker.checkUp("powerbot.org");
+			setTitle(websiteOnline ? "RSBot has been updated" : "Updating - new version found");
+			if (websiteOnline || !UpdateChecker.downloadLatest()) {
+				error = "Please update at " + (websiteOnline ? Configuration.Paths.URLs.HOST : Configuration.Paths.URLs.DOWNLOAD);
+			} else {
+				setTitle(Configuration.NAME);
+			}
+		}
+
 		log.info("Queueing resources for download");
 		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
 			tasks.add(Executors.callable(new Runnable() {
@@ -149,19 +162,6 @@ public class LoadScreen extends JDialog {
 			pool.awaitTermination(120L, TimeUnit.SECONDS);
 			count = -1;
 		} catch (final InterruptedException ignored) {
-		}
-
-		log.info("Checking for updates");
-		String error = null;
-
-		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
-			final boolean websiteOnline = UpdateChecker.checkUp("powerbot.org");
-			setTitle(websiteOnline ? "RSBot has been updated" : "Updating - new version found");
-			if (websiteOnline || !UpdateChecker.downloadLatest()) {
-				error = "Please update at " + (websiteOnline ? Configuration.Paths.URLs.HOST : Configuration.Paths.URLs.DOWNLOAD);
-			} else {
-				setTitle(Configuration.NAME);
-			}
 		}
 
 		if (error == null) {
