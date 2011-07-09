@@ -153,6 +153,10 @@ public class HttpClient {
 		return new String(buffer);
 	}
 
+	public static byte[] downloadBinary(final URL url) throws IOException {
+		return downloadBinary(getConnection(url));
+	}
+
 	private static byte[] downloadBinary(final URLConnection con) throws IOException {
 		final DataInputStream di = new DataInputStream(con.getInputStream());
 		byte[] buffer;
