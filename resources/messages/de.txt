@@ -34,7 +34,6 @@ HIDETOOLBAR=Toolbar verstecken
 HIDELOGPANE=Log-Panel verstecken
 ALLDEBUGGING=Alle Debugging-Nachrichten
 
-CLEARCACHE=Cache Leeren
 OPTIONS=Optionen
 
 SITE=Site

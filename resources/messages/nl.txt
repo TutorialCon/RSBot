@@ -35,7 +35,6 @@ HIDETOOLBAR=Verberg Toolbar
 HIDELOGPANE=Verberg Log Paneel
 ALLDEBUGGING=Alle Debug Opties
 
-CLEARCACHE=Leeg Cache
 OPTIONS=Opties
 
 SITE=Site

@@ -34,7 +34,6 @@ HIDETOOLBAR=Dölj verktygsfält
 HIDELOGPANE=Dölj loggpanel
 ALLDEBUGGING=All felsökning
 
-CLEARCACHE=Rensa cache
 OPTIONS=Alternativ
 
 SITE=Hemsida

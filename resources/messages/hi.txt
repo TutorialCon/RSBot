@@ -34,7 +34,6 @@ HIDETOOLBAR=उपकरण पट्टी छुपाना
 HIDELOGPANE=फलक लॉग छिपाने
 ALLDEBUGGING=सभी डिबगिंग
 
-CLEARCACHE=स्पष्ट कैश
 OPTIONS=विकल्प
 
 SITE=साइट

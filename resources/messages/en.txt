@@ -35,7 +35,6 @@ HIDETOOLBAR=Hide Toolbar
 HIDELOGPANE=Hide Log Pane
 ALLDEBUGGING=All Debugging
 
-CLEARCACHE=Clear Cache
 OPTIONS=Options
 LICENSES=Licenses
 
