@@ -18,7 +18,7 @@ import org.rsbot.util.io.IOHelper;
 import org.rsbot.util.io.JavaCompiler;
 
 /**
- * author @Paris
+ * @author Paris
  */
 public class ScriptDownloader {
 	private static final Logger log = Logger.getLogger(ScriptDownloader.class.getName());
