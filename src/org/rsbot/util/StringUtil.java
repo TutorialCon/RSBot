@@ -150,7 +150,7 @@ public class StringUtil {
 		return byteArrayToHexString(md.digest(getBytesUtf8(data)));
 	}
 
-	private static String byteArrayToHexString(byte[] b) {
+	public static String byteArrayToHexString(byte[] b) {
 		final StringBuilder s = new StringBuilder(b.length * 2);
 		for (byte aB : b) {
 			s.append(Integer.toString((aB & 0xff) + 0x100, 16).substring(1));
