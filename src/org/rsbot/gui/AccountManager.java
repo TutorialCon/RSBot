@@ -4,6 +4,7 @@ import org.rsbot.Configuration;
 import org.rsbot.bot.Bot;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.randoms.ImprovedLoginBot;
+import org.rsbot.security.UniqueID;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -48,6 +49,7 @@ public class AccountManager extends JDialog implements ActionListener {
 	private static final AccountStore accountStore = new AccountStore(new File(FILE_ACCOUNT_STORAGE));
 
 	static {
+		accountStore.setPassword(UniqueID.getID());
 		try {
 			accountStore.load();
 		} catch (final IOException ignored) {
