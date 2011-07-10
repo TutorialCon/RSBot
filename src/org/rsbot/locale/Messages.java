@@ -59,8 +59,6 @@ public class Messages {
 	public static final String DISABLEAUTOLOGIN = map.get("DISABLEAUTOLOGIN");
 	public static final String DISABLEADS = map.get("DISABLEADS");
 	public static final String DISABLECONFIRMATIONS = map.get("DISABLECONFIRMATIONS");
-	public static final String BINDTO = map.get("BINDTO");
-	public static final String USEPASSWORD = map.get("USEPASSWORD");
 	public static final String LESSCPU = map.get("LESSCPU");
 	public static final String DISABLECANVAS = map.get("DISABLECANVAS");
 	public static final String EXTDVIEWS = map.get("EXTDVIEWS");

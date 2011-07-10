@@ -19,10 +19,6 @@ public class Preferences {
 	public boolean confirmations = true;
 	public boolean shutdown = false;
 	public int shutdownTime = 10;
-	public boolean web = false;
-	public String webBind = "localhost:9500";
-	public boolean webPassRequire = false;
-	public String webPass = "";
 	public boolean sdnShow = true;
 	public boolean allowAllHosts = false;
 	public boolean likedScriptsOnly = false;
@@ -66,18 +62,6 @@ public class Preferences {
 			shutdownTime = Integer.parseInt(keys.get("shutdownTime"));
 			shutdownTime = Math.max(Math.min(shutdownTime, 60), 3);
 		}
-		if (keys.containsKey("web")) {
-			web = IniParser.parseBool(keys.get("web"));
-		}
-		if (keys.containsKey("webBind")) {
-			webBind = keys.get("webBind");
-		}
-		if (keys.containsKey("webPassRequire")) {
-			webPassRequire = IniParser.parseBool(keys.get("webPassRequire"));
-		}
-		if (keys.containsKey("webPass")) {
-			webPass = keys.get("webPass");
-		}
 		if (keys.containsKey("sdnShow")) {
 			sdnShow = IniParser.parseBool(keys.get("sdnShow"));
 		}
@@ -95,10 +79,6 @@ public class Preferences {
 		keys.put("confirmations", Boolean.toString(confirmations));
 		keys.put("shutdown", Boolean.toString(shutdown));
 		keys.put("shutdownTime", Integer.toString(shutdownTime));
-		keys.put("web", Boolean.toString(web));
-		keys.put("webBind", webBind);
-		keys.put("webPassRequire", Boolean.toString(webPassRequire));
-		keys.put("webPass", webPass);
 		keys.put("sdnShow", Boolean.toString(sdnShow));
 		keys.put("allowAllHosts", Boolean.toString(allowAllHosts));
 		keys.put("likedScriptsOnly", Boolean.toString(likedScriptsOnly));

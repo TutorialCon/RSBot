@@ -14,7 +14,6 @@ import java.awt.event.*;
  */
 public class SettingsManager extends JDialog {
 	private static final long serialVersionUID = 1657935322078534422L;
-	private static final String DEFAULT_PASSWORD = "\0\0\0\0\0\0\0\0";
 	private final Preferences preferences = Preferences.getInstance();
 
 	public Preferences getPreferences() {
@@ -31,8 +30,6 @@ public class SettingsManager extends JDialog {
 		panelOptions.setBorder(BorderFactory.createTitledBorder("Display"));
 		final JPanel panelInternal = new JPanel(new GridLayout(0, 1));
 		panelInternal.setBorder(BorderFactory.createTitledBorder("Internal"));
-		final JPanel panelWeb = new JPanel(new GridLayout(2, 1));
-		panelWeb.setBorder(BorderFactory.createTitledBorder("Web UI"));
 
 		final JCheckBox checkAds = new JCheckBox(Messages.DISABLEADS);
 		checkAds.setToolTipText("Show advertisement on startup");
@@ -62,53 +59,10 @@ public class SettingsManager extends JDialog {
 		checkHosts.setToolTipText("Allow connections to all websites (NOT RECOMMENDED)");
 		checkHosts.setSelected(preferences.allowAllHosts);
 
-		final JPanel[] panelWebOptions = new JPanel[2];
-		for (int i = 0; i < panelWebOptions.length; i++) {
-			panelWebOptions[i] = new JPanel(new GridLayout(1, 2));
-		}
-		final JCheckBox checkWeb = new JCheckBox(Messages.BINDTO);
-		checkWeb.setToolTipText("Remote control via web interface");
-		checkWeb.setSelected(preferences.web);
-		panelWebOptions[0].add(checkWeb);
-		final JFormattedTextField textWebBind = new JFormattedTextField(preferences.webBind);
-		textWebBind.setToolTipText("Example: localhost:9500");
-		panelWebOptions[0].add(textWebBind);
-		final JCheckBox checkWebPass = new JCheckBox(Messages.USEPASSWORD);
-		checkWebPass.setSelected(preferences.webPassRequire);
-		panelWebOptions[1].add(checkWebPass);
-		final JPasswordField textWebPass = new JPasswordField(DEFAULT_PASSWORD);
-		textWebPass.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(final FocusEvent e) {
-				textWebPass.setText("");
-			}
-		});
-		panelWebOptions[1].add(textWebPass);
-		checkWebPass.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textWebPass.setEnabled(checkWebPass.isSelected() && checkWebPass.isEnabled());
-			}
-		});
-		checkWeb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				final boolean enabled = checkWeb.isSelected();
-				textWebBind.setEnabled(enabled);
-				checkWebPass.setEnabled(enabled);
-				for (final ActionListener action : checkWebPass.getActionListeners()) {
-					action.actionPerformed(null);
-				}
-			}
-		});
-		for (final ActionListener action : checkWeb.getActionListeners()) {
-			action.actionPerformed(null);
-		}
-
 		panelOptions.add(checkAds);
 		panelOptions.add(checkConfirmations);
 		panelInternal.add(panelShutdown);
 		panelInternal.add(checkHosts);
-		panelWeb.add(panelWebOptions[0]);
-		panelWeb.add(panelWebOptions[1]);
 
 		final GridLayout gridAction = new GridLayout(1, 2);
 		gridAction.setHgap(5);
@@ -126,13 +80,9 @@ public class SettingsManager extends JDialog {
 				preferences.confirmations = checkConfirmations.isSelected();
 				preferences.shutdown = checkShutdown.isSelected();
 				preferences.shutdownTime = modelShutdown.getNumber().intValue();
-				preferences.web = checkWeb.isSelected();
-				preferences.webBind = textWebBind.getText();
-				preferences.webPassRequire = checkWebPass.isSelected() && checkWebPass.isEnabled();
 				preferences.allowAllHosts = checkHosts.isSelected();
 				preferences.save();
 				preferences.commit();
-				textWebPass.setText(DEFAULT_PASSWORD);
 				dispose();
 			}
 		});
