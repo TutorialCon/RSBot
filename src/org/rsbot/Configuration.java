@@ -158,10 +158,6 @@ public class Configuration {
 			return Paths.getCacheDirectory() + File.separator + "info.dat";
 		}
 
-		public static String getServiceKey() {
-			return Paths.getSettingsDirectory() + File.separator + "service.key";
-		}
-
 		public static String getSettingsDirectory() {
 			return Paths.getHomeDirectory() + File.separator + "Settings";
 		}
