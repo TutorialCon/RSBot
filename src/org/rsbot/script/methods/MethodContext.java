@@ -3,9 +3,12 @@ package org.rsbot.script.methods;
 import org.rsbot.bot.Bot;
 import org.rsbot.client.Client;
 import org.rsbot.script.internal.InputManager;
+import org.rsbot.script.task.executor.ScriptPool;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * For internal use to link MethodProviders.
@@ -212,6 +215,7 @@ public class MethodContext {
 		this.bot = bot;
 		client = bot.getClient();
 		inputManager = bot.getInputManager();
-		service = Executors.newCachedThreadPool();
+		service = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
+				new SynchronousQueue<Runnable>(), new ScriptPool(), new ThreadPoolExecutor.AbortPolicy());
 	}
 }

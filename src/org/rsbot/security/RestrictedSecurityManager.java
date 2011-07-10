@@ -9,6 +9,7 @@ import org.rsbot.loader.ClientLoader;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
+import org.rsbot.script.task.executor.ScriptPool;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 import sun.font.FontManager;
@@ -31,7 +32,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 	private final static int PORT_UNKNOWN = -1, PORT_HTTP = 80, PORT_HTTPS = 443, PORT_DNS = 53;
 	public final static String DNSA = "8.8.8.8", DNSB = "8.8.4.4"; // Google Public DNS (http://code.google.com/speed/public-dns/)
 	private static HashSet<String> resolved = new HashSet<String>();
-	public static final String SCRIPTTHREAD = "Script-", SCRIPTCLASS = "org.rsbot.script.Script";
+	public static final String SCRIPTCLASS = "org.rsbot.script.Script";
 	public static boolean allowAllHosts = false;
 
 	// NOTE: if whitelist item starts with a dot "." then it is checked at the end of the host
@@ -76,7 +77,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 	}
 
 	public boolean isCallerScript() {
-		return getThreadGroup().getName().equals(ScriptHandler.THREAD_GROUP_NAME) || Thread.currentThread().getName().startsWith(SCRIPTTHREAD) || getCallingClass().startsWith(SCRIPTCLASS);
+		return getThreadGroup().getName().equals(ScriptHandler.THREAD_GROUP_NAME) || Thread.currentThread().getName().startsWith(ScriptHandler.THREAD_GROUP_NAME + "-") ||
+				getCallingClass().startsWith(SCRIPTCLASS);
 	}
 
 	public static void assertNonScript() {
@@ -117,7 +119,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkAccess(final ThreadGroup g) {
-		if (g.getName().equals(ScriptHandler.THREAD_GROUP_NAME) && !(getCallingClass().equals(ScriptHandler.class.getName()) ||
+		if (g.getName().equals(ScriptHandler.THREAD_GROUP_NAME) && !(getCallingClass().equals(ScriptPool.class.getName()) ||
 				getCallingClass().equals(Script.class.getName()))) {
 			throw new SecurityException();
 		}
