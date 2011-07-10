@@ -16,7 +16,6 @@ public class Preferences {
 	private final File store;
 
 	public boolean hideAds = false;
-	public String user = "";
 	public boolean confirmations = true;
 	public boolean shutdown = false;
 	public int shutdownTime = 10;
@@ -53,9 +52,6 @@ public class Preferences {
 		}
 		if (keys == null || keys.isEmpty()) {
 			return;
-		}
-		if (keys.containsKey("user")) {
-			user = keys.get("user");
 		}
 		if (keys.containsKey("hideAds")) {
 			hideAds = IniParser.parseBool(keys.get("hideAds"));
@@ -95,7 +91,6 @@ public class Preferences {
 
 	public void save() {
 		final Map<String, String> keys = new HashMap<String, String>(11);
-		keys.put("user", user);
 		keys.put("hideAds", Boolean.toString(hideAds));
 		keys.put("confirmations", Boolean.toString(confirmations));
 		keys.put("shutdown", Boolean.toString(shutdown));
