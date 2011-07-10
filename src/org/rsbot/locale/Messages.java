@@ -71,6 +71,7 @@ public class Messages {
 
 	public static final String CLEARCACHE = map.get("CLEARCACHE");
 	public static final String OPTIONS = map.get("OPTIONS");
+	public static final String LICENSES = map.get("LICENSES");
 
 	public static final String SITE = map.get("SITE");
 	public static final String PROJECT = map.get("PROJECT");

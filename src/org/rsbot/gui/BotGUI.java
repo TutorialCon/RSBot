@@ -246,6 +246,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					IOHelper.recursiveDelete(new File(Configuration.Paths.getSettingsDirectory()), false);
 					log.info("Cache cleared and preferences reset to defaults");
 				}
+			} else if (option.equals(Messages.LICENSES)) {
+				log.warning("License manager coming soon");
 			} else if (option.equals(Messages.OPTIONS)) {
 				settings.display();
 			}

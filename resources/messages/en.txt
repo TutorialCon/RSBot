@@ -37,6 +37,7 @@ ALLDEBUGGING=All Debugging
 
 CLEARCACHE=Clear Cache
 OPTIONS=Options
+LICENSES=Licenses
 
 SITE=Site
 PROJECT=Project
