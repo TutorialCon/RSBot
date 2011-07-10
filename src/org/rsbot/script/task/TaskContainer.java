@@ -1,6 +1,5 @@
 package org.rsbot.script.task;
 
-import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.MethodContext;
 
 import java.util.Collections;
