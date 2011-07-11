@@ -115,7 +115,7 @@ public class LoadScreen extends JDialog {
 			tasks.add(Executors.callable(new Runnable() {
 				public void run() {
 					try {
-						log.info("Downloading " + item.getValue().getName());
+						log.fine("Downloading " + item.getValue().getName());
 						HttpClient.download(new URL(item.getKey()), item.getValue());
 					} catch (final IOException ignored) {
 					}
