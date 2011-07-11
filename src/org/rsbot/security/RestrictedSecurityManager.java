@@ -62,7 +62,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			".solarbots.org", // Wei Su
 			"www.darius.nl", // Dunnkers
 			"marneusscripts.com", // Marneus901
-			"aioscripts.com", // Ramy
+			"aioscripts.com", // Ramy-Haddad
 	};
 
 	private String getCallingClass() {
