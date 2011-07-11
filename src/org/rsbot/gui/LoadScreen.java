@@ -35,6 +35,7 @@ public class LoadScreen extends JDialog {
 	private final static Logger log = Logger.getLogger(LoadScreen.class.getName());
 	private static final long serialVersionUID = 5520543482560560389L;
 	private final boolean error;
+	private String taskError;
 	private static LoadScreen instance = null;
 
 	private LoadScreen() {
@@ -128,7 +129,8 @@ public class LoadScreen extends JDialog {
 			public void run() {
 				try {
 					ClientLoader.getInstance().load();
-				} catch (final Exception ignored) {
+				} catch (final Exception e) {
+					taskError = "Client error: " + e.getMessage();
 				}
 			}
 		}));
@@ -162,6 +164,8 @@ public class LoadScreen extends JDialog {
 				error = "Bot is outdated, please wait and try again later";
 			}
 		}
+
+		error = error == null ? taskError : error;
 
 		if (error == null) {
 			this.error = false;
