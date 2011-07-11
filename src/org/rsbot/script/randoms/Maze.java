@@ -152,10 +152,8 @@ public class Maze extends Random {
 
 		if (getMyPlayer().getLocation().equals(new RSTile(2911, 4576))) {
 			if (getMyPlayer().getAnimation() == -1) {
-				final RSTile tile = new RSTile(2912, 4576);
-				mouse.move(calc.tileToScreen(tile, 300));
-				sleep(50);
-				menu.doAction("Touch");
+				final RSObject ob = objects.getNearest(3634);
+				ob.interact("Touch");
 				return random(5000, 6000);
 			}
 		}
