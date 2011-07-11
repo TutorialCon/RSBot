@@ -10,6 +10,14 @@ public class Win32 {
 		return (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
 	}
 
+	public static int getCurrentProcessId() {
+		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
+			return -1;
+		}
+		final Kernel32 kernel32 = getKernel32Instance();
+		return kernel32.GetCurrentProcessId();
+	}
+
 	public static void emptyWorkingSet() {
 		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
 			System.gc();

@@ -173,4 +173,8 @@ public class WindowUtil {
 	public static void maximizeWindow() {
 		frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
+
+	public static Component getBotGUI() {
+		return frame;
+	}
 }
