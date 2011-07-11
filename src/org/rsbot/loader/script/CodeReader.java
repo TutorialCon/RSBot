@@ -38,22 +38,32 @@ public class CodeReader {
 			labels[i] = new Label();
 		}
 		while (len-- > 0) {
-			final int op = code.readByte();
-			if (op == Opcodes.INSN) {
+			final Label dflt;
+			final Label[] lbls;
+			int n, ptr = 0;
+			switch (code.readByte()) {
+			case Opcodes.INSN:
 				v.visitInsn(code.readByte());
-			} else if (op == Opcodes.INT_INSN) {
+				break;
+			case Opcodes.INT_INSN:
 				v.visitIntInsn(code.readByte(), code.readShort());
-			} else if (op == Opcodes.VAR_INSN) {
+				break;
+			case Opcodes.VAR_INSN:
 				v.visitVarInsn(code.readByte(), code.readByte());
-			} else if (op == Opcodes.TYPE_INSN) {
+				break;
+			case Opcodes.TYPE_INSN:
 				v.visitTypeInsn(code.readByte(), code.readString());
-			} else if (op == Opcodes.FIELD_INSN) {
+				break;
+			case Opcodes.FIELD_INSN:
 				v.visitFieldInsn(code.readByte(), code.readString(), code.readString(), code.readString());
-			} else if (op == Opcodes.METHOD_INSN) {
+				break;
+			case Opcodes.METHOD_INSN:
 				v.visitMethodInsn(code.readByte(), code.readString(), code.readString(), code.readString());
-			} else if (op == Opcodes.JUMP_INSN) {
+				break;
+			case Opcodes.JUMP_INSN:
 				v.visitJumpInsn(code.readByte(), labels[code.readByte()]);
-			} else if (op == Opcodes.LDC_INSN) {
+				break;
+			case Opcodes.LDC_INSN:
 				final int type = code.readByte();
 				if (type == 1) {
 					v.visitLdcInsn(code.readInt());
@@ -66,42 +76,48 @@ public class CodeReader {
 				} else if (type == 5) {
 					v.visitLdcInsn(code.readString());
 				}
-			} else if (op == Opcodes.IINC_INSN) {
+				break;
+			case Opcodes.IINC_INSN:
 				v.visitIincInsn(code.readByte(), code.readByte());
-			} else if (op == Opcodes.TABLESWITCH_INSN) {
+				break;
+			case Opcodes.TABLESWITCH_INSN:
 				final int min = code.readShort();
 				final int max = code.readShort();
-				final Label dflt = labels[code.readByte()];
-				final int n = code.readByte();
-				int ptr = 0;
-				final Label[] lbls = new Label[n];
+				dflt = labels[code.readByte()];
+				n = code.readByte();
+				lbls = new Label[n];
 				while (ptr < n) {
 					lbls[ptr++] = labels[code.readByte()];
 				}
 				v.visitTableSwitchInsn(min, max, dflt, lbls);
-			} else if (op == Opcodes.LOOKUPSWITCH_INSN) {
-				final Label dflt = labels[code.readByte()];
-				int n = code.readByte(), ptr = 0;
+				break;
+			case Opcodes.LOOKUPSWITCH_INSN:
+				dflt = labels[code.readByte()];
+				n = code.readByte();
 				final int[] keys = new int[n];
 				while (ptr < n) {
 					keys[ptr++] = code.readShort();
 				}
 				n = code.readByte();
 				ptr = 0;
-				final Label[] lbls = new Label[n];
+				lbls = new Label[n];
 				while (ptr < n) {
 					lbls[ptr++] = labels[code.readByte()];
 				}
 				v.visitLookupSwitchInsn(dflt, keys, lbls);
-			} else if (op == Opcodes.MULTIANEWARRAY_INSN) {
+				break;
+			case Opcodes.MULTIANEWARRAY_INSN:
 				v.visitMultiANewArrayInsn(code.readString(), code.readByte());
-			} else if (op == Opcodes.TRY_CATCH_BLOCK) {
+				break;
+			case Opcodes.TRY_CATCH_BLOCK:
 				v.visitTryCatchBlock(labels[code.readByte()], labels[code.readByte()], labels[code.readByte()], code.readString());
-			} else if (op == Opcodes.LOCAL_VARIABLE) {
-				v.visitLocalVariable(code.readString(), code.readString(), code.readString(), labels[code.readByte()], labels[code.readByte()],
-						code.readByte());
-			} else if (op == Opcodes.LABEL) {
+				break;
+			case Opcodes.LOCAL_VARIABLE:
+				v.visitLocalVariable(code.readString(), code.readString(), code.readString(), labels[code.readByte()], labels[code.readByte()], code.readByte());
+				break;
+			case Opcodes.LABEL:
 				v.visitLabel(labels[code.readByte()]);
+				break;
 			}
 		}
 	}

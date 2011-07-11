@@ -95,16 +95,20 @@ public class ModScript {
 		version = scan.readShort();
 		int num = scan.readShort();
 		while (num-- > 0) {
+			final String clazz;
+			int count = 0, ptr = 0;
 			final int op = scan.readByte();
-			if (op == Opcodes.ATTRIBUTE) {
+			switch (op) {
+			case Opcodes.ATTRIBUTE:
 				final String key = scan.readString();
 				final String value = scan.readString();
 				attributes.put(key, new StringBuilder(value).reverse().toString());
-			} else if (op == Opcodes.GET_STATIC || op == Opcodes.GET_FIELD) {
-				final String clazz = scan.readString();
-				final int count = scan.readShort();
-				int ptr = 0;
-				final AddGetterAdapter.Field[] fields = new AddGetterAdapter.Field[count];
+				break;
+			case Opcodes.GET_STATIC:
+			case Opcodes.GET_FIELD:
+				clazz = scan.readString();
+				count = scan.readShort();
+				final AddGetterAdapter.Field[] fieldsGet = new AddGetterAdapter.Field[count];
 				while (ptr < count) {
 					final AddGetterAdapter.Field f = new AddGetterAdapter.Field();
 					f.getter_access = scan.readInt();
@@ -113,27 +117,26 @@ public class ModScript {
 					f.owner = scan.readString();
 					f.name = scan.readString();
 					f.desc = scan.readString();
-
-					fields[ptr++] = f;
+					fieldsGet[ptr++] = f;
 				}
-				adapters.put(clazz, new AddGetterAdapter(delegate(clazz), op == Opcodes.GET_FIELD, fields));
-			} else if (op == Opcodes.ADD_FIELD) {
-				final String clazz = scan.readString();
-				final int count = scan.readShort();
-				int ptr = 0;
-				final AddFieldAdapter.Field[] fields = new AddFieldAdapter.Field[count];
+				adapters.put(clazz, new AddGetterAdapter(delegate(clazz), op == Opcodes.GET_FIELD, fieldsGet));
+				break;
+			case Opcodes.ADD_FIELD:
+				clazz = scan.readString();
+				count = scan.readShort();
+				final AddFieldAdapter.Field[] fieldsAdd = new AddFieldAdapter.Field[count];
 				while (ptr < count) {
 					final AddFieldAdapter.Field f = new AddFieldAdapter.Field();
 					f.access = scan.readInt();
 					f.name = scan.readString();
 					f.desc = scan.readString();
-					fields[ptr++] = f;
+					fieldsAdd[ptr++] = f;
 				}
-				adapters.put(clazz, new AddFieldAdapter(delegate(clazz), fields));
-			} else if (op == Opcodes.ADD_METHOD) {
-				final String clazz = scan.readString();
-				final int count = scan.readShort();
-				int ptr = 0;
+				adapters.put(clazz, new AddFieldAdapter(delegate(clazz), fieldsAdd));
+				break;
+			case Opcodes.ADD_METHOD:
+				clazz = scan.readString();
+				count = scan.readShort();
 				final AddMethodAdapter.Method[] methods = new AddMethodAdapter.Method[count];
 				while (ptr < count) {
 					final AddMethodAdapter.Method m = new AddMethodAdapter.Method();
@@ -148,18 +151,20 @@ public class ModScript {
 					methods[ptr++] = m;
 				}
 				adapters.put(clazz, new AddMethodAdapter(delegate(clazz), methods));
-			} else if (op == Opcodes.ADD_INTERFACE) {
-				final String clazz = scan.readString();
+				break;
+			case Opcodes.ADD_INTERFACE:
+				clazz = scan.readString();
 				final String inter = scan.readString();
 				adapters.put(clazz, new AddInterfaceAdapter(delegate(clazz), inter));
-			} else if (op == Opcodes.SET_SUPER) {
-				final String clazz = scan.readString();
+				break;
+			case Opcodes.SET_SUPER:
+				clazz = scan.readString();
 				final String superName = scan.readString();
 				adapters.put(clazz, new SetSuperAdapter(delegate(clazz), superName));
-			} else if (op == Opcodes.SET_SIGNATURE) {
-				final String clazz = scan.readString();
-				final int count = scan.readShort();
-				int ptr = 0;
+				break;
+			case Opcodes.SET_SIGNATURE:
+				clazz = scan.readString();
+				count = scan.readShort();
 				final SetSignatureAdapter.Signature[] signatures = new SetSignatureAdapter.Signature[count];
 				while (ptr < count) {
 					final SetSignatureAdapter.Signature s = new SetSignatureAdapter.Signature();
@@ -171,11 +176,12 @@ public class ModScript {
 					signatures[ptr++] = s;
 				}
 				adapters.put(clazz, new SetSignatureAdapter(delegate(clazz), signatures));
-			} else if (op == Opcodes.INSERT_CODE) {
-				final String clazz = scan.readString();
+				break;
+			case Opcodes.INSERT_CODE:
+				clazz = scan.readString();
 				final String name = scan.readString();
 				final String desc = scan.readString();
-				int count = scan.readByte();
+				count = scan.readByte();
 				final Map<Integer, byte[]> fragments = new HashMap<Integer, byte[]>();
 				while (count-- > 0) {
 					final int off = scan.readShort();
@@ -185,14 +191,16 @@ public class ModScript {
 				}
 				adapters.put(clazz, new InsertCodeAdapter(delegate(clazz),
 						name, desc, fragments, scan.readByte(), scan.readByte()));
-			} else if (op == Opcodes.OVERRIDE_CLASS) {
+				break;
+			case Opcodes.OVERRIDE_CLASS:
 				final String old_clazz = scan.readString();
 				final String new_clazz = scan.readString();
-				int count = scan.readByte();
+				count = scan.readByte();
 				while (count-- > 0) {
-					final String clazz = scan.readString();
-					adapters.put(clazz, new OverrideClassAdapter(delegate(clazz), old_clazz, new_clazz));
+					final String current_clazz = scan.readString();
+					adapters.put(current_clazz, new OverrideClassAdapter(delegate(current_clazz), old_clazz, new_clazz));
 				}
+				break;
 			}
 		}
 	}
