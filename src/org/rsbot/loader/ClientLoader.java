@@ -24,6 +24,7 @@ import org.rsbot.Configuration;
 import org.rsbot.loader.asm.ClassReader;
 import org.rsbot.loader.script.ModScript;
 import org.rsbot.loader.script.ParseException;
+import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 import org.rsbot.util.io.IniParser;
 
@@ -94,8 +95,7 @@ public class ClientLoader {
 			jar.close();
 		} else {
 			log.info("Downloading new game client");
-			// TODO: remove modscript as cachable resource
-			final ModScript script = new ModScript(IOHelper.read(Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.CLIENTPATCH)));
+			final ModScript script = new ModScript(HttpClient.downloadBinary(new URL(Configuration.Paths.URLs.CLIENTPATCH)));
 			version[0] = script.getVersion();
 			if (version[2] > version[0]) {
 				throw new ParseException("Patch outdated (" + version[2] + " > " + version[0] + ")");
