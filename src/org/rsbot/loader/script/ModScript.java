@@ -86,7 +86,7 @@ public class ModScript {
 
 	private void load(final Scanner scan) throws ParseException {
 		if (scan.readInt() != ModScript.MAGIC) {
-			throw new ParseException("Bad magic!");
+			throw new ParseException("invalid patch format");
 		}
 		attributes = new HashMap<String, String>();
 		adapters = new HashMap<String, ClassAdapter>();
