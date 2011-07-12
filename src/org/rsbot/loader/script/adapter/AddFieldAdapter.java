@@ -3,10 +3,7 @@ package org.rsbot.loader.script.adapter;
 import org.rsbot.loader.asm.ClassAdapter;
 import org.rsbot.loader.asm.ClassVisitor;
 
-/**
- */
 public class AddFieldAdapter extends ClassAdapter {
-
 	public static class Field {
 		public int access;
 		public String name;
@@ -27,5 +24,4 @@ public class AddFieldAdapter extends ClassAdapter {
 		}
 		cv.visitEnd();
 	}
-
 }

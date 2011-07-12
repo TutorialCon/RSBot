@@ -5,10 +5,7 @@ import org.rsbot.loader.asm.ClassVisitor;
 import org.rsbot.loader.asm.MethodVisitor;
 import org.rsbot.loader.asm.Opcodes;
 
-/**
- */
 public class AddGetterAdapter extends ClassAdapter implements Opcodes {
-
 	public static class Field {
 		public int getter_access;
 		public String getter_name;
@@ -109,5 +106,4 @@ public class AddGetterAdapter extends ClassAdapter implements Opcodes {
 		}
 		throw new RuntimeException("eek");
 	}
-
 }

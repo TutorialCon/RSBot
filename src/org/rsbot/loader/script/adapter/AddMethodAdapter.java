@@ -8,7 +8,6 @@ import org.rsbot.loader.script.CodeReader;
 /**
  */
 public class AddMethodAdapter extends ClassAdapter {
-
 	public static class Method {
 		public int access;
 		public String name;
@@ -36,5 +35,4 @@ public class AddMethodAdapter extends ClassAdapter {
 		}
 		cv.visitEnd();
 	}
-
 }

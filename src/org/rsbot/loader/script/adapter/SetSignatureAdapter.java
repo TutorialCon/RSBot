@@ -7,7 +7,6 @@ import org.rsbot.loader.asm.MethodVisitor;
 /**
  */
 public class SetSignatureAdapter extends ClassAdapter {
-
 	public static class Signature {
 		public String name;
 		public String desc;
@@ -42,5 +41,4 @@ public class SetSignatureAdapter extends ClassAdapter {
 		}
 		return cv.visitMethod(access, name, desc, signature, exceptions);
 	}
-
 }

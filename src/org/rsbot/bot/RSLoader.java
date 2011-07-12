@@ -138,9 +138,5 @@ public class RSLoader extends Applet implements Runnable, Loader {
 	public final Dimension getSize() {
 		return size;
 	}
-
-	public RSClassLoader getClassLoader() {
-		return classLoader;
-	}
 }
 

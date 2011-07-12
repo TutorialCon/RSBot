@@ -33,7 +33,7 @@ public class Bot {
 	private RSLoader loader;
 	private final ScriptHandler sh;
 	private final Map<String, EventListener> listeners;
-	private static final String THREADGROUPID = "RSClient-";
+	private static final String THREAD_GROUP_ID = "RSClient-";
 	private ImprovedLoginBot loginBot = null;
 
 	/**
@@ -101,7 +101,7 @@ public class Bot {
 			loader.setStub(botStub);
 			eventManager.start();
 			botStub.setActive(true);
-			final ThreadGroup tg = new ThreadGroup(THREADGROUPID + hashCode());
+			final ThreadGroup tg = new ThreadGroup(THREAD_GROUP_ID + hashCode());
 			final Thread thread = new Thread(tg, loader, "Loader");
 			thread.start();
 			new Timer(true).schedule(new TimerTask() {

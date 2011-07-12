@@ -3,10 +3,7 @@ package org.rsbot.loader.script.adapter;
 import org.rsbot.loader.asm.ClassAdapter;
 import org.rsbot.loader.asm.ClassVisitor;
 
-/**
- */
 public class AddInterfaceAdapter extends ClassAdapter {
-
 	private final String inter;
 
 	public AddInterfaceAdapter(final ClassVisitor delegate, final String inter) {
@@ -27,5 +24,4 @@ public class AddInterfaceAdapter extends ClassAdapter {
 		inters[interfaces.length] = inter;
 		cv.visit(version, access, name, signature, superName, inters);
 	}
-
 }

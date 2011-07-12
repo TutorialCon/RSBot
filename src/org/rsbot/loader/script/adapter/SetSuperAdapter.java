@@ -2,10 +2,7 @@ package org.rsbot.loader.script.adapter;
 
 import org.rsbot.loader.asm.*;
 
-/**
- */
 public class SetSuperAdapter extends ClassAdapter {
-
 	private String superName;
 	private final String newSuperName;
 
@@ -46,5 +43,4 @@ public class SetSuperAdapter extends ClassAdapter {
 		}
 		return cv.visitMethod(access, name, desc, signature, exceptions);
 	}
-
 }
