@@ -76,7 +76,7 @@ public class Scanner {
 					JOptionPane.showMessageDialog(
 							WindowUtil.getBotGUI(),
 							new String[]{Configuration.NAME + " will now close all external java programs to clean files.",
-									"Please save your unsaved work and click OK to  proceeded."},
+									"Please save your unsaved work and click OK to proceeded."},
 							"Security",
 							JOptionPane.ERROR_MESSAGE, null);
 					selectedOption = 0;
@@ -84,7 +84,6 @@ public class Scanner {
 			});
 			waitSelect();
 			killProcesses();
-			invokeStart();
 			for (final File f : removeFiles) {
 				if (!f.delete()) {
 					log.info("Failed to remove " + f.getAbsolutePath() + " please delete manually.");
@@ -122,15 +121,6 @@ public class Scanner {
 				Thread.sleep(150);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-		}
-	}
-
-	private static void invokeStart() {
-		if (Configuration.RUNNING_FROM_JAR) {
-			try {
-				Runtime.getRuntime().exec("java -jar \"" + Configuration.Paths.getRunningJarPath() + "\"");
-			} catch (IOException ignored) {
 			}
 		}
 	}
