@@ -29,7 +29,7 @@ public class Win32 {
 			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_QUOTA, false, dwProcessId);
 			kernel32.SetProcessWorkingSetSize(hProcess, -1, -1);
 			kernel32.CloseHandle(hProcess);
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 		System.gc();
 	}
@@ -44,7 +44,7 @@ public class Win32 {
 			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_SET_INFORMATION, false, dwProcessId);
 			kernel32.SetPriorityClass(hProcess, dwPriorityClass);
 			kernel32.CloseHandle(hProcess);
-		} catch (final Exception ignored) {
+		} catch (final Throwable ignored) {
 		}
 	}
 }
