@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class Scanner {
@@ -34,22 +35,7 @@ public class Scanner {
 	public static boolean Scan() {
 		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
 			log.fine("Scanning for malicious files.");
-			for (File directory : SUSPECT_DIRECTORIES) {
-				if (directory.exists()) {
-					final File[] directoryList = directory.listFiles();
-					for (File f : directoryList) {
-						final String lName = f.getName().toLowerCase();
-						for (final String fileName : SUSPECT_FILE_NAMES) {
-							for (final String fileExt : SUSPECT_FILE_EXTENSIONS) {
-								if (lName.contains(fileName) && lName.endsWith(fileExt)) {
-									return true;
-								}
-							}
-						}
-					}
-					return false;
-				}
-			}
+			return findInfections().length > 0;
 		}
 		return false;
 	}
@@ -67,40 +53,20 @@ public class Scanner {
 						JOptionPane.YES_NO_OPTION);
 			}
 		});
-		while (selectedOption == -1) { /* TODO: better wait for selection */
-			try {
-				Thread.sleep(150);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		if (selectedOption == JOptionPane.YES_OPTION) {
-			log.info("Initializing cleaning of computer.");
-		} else {
+		waitSelect();
+		if (selectedOption != JOptionPane.YES_OPTION) {
 			log.fine("User has left their computer infected.");
 			return;
 		}
+		log.info("Initializing cleaning of computer.");
 		final ArrayList<File> removeFiles = new ArrayList<File>();
-		int files = 0;
-		for (File directory : SUSPECT_DIRECTORIES) {
-			if (directory.exists()) {
-				final File[] directoryList = directory.listFiles();
-				for (File f : directoryList) {
-					final String lName = f.getName().toLowerCase();
-					for (final String fileName : SUSPECT_FILE_NAMES) {
-						for (final String fileExt : SUSPECT_FILE_EXTENSIONS) {
-							if (lName.contains(fileName) && lName.endsWith(fileExt)) {
-								files++;
-								if (f.delete()) {
-									log.fine(f.getAbsolutePath() + " has been removed");
-								} else {
-									log.fine("Failed to remove " + f.getAbsolutePath());
-									removeFiles.add(f);
-								}
-							}
-						}
-					}
-				}
+		final File[] infectedFiles = findInfections();
+		for (File f : infectedFiles) {
+			if (f.delete()) {
+				log.fine(f.getAbsolutePath() + " has been removed");
+			} else {
+				log.fine("Failed to remove " + f.getAbsolutePath());
+				removeFiles.add(f);
 			}
 		}
 		if (removeFiles.size() > 0) {
@@ -109,40 +75,16 @@ public class Scanner {
 				public void run() {
 					JOptionPane.showMessageDialog(
 							WindowUtil.getBotGUI(),
-							new String[]{"RSBot will now close all external java programs to clean files.",
+							new String[]{Configuration.NAME + " will now close all external java programs to clean files.",
 									"Please save your unsaved work and click OK to  proceeded."},
 							"Security",
 							JOptionPane.ERROR_MESSAGE, null);
 					selectedOption = 0;
 				}
 			});
-			while (selectedOption == -1) {
-				try {
-					Thread.sleep(150);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			final int currentProcessId = Win32.getCurrentProcessId();
-			try {
-				Runtime.getRuntime().exec("taskkill /F /T /FI \"PID ne " + currentProcessId + "\" /IM javaw.exe");
-			} catch (IOException ignored) {
-			}
-			try {
-				Runtime.getRuntime().exec("taskkill /F /T /FI \"PID ne " + currentProcessId + "\" /IM java.exe");
-			} catch (IOException ignored) {
-			}
-			if (Configuration.RUNNING_FROM_JAR) {
-				try {
-					Runtime.getRuntime().exec("java -jar \"" + Configuration.Paths.getRunningJarPath() + "\"");
-				} catch (IOException ignored) {
-				}
-			}
-			log.info("Waiting for processes to close.");
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException ignored) {
-			}
+			waitSelect();
+			killProcesses();
+			invokeStart();
 			for (final File f : removeFiles) {
 				if (!f.delete()) {
 					log.info("Failed to remove " + f.getAbsolutePath() + " please delete manually.");
@@ -150,5 +92,63 @@ public class Scanner {
 			}
 		}
 		log.info("Cleaning has been completed.");
+	}
+
+	private static File[] findInfections() {
+		final List<File> fileList = new ArrayList<File>();
+		for (File directory : SUSPECT_DIRECTORIES) {
+			if (directory.exists()) {
+				final File[] directoryList = directory.listFiles();
+				for (File f : directoryList) {
+					final String lName = f.getName().toLowerCase();
+					for (final String fileName : SUSPECT_FILE_NAMES) {
+						if (lName.contains(fileName)) {
+							for (final String fileExt : SUSPECT_FILE_EXTENSIONS) {
+								if (lName.endsWith(fileExt)) {
+									fileList.add(f);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return fileList.toArray(new File[fileList.size()]);
+	}
+
+	private static void waitSelect() {
+		while (selectedOption == -1) {
+			try {
+				Thread.sleep(150);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void invokeStart() {
+		if (Configuration.RUNNING_FROM_JAR) {
+			try {
+				Runtime.getRuntime().exec("java -jar \"" + Configuration.Paths.getRunningJarPath() + "\"");
+			} catch (IOException ignored) {
+			}
+		}
+	}
+
+	private static void killProcesses() {
+		final int currentProcessId = Win32.getCurrentProcessId();
+		try {
+			Runtime.getRuntime().exec("taskkill /F /T /FI \"PID ne " + currentProcessId + "\" /IM javaw.exe");
+		} catch (IOException ignored) {
+		}
+		try {
+			Runtime.getRuntime().exec("taskkill /F /T /FI \"PID ne " + currentProcessId + "\" /IM java.exe");
+		} catch (IOException ignored) {
+		}
+		log.info("Waiting for processes to close.");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException ignored) {
+		}
 	}
 }
