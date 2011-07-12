@@ -362,7 +362,19 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		final ScriptHandler sh = bot.getScriptHandler();
 		final Map<Integer, LoopTask> running = sh.getRunningScripts();
 		if (running.size() > 0) {
-			final int id = running.keySet().iterator().next();
+			Iterator<Integer> idIterator = running.keySet().iterator();
+			int id = -1;
+			Web web = bot.getMethodContext().web;
+			while (idIterator.hasNext()) {
+				final int checkID = idIterator.next();
+				if (web.areScriptsLoaded()) {
+					if (checkID == web.bankCacheId || checkID == web.webDataId) {
+						continue;
+					}
+				}
+				id = checkID;
+				break;
+			}
 			sh.pauseScript(id);
 		}
 	}
