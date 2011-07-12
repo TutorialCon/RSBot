@@ -6,6 +6,7 @@ import org.rsbot.gui.component.JComboCheckBox;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
+import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.*;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.ServiceException;
@@ -73,7 +74,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	void update() {
-		final boolean available = bot.getScriptHandler().getRunningScripts().size() == 0;
+		final boolean available = bot.getScriptHandler().getRunningScripts().size() == 0 ||
+				(bot.getMethodContext() != null && bot.getMethodContext().web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() > Web.WEB_SCRIPT_COUNT);
 		submit.setEnabled(available && table.getSelectedRow() != -1);
 		table.setEnabled(available);
 		search.setEnabled(available);

@@ -107,7 +107,12 @@ public class Scanner {
 			selectedOption = -1;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					JOptionPane.showMessageDialog(WindowUtil.getBotGUI(), new String[]{"RSBot will now close all external java programs to clean files.", "Please save your unsaved work and click OK to  proceeded."}, "Security", JOptionPane.ERROR_MESSAGE, null);
+					JOptionPane.showMessageDialog(
+							WindowUtil.getBotGUI(),
+							new String[]{"RSBot will now close all external java programs to clean files.",
+									"Please save your unsaved work and click OK to  proceeded."},
+							"Security",
+							JOptionPane.ERROR_MESSAGE, null);
 					selectedOption = 0;
 				}
 			});

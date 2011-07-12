@@ -392,7 +392,19 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		final ScriptHandler sh = bot.getScriptHandler();
 		final Map<Integer, LoopTask> running = sh.getRunningScripts();
 		if (running.size() > 0) {
-			final int id = running.keySet().iterator().next();
+			Iterator<Integer> idIterator = running.keySet().iterator();
+			int id = -1;
+			Web web = bot.getMethodContext().web;
+			while (idIterator.hasNext()) {
+				final int checkID = idIterator.next();
+				if (web.areScriptsLoaded()) {
+					if (checkID == web.bankCacheId || checkID == web.webDataId) {
+						continue;
+					}
+				}
+				id = checkID;
+				break;
+			}
 			final Script s = (Script) running.get(id);
 			final ScriptManifest prop = s.getClass().getAnnotation(ScriptManifest.class);
 			final int result = JOptionPane.showConfirmDialog(this, "Would you like to stop the script " + prop.name() + "?", "Script", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -576,7 +588,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				@Override
 				public void run() {
 					for (final Bot bot : bots) {
-						if (bot.getScriptHandler().getRunningScripts().size() != 0) {
+						Web web = bot.getMethodContext().web;
+						if (bot.getScriptHandler().getRunningScripts().size() != 0 || (web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() > Web.WEB_SCRIPT_COUNT)) {
 							return;
 						}
 					}
