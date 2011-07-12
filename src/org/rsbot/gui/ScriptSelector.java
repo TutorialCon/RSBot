@@ -47,7 +47,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JButton submit;
 	private boolean connected = true;
 	private boolean likedOnly = false;
-	private static boolean FIXEDCATEGORIES = true;
+	private static boolean FIXED_CATEGORIES = true;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -108,7 +108,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 
 	private void populateCategories() {
 		final List<String> list;
-		if (FIXEDCATEGORIES) {
+		if (FIXED_CATEGORIES) {
 			list = new ArrayList<String>();
 			list.add("agility");
 			list.add("combat");
