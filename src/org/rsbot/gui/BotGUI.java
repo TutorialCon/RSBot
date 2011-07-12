@@ -62,14 +62,13 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		preferences = settings.getPreferences();
 		preferences.load();
 		preferences.commit();
-		final BotGUI instance = this;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LoadScreen.quit();
 				JFrame.setDefaultLookAndFeelDecorated(true);
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-				SwingUtilities.updateComponentTreeUI(instance);
+				SwingUtilities.updateComponentTreeUI(BotGUI.this);
 				setVisible(true);
 				addBot();
 				updateScriptControls();
