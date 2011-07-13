@@ -1,5 +1,9 @@
 package org.rsbot.security;
 
+import org.rsbot.Configuration;
+import org.rsbot.util.StringUtil;
+import org.rsbot.util.io.IOHelper;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,13 +14,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Enumeration;
 
-import org.rsbot.Configuration;
-import org.rsbot.util.StringUtil;
-import org.rsbot.util.io.IOHelper;
-
 public class UniqueID {
 	private static final int LENGTH = 64;
-	private static final byte[] SALT = { 0x4a, 0x13, (byte) 0xf9, (byte) 0xcc };
+	private static final byte[] SALT = {0x4a, 0x13, (byte) 0xf9, (byte) 0xcc};
 	private static File store = new File(Configuration.Paths.getSettingsDirectory(), "random.dat");
 
 	public static String getID() {
