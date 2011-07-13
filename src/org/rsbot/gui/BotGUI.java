@@ -301,7 +301,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			toolBar.setScriptButton(BotToolBar.RUN_SCRIPT);
 		} else {
 			toolBar.setOverrideInput(bot.overrideInput);
-			toolBar.setOverrideInput(bot.overrideInput);
+			menuBar.setOverrideInput(bot.overrideInput);
 			toolBar.setInputState(bot.inputFlags);
 			toolBar.setScriptButton(paused ? BotToolBar.RESUME_SCRIPT : BotToolBar.PAUSE_SCRIPT);
 		}

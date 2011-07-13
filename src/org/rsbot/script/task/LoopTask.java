@@ -114,7 +114,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 		} catch (final Throwable t) {
 			onFinish();
 		}
-		super.stop();
+		stop();
 	}
 
 	/**
@@ -180,6 +180,7 @@ public abstract class LoopTask extends Containable implements EventListener {
 	public void stop() {
 		this.running = false;
 		ctx.bot.getEventManager().removeListener(this);
+		super.stop();
 	}
 
 	protected void blockEvents(final boolean paint) {

@@ -105,7 +105,7 @@ public abstract class Random extends Methods implements PaintListener {
 				} else {
 					sleep(wait);
 				}
-			} catch (final Exception ex) {
+			} catch (final Throwable ex) {
 				log.log(Level.SEVERE, "Uncaught exception: ", ex);
 				break;
 			}

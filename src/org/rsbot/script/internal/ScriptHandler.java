@@ -94,20 +94,23 @@ public class ScriptHandler extends TaskContainer {
 	}
 
 	public void stopScript(final int id) {
+		if (stopDaemonScript(id)) {
+			notifyStop();
+		}
+	}
+
+	public boolean stopDaemonScript(final int id) {
 		final LoopTask script = getTasks().get(id);
 		if (script != null) {
 			script.stop();
 			remove(id);
-			for (final ScriptListener l : listeners) {
-				l.scriptStopped(this);
-			}
+			return true;
 		}
+		return false;
 	}
 
 	public int runScript(final Script script) {
-		for (final ScriptListener l : listeners) {
-			l.scriptStarted(this);
-		}
+		notifyStart();
 		return runDaemonScript(script);
 	}
 
@@ -119,11 +122,24 @@ public class ScriptHandler extends TaskContainer {
 
 	public void stopAllScripts() {
 		stop();
+		notifyStop();
 	}
 
 	public void updateInput(final Bot bot, final int mask) {
 		for (final ScriptListener l : listeners) {
 			l.inputChanged(bot, mask);
+		}
+	}
+
+	private void notifyStart() {
+		for (final ScriptListener l : listeners) {
+			l.scriptStarted(this);
+		}
+	}
+
+	private void notifyStop() {
+		for (final ScriptListener l : listeners) {
+			l.scriptStopped(this);
 		}
 	}
 }
