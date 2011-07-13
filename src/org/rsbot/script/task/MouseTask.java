@@ -15,6 +15,7 @@ public class MouseTask extends AbstractTask {
 	private final MouseCallback callback;
 	protected final List<ForceModifier> forceModifiers = new ArrayList<ForceModifier>(5);
 	protected final Vector2D velocity = new Vector2D();
+	private boolean running;
 
 	public MouseTask(RSTarget target, MouseCallback callback, MethodContext ctx) {
 		this.target = target;
@@ -24,7 +25,8 @@ public class MouseTask extends AbstractTask {
 
 	public void run() {
 		initForceModifiers();
-		while (true) {
+		running = true;
+		while (running) {
 			Point p = target.getPoint();
 			if (p.x == -1 || p.y == -1) {
 				break;
@@ -81,6 +83,10 @@ public class MouseTask extends AbstractTask {
 				return;
 			}
 		}
+	}
+
+	public void stop() {
+		running = false;
 	}
 
 	public void initForceModifiers() {
