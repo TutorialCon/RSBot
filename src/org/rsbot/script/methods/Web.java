@@ -546,8 +546,8 @@ public class Web extends MethodProvider {
 	public void unloadWebScripts() {
 		if (webScriptsLoaded && !forceLoad) {
 			final ScriptHandler bsh = methods.bot.getScriptHandler();
-			bsh.stopScript(webDataId);
-			bsh.stopScript(bankCacheId);
+			bsh.stopDaemonScript(webDataId);
+			bsh.stopDaemonScript(bankCacheId);
 			webScriptsLoaded = false;
 		}
 	}
