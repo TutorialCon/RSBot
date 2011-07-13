@@ -75,7 +75,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 
 	void update() {
 		final boolean available = bot.getScriptHandler().getRunningScripts().size() == 0 ||
-				(bot.getMethodContext() != null && bot.getMethodContext().web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() > Web.WEB_SCRIPT_COUNT);
+				(bot.getMethodContext() != null && bot.getMethodContext().web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() == Web.WEB_SCRIPT_COUNT);
 		submit.setEnabled(available && table.getSelectedRow() != -1);
 		table.setEnabled(available);
 		search.setEnabled(available);
