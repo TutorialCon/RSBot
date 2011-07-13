@@ -76,6 +76,7 @@ public abstract class RSModel extends MethodProvider implements RSTarget {
 	 * @return true of the point is within the bounds of the model
 	 */
 	public boolean contains(int x, int y) {
+		/*
 		final int[][] points = projectVertices();
 		for (int i = 0; i < numFaces; i++) {
 			int index1 = indices1[i];
@@ -92,6 +93,14 @@ public abstract class RSModel extends MethodProvider implements RSTarget {
 					continue;
 				}
 				return x <= points[index1][0] || x <= points[index2][0] || x <= points[index3][0];
+			}
+		}
+		return false;
+		*/
+		final Polygon[] polygons = getTriangles();
+		for (final Polygon triangle : polygons) {
+			if (triangle.contains(x, y)) {
+				return true;
 			}
 		}
 		return false;
