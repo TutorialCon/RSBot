@@ -61,7 +61,7 @@ public class ModelCapture implements Model {
 		} else {
 			this.numVertices = numVertices;
 			System.arraycopy(vertices_x, 0, vertex_x, 0, numVertices);
-			System.arraycopy(vertices_z, 0, vertex_z, 0, numVertices);
+			System.arraycopy(vertices_y, 0, vertex_y, 0, numVertices);
 			System.arraycopy(vertices_z, 0, vertex_z, 0, numVertices);
 		}
 
