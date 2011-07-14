@@ -7,6 +7,7 @@ import org.rsbot.gui.BotGUI;
 import org.rsbot.gui.LoadScreen;
 import org.rsbot.loader.ClientLoader;
 import org.rsbot.script.AccountStore;
+import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.task.Containable;
 import org.rsbot.script.task.LoopTask;
@@ -121,7 +122,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkAccess(final ThreadGroup g) {
 		if (g.getName().equals(ScriptHandler.THREAD_GROUP_NAME) && !(getCallingClass().equals(ScriptPool.class.getName()) ||
-				getCallingClass().equals(LoopTask.class.getName()) || getCallingClass().equals(Containable.class.getName()))) {
+				getCallingClass().equals(LoopTask.class.getName()) || getCallingClass().equals(Containable.class.getName()) ||
+				getCallingClass().equals(Script.class.getName()))) {
 			throw new SecurityException();
 		}
 	}
