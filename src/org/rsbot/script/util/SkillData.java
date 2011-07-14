@@ -92,4 +92,16 @@ public class SkillData extends MethodProvider {
 		}
 		return 1000 * (long) ((expToLevel(idx, level) * 3600) / hourlyExp);
 	}
+
+	public int[] getStartExp() {
+		return startExp;
+	}
+
+	public int[] getExp() {
+		final int[] a = new int[startExp.length];
+		for (int i = 0; i < a.length; i++) {
+			a[i] = exp(i);
+		}
+		return a;
+	}
 }
