@@ -28,7 +28,11 @@ public class MouseTask extends AbstractTask {
 		while (running) {
 			Point p = target.getPoint();
 			if (p.x == -1 || p.y == -1) {
-				break;
+				try {
+					Thread.sleep(random(50, 250));
+				} catch (InterruptedException ignored) {
+				}
+				continue;
 			}
 
 			if (target.contains(ctx.client.getMouse().getX(), ctx.client.getMouse().getY()) && callback.performAction()) {
