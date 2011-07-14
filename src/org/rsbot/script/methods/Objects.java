@@ -65,6 +65,32 @@ public class Objects extends MethodProvider {
 	}
 
 	/**
+	 * Returns all the <tt>RSObject</tt>s in the local region within specified distance.
+	 *
+	 * @param distance The range to search (box-like).
+	 * @param filter   Filters out unwanted objects.
+	 * @return An <tt>RSObject[]</tt> of all objects in the loaded region within specified range.
+	 */
+	public RSObject[] getAll(final int distance, final Filter<RSObject> filter) {
+		final Set<RSObject> objects = new LinkedHashSet<RSObject>();
+		final RSTile currTile = methods.players.getMyPlayer().getLocation(), baseTile = methods.game.getMapBase();
+		final int sX = Math.max(0, currTile.getX() - baseTile.getX() - distance);
+		final int sY = Math.max(0, currTile.getY() - baseTile.getY() - distance);
+		final int eX = Math.min(104, currTile.getX() - baseTile.getX() + distance);
+		final int eY = Math.min(104, currTile.getY() - baseTile.getY() + distance);
+		for (int x = sX; x < eX; x++) {
+			for (int y = sY; y < eY; y++) {
+				for (final RSObject o : getAtLocal(x, y, -1)) {
+					if (o != null && filter.accept(o)) {
+						objects.add(o);
+					}
+				}
+			}
+		}
+		return objects.toArray(new RSObject[objects.size()]);
+	}
+
+	/**
 	 * Returns all the <tt>RSObject</tt>s in the local region accepted by the
 	 * provided Filter.
 	 *
