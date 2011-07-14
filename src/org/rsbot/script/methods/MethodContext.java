@@ -52,7 +52,7 @@ public class MethodContext {
 	/**
 	 * The singleton of Grand Exchange
 	 */
-	public final GrandExchange grandExchange = new GrandExchange();
+	public final GrandExchange grandExchange = new GrandExchange(this);
 
 	/**
 	 * The singletion of Hiscores

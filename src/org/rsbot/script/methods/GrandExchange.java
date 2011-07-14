@@ -1,7 +1,13 @@
 package org.rsbot.script.methods;
 
+import org.rsbot.gui.AccountManager;
+import org.rsbot.script.wrappers.RSArea;
+import org.rsbot.script.wrappers.RSComponent;
 import org.rsbot.script.wrappers.RSInterface;
+import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
+import org.rsbot.script.wrappers.RSTile;
+import org.rsbot.script.wrappers.RSWeb;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +20,7 @@ import java.util.regex.Pattern;
  * Obtains information on tradeable items from the Grand Exchange website and
  * Grand Exchange ingame interaction.
  *
- * @author Aion, Boolean, Debauchery, kyleshay
+ * @author Javaskill, Aion, Boolean, Debauchery, kyleshay
  */
 public class GrandExchange extends MethodProvider {
 	private static final String HOST = "http://services.runescape.com";
@@ -34,8 +40,8 @@ public class GrandExchange extends MethodProvider {
 
 	private static final Pattern PATTERN = Pattern.compile("(?i)<td><img src=\".+obj_sprite\\.gif\\?id=(\\d+)\" alt=\"(.+)\"");
 
-	GrandExchange() {
-		super(null);
+	GrandExchange(final MethodContext ctx) {
+		super(ctx);
 	}
 
 	/**
@@ -45,46 +51,6 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public RSInterface getInterface() {
 		return methods.interfaces.get(INTERFACE_GRAND_EXCHANGE);
-	}
-
-	/**
-	 * Checks whether or not the Grand Exchange is open.
-	 *
-	 * @return <tt>true</tt> if the grand exchange interface is open; otherwise <tt>false</tt>.
-	 */
-	public boolean isOpen() {
-		return getInterface().isValid();
-	}
-
-	/**
-	 * Opens Grand Exchange window.
-	 *
-	 * @return True if it's open, otherwise false.
-	 */
-	public boolean open() {
-		if (isOpen()) {
-			return true;
-		}
-		RSNPC clerk = methods.npcs.getNearest(GRAND_EXCHANGE_CLERK);
-		if (clerk != null) {
-			clerk.interact("Exchange " + clerk.getName());
-		}
-		return isOpen();
-	}
-
-	/**
-	 * Checks Grand Exchange slots for an any activity (1-6)
-	 *
-	 * @param slot An int for the corresponding slot.
-	 * @return <tt>True</tt> if the slot is free from activity.
-	 */
-	public boolean checkSlotIsEmpty(final int slot) {
-		try {
-			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot];
-			return isOpen() && methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).getComponent(10).containsText("Empty");
-		} catch (final Exception e) {
-			return false;
-		}
 	}
 
 	/**
@@ -147,7 +113,935 @@ public class GrandExchange extends MethodProvider {
 		}
 		return 0;
 	}
+	public final RSArea GE_AREA = new RSArea(3157, 3477, 3176, 3501);
+	public final RSTile GE_TILE = new RSTile(3164, 3484);
 
+	/**
+	 * Closes the GE interface
+	 * 
+	 * @return True if the G.E. was Closed
+	 */
+	public boolean closeGe() {
+		if (isOpen()) {
+			RSComponent exit = methods.interfaces.get(105).getComponent(18);
+			return exit.doClick();
+		}
+		return true;
+	}
+
+	/**
+	 * Sells an item, at the price of 5% * upButtonNumber + normalPrice
+	 * 
+	 * @param item
+	 *            The RSItem to sell
+	 * @param quantity
+	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param upButtonNumber
+	 *            The amount of times to press the %5 up button
+	 * 
+	 */
+	public boolean sellUp(RSItem item, String quantity, int upButtonNumber) {
+		boolean success = false;
+		int slot = 0;
+		if (item == null) {
+			return false;
+		}
+		if (!isOpen()) {
+			open();
+			sleep(random(450, 750));
+		}
+		if (isOpen()) {
+			if (isBuyOpen()) {
+				clickBackButton();
+			}
+			for (int i = 0; i < 4 && !isSellOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				openSell(slot);
+				sleep(random(350, 650));
+			}
+			if (isSellOpen()) {
+				while (!isSellItemChosen()) {
+					if(item.doClick(true)){
+						sleep(random(350, 650));
+					} else {
+						return false;
+					}
+				}
+				if (isSellItemChosen()) {
+					if (quantity == "0") {
+						sellAll();
+						sleep(random(250, 500));
+					}
+					if (quantity != "1" || quantity != "0") {
+						setQuantity(quantity);
+						sleep(random(250, 500));
+					}
+					if (upButtonNumber > 0) {
+						for (int i = 0; i < upButtonNumber; i++) {
+							fivePercentUp();
+						}
+					}
+					success = clickConfirm();
+				}
+			}
+		}
+		return success;
+	}
+
+	/**
+	 * Sells an item, at the price of 5% * downButtonNumer + normalPrice
+	 * 
+	 * @param item
+	 *            The RSItem to sell
+	 * @param quantity
+	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param upButtonNumber
+	 *            The amount of times to press the %5 up button
+	 * @return True on Success
+	 */
+	public boolean sellDown(RSItem item, String quantity,int downButtonNumber) {
+		boolean success = false;
+		int slot = 0;
+		if (item == null || item.getID() == 0 || !methods.inventory.contains(item.getID())) {
+			return false;
+		}
+		if (!isOpen()) {
+			open();
+			sleep(random(450, 750));
+		}
+		sleep(random(900,1300));
+		if (isOpen()) {
+			if (isBuyOpen()) {
+				clickBackButton();
+			}
+			for (int i = 0; i < 4 && !isSellOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				slot = getFree();
+				openSell(slot);
+				sleep(random(350, 650));
+			}
+			if (isSellOpen()) {
+				while (!isSellItemChosen() && isSellOpen()) {
+					if (methods.inventory.contains(item.getID())) {
+						item.doClick(true);
+					} else {
+						return false;
+					}
+					sleep(random(350, 650));
+				}
+				if (isSellItemChosen()) {
+					if (quantity == "0") {
+						sellAll();
+						sleep(random(250, 500));
+					}
+					if (quantity != "0") {
+						setQuantity(quantity);
+						sleep(random(250, 500));
+					}
+					if (downButtonNumber > 0) {
+						for (int i = 0; i < downButtonNumber; i++) {
+							fivePercentDown();
+							sleep(random(350,650));
+						}
+					}
+					success = clickConfirm();
+				}
+			}
+		}
+		
+		return success;
+	}
+
+	/**
+	 * Sells an item at a specific price
+	 * 
+	 * @param item
+	 *            The RSItem to sell
+	 * @param quantity
+	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param Price
+	 *            The price to sell the item at
+	 * @return True on Success
+	 */
+	public boolean sellItemAt(RSItem item, String quantity,String price) {
+		boolean success = false;
+		int slot = 0;
+		if (item == null || item.getID() == 0) {
+			return false;
+		}
+		if (!isOpen()) {
+			open();
+			sleep(random(450, 750));
+		}
+		if (isOpen()) {
+			if (isBuyOpen()) {
+				clickBackButton();
+			}
+			for (int i = 0; i < 4 && !isSellOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				openSell(slot);
+				sleep(random(350, 650));
+			}
+			if (isSellOpen()) {
+				while (!isSellItemChosen()) {
+					if (methods.inventory.contains(item.getID())) {
+						item.doClick(true);
+					} else {
+						return false;
+					}
+					sleep(random(350, 650));
+				}
+				if (isSellItemChosen()) {
+					if (quantity == "0") {
+						sellAll();
+						sleep(random(250, 500));
+					}
+					if (quantity != "0") {
+						setQuantity(quantity);
+						sleep(random(350, 500));
+					}
+					setPrice(price);
+					sleep(random(450,650));
+					success = clickConfirm();
+				}
+			}
+		}
+		
+		return success;
+	}
+	/**
+	 * Buys an item, at the price of 5% * upButtonNumber + normalPrice
+	 *
+	 * @param int The itemID to search for
+	 * @param quantity
+	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param upButtonNumber
+	 *            The amount of times to press the %5 up button
+	 * @return True on Success
+	 */
+	public boolean buyUp(int item, String quantity, int upButtonNumber) {
+		boolean success = false;
+		int slot = 0;
+		if (!isOpen()) {
+			open();
+			sleep(random(450, 750));
+		}
+		if (isOpen()) {
+			if (isSellOpen()) {
+				clickBackButton();
+			}
+			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				openBuy(slot);
+				sleep(random(350, 650));
+			}
+			if (isBuyOpen()) {
+				boolean skip = false;
+				for (int i = 0; i < 4 && !skip; i++) {
+					if (chooseBuyingItem(getItemName(item))) {
+						skip = true;
+						sleep(random(350, 650));
+					}
+				}
+				if (skip) {
+					if (quantity != "1" && quantity != "0") {
+						setQuantity(quantity);
+						sleep(random(250, 500));
+					}
+					if (upButtonNumber > 0) {
+						for (int i = 0; i < upButtonNumber; i++) {
+							fivePercentUp();
+						}
+					}
+					success = clickConfirm();
+				}
+			}
+		}
+		return success;
+	}
+
+	/**
+	 * Buys an item, at the price of (normal - 5% * downButtonNumber)
+	 * 
+	 * @param int The itemID to search for
+	 * @param quantity
+	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param downButtonNumber
+	 *            The amount of times to press the %5 down button
+	 * @return True on Success
+	 */
+	public boolean buyDown(int item, String quantity, int downButtonNumber) {
+		boolean success = false;
+		int slot = 0;
+		if (!isOpen()) {
+			open();
+			sleep(random(450, 750));
+		}
+		if (isOpen()) {
+			if (isSellOpen()) {
+				clickBackButton();
+			}
+			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				openBuy(slot);
+				sleep(random(350, 650));
+			}
+			if (isBuyOpen()) {
+				boolean skip = false;
+				for (int i = 0; i < 4 && !skip; i++) {
+					if (chooseBuyingItem(getItemName(item))) {
+						skip = true;
+						sleep(random(350, 650));
+					}
+				}
+				if (skip) {
+					if (quantity != "0" && quantity != null) {
+						setQuantity(quantity);
+						sleep(random(250, 500));
+					}
+					if (downButtonNumber > 0) {
+						for (int i = 0; i < downButtonNumber; i++) {
+							fivePercentDown();
+						}
+					}
+					success = clickConfirm();
+				}
+			}
+		}
+		return success;
+	}
+	/**
+	 *  Buys an item at a specific price
+	 * 
+	 * @param item The item to buy
+	 * @param quantity The amount to buy
+	 * @param price The price to buy at
+	 * @return
+	 */
+	public boolean buyItemAt(int item, String quantity, String price) {
+		boolean success = false;
+		int slot = 0;
+		for (int i = 0; i < 4 && !isOpen(); i++) {
+			open();
+			while (methods.players.getMyPlayer().isMoving()) {
+				sleep(random(750, 950));
+			}
+			sleep(random(650, 1100));
+		}
+		if (isOpen()) {
+			if (isSellOpen()) {
+				clickBackButton();
+				sleep(random(250, 350));
+			}
+			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
+				slot = getFree();
+				if(slot == -1){
+					return false;
+				}
+				slot = getFree();
+				openBuy(slot);
+				sleep(random(350, 650));
+			}
+			if (isBuyOpen()) {
+				boolean skip = false;
+				for (int i = 0; i < 4 && !skip; i++) {
+					if (chooseBuyingItem(getItemName(item))) {
+						skip = true;
+						sleep(random(350, 650));
+					}
+				}
+				if (skip) {
+					if (quantity != "0") {
+						sleep(random(450, 650));
+						setQuantity(quantity);
+						sleep(random(450, 500));
+					}
+					sleep(random(350, 500));
+					setPrice(price);
+					sleep(random(200, 350));
+					success = clickConfirm();
+				}
+			}
+		}
+		
+		return success;
+	}
+	/**
+	 * Searches the G.E. for the item
+	 * 
+	 * @param item The item to search for
+	 * @return True if the item was found, and clicked
+	 */
+	public boolean searchItem(int item) {
+		return chooseBuyingItem(getItemName(item));
+	}
+	private boolean chooseBuyingItem(String item) {
+		int infID = -1;
+		if (!methods.interfaces.getComponent(105, 142).getText().equalsIgnoreCase(item)) {
+			if (methods.interfaces.getComponent(105, 189).doClick()) {
+				sleep(random(2400, 2800));
+				methods.keyboard.sendText(item, false);
+				sleep(random(1500, 2200));
+				RSComponent[] components = methods.interfaces.getComponent(389, 4).getComponents();
+				for (int i = 1; i < components.length; i++) {
+					if (components[i].getText().equalsIgnoreCase(item)) {
+						infID = i;
+						break;
+					}
+				}
+				if (infID != -1) {
+					if (methods.interfaces.getComponent(389, 4).getComponent(infID).doClick()) {
+						sleep(random(900, 1700));
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the item under the name itemName is selected
+	 * 
+	 * @param itemName
+	 *            The name of the item to check
+	 * @return True if the selected Item's name is equal to itemName
+	 */
+	public boolean isItemSelected(String itemName) {
+		RSComponent c = getInterface().getComponent(142);
+		return isOpen() && c.isValid() && isSellOpen()
+				&& !c.getText().contains(itemName);
+	}
+
+	/**
+	 * Clicks the Choose Item button
+	 * 
+	 * @return True on success
+	 */
+	public boolean clickChooseItem() {
+		RSComponent c = getInterface().getComponent(139);
+		if (c != null) {
+			return isOpen() && c.doClick();
+		}
+		return false;
+	}
+
+	/**
+	 * Checks for the amount of completed slots, and then collects items.
+	 */
+	public void collectIfFinished() {
+		if(!isOpen()){
+			open();
+		}
+		int numberOfBoxes = 2;
+		if (AccountManager.isMember(methods.account.getName())) {
+			numberOfBoxes = 6;
+		}
+		for (int i = 1; i <= numberOfBoxes; i++) {
+			if(!checkSlotIsEmpty(i)){
+				openBox(i);
+				if (!methods.interfaces.getComponent(105, 200).containsAction("Abort Offer")) {
+					sleep(random(450, 650));
+					getItem();
+				} else {
+					clickBackButton();
+				}
+			}
+		}
+	}
+	/**
+	 * Checks Grand Exchange slots for an any activity (1-6)
+	 *
+	 * @param slot An int for the corresponding slot.
+	 * @return <tt>True</tt> if the slot is free from activity.
+	 */
+	public boolean checkSlotIsEmpty(final int slot) {
+		try {
+			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot-1];
+			return isOpen() && methods.interfaces.getComponent(105, slotComponent).getComponent(10).containsText("Empty");
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+	/**
+	 * Checks if a specific slot is complete.
+	 * 
+	 * @return True if the slot is finish
+	 */
+	public boolean isSlotFinished(int slot){
+		if(slot == 0){
+			return false;
+		}
+		final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1];
+		if (!methods.interfaces.getComponent(105, slotComponent).containsAction("Abort Offer")){
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Opens a specific finished slot
+	 * 
+	 * @param slot
+	 *            The slot number to open.
+	 * @return True on success
+	 */
+	public boolean openBox(int slot) {
+		boolean success = false;
+		RSComponent c = methods.interfaces.get(105).getComponent(
+				INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1]);
+		if (c != null) {
+			if (c.doClick(true)) {
+				success = true;
+			}
+			sleep(random(250, 500));
+		}
+		return success;
+	}
+
+	/**
+	 * Collects items in the open interface
+	 *
+	 */
+	public void getItem() {
+		int number = 0;
+		if (!isOpen()) {
+			open();
+		}
+		if (isOpen()) {
+			sleep(random(700, 1200));
+			RSComponent i = methods.interfaces.get(105).getComponent(
+					GRAND_EXCHANGE_COLLECT_BOX_TWO);
+			try {
+				if (i != null) {
+					if (i.isValid()) {
+						if (i.containsAction("Collect")) {
+							i.doClick();
+							sleep(random(400, 900));
+						} else {
+							number += 1;
+						}
+					}
+				}
+			} catch (Exception e) {
+			}
+			RSComponent c = methods.interfaces.get(105).getComponent(GRAND_EXCHANGE_COLLECT_BOX_ONE);
+			try {
+				if (c != null) {
+					if (c.isValid()) {
+						if (c.containsAction("Collect")) {
+							c.doClick();
+							sleep(random(400, 900));
+							return;
+						} else {
+							number += 1;
+						}
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		if(number == 2){
+			clickBackButton();
+			return;
+		}
+		if(isSellOpen() || isBuyOpen()){
+			clickBackButton();
+		}
+	}
+	/**
+	 * Detects if you an item has been selected to sell
+	 * 
+	 * @return True if an Item has been selected to be sold
+	 */
+	public boolean isSellItemChosen() {
+		RSComponent c = getInterface().getComponent(142);
+		return isOpen() && c.isValid() && isSellOpen()
+				&& !c.getText().contains("Choose an item");
+	}
+
+	/**
+	 * 
+	 * Detects if you an item has been selected to Buy
+	 * 
+	 * @return True if an Item has been selected to be sold
+	 */
+	public boolean isBuyItemChosen() {
+		RSComponent c = methods.interfaces.getComponent(105).getComponent(142);
+		return isOpen() && isBuyOpen()
+				&& !c.getText().contains("Choose an item");
+	}
+
+	/**
+	 * 
+	 * Opens A specific Buy Slot
+	 * 
+	 * @param slot
+	 *            The slot number numbers(1 - 6)
+	 * @return True on Click
+	 */
+	public boolean openBuy(final int slot) {
+		return openSlot(slot, true);
+	}
+
+	/**
+	 * 
+	 * Opens A specific Sell Slot
+	 * 
+	 * @param slot
+	 *            The slot number (1 - 6)
+	 * @return True on Click
+	 */
+	public boolean openSell(final int slot) {
+		return openSlot(slot, false);
+	}
+
+	/**
+	 * 
+	 * Opens A specific Buy or Sell Slot
+	 * 
+	 * @param slot
+	 *            The slot number numbers(1 - 6)
+	 * @param buy
+	 *            True to open Buy slot, False to open Sell Slot
+	 * @return True on Click
+	 */
+	private boolean openSlot(final int slot, boolean buy) {
+		if (!isOpen()) {
+			return false;
+		}
+		int c = buy ? INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot - 1]
+				: INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot - 1];
+		if (buy) {
+			return methods.interfaces.getComponent(105, c).interact(
+					"Make Buy Offer");
+		} else {
+			return methods.interfaces.getComponent(105, c).interact(
+					"Make Sell Offer");
+		}
+	}
+
+	/**
+	 * 
+	 * Calculates if the slot is free
+	 * 
+	 * @param slot
+	 *            The G.E. Slot, 1-6
+	 * @return True if the slot was opened
+	 */
+	public boolean isFree(int slot) {
+		final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1];
+		return isOpen()
+				&& methods.interfaces.getComponent(105, slotComponent)
+						.getComponent(10).containsText("Empty");
+	}
+
+	/**
+	 * 
+	 * Gets the first free slot.
+	 * 
+	 * @return The Slot number(1-6), -1 if none is free or if interface is
+	 *         not open
+	 */
+	public int getFree() {
+		int maxSlots = 6;
+		if(!AccountManager.isMember(methods.account.getName())){
+			maxSlots = 2;
+		}
+		for (int i = 1; i <= maxSlots; i++) {
+			if (isFree(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	/**
+	 * 
+	 * Sets the quantity
+	 * 
+	 * @param quantity
+	 *            The amount
+	 */
+	public void setQuantity(String quantity) {
+		RSComponent c = getInterface().getComponent(168);
+		if (c != null) {
+			if (c.doClick()) {
+				sleep(random(1250, 1550));
+				methods.keyboard.sendText(quantity, true);
+				sleep(random(650, 850));
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * Calculates if the G.E. is open
+	 * 
+	 * @return True if the G.E. is open
+	 */
+	public boolean isOpen() {
+		try {
+			RSInterface[] interfacesI = methods.interfaces.getAll();
+			for (RSInterface i : interfacesI) {
+				if (i != null) {
+					if (i.getIndex() == 105) {
+						return i.isValid();
+					}
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	/**
+	 * 
+	 * Opens the GE interface
+	 * 
+	 * @return True if the GE was opened
+	 */
+	public boolean open() {
+		if (isOpen()) {
+			return true;
+		}
+		RSNPC clerk = methods.npcs.getNearest(GRAND_EXCHANGE_CLERK);
+		if (clerk != null) {
+			if (clerk.isOnScreen()) {
+				clerk.interact("Exchange " + clerk.getName());
+			} else {
+				while (!clerk.isOnScreen()) {
+					methods.walking.walkTo(clerk.getLocation());
+				}
+				return open();
+			}
+		} else {
+			while (!atGe()) {
+				walkTo();
+			}
+			RSNPC npc = methods.npcs.getNearest(GRAND_EXCHANGE_CLERK);
+			if (atGe() && npc.isOnScreen()) {
+				return open();
+			}
+
+			if (atGe() && !npc.isOnScreen()) {
+				while (!npc.isOnScreen()) {
+					methods.walking.walkTo(npc.getLocation());
+				}
+				return open();
+			}
+		}
+		while (methods.players.getMyPlayer().isMoving()) {
+			sleep(random(450, 850));
+		}
+		sleep(random(350, 550));
+		return isOpen();
+	}
+
+	/**
+	 * 
+	 * Walks to the GE. Method Should be used in a loop
+	 */
+	public void walkTo() {
+		RSWeb webWalking = methods.web.getWeb(methods.players.getMyPlayer().getLocation(), GE_TILE);
+		webWalking.step();
+	}
+
+	/**
+	 * 
+	 * Checks if your player is at the GE
+	 * 
+	 * @return True if you at the G.E
+	 */
+	public boolean atGe() {
+		return GE_AREA.contains(methods.players.getMyPlayer().getLocation());
+	}
+
+	/**
+	 * 
+	 * Clicks the sell all button
+	 * 
+	 * @return True if the button is clicked
+	 */
+	public boolean sellAll() {
+		RSComponent c = methods.interfaces.get(105).getComponent(166);
+		return c != null && c.isValid() && c.doClick(true);
+	}
+
+	/**
+	 * 
+	 * Enters the amount (quantity) of the item to sell
+	 * 
+	 * @param text
+	 *            The Number to send, as String to shorten nums sellX("1k")
+	 * @return True on Success
+	 */
+	public boolean sellX(String text) {
+		RSComponent c = methods.interfaces.get(105).getComponent(166);
+		if (c != null && c.isValid() && c.doClick()) {
+			sleep(random(250, 500));
+			methods.keyboard.sendText(text, true);
+			sleep(random(175, 250));
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 * Presses the %5 DOWN button
+	 * 
+	 * @return True on Success
+	 */
+	public boolean fivePercentDown() {
+		RSComponent c = methods.interfaces.get(105).getComponent(181);
+		if (c != null && c.isValid() && c.doClick()) {
+			sleep(random(175, 225));
+			return true;
+		}
+		sleep(random(250, 500));
+		return false;
+	}
+
+	/**
+	 * 
+	 * Presses the %5 UP button
+	 * 
+	 * @return True on Success
+	 */
+	public boolean fivePercentUp() {
+		RSComponent c = methods.interfaces.get(105).getComponent(179);
+		if (c != null && c.isValid() && c.doClick()) {
+			sleep(random(175, 225));
+			return true;
+		}
+		sleep(random(250, 500));
+		return false;
+	}
+
+	/**
+	 * 
+	 * Sets the price of the item to Sell
+	 * 
+	 * @param price
+	 *            The price to set Can include Symbols like "m" and "k"
+	 * @return True on Success
+	 */
+	public boolean setPrice(String price) {
+		RSComponent c = methods.interfaces.get(105).getComponent(177);
+		if (c != null && c.isValid() && c.doClick()) {
+			sleep(random(1250, 1550));
+			methods.keyboard.sendText(price, true);
+			sleep(random(250, 500));
+			return true;
+		}
+		sleep(random(250, 500));
+		return false;
+	}
+
+	/**
+	 * 
+	 * Clicks the confirm Button on the G.E Interface
+	 * 
+	 * @return True on Success
+	 */
+	public boolean clickConfirm() {
+		RSComponent c = methods.interfaces.get(105).getComponent(186);
+		if (c != null && c.isValid() && c.doClick()) {
+			sleep(random(175,225));
+			return true;
+		}
+		sleep(random(250,500));
+		return false;
+	}
+
+	/**
+	 * 
+	 * Clicks the back Button on the G.E order form
+	 * 
+	 * @return True on Success
+	 */
+	public boolean clickBackButton() {
+		RSComponent c = methods.interfaces.get(105).getComponent(128);
+		if (c != null && c.isValid()) {
+			sleep(random(150,225));
+			c.doHover();
+			String[] actions = methods.menu.getItems();
+			for(String a : actions){
+				if(a.contains("Back")){
+					c.doClick();
+					return true;
+				}
+			}
+		}
+		sleep(random(250,500));
+		return false;
+	}
+
+	/**
+	 * 
+	 * Calculates if the G.E offer interface is a buy Interface
+	 * 
+	 * @return True if the interface is open
+	 */
+	public boolean isBuyOpen() {
+		RSComponent c = methods.interfaces.get(105).getComponent(134);
+		RSComponent bb = methods.interfaces.get(105).getComponent(128);
+		c.isValid();
+		if (c != null && c.isValid() && c.getText().contains("Buy Offer")) {
+			if(bb != null){
+				if(bb.isValid()){
+					bb.doHover();
+					String[] actions = methods.menu.getItems();
+					for(String a : actions){
+						if(a.contains("Back")){
+							methods.mouse.moveRandomly(random(40,150));
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * 
+	 * Calculates if the G.E offer interface is a Sell Interface
+	 * @return True if the interface is open
+	 */
+	public boolean isSellOpen() {
+		RSComponent c = methods.interfaces.get(105).getComponent(134);
+		RSComponent bb = methods.interfaces.get(105).getComponent(128);
+		if (c != null && c.isValid() && c.getText().contains("Sell Offer")) {
+			if(bb != null){
+				if(bb.isValid()){
+					bb.doHover();
+					String[] actions = methods.menu.getItems();
+					for(String a : actions){
+						if(a.contains("Back")){
+							methods.mouse.moveRandomly(random(40,150));
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 	/**
 	 * Will check a slot for to see if an item has completed.
 	 *
@@ -188,7 +1082,13 @@ public class GrandExchange extends MethodProvider {
 			}
 		}
 	}
-
+	public boolean testMethod(){
+		try {
+			sleep(random(5000,10000));
+		} catch(Exception e){e.printStackTrace();return false;};
+		return true;
+	}
+	
 	/**
 	 * Clicks the buy button for specified slot.
 	 *
@@ -207,23 +1107,6 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean openSellSlot(final int slot) {
 		return openSlot(slot, false);
-	}
-
-	/**
-	 * Clicks the buy/sell button for specified slot.
-	 *
-	 * @param slot An int for the corresponding slot.
-	 * @param buy  a boolean to click buy or sell.
-	 * @return <tt>true</tt> on click.
-	 */
-	private boolean openSlot(final int slot, boolean buy) {
-		if (!isOpen()) {
-			return false;
-		}
-
-		final int slotComponent = buy ? INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot] : INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot];
-
-		return methods.interfaces.getComponent(INTERFACE_GRAND_EXCHANGE, slotComponent).interact("Make " + (buy ? "Buy" : "Sell") + " Offer");
 	}
 
 	/**
