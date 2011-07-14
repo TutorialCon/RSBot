@@ -307,8 +307,7 @@ public class Methods {
 			while (start + toSleep > (now = System.currentTimeMillis())) {
 				Thread.sleep(start + toSleep - now);
 			}
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
+		} catch (final InterruptedException ignored) {
 		}
 	}
 
