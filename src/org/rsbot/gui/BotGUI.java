@@ -441,7 +441,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			disableRendering(on || menuBar.isTicked(Messages.LESSCPU));
 			disableGraphics(on || menuBar.isTicked(Messages.DISABLECANVAS));
 		}
-		Win32.setProcessPriority(on ? Kernel32.PROCESS_MODE_BACKGROUND_BEGIN : Kernel32.PROCESS_MODE_BACKGROUND_END);
+		Win32.setProcessPriority(on ? Kernel32.BELOW_NORMAL_PRIORITY_CLASS : Kernel32.NORMAL_PRIORITY_CLASS);
 	}
 
 	public void disableRendering(final boolean mode) {
