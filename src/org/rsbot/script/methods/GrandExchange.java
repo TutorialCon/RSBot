@@ -1,13 +1,7 @@
 package org.rsbot.script.methods;
 
 import org.rsbot.gui.AccountManager;
-import org.rsbot.script.wrappers.RSArea;
-import org.rsbot.script.wrappers.RSComponent;
-import org.rsbot.script.wrappers.RSInterface;
-import org.rsbot.script.wrappers.RSItem;
-import org.rsbot.script.wrappers.RSNPC;
-import org.rsbot.script.wrappers.RSTile;
-import org.rsbot.script.wrappers.RSWeb;
+import org.rsbot.script.wrappers.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,9 +12,13 @@ import java.util.regex.Pattern;
 
 /**
  * Obtains information on tradeable items from the Grand Exchange website and
- * Grand Exchange ingame interaction.
+ * Grand Exchange in-game interaction.
  *
- * @author Javaskill, Aion, Boolean, Debauchery, kyleshay
+ * @author Javaskill
+ * @author Aion
+ * @author Boolean
+ * @author Debauchery
+ * @author kyleshay
  */
 public class GrandExchange extends MethodProvider {
 	private static final String HOST = "http://services.runescape.com";
@@ -31,7 +29,6 @@ public class GrandExchange extends MethodProvider {
 	public static final int[] INTERFACE_GRAND_EXCHANGE_BUY_BUTTON = {31, 47, 63, 82, 101, 120};
 	public static final int[] INTERFACE_GRAND_EXCHANGE_SELL_BUTTON = {32, 48, 64, 83, 102, 121};
 	public static final int[] INTERFACE_GRAND_EXCHANGE_OFFER_BOXES = {19, 35, 51, 67, 83, 99};
-
 
 	public static final int GRAND_EXCHANGE_COLLECT_BOX_ONE = 209;
 	public static final int GRAND_EXCHANGE_COLLECT_BOX_TWO = 211;
@@ -113,12 +110,13 @@ public class GrandExchange extends MethodProvider {
 		}
 		return 0;
 	}
+
 	public final RSArea GE_AREA = new RSArea(3157, 3477, 3176, 3501);
 	public final RSTile GE_TILE = new RSTile(3164, 3484);
 
 	/**
 	 * Closes the GE interface
-	 * 
+	 *
 	 * @return True if the G.E. was Closed
 	 */
 	public boolean closeGe() {
@@ -131,14 +129,10 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Sells an item, at the price of 5% * upButtonNumber + normalPrice
-	 * 
-	 * @param item
-	 *            The RSItem to sell
-	 * @param quantity
-	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
-	 * @param upButtonNumber
-	 *            The amount of times to press the %5 up button
-	 * 
+	 *
+	 * @param item           The RSItem to sell
+	 * @param quantity       The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param upButtonNumber The amount of times to press the %5 up button
 	 */
 	public boolean sellUp(RSItem item, String quantity, int upButtonNumber) {
 		boolean success = false;
@@ -156,7 +150,7 @@ public class GrandExchange extends MethodProvider {
 			}
 			for (int i = 0; i < 4 && !isSellOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				openSell(slot);
@@ -164,18 +158,18 @@ public class GrandExchange extends MethodProvider {
 			}
 			if (isSellOpen()) {
 				while (!isSellItemChosen()) {
-					if(item.doClick(true)){
+					if (item.doClick(true)) {
 						sleep(random(350, 650));
 					} else {
 						return false;
 					}
 				}
 				if (isSellItemChosen()) {
-					if (quantity == "0") {
+					if (quantity.equals("0")) {
 						sellAll();
 						sleep(random(250, 500));
 					}
-					if (quantity != "1" || quantity != "0") {
+					if (!quantity.equals("1") || !quantity.equals("0")) {
 						setQuantity(quantity);
 						sleep(random(250, 500));
 					}
@@ -193,16 +187,13 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Sells an item, at the price of 5% * downButtonNumer + normalPrice
-	 * 
-	 * @param item
-	 *            The RSItem to sell
-	 * @param quantity
-	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
-	 * @param upButtonNumber
-	 *            The amount of times to press the %5 up button
+	 *
+	 * @param item             The RSItem to sell
+	 * @param quantity         The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param downButtonNumber The amount of times to press the %5 up button
 	 * @return True on Success
 	 */
-	public boolean sellDown(RSItem item, String quantity,int downButtonNumber) {
+	public boolean sellDown(RSItem item, String quantity, int downButtonNumber) {
 		boolean success = false;
 		int slot = 0;
 		if (item == null || item.getID() == 0 || !methods.inventory.contains(item.getID())) {
@@ -212,14 +203,14 @@ public class GrandExchange extends MethodProvider {
 			open();
 			sleep(random(450, 750));
 		}
-		sleep(random(900,1300));
+		sleep(random(900, 1300));
 		if (isOpen()) {
 			if (isBuyOpen()) {
 				clickBackButton();
 			}
 			for (int i = 0; i < 4 && !isSellOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				slot = getFree();
@@ -236,40 +227,37 @@ public class GrandExchange extends MethodProvider {
 					sleep(random(350, 650));
 				}
 				if (isSellItemChosen()) {
-					if (quantity == "0") {
+					if (quantity.equals("0")) {
 						sellAll();
 						sleep(random(250, 500));
 					}
-					if (quantity != "0") {
+					if (!quantity.equals("0")) {
 						setQuantity(quantity);
 						sleep(random(250, 500));
 					}
 					if (downButtonNumber > 0) {
 						for (int i = 0; i < downButtonNumber; i++) {
 							fivePercentDown();
-							sleep(random(350,650));
+							sleep(random(350, 650));
 						}
 					}
 					success = clickConfirm();
 				}
 			}
 		}
-		
+
 		return success;
 	}
 
 	/**
 	 * Sells an item at a specific price
-	 * 
-	 * @param item
-	 *            The RSItem to sell
-	 * @param quantity
-	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
-	 * @param Price
-	 *            The price to sell the item at
+	 *
+	 * @param item     The RSItem to sell
+	 * @param quantity The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param price    The price to sell the item at
 	 * @return True on Success
 	 */
-	public boolean sellItemAt(RSItem item, String quantity,String price) {
+	public boolean sellItemAt(RSItem item, String quantity, String price) {
 		boolean success = false;
 		int slot = 0;
 		if (item == null || item.getID() == 0) {
@@ -285,7 +273,7 @@ public class GrandExchange extends MethodProvider {
 			}
 			for (int i = 0; i < 4 && !isSellOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				openSell(slot);
@@ -301,31 +289,30 @@ public class GrandExchange extends MethodProvider {
 					sleep(random(350, 650));
 				}
 				if (isSellItemChosen()) {
-					if (quantity == "0") {
+					if (quantity.equals("0")) {
 						sellAll();
 						sleep(random(250, 500));
 					}
-					if (quantity != "0") {
+					if (!quantity.equals("0")) {
 						setQuantity(quantity);
 						sleep(random(350, 500));
 					}
 					setPrice(price);
-					sleep(random(450,650));
+					sleep(random(450, 650));
 					success = clickConfirm();
 				}
 			}
 		}
-		
+
 		return success;
 	}
+
 	/**
 	 * Buys an item, at the price of 5% * upButtonNumber + normalPrice
 	 *
-	 * @param int The itemID to search for
-	 * @param quantity
-	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
-	 * @param upButtonNumber
-	 *            The amount of times to press the %5 up button
+	 * @param item           The itemID to search for
+	 * @param quantity       The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param upButtonNumber The amount of times to press the %5 up button
 	 * @return True on Success
 	 */
 	public boolean buyUp(int item, String quantity, int upButtonNumber) {
@@ -341,7 +328,7 @@ public class GrandExchange extends MethodProvider {
 			}
 			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				openBuy(slot);
@@ -356,7 +343,7 @@ public class GrandExchange extends MethodProvider {
 					}
 				}
 				if (skip) {
-					if (quantity != "1" && quantity != "0") {
+					if (quantity.equals("1") && quantity.equals("0")) {
 						setQuantity(quantity);
 						sleep(random(250, 500));
 					}
@@ -374,12 +361,10 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Buys an item, at the price of (normal - 5% * downButtonNumber)
-	 * 
-	 * @param int The itemID to search for
-	 * @param quantity
-	 *            The quantity to Sell CAN CONTAIN "m", "k", and "b"
-	 * @param downButtonNumber
-	 *            The amount of times to press the %5 down button
+	 *
+	 * @param item             The itemID to search for
+	 * @param quantity         The quantity to Sell CAN CONTAIN "m", "k", and "b"
+	 * @param downButtonNumber The amount of times to press the %5 down button
 	 * @return True on Success
 	 */
 	public boolean buyDown(int item, String quantity, int downButtonNumber) {
@@ -395,7 +380,7 @@ public class GrandExchange extends MethodProvider {
 			}
 			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				openBuy(slot);
@@ -410,7 +395,7 @@ public class GrandExchange extends MethodProvider {
 					}
 				}
 				if (skip) {
-					if (quantity != "0" && quantity != null) {
+					if (!quantity.equals("0")) {
 						setQuantity(quantity);
 						sleep(random(250, 500));
 					}
@@ -425,12 +410,13 @@ public class GrandExchange extends MethodProvider {
 		}
 		return success;
 	}
+
 	/**
-	 *  Buys an item at a specific price
-	 * 
-	 * @param item The item to buy
+	 * Buys an item at a specific price
+	 *
+	 * @param item     The item to buy
 	 * @param quantity The amount to buy
-	 * @param price The price to buy at
+	 * @param price    The price to buy at
 	 * @return
 	 */
 	public boolean buyItemAt(int item, String quantity, String price) {
@@ -450,7 +436,7 @@ public class GrandExchange extends MethodProvider {
 			}
 			for (int i = 0; i < 4 && !isBuyOpen(); i++) {
 				slot = getFree();
-				if(slot == -1){
+				if (slot == -1) {
 					return false;
 				}
 				slot = getFree();
@@ -466,7 +452,7 @@ public class GrandExchange extends MethodProvider {
 					}
 				}
 				if (skip) {
-					if (quantity != "0") {
+					if (!quantity.equals("0")) {
 						sleep(random(450, 650));
 						setQuantity(quantity);
 						sleep(random(450, 500));
@@ -478,18 +464,20 @@ public class GrandExchange extends MethodProvider {
 				}
 			}
 		}
-		
+
 		return success;
 	}
+
 	/**
 	 * Searches the G.E. for the item
-	 * 
+	 *
 	 * @param item The item to search for
 	 * @return True if the item was found, and clicked
 	 */
 	public boolean searchItem(int item) {
 		return chooseBuyingItem(getItemName(item));
 	}
+
 	private boolean chooseBuyingItem(String item) {
 		int infID = -1;
 		if (!methods.interfaces.getComponent(105, 142).getText().equalsIgnoreCase(item)) {
@@ -517,35 +505,30 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Checks if the item under the name itemName is selected
-	 * 
-	 * @param itemName
-	 *            The name of the item to check
+	 *
+	 * @param itemName The name of the item to check
 	 * @return True if the selected Item's name is equal to itemName
 	 */
 	public boolean isItemSelected(String itemName) {
 		RSComponent c = getInterface().getComponent(142);
-		return isOpen() && c.isValid() && isSellOpen()
-				&& !c.getText().contains(itemName);
+		return isOpen() && c.isValid() && isSellOpen() && !c.getText().contains(itemName);
 	}
 
 	/**
 	 * Clicks the Choose Item button
-	 * 
+	 *
 	 * @return True on success
 	 */
 	public boolean clickChooseItem() {
 		RSComponent c = getInterface().getComponent(139);
-		if (c != null) {
-			return isOpen() && c.doClick();
-		}
-		return false;
+		return c != null && isOpen() && c.doClick();
 	}
 
 	/**
 	 * Checks for the amount of completed slots, and then collects items.
 	 */
 	public void collectIfFinished() {
-		if(!isOpen()){
+		if (!isOpen()) {
 			open();
 		}
 		int numberOfBoxes = 2;
@@ -553,7 +536,7 @@ public class GrandExchange extends MethodProvider {
 			numberOfBoxes = 6;
 		}
 		for (int i = 1; i <= numberOfBoxes; i++) {
-			if(!checkSlotIsEmpty(i)){
+			if (!checkSlotIsEmpty(i)) {
 				openBox(i);
 				if (!methods.interfaces.getComponent(105, 200).containsAction("Abort Offer")) {
 					sleep(random(450, 650));
@@ -564,6 +547,7 @@ public class GrandExchange extends MethodProvider {
 			}
 		}
 	}
+
 	/**
 	 * Checks Grand Exchange slots for an any activity (1-6)
 	 *
@@ -572,32 +556,30 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean checkSlotIsEmpty(final int slot) {
 		try {
-			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot-1];
+			final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1];
 			return isOpen() && methods.interfaces.getComponent(105, slotComponent).getComponent(10).containsText("Empty");
 		} catch (final Exception e) {
 			return false;
 		}
 	}
+
 	/**
 	 * Checks if a specific slot is complete.
-	 * 
+	 *
 	 * @return True if the slot is finish
 	 */
-	public boolean isSlotFinished(int slot){
-		if(slot == 0){
+	public boolean isSlotFinished(int slot) {
+		if (slot == 0) {
 			return false;
 		}
 		final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1];
-		if (!methods.interfaces.getComponent(105, slotComponent).containsAction("Abort Offer")){
-			return true;
-		}
-		return false;
+		return !methods.interfaces.getComponent(105, slotComponent).containsAction("Abort Offer");
 	}
+
 	/**
 	 * Opens a specific finished slot
-	 * 
-	 * @param slot
-	 *            The slot number to open.
+	 *
+	 * @param slot The slot number to open.
 	 * @return True on success
 	 */
 	public boolean openBox(int slot) {
@@ -615,7 +597,6 @@ public class GrandExchange extends MethodProvider {
 
 	/**
 	 * Collects items in the open interface
-	 *
 	 */
 	public void getItem() {
 		int number = 0;
@@ -637,7 +618,7 @@ public class GrandExchange extends MethodProvider {
 						}
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 			RSComponent c = methods.interfaces.get(105).getComponent(GRAND_EXCHANGE_COLLECT_BOX_ONE);
 			try {
@@ -652,46 +633,42 @@ public class GrandExchange extends MethodProvider {
 						}
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 		}
-		if(number == 2){
+		if (number == 2) {
 			clickBackButton();
 			return;
 		}
-		if(isSellOpen() || isBuyOpen()){
+		if (isSellOpen() || isBuyOpen()) {
 			clickBackButton();
 		}
 	}
+
 	/**
 	 * Detects if you an item has been selected to sell
-	 * 
+	 *
 	 * @return True if an Item has been selected to be sold
 	 */
 	public boolean isSellItemChosen() {
 		RSComponent c = getInterface().getComponent(142);
-		return isOpen() && c.isValid() && isSellOpen()
-				&& !c.getText().contains("Choose an item");
+		return isOpen() && c.isValid() && isSellOpen() && !c.getText().contains("Choose an item");
 	}
 
 	/**
-	 * 
 	 * Detects if you an item has been selected to Buy
-	 * 
+	 *
 	 * @return True if an Item has been selected to be sold
 	 */
 	public boolean isBuyItemChosen() {
 		RSComponent c = methods.interfaces.getComponent(105).getComponent(142);
-		return isOpen() && isBuyOpen()
-				&& !c.getText().contains("Choose an item");
+		return isOpen() && isBuyOpen() && !c.getText().contains("Choose an item");
 	}
 
 	/**
-	 * 
 	 * Opens A specific Buy Slot
-	 * 
-	 * @param slot
-	 *            The slot number numbers(1 - 6)
+	 *
+	 * @param slot The slot number numbers(1 - 6)
 	 * @return True on Click
 	 */
 	public boolean openBuy(final int slot) {
@@ -699,11 +676,9 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Opens A specific Sell Slot
-	 * 
-	 * @param slot
-	 *            The slot number (1 - 6)
+	 *
+	 * @param slot The slot number (1 - 6)
 	 * @return True on Click
 	 */
 	public boolean openSell(final int slot) {
@@ -711,55 +686,42 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Opens A specific Buy or Sell Slot
-	 * 
-	 * @param slot
-	 *            The slot number numbers(1 - 6)
-	 * @param buy
-	 *            True to open Buy slot, False to open Sell Slot
+	 *
+	 * @param slot The slot number numbers(1 - 6)
+	 * @param buy  True to open Buy slot, False to open Sell Slot
 	 * @return True on Click
 	 */
 	private boolean openSlot(final int slot, boolean buy) {
 		if (!isOpen()) {
 			return false;
 		}
-		int c = buy ? INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot - 1]
-				: INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot - 1];
-		if (buy) {
-			return methods.interfaces.getComponent(105, c).interact(
-					"Make Buy Offer");
-		} else {
-			return methods.interfaces.getComponent(105, c).interact(
-					"Make Sell Offer");
-		}
+		int c = buy ? INTERFACE_GRAND_EXCHANGE_BUY_BUTTON[slot - 1] : INTERFACE_GRAND_EXCHANGE_SELL_BUTTON[slot - 1];
+		return buy ?
+				methods.interfaces.getComponent(105, c).interact("Make Buy Offer") :
+				methods.interfaces.getComponent(105, c).interact("Make Sell Offer");
 	}
 
 	/**
-	 * 
 	 * Calculates if the slot is free
-	 * 
-	 * @param slot
-	 *            The G.E. Slot, 1-6
+	 *
+	 * @param slot The G.E. Slot, 1-6
 	 * @return True if the slot was opened
 	 */
 	public boolean isFree(int slot) {
 		final int slotComponent = INTERFACE_GRAND_EXCHANGE_OFFER_BOXES[slot - 1];
-		return isOpen()
-				&& methods.interfaces.getComponent(105, slotComponent)
-						.getComponent(10).containsText("Empty");
+		return isOpen() && methods.interfaces.getComponent(105, slotComponent).getComponent(10).containsText("Empty");
 	}
 
 	/**
-	 * 
 	 * Gets the first free slot.
-	 * 
+	 *
 	 * @return The Slot number(1-6), -1 if none is free or if interface is
 	 *         not open
 	 */
 	public int getFree() {
 		int maxSlots = 6;
-		if(!AccountManager.isMember(methods.account.getName())){
+		if (!AccountManager.isMember(methods.account.getName())) {
 			maxSlots = 2;
 		}
 		for (int i = 1; i <= maxSlots; i++) {
@@ -769,12 +731,11 @@ public class GrandExchange extends MethodProvider {
 		}
 		return -1;
 	}
+
 	/**
-	 * 
 	 * Sets the quantity
-	 * 
-	 * @param quantity
-	 *            The amount
+	 *
+	 * @param quantity The amount
 	 */
 	public void setQuantity(String quantity) {
 		RSComponent c = getInterface().getComponent(168);
@@ -788,9 +749,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Calculates if the G.E. is open
-	 * 
+	 *
 	 * @return True if the G.E. is open
 	 */
 	public boolean isOpen() {
@@ -810,9 +770,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Opens the GE interface
-	 * 
+	 *
 	 * @return True if the GE was opened
 	 */
 	public boolean open() {
@@ -853,7 +812,6 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Walks to the GE. Method Should be used in a loop
 	 */
 	public void walkTo() {
@@ -862,9 +820,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Checks if your player is at the GE
-	 * 
+	 *
 	 * @return True if you at the G.E
 	 */
 	public boolean atGe() {
@@ -872,9 +829,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Clicks the sell all button
-	 * 
+	 *
 	 * @return True if the button is clicked
 	 */
 	public boolean sellAll() {
@@ -883,11 +839,9 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Enters the amount (quantity) of the item to sell
-	 * 
-	 * @param text
-	 *            The Number to send, as String to shorten nums sellX("1k")
+	 *
+	 * @param text The Number to send, as String to shorten nums sellX("1k")
 	 * @return True on Success
 	 */
 	public boolean sellX(String text) {
@@ -902,9 +856,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Presses the %5 DOWN button
-	 * 
+	 *
 	 * @return True on Success
 	 */
 	public boolean fivePercentDown() {
@@ -918,9 +871,8 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Presses the %5 UP button
-	 * 
+	 *
 	 * @return True on Success
 	 */
 	public boolean fivePercentUp() {
@@ -934,11 +886,9 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Sets the price of the item to Sell
-	 * 
-	 * @param price
-	 *            The price to set Can include Symbols like "m" and "k"
+	 *
+	 * @param price The price to set Can include Symbols like "m" and "k"
 	 * @return True on Success
 	 */
 	public boolean setPrice(String price) {
@@ -954,62 +904,58 @@ public class GrandExchange extends MethodProvider {
 	}
 
 	/**
-	 * 
 	 * Clicks the confirm Button on the G.E Interface
-	 * 
+	 *
 	 * @return True on Success
 	 */
 	public boolean clickConfirm() {
 		RSComponent c = methods.interfaces.get(105).getComponent(186);
 		if (c != null && c.isValid() && c.doClick()) {
-			sleep(random(175,225));
+			sleep(random(175, 225));
 			return true;
 		}
-		sleep(random(250,500));
+		sleep(random(250, 500));
 		return false;
 	}
 
 	/**
-	 * 
 	 * Clicks the back Button on the G.E order form
-	 * 
+	 *
 	 * @return True on Success
 	 */
 	public boolean clickBackButton() {
 		RSComponent c = methods.interfaces.get(105).getComponent(128);
 		if (c != null && c.isValid()) {
-			sleep(random(150,225));
+			sleep(random(150, 225));
 			c.doHover();
 			String[] actions = methods.menu.getItems();
-			for(String a : actions){
-				if(a.contains("Back")){
+			for (String a : actions) {
+				if (a.contains("Back")) {
 					c.doClick();
 					return true;
 				}
 			}
 		}
-		sleep(random(250,500));
+		sleep(random(250, 500));
 		return false;
 	}
 
 	/**
-	 * 
 	 * Calculates if the G.E offer interface is a buy Interface
-	 * 
+	 *
 	 * @return True if the interface is open
 	 */
 	public boolean isBuyOpen() {
 		RSComponent c = methods.interfaces.get(105).getComponent(134);
 		RSComponent bb = methods.interfaces.get(105).getComponent(128);
-		c.isValid();
-		if (c != null && c.isValid() && c.getText().contains("Buy Offer")) {
-			if(bb != null){
-				if(bb.isValid()){
+		if (c.isValid() && c.getText().contains("Buy Offer")) {
+			if (bb != null) {
+				if (bb.isValid()) {
 					bb.doHover();
 					String[] actions = methods.menu.getItems();
-					for(String a : actions){
-						if(a.contains("Back")){
-							methods.mouse.moveRandomly(random(40,150));
+					for (String a : actions) {
+						if (a.contains("Back")) {
+							methods.mouse.moveRandomly(random(40, 150));
 							return true;
 						}
 					}
@@ -1018,22 +964,23 @@ public class GrandExchange extends MethodProvider {
 		}
 		return false;
 	}
+
 	/**
-	 * 
 	 * Calculates if the G.E offer interface is a Sell Interface
+	 *
 	 * @return True if the interface is open
 	 */
 	public boolean isSellOpen() {
 		RSComponent c = methods.interfaces.get(105).getComponent(134);
 		RSComponent bb = methods.interfaces.get(105).getComponent(128);
 		if (c != null && c.isValid() && c.getText().contains("Sell Offer")) {
-			if(bb != null){
-				if(bb.isValid()){
+			if (bb != null) {
+				if (bb.isValid()) {
 					bb.doHover();
 					String[] actions = methods.menu.getItems();
-					for(String a : actions){
-						if(a.contains("Back")){
-							methods.mouse.moveRandomly(random(40,150));
+					for (String a : actions) {
+						if (a.contains("Back")) {
+							methods.mouse.moveRandomly(random(40, 150));
 							return true;
 						}
 					}
@@ -1042,6 +989,7 @@ public class GrandExchange extends MethodProvider {
 		}
 		return false;
 	}
+
 	/**
 	 * Will check a slot for to see if an item has completed.
 	 *
@@ -1082,13 +1030,7 @@ public class GrandExchange extends MethodProvider {
 			}
 		}
 	}
-	public boolean testMethod(){
-		try {
-			sleep(random(5000,10000));
-		} catch(Exception e){e.printStackTrace();return false;};
-		return true;
-	}
-	
+
 	/**
 	 * Clicks the buy button for specified slot.
 	 *
