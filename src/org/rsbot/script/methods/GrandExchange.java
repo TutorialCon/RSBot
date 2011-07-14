@@ -133,10 +133,11 @@ public class GrandExchange extends MethodProvider {
 	 * @param item           The RSItem to sell
 	 * @param quantity       The quantity to Sell CAN CONTAIN "m", "k", and "b"
 	 * @param upButtonNumber The amount of times to press the %5 up button
+	 * @return If the item was sold.
 	 */
 	public boolean sellUp(RSItem item, String quantity, int upButtonNumber) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		if (item == null) {
 			return false;
 		}
@@ -195,7 +196,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean sellDown(RSItem item, String quantity, int downButtonNumber) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		if (item == null || item.getID() == 0 || !methods.inventory.contains(item.getID())) {
 			return false;
 		}
@@ -259,7 +260,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean sellItemAt(RSItem item, String quantity, String price) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		if (item == null || item.getID() == 0) {
 			return false;
 		}
@@ -317,7 +318,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean buyUp(int item, String quantity, int upButtonNumber) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		if (!isOpen()) {
 			open();
 			sleep(random(450, 750));
@@ -369,7 +370,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean buyDown(int item, String quantity, int downButtonNumber) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		if (!isOpen()) {
 			open();
 			sleep(random(450, 750));
@@ -417,11 +418,11 @@ public class GrandExchange extends MethodProvider {
 	 * @param item     The item to buy
 	 * @param quantity The amount to buy
 	 * @param price    The price to buy at
-	 * @return
+	 * @return If the item was bought.
 	 */
 	public boolean buyItemAt(int item, String quantity, String price) {
 		boolean success = false;
-		int slot = 0;
+		int slot;
 		for (int i = 0; i < 4 && !isOpen(); i++) {
 			open();
 			while (methods.players.getMyPlayer().isMoving()) {
@@ -566,6 +567,7 @@ public class GrandExchange extends MethodProvider {
 	/**
 	 * Checks if a specific slot is complete.
 	 *
+	 * @param slot The slot to check.
 	 * @return True if the slot is finish
 	 */
 	public boolean isSlotFinished(int slot) {
