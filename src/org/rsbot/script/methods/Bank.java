@@ -289,17 +289,24 @@ public class Bank extends MethodProvider {
 	}
 
 	/**
-	 * Gets the first item with the provided ID in the bank.
+	 * Gets the first item with the provided ID/Name in the bank.
 	 *
-	 * @param id ID of the item to get.
+	 * @param item ID/Name of the item to get.
 	 * @return The component of the item; otherwise null.
 	 */
-	public RSItem getItem(final int id) {
-		final RSItem[] items = getItems();
-		if (items != null) {
-			for (final RSItem item : items) {
-				if (item.getID() == id) {
-					return item;
+	public RSItem getItem(final Object item) {
+		final RSItem[] Items = bank.getItems();
+		if (Items != null) {
+			for (final RSItem Item : Items) {
+				if (item instanceof Integer) {
+					if (Item.getID() == (Integer) item) {
+						return Item;
+					}
+				}
+				if (item instanceof String) {
+					if (Item.getName().equalsIgnoreCase(item.toString())) {
+						return Item;
+					}
 				}
 			}
 		}
