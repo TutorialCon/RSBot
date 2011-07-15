@@ -15,7 +15,7 @@ public class RSLocalPath extends RSPath {
 	public static final int WALL_SOUTH = 0x20;
 	public static final int WALL_SOUTH_WEST = 0x40;
 	public static final int WALL_WEST = 0x80;
-	public static final int BLOCKED = 0x100;
+	public static final int BLOCKED = 0x1280100;
 
 	protected final RSTile end;
 	protected RSTile base;
