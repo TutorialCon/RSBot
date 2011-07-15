@@ -225,4 +225,13 @@ public class Tiles extends MethodProvider {
 	public boolean isCloser(final RSTile t, final RSTile tt) {
 		return methods.calc.distanceTo(t) < methods.calc.distanceTo(tt);
 	}
+
+	public boolean doHover(final RSTile tile) {
+		final Point p = methods.calc.tileToScreen(tile);
+		if (p.getX() != -1) {
+			methods.mouse.move(p);
+			return true;
+		}
+		return false;
+	}
 }
