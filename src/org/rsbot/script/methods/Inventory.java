@@ -19,6 +19,7 @@ public class Inventory extends MethodProvider {
 	public static final int INTERFACE_INVENTORY_SHOP = 621;
 	public static final int INTERFACE_INVENTORY_EQUIPMENT_BONUSES = 670;
 	public static final int INTERFACE_INVENTORY_BANK = 763;
+	public static final int INTERFACE_INVENTORY_DEPOSIT_BOX = 11;
 	public static final int INTERFACE_INVENTORY_DUNGEONEERING_SHOP = 957;
 
 	Inventory(final MethodContext ctx) {
@@ -474,6 +475,13 @@ public class Inventory extends MethodProvider {
 		if (methods.interfaces.get(INTERFACE_INVENTORY_BANK).isValid()) {
 			final RSComponent bankInv = methods.interfaces.getComponent(
 					INTERFACE_INVENTORY_BANK, 0);
+			if (bankInv != null && bankInv.getAbsoluteX() > 50) {
+				return bankInv;
+			}
+		}
+		if (methods.interfaces.get(INTERFACE_INVENTORY_DEPOSIT_BOX).isValid()) {
+			final RSComponent bankInv = methods.interfaces.getComponent(
+					INTERFACE_INVENTORY_DEPOSIT_BOX, 17);
 			if (bankInv != null && bankInv.getAbsoluteX() > 50) {
 				return bankInv;
 			}

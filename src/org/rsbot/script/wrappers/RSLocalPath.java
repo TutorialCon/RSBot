@@ -93,7 +93,6 @@ public class RSLocalPath extends RSPath {
 	}
 
 	protected class Node {
-
 		public final int x;
 		public final int y;
 		public Node prev;
@@ -135,7 +134,6 @@ public class RSLocalPath extends RSPath {
 		public RSTile toRSTile(final int baseX, final int baseY) {
 			return new RSTile(x + baseX, y + baseY);
 		}
-
 	}
 
 	protected RSTile[] findPath(final RSTile start, final RSTile end) {
