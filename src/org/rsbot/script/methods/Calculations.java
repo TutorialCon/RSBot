@@ -443,7 +443,7 @@ public class Calculations extends MethodProvider {
 	 * @param findAdjacent if it's an object, it will find path which touches it.
 	 * @return The distance of the shortest path to the destination; or -1 if no valid path to the destination was found.
 	 */
-	public int dijkstraDist(final int startX, final int startY, final int destX, final int destY, final boolean findAdjacent) {
+	private int dijkstraDist(final int startX, final int startY, final int destX, final int destY, final boolean findAdjacent) {
 		try {
 			final int[][] prev = new int[104][104];
 			final int[][] dist = new int[104][104];
