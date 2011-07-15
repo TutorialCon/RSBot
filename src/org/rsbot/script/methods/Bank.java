@@ -295,7 +295,7 @@ public class Bank extends MethodProvider {
 	 * @return The component of the item; otherwise null.
 	 */
 	public RSItem getItem(final Object item) {
-		final RSItem[] Items = bank.getItems();
+		final RSItem[] Items = methods.bank.getItems();
 		if (Items != null) {
 			for (final RSItem Item : Items) {
 				if (item instanceof Integer) {
