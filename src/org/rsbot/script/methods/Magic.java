@@ -513,6 +513,21 @@ public class Magic extends MethodProvider {
 	}
 
 	/**
+	 * Gets the selected spell.
+	 *
+	 * @return <tt>spell ID</tt> if a spell is selected; otherwise <tt>null</tt>.
+	 */
+        public int getSelectedSpell() {
+		RSInterface book = getInterface();
+		for (RSComponent c : book.getComponents()) {
+			if (c.getBorderThickness() == 2) {
+				return c.getIndex();
+			}
+		}
+		return -1;
+	}
+
+	/**
 	 * Determines whether a spell is currently set to autocast.
 	 *
 	 * @return <tt>true</tt> if autocasting; otherwise <tt>false</tt>.
@@ -583,7 +598,6 @@ public class Magic extends MethodProvider {
 	 * @return The current magic RSInterface.
 	 */
 	public RSInterface getInterface() {
-		methods.game.openTab(Game.Tab.MAGIC);
 		for (Book book : Book.values()) {
 			RSInterface inter = methods.interfaces.get(book.getInterfaceID());
 			if (inter.isValid()) {
