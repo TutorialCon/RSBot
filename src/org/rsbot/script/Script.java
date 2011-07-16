@@ -90,7 +90,7 @@ public abstract class Script extends LoopTask {
 	/**
 	 * Stops the current script without logging out.
 	 */
-	public void stopScript() {
+	public final void stopScript() {
 		stopScript(false);
 	}
 
@@ -101,7 +101,7 @@ public abstract class Script extends LoopTask {
 	 * @param logout <tt>true</tt> if the player should be logged
 	 *               out before the script is stopped.
 	 */
-	public void stopScript(final boolean logout) {
+	public final void stopScript(final boolean logout) {
 		log.info("Script stopping...");
 		if (logout) {
 			if (bank.isOpen()) {
@@ -213,7 +213,7 @@ public abstract class Script extends LoopTask {
 	 *
 	 * @return A unique per-script directory path with file IO permissions.
 	 */
-	public File getCacheDirectory() {
+	public final File getCacheDirectory() {
 		final File dir = new File(Configuration.Paths.getScriptCacheDirectory(), getClass().getName());
 		if (!dir.exists()) {
 			dir.mkdirs();
