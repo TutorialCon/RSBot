@@ -10,7 +10,6 @@ import org.rsbot.script.wrappers.RSTile;
  */
 @ScriptManifest(authors = {"Garrett"}, name = "LostAndFound", version = 1.1)
 public class LostAndFound extends Random {
-
 	private final int appendN = 8995;
 	private final int appendE = 8994;
 	private final int appendS = 8997;
@@ -29,7 +28,7 @@ public class LostAndFound extends Random {
 
 	@Override
 	public boolean activateCondition() {
-		return game.isLoggedIn() && objects.getNearest(appendN) != null;
+		return game.isLoggedIn() && (objects.getNearest(appendN) != null || interfaces.getComponent(210, 1).containsText("Abyssal Service"));
 	}
 
 	RSObject getFarthestObjectByID(final int... ids) {
@@ -97,32 +96,33 @@ public class LostAndFound extends Random {
 			interfaces.clickContinue();
 		}
 
-		if (objects.getNearest(appendN) == null) {
+		if (objects.getNearest(appendN) == null && !interfaces.getComponent(210, 1).containsText("Abyssal Service")) {
 			return -1;
 		}
 
-		final int appendage = getOddAppendage();
+		if (objects.getNearest(appendN) != null) {
+			final int appendage = getOddAppendage();
 
-		try {
-			final RSObject obj = getFarthestObjectByID(appendage);
-			final RSTile tile = obj.getLocation();
-			if (!calc.tileOnScreen(tile)) {
-				walking.getPath(tile).traverse();
-				sleep(random(700, 900));
-				while (getMyPlayer().isMoving()) {
-					sleep(100);
+			try {
+				final RSObject obj = getFarthestObjectByID(appendage);
+				final RSTile tile = obj.getLocation();
+				if (!calc.tileOnScreen(tile)) {
+					walking.getPath(tile).traverse();
+					sleep(random(700, 900));
+					while (getMyPlayer().isMoving()) {
+						sleep(100);
+					}
 				}
-			}
-			if (obj.interact("Operate")) {
-				sleep(random(1000, 1500));
-				while (getMyPlayer().isMoving()) {
-					sleep(100);
+				if (obj.interact("Operate")) {
+					sleep(random(1000, 1500));
+					while (getMyPlayer().isMoving()) {
+						sleep(100);
+					}
 				}
+			} catch (final Exception ignored) {
 			}
-		} catch (final Exception ignored) {
 		}
 
 		return random(1000, 2000);
 	}
-
 }
