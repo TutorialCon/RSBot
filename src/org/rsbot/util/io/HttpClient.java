@@ -98,6 +98,21 @@ public class HttpClient {
 		return cloned;
 	}
 
+	public static boolean isModifiedSince(URL url, long date) {
+		try {
+			url = getFinalURL(url);
+			date -= TimeZone.getDefault().getOffset(date);
+			final HttpURLConnection con = getConnection(url);
+			con.setRequestMethod("HEAD");
+			con.connect();
+			final int resp = con.getResponseCode();
+			con.disconnect();
+			return resp != HttpURLConnection.HTTP_NOT_MODIFIED;
+		} catch (final IOException ignored) {
+			return true;
+		}
+	}
+
 	public static HttpURLConnection download(final URL url, final File file) throws IOException {
 		return download(getConnection(getFinalURL(url)), file);
 	}
