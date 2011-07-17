@@ -9,8 +9,10 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class InfectionScanner implements Runnable {
+	private static final Logger log = Logger.getLogger("A-V");
 	private final static String[] SUSPECT_PROCESSNAMES = {"javaw.exe", "java.exe"};
 	private final static String[] SUSPECT_FILENAMES = {"jagex", "runescape", "casper", "gh0st"};
 	int selectedOption;
@@ -27,6 +29,7 @@ public class InfectionScanner implements Runnable {
 			} catch (InterruptedException ignored) {
 			}
 			removeSuspectFiles();
+			log.info("Task completed");
 		}
 	}
 
@@ -89,8 +92,12 @@ public class InfectionScanner implements Runnable {
 			return;
 		}
 		for (final File item : suspectFiles) {
+			final String p = item.getAbsolutePath();
 			if (!item.delete()) {
+				log.warning("Failed to delete " + p + "\nQueued for deletion on exit.");
 				item.deleteOnExit();
+			} else {
+				log.info("Deleted " + p);
 			}
 		}
 	}
