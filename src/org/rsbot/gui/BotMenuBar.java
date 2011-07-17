@@ -154,6 +154,7 @@ public class BotMenuBar extends JMenuBar {
 			final String[] elements = ELEMENTS[i];
 			add(constructMenu(title, elements));
 		}
+		commandMenuItem.get(Messages.LICENSES).setVisible(false);
 		constructItemIcons();
 		commandMenuItem.get(Messages.HIDEBOT).setVisible(SystemTray.isSupported());
 		setExtendedView(EXTENDED_VIEW_INITIAL);
