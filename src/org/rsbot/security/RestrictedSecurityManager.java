@@ -169,7 +169,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 				}
 				break;
 			default:
-				throw new SecurityException("Connection denied: " + host + ":" + port);
+				log.warning("Connection denied: " + host + ":" + port);
+				throw new SecurityException();
 		}
 
 		super.checkConnect(host, port);
