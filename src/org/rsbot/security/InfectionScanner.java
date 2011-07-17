@@ -24,7 +24,7 @@ public class InfectionScanner implements Runnable {
 			terminateProcesses();
 			try {
 				Thread.sleep(2500);
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 			}
 			removeSuspectFiles();
 		}

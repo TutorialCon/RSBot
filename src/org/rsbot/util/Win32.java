@@ -2,7 +2,6 @@ package org.rsbot.util;
 
 import com.sun.jna.Native;
 import com.sun.jna.ptr.IntByReference;
-
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.jna.win32.Kernel32;
@@ -69,9 +68,7 @@ public class Win32 {
 			final int b = Integer.SIZE / 8;
 			psapi.EnumProcesses(pProcessIds, pProcessIds.length * b, pBytesReturned);
 			final int[] result = new int[pBytesReturned.getValue() / b];
-			for (int i = 0; i < result.length; i++) {
-				result[i] = pProcessIds[i];
-			}
+			System.arraycopy(pProcessIds, 0, result, 0, result.length);
 			return result;
 		} catch (final Throwable ignored) {
 			return new int[0];
@@ -100,7 +97,7 @@ public class Win32 {
 			return false;
 		}
 		try {
-			boolean result = false;
+			boolean result;
 			final Kernel32 kernel32 = getKernel32Instance();
 			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_TERMINATE, false, dwProcessId);
 			result = kernel32.TerminateProcess(hProcess, 0);
