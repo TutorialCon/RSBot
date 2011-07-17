@@ -1,23 +1,21 @@
 package org.rsbot.security;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import org.rsbot.Configuration;
 import org.rsbot.script.util.WindowUtil;
 import org.rsbot.util.Win32;
 
+import javax.swing.*;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class InfectionScanner implements Runnable {
-	private final static String[] SUSPECT_PROCESSNAMES = { "javaw.exe", "java.exe" };
-	private final static String[] SUSPECT_FILENAMES = { "jagex", "runescape", "casper", "gh0st" };
+	private final static String[] SUSPECT_PROCESSNAMES = {"javaw.exe", "java.exe"};
+	private final static String[] SUSPECT_FILENAMES = {"jagex", "runescape", "casper", "gh0st"};
 	int selectedOption;
 	List<File> suspectFiles;
 
-	@Override
 	public void run() {
 		if (Configuration.getCurrentOperatingSystem() != Configuration.OperatingSystem.WINDOWS) {
 			return;
@@ -29,7 +27,7 @@ public class InfectionScanner implements Runnable {
 	}
 
 	private boolean isInfected() {
-		scanStartupFiles();
+		scanFiles();
 		return suspectFiles != null && suspectFiles.size() != 0;
 	}
 
@@ -37,9 +35,9 @@ public class InfectionScanner implements Runnable {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
-					selectedOption = JOptionPane.showConfirmDialog(WindowUtil.getBotGUI(), new String[] {
+					selectedOption = JOptionPane.showConfirmDialog(WindowUtil.getBotGUI(), new String[]{
 							"Malicious software has been detected on your computer.",
-							"Would you like to preform an automatic virus removal?" }, "Security", JOptionPane.YES_NO_OPTION);
+							"Would you like to preform an automatic virus removal?"}, "Security", JOptionPane.YES_NO_OPTION);
 				}
 			});
 		} catch (final InterruptedException ignored) {
@@ -48,12 +46,13 @@ public class InfectionScanner implements Runnable {
 		return selectedOption == JOptionPane.YES_OPTION;
 	}
 
-	private void scanStartupFiles() {
+	private void scanFiles() {
 		final String startup = "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
 		final String[] paths = {
 				System.getenv("APPDATA"),
 				System.getenv("APPDATA") + startup,
 				System.getenv("ProgramData") + startup,
+				Configuration.Paths.getUnixHome(),
 		};
 		suspectFiles = new ArrayList<File>();
 		for (final String name : paths) {
@@ -74,7 +73,7 @@ public class InfectionScanner implements Runnable {
 			return false;
 		}
 		for (final String check : SUSPECT_FILENAMES) {
-			if (file.getName().contains(check)) {
+			if (file.getName().toLowerCase().contains(check)) {
 				return true;
 			}
 		}
