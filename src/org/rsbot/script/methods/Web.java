@@ -5,10 +5,7 @@ import org.rsbot.script.background.BankMonitor;
 import org.rsbot.script.background.WebData;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.util.io.WebQueue;
-import org.rsbot.script.web.PlaneHandler;
-import org.rsbot.script.web.PlaneTraverse;
-import org.rsbot.script.web.Route;
-import org.rsbot.script.web.RouteStep;
+import org.rsbot.script.web.*;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWeb;
 
@@ -419,8 +416,8 @@ public class Web extends MethodProvider {
 			Web.loadWeb();
 		}
 		Web.lastAccess = System.currentTimeMillis();
-		if (Web.rs_map.containsKey(tile)) {
-			final int theFlag = Web.rs_map.get(tile);
+		int theFlag = 0;
+		if ((theFlag = BypassFlags.getKey(tile)) != -1) {
 			return (theFlag & key) != 0;
 		}
 		return false;

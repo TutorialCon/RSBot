@@ -39,16 +39,14 @@ public class WebQueue {
 					for (Map.Entry<RSTile, Integer> tileData : safeMapData.entrySet()) {
 						final RSTile tile = tileData.getKey();
 						final int key = tileData.getValue();
-						if (tileData != null) {
-							synchronized (queueLock) {
-								queue.add(tile.getX() + "," + tile.getY() + "," + tile.getZ() + "k" + key);
-							}
-							synchronized (bufferLock) {
-								try {
-									weAreBuffering = true;
-									Thread.sleep(1);
-								} catch (final InterruptedException ignored) {
-								}
+						synchronized (queueLock) {
+							queue.add(tile.getX() + "," + tile.getY() + "," + tile.getZ() + "k" + key);
+						}
+						synchronized (bufferLock) {
+							try {
+								weAreBuffering = true;
+								Thread.sleep(1);
+							} catch (final InterruptedException ignored) {
 							}
 						}
 					}
