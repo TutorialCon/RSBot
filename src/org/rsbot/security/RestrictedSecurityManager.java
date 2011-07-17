@@ -169,7 +169,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 				}
 				break;
 			default:
-				throw new SecurityException("Connection denied: " + host + ":" + port);
+				log.warning("Connection denied: " + host + ":" + port);
+				throw new SecurityException();
 		}
 
 		super.checkConnect(host, port);
@@ -280,7 +281,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 				throw new SecurityException();
 			}
 		} else if (isCallerScript() && perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
-			log.info("Denied: java.home  <\"" + perm.getActions() + "\">");
 			throw new SecurityException();
 		}
 	}
