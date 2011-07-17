@@ -8,11 +8,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Enumeration;
 
 public class UniqueID {
 	private static final int LENGTH = 64;
@@ -26,7 +26,7 @@ public class UniqueID {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			out.write(IOHelper.read(store));
-			out.write(getInterfaceAddresses());
+			out.write(getLocalHostAddress());
 			out.write(StringUtil.getBytesUtf8(Configuration.NAME));
 			out.write(StringUtil.getBytesUtf8(Configuration.Paths.URLs.DOWNLOAD));
 			out.write(SALT);
@@ -42,16 +42,9 @@ public class UniqueID {
 		IOHelper.write(new ByteArrayInputStream(d), store);
 	}
 
-	private static byte[] getInterfaceAddresses() throws IOException {
-		final ByteArrayOutputStream out = new ByteArrayOutputStream(128);
-		final Enumeration<NetworkInterface> iface = NetworkInterface.getNetworkInterfaces();
-		while (iface.hasMoreElements()) {
-			final byte[] adr = iface.nextElement().getHardwareAddress();
-			if (adr != null) {
-				out.write(adr);
-			}
-		}
-		return out.toByteArray();
+	private static byte[] getLocalHostAddress() throws IOException {
+		final byte[] lo = NetworkInterface.getByInetAddress(InetAddress.getLocalHost()).getHardwareAddress();
+		return lo == null ? new byte[] { 0 } : lo;
 	}
 
 	public static String sha1(final byte[] data) {
