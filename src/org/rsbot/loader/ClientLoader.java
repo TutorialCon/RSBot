@@ -55,7 +55,7 @@ public class ClientLoader {
 			ignored.printStackTrace();
 			return false;
 		}
-		if (info != null && info.containsKey("v1")) {
+		if (info != null && info.containsKey("v1") && info.containsKey("t")) {
 			try {
 				version[1] = Integer.parseInt(info.get("v1"));
 			} catch (final NumberFormatException ignored) {
@@ -66,7 +66,13 @@ public class ClientLoader {
 			} catch (final IOException ignored) {
 				return false;
 			}
-			return version[1] == version[2];
+			boolean notModified = false;
+			try {
+				notModified = HttpClient.isModifiedSince(new URL(Configuration.Paths.URLs.CLIENTPATCH), Long.parseLong(info.get("t")));
+			} catch (final IOException ignored) {
+			} catch (final NumberFormatException ignored) {
+			}
+			return version[1] == version[2] && notModified;
 		} else {
 			return false;
 		}
@@ -141,6 +147,7 @@ public class ClientLoader {
 			final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>(1);
 			final Map<String, String> info = new HashMap<String, String>();
 			info.put("v1", Integer.toString(version[1]));
+			info.put("t", Long.toString(System.currentTimeMillis() / 1000L));
 			data.put(IniParser.EMPTYSECTION, info);
 			IniParser.serialise(data, manifest);
 		}
