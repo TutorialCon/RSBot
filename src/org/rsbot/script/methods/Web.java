@@ -401,7 +401,7 @@ public class Web extends MethodProvider {
 			Web.loadWeb();
 		}
 		Web.lastAccess = System.currentTimeMillis();
-		return Web.rs_map.get(tile);
+		return BypassFlags.getKey(tile);
 	}
 
 	/**

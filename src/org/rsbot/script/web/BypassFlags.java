@@ -10,13 +10,15 @@ public class BypassFlags {
 	private static final Map<RSTile, Integer> bypass = new HashMap<RSTile, Integer>();
 
 	static {
-		bypass.put(new RSTile(3091, 3470), 0);
+		bypass.put(new RSTile(3091, 3470, 0), -1);
 	}
 
 	public static int getKey(final RSTile tile) {
-		boolean bck = false;
-		if (Web.rs_map.containsKey(tile) || (bck = BypassFlags.bypass.containsKey(tile))) {
-			return bck ? BypassFlags.bypass.get(tile) : Web.rs_map.get(tile);
+		if (BypassFlags.bypass.containsKey(tile) || Web.rs_map.containsKey(tile)) {
+			if (BypassFlags.bypass.containsKey(tile)) {
+				return BypassFlags.bypass.get(tile);
+			}
+			return Web.rs_map.get(tile);
 		}
 		return -1;
 	}
