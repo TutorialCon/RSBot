@@ -10,11 +10,13 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TwitterUpdates {
-	public static void loadTweets(final int count) {
+public class TwitterUpdates implements Runnable {
+	@Override
+	public void run() {
 		final Logger log = Logger.getLogger("@" + Configuration.Twitter.NAME);
 		final Level level = Level.INFO;
 		final Object[] param = new Object[]{new Color(0, 0x99, 0xff)};
+		final int count = Configuration.Twitter.MESSAGES;
 
 		final StringBuilder url = new StringBuilder();
 		url.append("http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=");
