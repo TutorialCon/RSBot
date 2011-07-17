@@ -280,8 +280,12 @@ public class RestrictedSecurityManager extends SecurityManager {
 			if (perm.getName().equals("setSecurityManager")) {
 				throw new SecurityException();
 			}
-		} else if (isCallerScript() && perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
-			throw new SecurityException();
+		} else if (isCallerScript()) {
+			if (perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
+				throw new SecurityException();
+			} else if (perm.getName().equals("accessDeclaredMembers")) {
+				throw new SecurityException();
+			}
 		}
 	}
 
