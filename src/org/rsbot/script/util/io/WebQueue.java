@@ -78,8 +78,11 @@ public class WebQueue {
 	 */
 	public static void Start() {
 		if (writer.destroy && !writer.isAlive()) {
-			writer.destroy = false;
-			writer.start();
+			try {
+				writer.destroy = false;
+				writer.start();
+			} catch (IllegalThreadStateException ignored) {
+			}
 		}
 	}
 
@@ -133,7 +136,6 @@ public class WebQueue {
 						file.setWritable(true);
 					}
 				} catch (final Exception e) {
-					destroy = true;
 				}
 			}
 		}
