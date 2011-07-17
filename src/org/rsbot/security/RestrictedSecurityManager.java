@@ -280,7 +280,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 				throw new SecurityException();
 			}
 		} else if (isCallerScript() && perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
-			log.info("Denied: java.home  <\"" + perm.getActions() + "\">");
 			throw new SecurityException();
 		}
 	}
