@@ -279,9 +279,8 @@ public class RestrictedSecurityManager extends SecurityManager {
 			if (perm.getName().equals("setSecurityManager")) {
 				throw new SecurityException();
 			}
-		} else if (isCallerScript() && perm.getName().equals("java.home")) {
-			throw new SecurityException();
 		}
+		// super.checkPermission(perm);
 	}
 
 	@Override
