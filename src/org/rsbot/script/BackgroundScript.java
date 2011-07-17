@@ -22,9 +22,7 @@ public abstract class BackgroundScript extends Script {
 		try {
 			while (isRunning()) {
 				if (activateCondition()) {
-					if (!runOnce()) {
-						break;
-					}
+					runOnce();
 				} else {
 					try {
 						sleep(pausedIterationDelay());
