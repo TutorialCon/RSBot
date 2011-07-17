@@ -22,6 +22,10 @@ public class InfectionScanner implements Runnable {
 		}
 		if (isInfected() && userConfirmedRemoval()) {
 			terminateProcesses();
+			try {
+				Thread.sleep(2500);
+			} catch (InterruptedException e) {
+			}
 			removeSuspectFiles();
 		}
 	}
