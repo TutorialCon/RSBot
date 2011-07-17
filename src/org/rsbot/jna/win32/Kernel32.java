@@ -1,5 +1,6 @@
 package org.rsbot.jna.win32;
 
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
 
 /**
@@ -18,6 +19,7 @@ public interface Kernel32 extends StdCallLibrary {
 	final int PROCESS_MODE_BACKGROUND_BEGIN = 0x00100000;
 	final int PROCESS_MODE_BACKGROUND_END = 0x00200000;
 	final int REALTIME_PRIORITY_CLASS = 0x00000100;
+	final int PROCESS_TERMINATE = 1;
 
 	int GetCurrentProcessId();
 
@@ -28,4 +30,8 @@ public interface Kernel32 extends StdCallLibrary {
 	boolean SetProcessWorkingSetSize(int hProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
 
 	boolean SetPriorityClass(int hProcess, int dwPriorityClass);
+
+	boolean QueryFullProcessImageNameW(int hProcess, int dwFlags, char[] lpExeName, IntByReference lpdwSize);
+
+	boolean TerminateProcess(int hProcess, int uExitCode);
 }

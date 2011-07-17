@@ -1,13 +1,23 @@
 package org.rsbot.util;
 
 import com.sun.jna.Native;
+import com.sun.jna.ptr.IntByReference;
+
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.jna.win32.Kernel32;
+import org.rsbot.jna.win32.Psapi;
 
+/**
+ * @author Paris
+ */
 public class Win32 {
 	private static Kernel32 getKernel32Instance() {
 		return (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
+	}
+
+	private static Psapi getPsapiInstance() {
+		return (Psapi) Native.loadLibrary("Psapi", Psapi.class);
 	}
 
 	public static int getCurrentProcessId() {
@@ -45,6 +55,59 @@ public class Win32 {
 			kernel32.SetPriorityClass(hProcess, dwPriorityClass);
 			kernel32.CloseHandle(hProcess);
 		} catch (final Throwable ignored) {
+		}
+	}
+
+	public static int[] EnumProcesses() {
+		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
+			return null;
+		}
+		try {
+			final int[] pProcessIds = new int[256];
+			final IntByReference pBytesReturned = new IntByReference();
+			final Psapi psapi = getPsapiInstance();
+			final int b = Integer.SIZE / 8;
+			psapi.EnumProcesses(pProcessIds, pProcessIds.length * b, pBytesReturned);
+			final int[] result = new int[pBytesReturned.getValue() / b];
+			for (int i = 0; i < result.length; i++) {
+				result[i] = pProcessIds[i];
+			}
+			return result;
+		} catch (final Throwable ignored) {
+			return new int[0];
+		}
+	}
+
+	public static String QueryFullProcessImageName(final int dwProcessId) {
+		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
+			return null;
+		}
+		try {
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false, dwProcessId);
+			final char[] lpExeName = new char[1024];
+			final IntByReference lpdwSize = new IntByReference(lpExeName.length);
+			kernel32.QueryFullProcessImageNameW(hProcess, 0, lpExeName, lpdwSize);
+			kernel32.CloseHandle(hProcess);
+			return Native.toString(lpExeName);
+		} catch (final Throwable ignored) {
+			return null;
+		}
+	}
+
+	public static boolean TerminateProcess(final int dwProcessId) {
+		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
+			return false;
+		}
+		try {
+			boolean result = false;
+			final Kernel32 kernel32 = getKernel32Instance();
+			final int hProcess = kernel32.OpenProcess(Kernel32.PROCESS_TERMINATE, false, dwProcessId);
+			result = kernel32.TerminateProcess(hProcess, 0);
+			kernel32.CloseHandle(hProcess);
+			return result;
+		} catch (final Throwable ignored) {
+			return false;
 		}
 	}
 }

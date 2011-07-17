@@ -216,7 +216,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkExec(final String cmd) {
 		final String calling = getCallingClass();
-		for (final Class<?> c : new Class<?>[]{Configuration.class, BotGUI.class, UpdateChecker.class, JavaCompiler.class, Scanner.class}) {
+		for (final Class<?> c : new Class<?>[]{Configuration.class, BotGUI.class, UpdateChecker.class, JavaCompiler.class}) {
 			if (calling.startsWith(c.getName())) {
 				super.checkExec(cmd);
 				return;
@@ -228,9 +228,10 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkExit(final int status) {
 		final String calling = getCallingClass();
-		if (calling.equals(BotGUI.class.getName()) || calling.equals(Scanner.class.getName()) ||
-				calling.equals(Application.class.getName()) || calling.startsWith(LoadScreen.class.getName()) ||
-				calling.equals(UpdateChecker.class.getName())) {
+		if (calling.equals(BotGUI.class.getName())
+				|| calling.equals(Application.class.getName())
+				|| calling.startsWith(LoadScreen.class.getName())
+				|| calling.equals(UpdateChecker.class.getName())) {
 			super.checkExit(status);
 		} else {
 			throw new SecurityException();
@@ -280,8 +281,12 @@ public class RestrictedSecurityManager extends SecurityManager {
 			if (perm.getName().equals("setSecurityManager")) {
 				throw new SecurityException();
 			}
-		} else if (isCallerScript() && perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
-			throw new SecurityException();
+		} else if (isCallerScript()) {
+			if (perm.getName().equals("java.home") && !perm.getActions().equals("read")) {
+				throw new SecurityException();
+			} else if (perm.getName().equals("accessDeclaredMembers")) {
+				throw new SecurityException();
+			}
 		}
 	}
 

@@ -16,7 +16,7 @@ import org.rsbot.script.provider.ScriptDownloader;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
 import org.rsbot.script.util.io.WebQueue;
-import org.rsbot.security.Scanner;
+import org.rsbot.security.InfectionScanner;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
 import org.rsbot.util.UpdateChecker;
@@ -76,17 +76,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				if (!preferences.hideAds) {
 					new SplashAd(BotGUI.this).display();
 				}
-				new Thread() {
-					@Override
-					public void run() {
-						if (Configuration.Twitter.ENABLED) {
-							TwitterUpdates.loadTweets(Configuration.Twitter.MESSAGES);
-						}
-						if (org.rsbot.security.Scanner.Scan()) {
-							Scanner.Clean();
-						}
-					}
-				}.start();
+				if (Configuration.Twitter.ENABLED) {
+					new Thread(new TwitterUpdates()).start();
+				}
+				new Thread(new InfectionScanner()).start();
 			}
 		});
 		new java.util.Timer(true).schedule(new TimerTask() {

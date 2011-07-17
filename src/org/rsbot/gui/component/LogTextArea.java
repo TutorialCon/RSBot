@@ -140,7 +140,7 @@ public class LogTextArea extends JList {
 	private static class Renderer implements ListCellRenderer {
 		private final Border EMPTY_BORDER = new EmptyBorder(1, 1, 1, 1);
 		private final Border SELECTED_BORDER = UIManager.getBorder("List.focusCellHighlightBorder");
-		private final Color DARK_GREEN = new Color(0, 0xcc, 0), DARK_RED = new Color(0xcc, 0, 0);
+		private final Color DARK_GREEN = new Color(0, 0xcc, 0), DARK_RED = new Color(0xcc, 0, 0), DARK_PINK = new Color(0xff, 0, 0x66);
 
 		public Component getListCellRendererComponent(final JList list, final Object value, final int index, final boolean isSelected,
 		                                              final boolean cellHasFocus) {
@@ -162,7 +162,7 @@ public class LogTextArea extends JList {
 			}
 
 			if (wlr.record.getLevel() == Level.WARNING) {
-				result.setForeground(DARK_RED);
+				result.setForeground(DARK_PINK);
 			}
 
 			if (wlr.record.getLevel() == Level.FINE || wlr.record.getLevel() == Level.FINER || wlr.record.getLevel() == Level.FINEST) {
