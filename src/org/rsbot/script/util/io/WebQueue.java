@@ -4,7 +4,10 @@ import org.rsbot.script.methods.Web;
 import org.rsbot.script.wrappers.RSTile;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -160,9 +163,7 @@ public class WebQueue {
 						String line;
 						while ((line = br.readLine()) != null) {
 							boolean good = true;
-							final Iterator<String> removeLines = removeStack.listIterator();
-							while (removeLines.hasNext()) {
-								final String str = removeLines.next();
+							for (String str : removeStack) {
 								if (str != null && line.contains(str)) {
 									good = false;
 									break;
@@ -190,9 +191,7 @@ public class WebQueue {
 							queueOutList.clear();
 							queueOutList.addAll(queue);
 							queue.clear();
-							final Iterator<String> outLines = queueOutList.listIterator();
-							while (outLines.hasNext()) {
-								final String line = outLines.next();
+							for (String line : queueOutList) {
 								out.write(line + "\n");
 							}
 							out.flush();
