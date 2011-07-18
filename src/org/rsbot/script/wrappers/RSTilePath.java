@@ -64,7 +64,8 @@ public class RSTilePath extends RSPath {
 	@Override
 	public RSTile getNext() {
 		for (int i = tiles.length - 1; i >= 0; --i) {
-			if (methods.calc.tileOnMap(tiles[i]) && methods.calc.canReach(tiles[i], false)) {
+			final RSTile dest = methods.walking.getDestination();
+			if (methods.calc.tileOnMap(tiles[i]) && (methods.calc.canReach(tiles[i], false) || (i != 0 && (dest != null ? methods.calc.distanceBetween(dest, tiles[i - 1]) < 3 : methods.calc.distanceTo(tiles[i - 1]) < 7)))) {
 				return tiles[i];
 			}
 		}
