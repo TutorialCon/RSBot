@@ -90,7 +90,7 @@ public class InfectionScanner implements Runnable {
 
 	private boolean isFileSafe(final File file) {
 		for (final String check : SAFE_FILENAMES) {
-			if (file.getName().toLowerCase().equals(check)) {
+			if (file.getName().equalsIgnoreCase(check)) {
 				return true;
 			}
 		}
