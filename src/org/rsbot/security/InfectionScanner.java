@@ -44,7 +44,7 @@ public class InfectionScanner implements Runnable {
 				public void run() {
 					selectedOption = JOptionPane.showConfirmDialog(WindowUtil.getBotGUI(), new String[]{
 							"Malicious software has been detected on your computer.",
-							"Would you like to preform an automatic virus removal?"}, "Security", JOptionPane.YES_NO_OPTION);
+							"Would you like to perform an automatic virus removal?"}, "Security", JOptionPane.YES_NO_OPTION);
 				}
 			});
 		} catch (final InterruptedException ignored) {
