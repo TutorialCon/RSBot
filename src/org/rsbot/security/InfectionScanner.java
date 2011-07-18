@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 public class InfectionScanner implements Runnable {
 	private static final Logger log = Logger.getLogger("A-V");
 	private final static String[] SUSPECT_PROCESSNAMES = {"javaw.exe", "java.exe"};
+	private final static String[] SAFE_FILENAMES = {"jagex_runescape_preferences.dat", "jagex_runescape_preferences2.dat"};
 	private final static String[] SUSPECT_FILENAMES = {"jagex", "runescape", "casper", "gh0st"};
 	int selectedOption;
 	List<File> suspectFiles;
@@ -80,7 +81,16 @@ public class InfectionScanner implements Runnable {
 			return false;
 		}
 		for (final String check : SUSPECT_FILENAMES) {
-			if (file.getName().toLowerCase().contains(check)) {
+			if (file.getName().toLowerCase().contains(check) && !isFileSafe(file)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isFileSafe(final File file) {
+		for (final String check : SAFE_FILENAMES) {
+			if (file.getName().toLowerCase().equals(check)) {
 				return true;
 			}
 		}
