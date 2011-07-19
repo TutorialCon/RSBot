@@ -6,8 +6,6 @@ import org.rsbot.bot.Bot;
 import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.TextAreaLogHandler;
-import org.rsbot.script.Script;
-import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.methods.Environment;
@@ -366,6 +364,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					}
 				}
 				id = checkID;
+				break;
 			}
 			sh.pauseScript(id);
 		}
@@ -394,24 +393,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		final ScriptHandler sh = bot.getScriptHandler();
 		final Map<Integer, LoopTask> running = sh.getRunningScripts();
 		if (running.size() > 0) {
-			Iterator<Integer> idIterator = running.keySet().iterator();
-			int id = -1;
-			Web web = bot.getMethodContext().web;
-			while (idIterator.hasNext()) {
-				final int checkID = idIterator.next();
-				if (web.areScriptsLoaded()) {
-					if (checkID == web.bankCacheId || checkID == web.webDataId) {
-						continue;
-					}
-				}
-				id = checkID;
-			}
-			final LoopTask s = running.get(id);
-			final ScriptManifest prop = s.getClass().getAnnotation(ScriptManifest.class);
-			final int result = JOptionPane.showConfirmDialog(this, "Would you like to stop the script " + prop.name() + "?", "Script", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			final int result = JOptionPane.showConfirmDialog(this, "Would you like to stop the script?", "Script", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (result == JOptionPane.OK_OPTION) {
 				sh.stopAllScripts();
-				web.unloadWebScripts();
+				bot.getMethodContext().web.unloadWebScripts();
 				updateScriptControls();
 			}
 		}

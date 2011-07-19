@@ -79,6 +79,7 @@ public class ScriptHandler extends TaskContainer {
 		return Collections.unmodifiableMap(getTasks());
 	}
 
+
 	public void pauseScript(final int id) {
 		final LoopTask s = getTasks().get(id);
 		s.setPaused(!s.isPaused());
@@ -90,6 +91,9 @@ public class ScriptHandler extends TaskContainer {
 			for (final ScriptListener l : listeners) {
 				l.scriptResumed(this);
 			}
+		}
+		for (final Map.Entry<Integer, LoopTask> lt : getTasks().entrySet()) {
+			lt.getValue().setPaused(s.isPaused());
 		}
 	}
 
