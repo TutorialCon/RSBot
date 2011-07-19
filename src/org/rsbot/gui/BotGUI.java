@@ -366,7 +366,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					}
 				}
 				id = checkID;
-				break;
 			}
 			sh.pauseScript(id);
 		}
