@@ -406,13 +406,13 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					}
 				}
 				id = checkID;
-				break;
 			}
-			final Script s = (Script) running.get(id);
+			final LoopTask s = running.get(id);
 			final ScriptManifest prop = s.getClass().getAnnotation(ScriptManifest.class);
 			final int result = JOptionPane.showConfirmDialog(this, "Would you like to stop the script " + prop.name() + "?", "Script", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (result == JOptionPane.OK_OPTION) {
-				sh.stopScript(id);
+				sh.stopAllScripts();
+				web.unloadWebScripts();
 				updateScriptControls();
 			}
 		}

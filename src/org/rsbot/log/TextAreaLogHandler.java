@@ -6,7 +6,6 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 public class TextAreaLogHandler extends Handler {
-
 	public static final LogTextArea TEXT_AREA = new LogTextArea();
 
 	@Override
@@ -21,5 +20,4 @@ public class TextAreaLogHandler extends Handler {
 	public void publish(final LogRecord record) {
 		TextAreaLogHandler.TEXT_AREA.log(record);
 	}
-
 }

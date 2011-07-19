@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class LabelLogHandler extends Handler {
-
 	public final JLabel label = new JLabel();
 	private final Color defaultColor;
 
@@ -35,5 +34,4 @@ public class LabelLogHandler extends Handler {
 		}
 		label.setText(msg);
 	}
-
 }

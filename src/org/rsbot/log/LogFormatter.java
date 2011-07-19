@@ -8,7 +8,6 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 public class LogFormatter extends Formatter {
-
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	private final boolean appendNewLine;
@@ -57,5 +56,4 @@ public class LogFormatter extends Formatter {
 	public String formatError(final LogRecord record) {
 		return StringUtil.throwableToString(record.getThrown());
 	}
-
 }
