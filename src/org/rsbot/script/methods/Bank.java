@@ -143,6 +143,19 @@ public class Bank extends MethodProvider {
 		return false;
 	}
 
+        /**
+	 * If bank is open, deposits specified amount of an item into the bank.
+	 * Supports deposit boxes.
+	 *
+	 * @param itemName The Name of the item.
+	 * @param number The amount to deposit. 0 deposits All. 1,5,10 deposit
+	 *               corresponding amount while other numbers deposit X.
+	 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>.
+	 */
+	public boolean deposit(final int itemName, final int number) {
+                return deposit(inventory.getItemID(itemName), number);
+        }
+
 	/**
 	 * Deposits all items in methods.inventory. Supports deposit boxes.
 	 *
@@ -653,6 +666,18 @@ public class Bank extends MethodProvider {
 		final int newInvCount = methods.inventory.getCount(true);
 		return newInvCount > invCount;
 	}
+
+	/**
+	 * Tries to withdraw an item.
+	 * 0 is All. -1 is All but one, 1, 5, 10 use Withdraw 1, 5, 10 while other numbers Withdraw X.
+	 *
+	 * @param itemName The Name of the item.
+	 * @param count  The number to withdraw.
+	 * @return <tt>true</tt> on success.
+	 */
+        public boolean withdraw(String itemName, int count) {
+                return withdraw(bank.getItemID(itemName), count);
+        }
 
 	/**
 	 * Gets the count of all the items in the inventory with the any of the
