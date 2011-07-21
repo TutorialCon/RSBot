@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * @author Paris
+ */
 public class InfectionScanner implements Runnable {
-	private static final Logger log = Logger.getLogger("A-V");
+	private static final Logger log = Logger.getLogger(InfectionScanner.class.getName());
 	private final static String[] SUSPECT_PROCESSNAMES = {"javaw.exe", "java.exe"};
 	private final static String[] SAFE_FILENAMES = {"jagex_runescape_preferences.dat", "jagex_runescape_preferences2.dat"};
 	private final static String[] SUSPECT_FILENAMES = {"jagex", "runescape", "casper", "gh0st"};
@@ -30,7 +33,6 @@ public class InfectionScanner implements Runnable {
 			} catch (InterruptedException ignored) {
 			}
 			removeSuspectFiles();
-			log.info("Task completed");
 		}
 	}
 
@@ -102,12 +104,11 @@ public class InfectionScanner implements Runnable {
 			return;
 		}
 		for (final File item : suspectFiles) {
-			final String p = item.getAbsolutePath();
 			if (!item.delete()) {
-				log.warning("Failed to delete " + p + "\nQueued for deletion on exit.");
+				log.warning("Unable to delete " + item.getName());
 				item.deleteOnExit();
 			} else {
-				log.info("Deleted " + p);
+				log.info("Deleted " + item.getName());
 			}
 		}
 	}
