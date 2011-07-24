@@ -58,7 +58,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 			".logikmedia.co", // countvidal
 			"letthesmokeout.com", // MrByte
 			"zaszmedia.com", // zasz - Frost Dragons Pro, Enchanter Pro, Jars Pro
-			"muscripting.net", // ShizZznit - Aviansie Massacre
+			"massacrescripting.net", // ShizZznit ~ Ramy - Aviansie Massacre
 			".ownagebots.com", // Ownageful - OwnageGDK, OwnageBDK, OwnageFDK
 			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
 			".solarbots.org", // Wei Su
