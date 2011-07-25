@@ -5,7 +5,6 @@ import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
 import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
-import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.methods.Environment;
@@ -29,13 +28,16 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
  * @author Paris
  */
 public class BotGUI extends JFrame implements ActionListener, ScriptListener {
-	public static final int PANEL_WIDTH = 765, PANEL_HEIGHT = 503, LOG_HEIGHT = 120;
+	public static final int PANEL_WIDTH = 765, PANEL_HEIGHT = 503;
 	public static final int MAX_BOTS = 6;
 	private static final long serialVersionUID = -5411033752001988794L;
 	private static final Logger log = Logger.getLogger(BotGUI.class.getName());
@@ -44,7 +46,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	private BotPanel panel;
 	private BotToolBar toolBar;
 	private BotMenuBar menuBar;
-	private JScrollPane textScroll;
+	private JLabel statusText;
 	protected static final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
 	private java.util.Timer shutdown = null;
@@ -196,8 +198,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			final boolean selected = ((JCheckBoxMenuItem) evt.getSource()).isSelected();
 			if (option.equals(Messages.HIDETOOLBAR)) {
 				toggleViewState(toolBar, selected);
-			} else if (option.equals(Messages.HIDELOGPANE)) {
-				toggleViewState(textScroll, selected);
 			} else if (current != null) {
 				if (option.equals(Messages.ALLDEBUGGING)) {
 					for (final String key : BotMenuBar.DEBUG_MAP.keySet()) {
@@ -461,19 +461,44 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		panel = new BotPanel();
 		menuBar = new BotMenuBar(this);
 		toolBar = new BotToolBar(this, menuBar);
+		statusText = new JLabel(" ");
+		statusText.setFont(new Font(statusText.getFont().getName(), Font.BOLD, statusText.getFont().getSize()));
 		panel.setFocusTraversalKeys(0, new HashSet<AWTKeyStroke>());
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		new KeyboardShortcuts(manager, this);
 		menuBar.setBot(null);
 		setJMenuBar(menuBar);
-		textScroll = new JScrollPane(TextAreaLogHandler.TEXT_AREA, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		textScroll.setBorder(null);
-		textScroll.setPreferredSize(new Dimension(PANEL_WIDTH, LOG_HEIGHT));
-		textScroll.setVisible(true);
 		JScrollPane scrollableBotPanel = new JScrollPane(panel);
 		add(toolBar, BorderLayout.NORTH);
 		add(scrollableBotPanel, BorderLayout.CENTER);
-		add(textScroll, BorderLayout.SOUTH);
+		add(statusText, BorderLayout.SOUTH);
+		final Color statusDefaultColor = statusText.getForeground();
+		Logger.getLogger("").addHandler(new Handler() {
+			@Override
+			public void close() throws SecurityException {
+			}
+
+			@Override
+			public void flush() {
+			}
+
+			@Override
+			public void publish(final LogRecord record) {
+				final StringBuilder txt = new StringBuilder(46);
+				String name = record.getLoggerName();
+				if (name != null) {
+					if (name.contains(".")) {
+						name = name.substring(name.lastIndexOf('.') + 1);
+					}
+					txt.append(name);
+					txt.append(": ");
+				}
+				txt.append(record.getMessage());
+				final boolean error = record.getLevel() == Level.WARNING || record.getLevel() == Level.SEVERE;
+				statusText.setForeground(error ? Color.RED : statusDefaultColor);
+				statusText.setText(txt.toString());
+			}
+		});
 	}
 
 	public void scriptStarted(final ScriptHandler handler) {

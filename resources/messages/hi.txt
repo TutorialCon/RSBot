@@ -29,7 +29,6 @@ EXTDVIEWS=विस्तारित विचार
 AUTOSHUTDOWN=स्वत: बंद (mins):
 
 HIDETOOLBAR=उपकरण पट्टी छुपाना
-HIDELOGPANE=फलक लॉग छिपाने
 ALLDEBUGGING=सभी डिबगिंग
 
 OPTIONS=विकल्प

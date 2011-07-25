@@ -29,7 +29,6 @@ EXTDVIEWS=Ansicht erweitern
 AUTOSHUTDOWN=Herunterfahren (min):
 
 HIDETOOLBAR=Toolbar verstecken
-HIDELOGPANE=Log-Panel verstecken
 ALLDEBUGGING=Alle Debugging-Nachrichten
 
 OPTIONS=Optionen

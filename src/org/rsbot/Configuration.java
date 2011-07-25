@@ -2,7 +2,6 @@ package org.rsbot;
 
 import org.rsbot.log.LogFormatter;
 import org.rsbot.log.SystemConsoleHandler;
-import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.util.StringUtil;
 import org.rsbot.util.io.IOHelper;
 
@@ -295,11 +294,10 @@ public class Configuration {
 		final Properties logging = new Properties();
 		final String logFormatter = LogFormatter.class.getCanonicalName();
 		final String fileHandler = FileHandler.class.getCanonicalName();
-		logging.setProperty("handlers", TextAreaLogHandler.class.getCanonicalName() + "," + fileHandler);
+		logging.setProperty("handlers", fileHandler);
 		logging.setProperty(".level", "INFO");
 		logging.setProperty(SystemConsoleHandler.class.getCanonicalName() + ".formatter", logFormatter);
 		logging.setProperty(fileHandler + ".formatter", logFormatter);
-		logging.setProperty(TextAreaLogHandler.class.getCanonicalName() + ".formatter", logFormatter);
 		logging.setProperty(fileHandler + ".pattern", Paths.getLogsDirectory() + File.separator + "%u.%g.log");
 		logging.setProperty(fileHandler + ".count", "10");
 		final ByteArrayOutputStream logout = new ByteArrayOutputStream();
