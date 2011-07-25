@@ -107,7 +107,14 @@ public class BotToolBar extends JToolBar {
 		runScriptButton.setToolTipText(runScriptButton.getText());
 		runScriptButton.setText("");
 
-		final HomeButton home = new HomeButton(ICON_HOME);
+		final JButton home = new JButton("", ICON_HOME);
+		home.setFocusable(false);
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setSelection(getComponentIndex(home));
+			}
+		});
 
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		setFloatable(false);
@@ -264,61 +271,6 @@ public class BotToolBar extends JToolBar {
 		} catch (NullPointerException ignored) {
 			return null;
 		}
-	}
-
-	/**
-	 */
-	private class HomeButton extends JPanel {
-		private static final long serialVersionUID = 938456324328L;
-
-		private final Image image;
-		private boolean hovered;
-
-		public HomeButton(final ImageIcon icon) {
-			super(new BorderLayout());
-			image = icon.getImage();
-			setBorder(new EmptyBorder(3, 6, 2, 3));
-			setPreferredSize(new Dimension(24, 22));
-			setMaximumSize(new Dimension(24, 22));
-			setFocusable(false);
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseReleased(final MouseEvent e) {
-					setSelection(getComponentIndex(HomeButton.this));
-				}
-
-				@Override
-				public void mouseEntered(final MouseEvent e) {
-					hovered = true;
-					repaint();
-				}
-
-				@Override
-				public void mouseExited(final MouseEvent e) {
-					hovered = false;
-					repaint();
-				}
-			});
-		}
-
-		@Override
-		public void paintComponent(final Graphics g) {
-			super.paintComponent(g);
-			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			if (getComponentIndex(this) == idx) {
-				g.setColor(new Color(255, 255, 255, 200));
-				g.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
-				g.setColor(new Color(180, 180, 180, 200));
-				g.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
-			} else if (hovered) {
-				g.setColor(new Color(255, 255, 255, 150));
-				g.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
-				g.setColor(new Color(180, 180, 180, 150));
-				g.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
-			}
-			g.drawImage(image, 3, 3, null);
-		}
-
 	}
 
 	/**
