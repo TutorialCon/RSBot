@@ -1,7 +1,7 @@
 package org.rsbot.client;
 
 public interface RSCharacter extends RSAnimable {
-	int getAnimation();
+	int[] getAnimationQueue();
 
 	Graphic[] getGraphicsData();
 

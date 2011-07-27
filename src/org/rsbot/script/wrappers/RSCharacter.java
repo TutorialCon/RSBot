@@ -91,7 +91,8 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	}
 
 	public int getAnimation() {
-		return getAccessor().getAnimation();
+		final int[] q = getAccessor().getAnimationQueue();
+		return q == null || q.length == 0 ? -1 : q[0];
 	}
 
 	public int getGraphic() {
