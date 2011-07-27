@@ -40,7 +40,7 @@ public class BotToolBar extends JToolBar {
 		IMAGE_CLOSE_OVER = Configuration.getImage(Configuration.Paths.Resources.ICON_CLOSE);
 	}
 
-	private final AddButton addTabButton;
+	private final JButton addTabButton;
 	private final JButton screenshotButton;
 	private final JButton userInputButton;
 	private final JButton runScriptButton;
@@ -116,10 +116,19 @@ public class BotToolBar extends JToolBar {
 			}
 		});
 
+		addTabButton = new JButton("", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_ADD)));
+		addTabButton.setFocusable(false);
+		addTabButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				listener.actionPerformed(new ActionEvent(this, e.getID(), Messages.FILE + "." + Messages.NEWBOT));
+			}
+		});
+
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		setFloatable(false);
 		add(home);
-		add(addTabButton = new AddButton(listener));
+		add(addTabButton);
 		add(Box.createHorizontalGlue());
 		add(screenshotButton);
 		add(runScriptButton);
@@ -344,72 +353,6 @@ public class BotToolBar extends JToolBar {
 			g.setColor(Configuration.isSkinAvailable() ? (selected ? Color.BLACK : Color.DARK_GRAY) : (selected ? Color.GRAY : LIGHTER_GRAY));
 			g.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
 			g.drawImage(hovered && close ? IMAGE_CLOSE_OVER : IMAGE_CLOSE, 90, 3, null);
-		}
-	}
-
-	private static class AddButton extends JComponent {
-		private static final long serialVersionUID = 1L;
-
-		private static Image ICON;
-		private static Image ICON_OVER;
-		private static final Image ICON_DOWN;
-		private boolean hovered = false;
-		private boolean pressed = false;
-
-		static {
-			ICON_DOWN = Configuration.getImage(Configuration.Paths.Resources.ICON_ADD);
-		}
-
-		public AddButton(final ActionListener listener) {
-			URL src = null;
-			try {
-				src = Configuration.getResourceURL(Configuration.Paths.Resources.ICON_ADD);
-			} catch (final MalformedURLException ignored) {
-			}
-			ICON = getTransparentImage(src, 0.3f);
-			ICON_OVER = getTransparentImage(src, 0.7f);
-
-			setPreferredSize(new Dimension(20, 20));
-			setMaximumSize(new Dimension(20, 20));
-			setFocusable(false);
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(final MouseEvent e) {
-					hovered = true;
-					repaint();
-				}
-
-				@Override
-				public void mouseExited(final MouseEvent e) {
-					hovered = false;
-					repaint();
-				}
-
-				@Override
-				public void mousePressed(final MouseEvent e) {
-					pressed = true;
-					repaint();
-				}
-
-				@Override
-				public void mouseReleased(final MouseEvent e) {
-					pressed = false;
-					repaint();
-					listener.actionPerformed(new ActionEvent(this, e.getID(), Messages.FILE + "." + Messages.NEWBOT));
-				}
-			});
-		}
-
-		@Override
-		public void paintComponent(final Graphics g) {
-			super.paintComponent(g);
-			if (pressed) {
-				g.drawImage(ICON_DOWN, 2, 2, null);
-			} else if (hovered) {
-				g.drawImage(ICON_OVER, 2, 2, null);
-			} else {
-				g.drawImage(ICON, 2, 2, null);
-			}
 		}
 	}
 }
