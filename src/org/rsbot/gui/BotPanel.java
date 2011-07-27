@@ -53,11 +53,12 @@ public class BotPanel extends JPanel {
 
 	private Bot bot;
 	private final HomeUpdater updater;
-	private int offX;
+	private Point offset;
 	private boolean present;
 
 	public BotPanel() {
 		updater = new HomeUpdater();
+		offset = new Point(0, 0);
 		setSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
 		setMinimumSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
 		setPreferredSize(new Dimension(BotGUI.PANEL_WIDTH, BotGUI.PANEL_HEIGHT));
@@ -126,8 +127,8 @@ public class BotPanel extends JPanel {
 
 	public void offset() {
 		if (bot.getCanvas() != null) {
-			// center canvas horizontally if not filling container
-			offX = (getWidth() - bot.getCanvas().getWidth()) / 2;
+			offset.x = (getWidth() - bot.getCanvas().getWidth()) / 2;
+			offset.y = (getHeight() - bot.getCanvas().getHeight()) / 2;
 		}
 	}
 
@@ -140,9 +141,7 @@ public class BotPanel extends JPanel {
 		this.bot = bot;
 		if (bot != null) {
 			bot.setPanel(this);
-			if (bot.getCanvas() != null) {
-				offset();
-			}
+			offset();
 		} else {
 			new Thread(updater).start();
 		}
@@ -153,7 +152,7 @@ public class BotPanel extends JPanel {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if (bot != null) {
-			g.drawImage(bot.getImage(), offX, 0, null);
+			g.drawImage(bot.getImage(), offset.x, offset.y, null);
 		}
 	}
 
@@ -166,7 +165,7 @@ public class BotPanel extends JPanel {
 			final boolean present = mouse.isPresent();
 			final Component c = bot.getLoader().getComponent(0);
 			// account for horizontal offset
-			e.translatePoint(-offX, 0);
+			e.translatePoint(-offset.x, -offset.y);
 			// fire human mouse event for scripts
 			dispatchHuman(c, e);
 			if (!bot.overrideInput && (bot.inputFlags & INPUT_MOUSE) == 0) {
