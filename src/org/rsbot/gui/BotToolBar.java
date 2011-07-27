@@ -4,15 +4,10 @@ import org.rsbot.Configuration;
 import org.rsbot.locale.Messages;
 import org.rsbot.script.methods.Environment;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * @author Paris
@@ -37,6 +32,7 @@ public class BotToolBar extends JToolBar {
 	static {
 		ICON_HOME = new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_HOME));
 		ICON_BOT = new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_BOT));
+		IMAGE_CLOSE = Configuration.getImage(Configuration.Paths.Resources.ICON_CLOSE_SEMI);
 		IMAGE_CLOSE_OVER = Configuration.getImage(Configuration.Paths.Resources.ICON_CLOSE);
 	}
 
@@ -52,11 +48,6 @@ public class BotToolBar extends JToolBar {
 	private boolean inputOverride = true;
 
 	public BotToolBar(final ActionListener listener, final BotMenuBar menu) {
-		try {
-			IMAGE_CLOSE = getTransparentImage(Configuration.getResourceURL(Configuration.Paths.Resources.ICON_CLOSE), 0.5f);
-		} catch (final MalformedURLException ignored) {
-		}
-
 		this.listener = listener;
 
 		screenshotButton = new JButton(Messages.SAVESCREENSHOT, new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PHOTO)));
@@ -261,24 +252,6 @@ public class BotToolBar extends JToolBar {
 			return Configuration.getImage(Configuration.Paths.Resources.ICON_MOUSE);
 		} else {
 			return Configuration.getImage(Configuration.Paths.Resources.ICON_DELETE);
-		}
-	}
-
-	private static Image getTransparentImage(final URL url, final float transparency) {
-		BufferedImage parentImage = null;
-		try {
-			parentImage = ImageIO.read(url);
-		} catch (final IOException ignored) {
-		}
-		try {
-			final BufferedImage bufferedImage = new BufferedImage(parentImage.getWidth(), parentImage.getHeight(), Transparency.TRANSLUCENT);
-			final Graphics2D graphics = bufferedImage.createGraphics();
-			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, transparency));
-			graphics.drawImage(parentImage, null, 0, 0);
-			graphics.dispose();
-			return bufferedImage;
-		} catch (NullPointerException ignored) {
-			return null;
 		}
 	}
 

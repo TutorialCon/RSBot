@@ -44,6 +44,7 @@ public class Configuration {
 			public static final String ICON_HOME = ROOT_IMG + "/home.png";
 			public static final String ICON_BOT = ROOT_IMG + "/bot.png";
 			public static final String ICON_CLOSE = ROOT_IMG + "/close.png";
+			public static final String ICON_CLOSE_SEMI = ROOT_IMG + "/close_semi.png";
 			public static final String ICON_TICK = ROOT_IMG + "/tick.png";
 			public static final String ICON_MOUSE = ROOT_IMG + "/mouse.png";
 			public static final String ICON_PHOTO = ROOT_IMG + "/photo.png";
