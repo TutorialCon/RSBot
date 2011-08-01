@@ -60,7 +60,7 @@ public class AccountManager extends JDialog implements ActionListener {
 		private static final long serialVersionUID = 6519185448833736787L;
 
 		public RandomRewardEditor() {
-			super(new JComboBox<Object>(RANDOM_REWARDS));
+			super(new JComboBox(RANDOM_REWARDS));
 		}
 	}
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * @author Paris
  */
-public class JComboCheckBox extends JComboBox<Object> implements ActionListener {
+public class JComboCheckBox extends JComboBox implements ActionListener {
 	private static final long serialVersionUID = -3388586151789454096L;
 	private final ComboCheckRenderer renderer;
 
@@ -29,7 +29,7 @@ public class JComboCheckBox extends JComboBox<Object> implements ActionListener 
 		if (e.getModifiers() == 0 || getItemCount() < 2) {
 			return;
 		}
-		final JComboBox<?> cb = (JComboBox<?>) e.getSource();
+		final JComboBox cb = (JComboBox) e.getSource();
 		final StatefulItem store = (StatefulItem) cb.getSelectedItem();
 		final ComboCheckRenderer ccr = (ComboCheckRenderer) cb.getRenderer();
 		ccr.checkBox.setSelected(store.state = !store.state);
@@ -59,7 +59,7 @@ public class JComboCheckBox extends JComboBox<Object> implements ActionListener 
 		}
 	}
 
-	class ComboCheckRenderer implements ListCellRenderer<Object> {
+	class ComboCheckRenderer implements ListCellRenderer {
 		final JLabel none;
 		final JCheckBox checkBox;
 
@@ -72,7 +72,7 @@ public class JComboCheckBox extends JComboBox<Object> implements ActionListener 
 			none.setText(" " + label);
 		}
 
-		public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+		public Component getListCellRendererComponent(final JList list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
 			if (index == -1) {
 				return none;
 			}
