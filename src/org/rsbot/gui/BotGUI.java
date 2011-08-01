@@ -380,11 +380,12 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 	private void showScriptSelector(final Bot bot) {
 		if (AccountManager.getAccountNames() == null || AccountManager.getAccountNames().length == 0) {
-			JOptionPane.showMessageDialog(this, "No accounts found! Please create one before using the bot.");
+			log.warning("Please save an account before loading a script");
 			AccountManager.getInstance().showGUI();
-		} else if (bot.getMethodContext() == null) {
+		}
+		if (bot.getMethodContext() == null) {
 			log.warning("The client is still loading");
-		} else {
+		} else if (AccountManager.getAccountNames() != null && AccountManager.getAccountNames().length != 0) {
 			new ScriptSelector(this, bot).showGUI();
 		}
 	}
