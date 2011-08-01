@@ -14,7 +14,6 @@ import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.task.executor.ScriptPool;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
-import sun.font.FontManager;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -401,8 +400,20 @@ public class RestrictedSecurityManager extends SecurityManager {
 					fail = false;
 				}
 				if (fail && readOnly) {
-					for (final String font : FontManager.getFontPath(true).split("\\Q" + File.pathSeparator + "\\E")) {
-						if (path.startsWith(font)) {
+					final String[] fonts;
+					switch (Configuration.getCurrentOperatingSystem()) {
+					case WINDOWS:
+						fonts = new String[] { System.getenv("SystemRoot") + "\\Fonts" };
+						break;
+					case MAC:
+						fonts = new String[] { "/Library/Fonts", "/System/Library/Fonts", System.getenv("HOME") + "/Library/Fonts" };
+						break;
+					default:
+						fonts = new String[] { "/usr/share/fonts/", "/usr/local/share/fonts", System.getenv("HOME") + "/.fonts" };
+						break;
+					}
+					for (int i = 0; i < fonts.length; i++) {
+						if (path.startsWith(fonts[i])) {
 							fail = false;
 							break;
 						}
