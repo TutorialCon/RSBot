@@ -40,7 +40,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JTable table;
 	private JTextField search;
 	private final static Color searchAltColor = Color.GRAY;
-	private JComboBox accounts;
+	private JComboBox<?> accounts;
 	private final JComboCheckBox categories = new JComboCheckBox();
 	private final ScriptTableModel model;
 	private final List<ScriptDefinition> scripts;
@@ -376,7 +376,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				load();
 			}
 		});
-		accounts = new JComboBox(AccountManager.getAccountNames());
+		accounts = new JComboBox<Object>(AccountManager.getAccountNames());
 		accounts.setPreferredSize(new Dimension(125, 20));
 		categories.setPreferredSize(new Dimension(150, 20));
 		categories.addActionListener(new ActionListener() {
