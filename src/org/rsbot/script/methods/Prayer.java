@@ -261,7 +261,7 @@ public class Prayer extends MethodProvider {
 			}
 			methods.game.openTab(Game.Tab.PRAYER);
 			if (methods.game.getTab() == Game.Tab.PRAYER) {
-				RSComponent component = methods.interfaces.getComponent(INTERFACE_PRAYER, 7)
+				RSComponent component = methods.interfaces.getComponent(INTERFACE_PRAYER, 8)
 						.getComponent(pray.getComponentIndex());
 				if (component.isValid()) {
 					component.interact(active ? "Activate" : "Deactivate");
