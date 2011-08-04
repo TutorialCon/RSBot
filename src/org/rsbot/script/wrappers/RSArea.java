@@ -1,6 +1,7 @@
 package org.rsbot.script.wrappers;
 
-import java.awt.*;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -89,9 +90,8 @@ public class RSArea {
 		final RSTile[] areaTiles = getTileArray();
 		for (final RSTile check : tiles) {
 			for (final RSTile space : areaTiles) {
-				if (check.equals(space)) {
+				if (check.equals(space))
 					return true;
-				}
 			}
 		}
 		return false;
@@ -109,9 +109,8 @@ public class RSArea {
 	 * @return The central <b>RSTile</b> of the <b>RSArea</b>.
 	 */
 	public RSTile getCentralTile() {
-		if (area.npoints < 1) {
+		if (area.npoints < 1)
 			return null;
-		}
 		int totalX = 0, totalY = 0;
 		for (int i = 0; i < area.npoints; i++) {
 			totalX += area.xpoints[i];
@@ -127,20 +126,14 @@ public class RSArea {
 	 *         to the given <b>RSTile</b>.
 	 */
 	public RSTile getNearestTile(final RSTile base) {
-		final RSTile[] tiles = getTileArray();
-		RSTile cur = null;
-		double dist = -1;
-		for (final RSTile tile : tiles) {
-			final double distTmp = distanceBetween(tile, base);
-			if (cur == null) {
-				dist = distTmp;
-				cur = tile;
-			} else if (distTmp < dist) {
-				cur = tile;
-				dist = distTmp;
+		RSTile currTile = null;
+		for (final RSTile tile : getTileArray()) {
+			if (currTile == null || distanceBetween(base, tile)
+					< distanceBetween(currTile, tile)) {
+				currTile = tile;
 			}
 		}
-		return cur;
+		return currTile;
 	}
 
 	/**
@@ -162,11 +155,7 @@ public class RSArea {
 				}
 			}
 		}
-		final RSTile[] tiles = new RSTile[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			tiles[i] = list.get(i);
-		}
-		return tiles;
+		return list.toArray(new RSTile[list.size()]);
 	}
 
 	/**
@@ -218,7 +207,7 @@ public class RSArea {
 	 * @return An array of <b>RSTile<b>'s that make the area.
 	 */
 	public RSTile[] getAreaTiles() {
-		return this.tiles;
+		return tiles;
 	}
 
 	/**
