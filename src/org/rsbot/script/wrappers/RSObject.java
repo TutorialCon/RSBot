@@ -274,6 +274,18 @@ public class RSObject extends MethodProvider implements RSTarget {
 		return methods.calc.tileToScreen(getLocation()).distance(x, y) < random(4, 9);
 	}
 
+	public boolean hasAction(final RSObject object, final String action) {
+		final RSObject objectDef = object;
+		if (objectDef != null) {
+			for (final String a : objectDef.getDef().getActions()) {
+				if (a != null && a.equalsIgnoreCase(action)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	} 
+
 	@Override
 	public boolean equals(final Object o) {
 		return o instanceof RSObject && ((RSObject) o).obj == obj;
