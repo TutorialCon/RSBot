@@ -274,10 +274,17 @@ public class RSObject extends MethodProvider implements RSTarget {
 		return methods.calc.tileToScreen(getLocation()).distance(x, y) < random(4, 9);
 	}
 
-	public boolean hasAction(final RSObject object, final String action) {
-		final RSObject objectDef = object;
+	/**
+	* Determines if this object contains the desired action
+	*
+	* @param action The object menu action to check.
+	* @return <tt>true</tt> if the object has the action; otherwise
+	*         <tt>false</tt>.
+	*/
+	public boolean hasAction(final String action) {
+		final RSObjectDef objectDef = getDef();
 		if (objectDef != null) {
-			for (final String a : objectDef.getDef().getActions()) {
+			for (final String a : objectDef.getActions()) {
 				if (a != null && a.equalsIgnoreCase(action)) {
 					return true;
 				}
