@@ -107,7 +107,8 @@ public class BotToolBar extends JToolBar {
 			}
 		});
 
-		addTabButton = new JButton("", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_ADD)));
+		addTabButton = new JButton("", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_ADD_SEMI)));
+		addTabButton.setPressedIcon(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_ADD)));
 		addTabButton.setFocusable(false);
 		addTabButton.addActionListener(new ActionListener() {
 			@Override

@@ -42,6 +42,7 @@ public class Configuration {
 			public static final String ICON_PLAY = ROOT_IMG + "/control_play_blue.png";
 			public static final String ICON_PAUSE = ROOT_IMG + "/control_pause.png";
 			public static final String ICON_ADD = ROOT_IMG + "/add.png";
+			public static final String ICON_ADD_SEMI = ROOT_IMG + "/add_semi.png";
 			public static final String ICON_HOME = ROOT_IMG + "/home.png";
 			public static final String ICON_BOT = ROOT_IMG + "/bot.png";
 			public static final String ICON_CLOSE = ROOT_IMG + "/close.png";
