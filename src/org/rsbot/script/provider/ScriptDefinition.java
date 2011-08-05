@@ -12,7 +12,9 @@ import java.util.List;
 public class ScriptDefinition implements Comparable<ScriptDefinition> {
 
 	public String getName() {
-		return StringUtil.stripHtml(name);
+		String txt = StringUtil.stripHtml(name);
+		txt = txt.replaceFirst("\\b[Vv]\\d+(?:\\.\\d+)?", "");
+		return txt.trim();
 	}
 
 	public String getDescription() {
