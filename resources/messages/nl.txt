@@ -30,6 +30,7 @@ AUTOSHUTDOWN=Stop na(minuten):
 ALLOWALLHOSTS=Sta onveilige verbindingen toe
 
 HIDETOOLBAR=Verberg Toolbar
+HIDELOGPANE=Verberg Log Paneel
 ALLDEBUGGING=Alle Debug Opties
 
 OPTIONS=Opties

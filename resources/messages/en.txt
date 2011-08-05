@@ -30,6 +30,7 @@ AUTOSHUTDOWN=Shutdown (mins):
 ALLOWALLHOSTS=Allow untrusted connections
 
 HIDETOOLBAR=Hide Toolbar
+HIDELOGPANE=Hide Log Pane
 ALLDEBUGGING=All Debugging
 
 OPTIONS=Options

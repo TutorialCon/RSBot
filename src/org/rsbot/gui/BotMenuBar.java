@@ -84,6 +84,7 @@ public class BotMenuBar extends JMenuBar {
 	private static String[] constructDebugs() {
 		final List<String> debugItems = new ArrayList<String>();
 		debugItems.add(Messages.HIDETOOLBAR);
+		debugItems.add(Messages.HIDELOGPANE);
 		debugItems.add(Messages.ALLDEBUGGING);
 		debugItems.add(Messages.MENUSEPERATOR);
 		for (final String key : DEBUG_MAP.keySet()) {

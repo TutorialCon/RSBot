@@ -66,6 +66,7 @@ public class Messages {
 	public static final String ALLOWALLHOSTS = map.get("ALLOWALLHOSTS");
 
 	public static final String HIDETOOLBAR = map.get("HIDETOOLBAR");
+	public static final String HIDELOGPANE = map.get("HIDELOGPANE");
 	public static final String ALLDEBUGGING = map.get("ALLDEBUGGING");
 
 	public static final String OPTIONS = map.get("OPTIONS");

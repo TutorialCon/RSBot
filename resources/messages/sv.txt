@@ -31,6 +31,7 @@ EXTDVIEWS=Utökad visa-meny
 AUTOSHUTDOWN=Automatisk avstängning (min):
 
 HIDETOOLBAR=Dölj verktygsfält
+HIDELOGPANE=Dölj loggpanel
 ALLDEBUGGING=All felsökning
 
 OPTIONS=Alternativ
