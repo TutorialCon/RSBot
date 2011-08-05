@@ -1,8 +1,8 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.script.wrappers.RSComponent;
-
 import java.util.regex.Pattern;
+
+import org.rsbot.script.wrappers.RSComponent;
 
 /**
  * Friend chat related operations.
@@ -31,7 +31,7 @@ public class FriendChat extends MethodProvider {
 
 		private final int TEXTURE_ID;
 
-		private ChatRank(int textureId) {
+		private ChatRank(final int textureId) {
 			TEXTURE_ID = textureId;
 		}
 
@@ -51,16 +51,16 @@ public class FriendChat extends MethodProvider {
 		private final boolean isInLobby;
 		private ChatRank rank = ChatRank.GUEST;
 
-		public User(String name, RSComponent rank, RSComponent world) {
+		public User(final String name, final RSComponent rank, final RSComponent world) {
 			this.name = name;
-			int textureId = rank.getTextureID();
-			for (ChatRank chatRank : ChatRank.values()) {
+			final int textureId = rank.getTextureID();
+			for (final ChatRank chatRank : ChatRank.values()) {
 				if (chatRank.getTextureId() == textureId) {
 					this.rank = chatRank;
 					break;
 				}
 			}
-			String text = world.getText();
+			final String text = world.getText();
 			isInLobby = text.contains("Lo");
 			if (!text.endsWith(".")) {
 				worldNumber = Integer.parseInt(text.substring(text.indexOf(32) + 1));
@@ -135,12 +135,10 @@ public class FriendChat extends MethodProvider {
 	public boolean join(final String channel) {
 		methods.game.openTab(Game.Tab.FRIENDS_CHAT);
 		if (isInChannel()) {
-			if (getName().equals(channel)) {
+			if (getName().equals(channel))
 				return true;
-			}
-			if (!leave()) {
+			if (!leave())
 				return false;
-			}
 		}
 		methods.interfaces.getComponent(INTERFACE_FRIEND_CHAT, INTERFACE_FRIEND_CHAT_JOIN_BUTTON).doClick();
 		sleep(random(500, 800));
@@ -150,9 +148,8 @@ public class FriendChat extends MethodProvider {
 			lastCachedChannel = lastChatCompText.substring(lastChatCompText.indexOf(": ") + 2);
 			methods.keyboard.sendText(channel, true);
 			sleep(random(1550, 1800));
-			if (isInChannel()) {
+			if (isInChannel())
 				return true;
-			}
 		}
 		return false;
 	}
@@ -166,9 +163,8 @@ public class FriendChat extends MethodProvider {
 	 */
 	public boolean joinLastChannel() {
 		methods.game.openTab(Game.Tab.FRIENDS_CHAT);
-		if (isInChannel()) {
+		if (isInChannel())
 			return true;
-		}
 		methods.interfaces.getComponent(INTERFACE_FRIEND_CHAT, INTERFACE_FRIEND_CHAT_JOIN_BUTTON).doClick();
 		sleep(random(500, 800));
 		if (methods.interfaces.get(INTERFACE_JOIN_FRIEND_CHAT).isValid()) {
@@ -178,9 +174,8 @@ public class FriendChat extends MethodProvider {
 			methods.interfaces.getComponent(INTERFACE_JOIN_FRIEND_CHAT,
 					INTERFACE_JOIN_FRIEND_CHAT_LAST_CHANNEL).doClick();
 			sleep(random(1550, 1800));
-			if (isInChannel()) {
+			if (isInChannel())
 				return true;
-			}
 		}
 		return false;
 	}
@@ -220,14 +215,13 @@ public class FriendChat extends MethodProvider {
 	 * @param names The names to look for.
 	 * @return an instance of <code>User</code>.
 	 */
-	public User getUser(String... names) {
+	public User getUser(final String... names) {
 		if (isInChannel()) {
-			User[] users = getUsers();
-			for (String name : names) {
-				for (User user : users) {
-					if (name.equalsIgnoreCase(user.getName())) {
+			final User[] users = getUsers();
+			for (final String name : names) {
+				for (final User user : users) {
+					if (name.equalsIgnoreCase(user.getName()))
 						return user;
-					}
 				}
 			}
 		}
@@ -241,18 +235,18 @@ public class FriendChat extends MethodProvider {
 	 */
 	public User[] getUsers() {
 		if (isInChannel()) {
-			java.util.ArrayList<User> users = new java.util.ArrayList<User>();
-			RSComponent list = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, FriendChat.INTERFACE_FRIEND_CHAT_USERS_LIST);
+			final java.util.ArrayList<User> users = new java.util.ArrayList<User>();
+			final RSComponent list = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, FriendChat.INTERFACE_FRIEND_CHAT_USERS_LIST);
 			if (list != null) {
-				for (RSComponent c : list.getComponents()) {
+				for (final RSComponent c : list.getComponents()) {
 					if (c == null) {
 						continue;
 					}
 					String name = c.getText();
 					if (name != null && !name.isEmpty() && name.contains("..")) {
-						String[] actions = c.getActions();
+						final String[] actions = c.getActions();
 						if (actions != null) {
-							for (String action : actions) {
+							for (final String action : actions) {
 								if (action != null) {
 									if (action.contains("Add") || action.contains("Remove")) {
 										name = action.substring(action.indexOf(32, action.indexOf(32) + 1) + 1);
@@ -262,7 +256,7 @@ public class FriendChat extends MethodProvider {
 							}
 						}
 					}
-					int componentIndex = c.getComponentIndex();
+					final int componentIndex = c.getComponentIndex();
 					RSComponent rank = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, 6);
 					rank = rank.getComponent(componentIndex);
 					RSComponent world = methods.interfaces.getComponent(FriendChat.INTERFACE_FRIEND_CHAT, 8);
@@ -330,7 +324,7 @@ public class FriendChat extends MethodProvider {
 	 *
 	 * @param msg the message to send
 	 */
-	public void sendMessage(String msg) {
+	public void sendMessage(final String msg) {
 		sendMessage(msg, false);
 	}
 
@@ -340,9 +334,9 @@ public class FriendChat extends MethodProvider {
 	 * @param msg     the message to send
 	 * @param instant if <tt>true</tt>, message will be sent instantly
 	 */
-	public void sendMessage(String msg, boolean instant) {
+	public void sendMessage(final String msg, final boolean instant) {
 		if (msg != null && !msg.isEmpty()) {
-			String message = FRIEND_CHAT_STRING_TALK.concat(msg);
+			final String message = FRIEND_CHAT_STRING_TALK.concat(msg);
 			if (instant) {
 				methods.keyboard.sendTextInstant(message, true);
 			} else {
@@ -371,9 +365,9 @@ public class FriendChat extends MethodProvider {
 			private final boolean isOffline;
 			private final boolean isInLobby;
 
-			public Friend(String name, RSComponent world) {
+			public Friend(final String name, final RSComponent world) {
 				this.name = name;
-				String text = world.getText();
+				final String text = world.getText();
 				isOffline = text.contains("Of");
 				isInLobby = text.contains("Lo");
 				if (!isOffline && !isInLobby && !text.endsWith(".")) {
@@ -427,10 +421,9 @@ public class FriendChat extends MethodProvider {
 		 */
 		public boolean add(final FriendChat.Friend user) {
 			if (user != null) {
-				Friend friend = getFriend(user.getName());
-				if (friend == null) {
+				final Friend friend = getFriend(user.getName());
+				if (friend == null)
 					return add(user.getName());
-				}
 			}
 			return false;
 		}
@@ -444,7 +437,7 @@ public class FriendChat extends MethodProvider {
 		public boolean add(final String name) {
 			if (name != null && !name.isEmpty()) {
 				openTab();
-				RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_BUTTON_ADD_FRIEND);
+				final RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_BUTTON_ADD_FRIEND);
 				if (c != null) {
 					c.doClick();
 					sleep(random(300, 550));
@@ -463,12 +456,11 @@ public class FriendChat extends MethodProvider {
 		 * @return an instance of <code>Friend</code> or <code>null</code> if no results
 		 */
 		public Friend getFriend(final String... names) {
-			Friend[] friends = getFriends();
-			for (String name : names) {
-				for (Friend friend : friends) {
-					if (name.equalsIgnoreCase(friend.getName())) {
+			final Friend[] friends = getFriends();
+			for (final String name : names) {
+				for (final Friend friend : friends) {
+					if (name.equalsIgnoreCase(friend.getName()))
 						return friend;
-					}
 				}
 			}
 			return null;
@@ -481,10 +473,10 @@ public class FriendChat extends MethodProvider {
 		 */
 		public Friend[] getFriends() {
 			openTab();
-			RSComponent list = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_LIST_FRIENDS);
+			final RSComponent list = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_LIST_FRIENDS);
 			if (list != null) {
-				java.util.ArrayList<Friend> friends = new java.util.ArrayList<Friend>();
-				for (RSComponent c : list.getComponents()) {
+				final java.util.ArrayList<Friend> friends = new java.util.ArrayList<Friend>();
+				for (final RSComponent c : list.getComponents()) {
 					if (c == null) {
 						continue;
 					}
@@ -506,9 +498,9 @@ public class FriendChat extends MethodProvider {
 		 * @return an array instance of <code>Friend</code>
 		 */
 		public Friend[] getFriends(final String... names) {
-			java.util.ArrayList<Friend> friends = new java.util.ArrayList<Friend>();
-			for (String name : names) {
-				for (Friend friend : getFriends()) {
+			final java.util.ArrayList<Friend> friends = new java.util.ArrayList<Friend>();
+			for (final String name : names) {
+				for (final Friend friend : getFriends()) {
 					if (name.equalsIgnoreCase(friend.getName())) {
 						friends.add(friend);
 					}
@@ -530,9 +522,9 @@ public class FriendChat extends MethodProvider {
 		 * @param name the name of the friend to remove
 		 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>
 		 */
-		public boolean remove(String name) {
+		public boolean remove(final String name) {
 			if (name != null && getFriend(name) != null) {
-				RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_BUTTON_REMOVE_FRIEND);
+				final RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_BUTTON_REMOVE_FRIEND);
 				if (c != null) {
 					c.doClick();
 					sleep(random(300, 550));
@@ -550,12 +542,11 @@ public class FriendChat extends MethodProvider {
 		 * @param user the instance of <code>Friend</code> to remove
 		 * @return <tt>true</tt> if successful; otherwise <tt>false</tt>
 		 */
-		public boolean remove(FriendChat.Friend user) {
+		public boolean remove(final FriendChat.Friend user) {
 			if (user != null) {
-				Friend friend = getFriend(user.getName());
-				if (friend != null) {
+				final Friend friend = getFriend(user.getName());
+				if (friend != null)
 					return remove(friend.getName());
-				}
 			}
 			return false;
 		}
@@ -567,9 +558,9 @@ public class FriendChat extends MethodProvider {
 		 */
 		public int getCount() {
 			openTab();
-			RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_LABEL_FRIENDS_COUNT);
+			final RSComponent c = methods.interfaces.getComponent(FriendsList.FRIENDSLIST, FriendsList.FRIENDSLIST_LABEL_FRIENDS_COUNT);
 			if (c != null) {
-				String text = c.getText();
+				final String text = c.getText();
 				return Integer.parseInt(text.split(" ")[0]);
 			}
 			return -1;
