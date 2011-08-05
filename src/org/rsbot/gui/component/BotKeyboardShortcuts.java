@@ -1,17 +1,18 @@
 package org.rsbot.gui.component;
 
-import org.rsbot.gui.BotGUI;
-import org.rsbot.locale.Messages;
-
-import java.awt.*;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+
+import org.rsbot.locale.Messages;
 
 /**
  * @author Mothma
  */
-public class KeyboardShortcuts {
+public class BotKeyboardShortcuts {
 	private static final HashMap<Object, String> SHORTCUT_MAP = new HashMap<Object, String>();
 
 	static {
@@ -28,24 +29,25 @@ public class KeyboardShortcuts {
 		SHORTCUT_MAP.put(KeyEvent.VK_O, Messages.TOOLS + "." + Messages.OPTIONS);
 	}
 
-	public KeyboardShortcuts(KeyboardFocusManager manager, BotGUI botgui) {
-		manager.addKeyEventDispatcher(new KeyDispatcher(manager, botgui));
+	public BotKeyboardShortcuts(final KeyboardFocusManager manager, final ActionListener listener) {
+		manager.addKeyEventDispatcher(new KeyDispatcher(manager, listener));
 	}
 
-	public class KeyDispatcher implements KeyEventDispatcher {
+	private class KeyDispatcher implements KeyEventDispatcher {
 		final KeyboardFocusManager manager;
-		final BotGUI botgui;
+		final ActionListener listener;
 
-		KeyDispatcher(KeyboardFocusManager manager, BotGUI botgui) {
+		public KeyDispatcher(final KeyboardFocusManager manager, final ActionListener listener) {
 			this.manager = manager;
-			this.botgui = botgui;
+			this.listener = listener;
 		}
 
-		public boolean dispatchKeyEvent(KeyEvent e) {
+		@Override
+		public boolean dispatchKeyEvent(final KeyEvent e) {
 			if (e.isControlDown()) {
 				if (SHORTCUT_MAP.containsKey(e.getKeyCode())) {
 					if (e.getID() == KeyEvent.KEY_PRESSED) {
-						botgui.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, SHORTCUT_MAP.get(e.getKeyCode())));
+						listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, SHORTCUT_MAP.get(e.getKeyCode())));
 					}
 				}
 				return false;
@@ -56,5 +58,3 @@ public class KeyboardShortcuts {
 		}
 	}
 }
-
-
