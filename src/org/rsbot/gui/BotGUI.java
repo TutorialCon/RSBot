@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * @author Paris
  */
 public class BotGUI extends JFrame implements ActionListener, ScriptListener {
-	public static final int PANEL_WIDTH = 765, PANEL_HEIGHT = 503, LOG_HEIGHT = 120;
+	public static final int PANEL_WIDTH = 765, PANEL_HEIGHT = 503;
 	public static final int MAX_BOTS = 6;
 	private static final long serialVersionUID = -5411033752001988794L;
 	private static final Logger log = Logger.getLogger(BotGUI.class.getName());
@@ -469,7 +469,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		setJMenuBar(menuBar);
 		textScroll = new JScrollPane(TextAreaLogHandler.TEXT_AREA, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		textScroll.setBorder(null);
-		textScroll.setPreferredSize(new Dimension(PANEL_WIDTH, LOG_HEIGHT));
+		textScroll.setPreferredSize(new Dimension(PANEL_WIDTH, Configuration.RUNNING_FROM_JAR ? 60 : 120));
 		textScroll.setVisible(true);
 		JScrollPane scrollableBotPanel = new JScrollPane(panel);
 		add(toolBar, BorderLayout.NORTH);
