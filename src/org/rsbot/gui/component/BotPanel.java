@@ -1,7 +1,8 @@
-package org.rsbot.gui;
+package org.rsbot.gui.component;
 
 import org.rsbot.bot.Bot;
 import org.rsbot.event.EventManager;
+import org.rsbot.gui.BotGUI;
 import org.rsbot.script.methods.Mouse;
 
 import javax.swing.*;

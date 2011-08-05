@@ -1,5 +1,6 @@
-package org.rsbot.gui;
+package org.rsbot.gui.component;
 
+import org.rsbot.gui.BotGUI;
 import org.rsbot.locale.Messages;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 /**
  * @author Mothma
  */
-class KeyboardShortcuts {
+public class KeyboardShortcuts {
 	private static final HashMap<Object, String> SHORTCUT_MAP = new HashMap<Object, String>();
 
 	static {
@@ -27,7 +28,7 @@ class KeyboardShortcuts {
 		SHORTCUT_MAP.put(KeyEvent.VK_O, Messages.TOOLS + "." + Messages.OPTIONS);
 	}
 
-	KeyboardShortcuts(KeyboardFocusManager manager, BotGUI botgui) {
+	public KeyboardShortcuts(KeyboardFocusManager manager, BotGUI botgui) {
 		manager.addKeyEventDispatcher(new KeyDispatcher(manager, botgui));
 	}
 
@@ -36,7 +37,6 @@ class KeyboardShortcuts {
 		final BotGUI botgui;
 
 		KeyDispatcher(KeyboardFocusManager manager, BotGUI botgui) {
-			System.out.println("Dispatcher created.");
 			this.manager = manager;
 			this.botgui = botgui;
 		}

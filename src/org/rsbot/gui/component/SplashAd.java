@@ -1,6 +1,7 @@
-package org.rsbot.gui;
+package org.rsbot.gui.component;
 
 import org.rsbot.Configuration;
+import org.rsbot.gui.BotGUI;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IniParser;
 
