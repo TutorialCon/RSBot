@@ -45,7 +45,7 @@ public class ClientLoader {
 	}
 
 	private boolean isCacheClean() {
-		if (!(manifest.exists() && cache.exists()) || localms.exists()) {
+		if (!(manifest.exists() && cache.exists()) || (localms.exists() && !Configuration.RUNNING_FROM_JAR)) {
 			return false;
 		}
 		final Map<String, String> info;
@@ -96,7 +96,7 @@ public class ClientLoader {
 			jar.close();
 		} else {
 			final ModScript script;
-			if (localms.exists()) {
+			if (localms.exists() && !Configuration.RUNNING_FROM_JAR) {
 				log.info("Loading game client against local patch");
 				script = new ModScript(IOHelper.ungzip(IOHelper.read(localms)));
 			} else {
