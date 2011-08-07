@@ -1,9 +1,11 @@
 package org.rsbot;
 
+import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.log.LogFormatter;
 import org.rsbot.log.SystemConsoleHandler;
 import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.util.StringUtil;
+import org.rsbot.util.Win32;
 import org.rsbot.util.io.IOHelper;
 
 import javax.swing.filechooser.FileSystemView;
@@ -285,11 +287,9 @@ public class Configuration {
 				dir.mkdirs();
 			}
 		}
-		if (Configuration.getCurrentOperatingSystem() == Configuration.OperatingSystem.WINDOWS) {
-			try {
-				Runtime.getRuntime().exec("attrib +H \"" + new File(Paths.getScriptsNetworkDirectory()).getAbsolutePath() + "\"");
-			} catch (final IOException ignored) {
-			}
+		try {
+			Win32.SetFileAttributes(new File(Paths.getScriptsNetworkDirectory()).getCanonicalPath(), Kernel32.FILE_ATTRIBUTE_HIDDEN);
+		} catch (final IOException ignored) {
 		}
 	}
 
