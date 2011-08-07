@@ -98,7 +98,7 @@ public class ClientLoader {
 			final ModScript script;
 			if (localms.exists()) {
 				log.info("Loading game client against local patch");
-				script = new ModScript(IOHelper.read(localms));
+				script = new ModScript(IOHelper.ungzip(IOHelper.read(localms)));
 			} else {
 				log.info("Downloading new game client");
 				script = new ModScript(HttpClient.downloadBinary(new URL(Configuration.Paths.URLs.CLIENTPATCH)));
