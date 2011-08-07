@@ -5,8 +5,6 @@ import org.rsbot.Configuration.OperatingSystem;
 
 import javax.tools.ToolProvider;
 import java.io.*;
-import java.net.URL;
-import java.net.URLEncoder;
 
 public class JavaCompiler {
 	private final static String JAVACARGS = "-g:none";
@@ -27,18 +25,6 @@ public class JavaCompiler {
 
 	public static boolean isAvailable() {
 		return !(ToolProvider.getSystemJavaCompiler() == null && findJavac() == null);
-	}
-
-	public static boolean compileWeb(final String source, final File out) {
-		try {
-			HttpClient.download(new URL(source + "?v=" + Integer.toString(Configuration.getVersion()) + "&s=" + URLEncoder.encode(source, "UTF-8")), out);
-		} catch (final Exception ignored) {
-			return false;
-		}
-		if (out.length() == 0) {
-			out.delete();
-		}
-		return out.exists();
 	}
 
 	private static int compileNative(final javax.tools.JavaCompiler javac, final InputStream source, final String classPath) throws FileNotFoundException {

@@ -102,7 +102,7 @@ public class ScriptDownloader {
 		}
 
 		// compile the script
-		boolean result;
+		boolean result = false;
 		if (JavaCompiler.isAvailable()) {
 			String compileClassPath;
 			if (Configuration.RUNNING_FROM_JAR) {
@@ -111,12 +111,6 @@ public class ScriptDownloader {
 				compileClassPath = new File(Configuration.Paths.ROOT + File.separator + "bin").getAbsolutePath();
 			}
 			result = JavaCompiler.run(classFile, compileClassPath);
-		} else {
-			final File compiledJar = new File(Configuration.Paths.getScriptsPrecompiledDirectory(), className + ".jar");
-			if (compiledJar.exists()) {
-				compiledJar.delete();
-			}
-			result = JavaCompiler.compileWeb(url, compiledJar);
 		}
 
 		// notify user of result
