@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
 /**
  * @author Paris
@@ -189,32 +188,8 @@ public class HttpClient {
 		}
 		di.close();
 		if (buffer != null) {
-			buffer = ungzip(buffer);
+			buffer = IOHelper.ungzip(buffer);
 		}
 		return buffer;
-	}
-
-	private static byte[] ungzip(final byte[] data) {
-		if (data.length < 2) {
-			return data;
-		}
-
-		final int header = (data[0] | data[1] << 8) ^ 0xffff0000;
-		if (header != GZIPInputStream.GZIP_MAGIC) {
-			return data;
-		}
-
-		try {
-			final ByteArrayInputStream b = new ByteArrayInputStream(data);
-			final GZIPInputStream gzin = new GZIPInputStream(b);
-			final ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
-			for (int c = gzin.read(); c != -1; c = gzin.read()) {
-				out.write(c);
-			}
-			return out.toByteArray();
-		} catch (final IOException e) {
-			e.printStackTrace();
-			return data;
-		}
 	}
 }

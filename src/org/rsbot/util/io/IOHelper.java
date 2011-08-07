@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author Paris
@@ -123,5 +124,29 @@ public class IOHelper {
 
 	public static long crc32(final File path) throws IOException {
 		return crc32(new FileInputStream(path));
+	}
+
+	public static byte[] ungzip(final byte[] data) {
+		if (data.length < 2) {
+			return data;
+		}
+
+		final int header = (data[0] | data[1] << 8) ^ 0xffff0000;
+		if (header != GZIPInputStream.GZIP_MAGIC) {
+			return data;
+		}
+
+		try {
+			final ByteArrayInputStream b = new ByteArrayInputStream(data);
+			final GZIPInputStream gzin = new GZIPInputStream(b);
+			final ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
+			for (int c = gzin.read(); c != -1; c = gzin.read()) {
+				out.write(c);
+			}
+			return out.toByteArray();
+		} catch (final IOException e) {
+			e.printStackTrace();
+			return data;
+		}
 	}
 }
