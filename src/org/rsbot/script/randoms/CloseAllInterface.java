@@ -4,6 +4,7 @@ import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.wrappers.RSComponent;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CloseAllInterface extends Random {
 		addChild(157, 13); // Quick chat help
 		addChild(764, 18); // Objectives
 		addChild(895, 19); // Advisor
-		addChild(109, 14); // Grand exchange collection
+		//addChild(109, 14); // Grand exchange collection
 		addChild(667, 74); // Equipment Bonus
 		addChild(742, 18); // Graphic
 		addChild(917, 73); // Task List
@@ -72,6 +73,9 @@ public class CloseAllInterface extends Random {
 					return true;
 				}
 			}
+			if (interfaces.get(109).getComponent(14).isValid()){
+				return true;
+			}
 			for (final ComponentDef c : components) {
 				final RSComponent comp = interfaces.getComponent(c.parent, c.child);
 				if (comp.isValid() && !(c.text && (comp.getText() == null || comp.getText().isEmpty()))) {
@@ -88,6 +92,29 @@ public class CloseAllInterface extends Random {
 		if (interfaces.get(755).isValid() && interfaces.getComponent(755, 0).getComponents().length > 0) {
 			interfaces.getComponent(755, 44).doClick();
 			return random(500, 900);
+		}
+		if (interfaces.get(109).getComponent(14).isValid()){
+			boolean xpIsOpen = false;
+			if (game.getColorAtPoint(432, 70).equals(new Color(99, 120, 118)) || 
+					game.getColorAtPoint(432, 70).equals(new Color(144, 129, 91))){
+				xpIsOpen = true;
+				if (interfaces.get(548).getComponent(0).isValid()){
+					interfaces.get(548).getComponent(0).doClick();
+				}
+				sleep(random(500, 900));
+			}
+			interfaces.get(109).getComponent(14).doClick();
+			sleep(random(500, 900));
+			if (xpIsOpen){
+				if (interfaces.get(548).getComponent(0).isValid()){
+					interfaces.get(548).getComponent(0).doClick();
+				}
+				sleep(random(500, 900));
+			}
+			if (random(0, 3) == 0) {
+				mouse.moveSlightly();
+			}
+			return -1;
 		}
 		for (final ComponentDef c : components) {
 			if (interfaces.getComponent(c.parent, c.child).isValid()) {

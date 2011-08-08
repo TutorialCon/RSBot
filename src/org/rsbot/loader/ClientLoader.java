@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 public class ClientLoader {
 	private final static ClientLoader instance = new ClientLoader();
 	private final Logger log = Logger.getLogger(ClientLoader.class.getName());
-	private final File manifest, cache;
+	private final File manifest, cache, localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
 	private final static String TARGET = "runescape";
 	public final static int PORT_CLIENT = 43594;
 	private int[] version = {-1, -1, -1};
@@ -45,7 +45,7 @@ public class ClientLoader {
 	}
 
 	private boolean isCacheClean() {
-		if (!(manifest.exists() && cache.exists())) {
+		if (!(manifest.exists() && cache.exists()) || localms.exists()) {
 			return false;
 		}
 		final Map<String, String> info;
@@ -95,8 +95,14 @@ public class ClientLoader {
 			}
 			jar.close();
 		} else {
-			log.info("Downloading new game client");
-			final ModScript script = new ModScript(HttpClient.downloadBinary(new URL(Configuration.Paths.URLs.CLIENTPATCH)));
+			final ModScript script;
+			if (localms.exists()) {
+				log.info("Loading game client against local patch");
+				script = new ModScript(IOHelper.ungzip(IOHelper.read(localms)));
+			} else {
+				log.info("Downloading new game client");
+				script = new ModScript(HttpClient.downloadBinary(new URL(Configuration.Paths.URLs.CLIENTPATCH)));
+			}
 			version[0] = script.getVersion();
 			if (version[2] > version[0]) {
 				throw new ParseException("Patch outdated (" + version[2] + " > " + version[0] + ")");

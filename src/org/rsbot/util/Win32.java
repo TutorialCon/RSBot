@@ -1,6 +1,7 @@
 package org.rsbot.util;
 
 import com.sun.jna.Native;
+import com.sun.jna.WString;
 import com.sun.jna.ptr.IntByReference;
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
@@ -103,6 +104,17 @@ public class Win32 {
 			result = kernel32.TerminateProcess(hProcess, 0);
 			kernel32.CloseHandle(hProcess);
 			return result;
+		} catch (final Throwable ignored) {
+			return false;
+		}
+	}
+
+	public static boolean SetFileAttributes(final String lpFileName, final int dwFileAttributes) {
+		if (Configuration.getCurrentOperatingSystem() != OperatingSystem.WINDOWS) {
+			return false;
+		}
+		try {
+			return getKernel32Instance().SetFileAttributesW(new WString("\\\\?\\" + lpFileName), dwFileAttributes);
 		} catch (final Throwable ignored) {
 			return false;
 		}
