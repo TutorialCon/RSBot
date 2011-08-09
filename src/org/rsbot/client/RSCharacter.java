@@ -19,7 +19,7 @@ public interface RSCharacter extends RSAnimable {
 
 	int getLoopCycleStatus();
 
-	String getMessage();
+	RSMessageData getMessageData();
 
 	int isMoving();
 
