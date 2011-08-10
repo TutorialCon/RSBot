@@ -68,9 +68,9 @@ public interface Client {
 
 	int getSubMenuWidth();
 
-	float getMinimapOffset();
+	int getMinimapOffset();
 
-	int getMinimapAngle();
+	float getMinimapAngle();
 
 	int getMinimapScale();
 

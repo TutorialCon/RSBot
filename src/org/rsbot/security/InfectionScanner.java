@@ -6,6 +6,7 @@ import org.rsbot.util.Win32;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,14 @@ public class InfectionScanner implements Runnable {
 		if (Configuration.getCurrentOperatingSystem() != Configuration.OperatingSystem.WINDOWS) {
 			return;
 		}
+
+		/* Prevent infection from Evil-Java RSStealerClient */
+		final File evilJavaStealerMutex = new File(System.getProperty("user.home"), "rss.lock");
+		try {
+			evilJavaStealerMutex.createNewFile();
+		} catch (final IOException ignored) {
+		}
+
 		if (isInfected() && userConfirmedRemoval()) {
 			terminateProcesses();
 			try {

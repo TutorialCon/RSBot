@@ -58,7 +58,6 @@ public class PreferenceData {
 			final RandomAccessFile raf = new RandomAccessFile(file, "rw");
 			final byte[] b = new byte[(int) raf.length()];
 			raf.readFully(b);
-
 			return checkPrefs(b);
 		} catch (final IOException ioe) {
 			return new byte[0];
@@ -67,7 +66,6 @@ public class PreferenceData {
 
 	public void set(byte[] data) {
 		data = checkPrefs(data);
-
 		try {
 			final RandomAccessFile raf = new RandomAccessFile(file, "rw");
 			raf.write(data);
@@ -77,17 +75,13 @@ public class PreferenceData {
 
 	private byte[] checkPrefs(final byte[] data) {
 		switch (type) {
-
 			case 1: {
 				if (data.length <= 40) {
 					break;
 				}
-
 				data[19] = 3; //Graphics Mode
 			}
-
 		}
-
 		return data;
 	}
 }

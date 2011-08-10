@@ -145,7 +145,7 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	}
 
 	public String getMessage() {
-		return getAccessor().getMessage();
+		return getAccessor().getMessageData().getMessage();
 	}
 
 	/**
