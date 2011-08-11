@@ -489,7 +489,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				if (likedOnly && !ScriptLikes.isLiked(def)) {
 					continue;
 				}
-				if (find.length() != 0 && !def.name.toLowerCase().contains(find)) {
+				if (find.length() != 0 && !def.name.toLowerCase().contains(find.toLowerCase())) {
 					continue;
 				}
 				if (!(keys.length > 0)) {
