@@ -298,7 +298,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		toolBar.setFloatable(false);
 		search = new JTextField();
 		final Color searchDefaultColor = search.getForeground();
-		final String searchDefaultText = "Search";
+		final String searchDefaultText = "Search...";
 		search.setText(searchDefaultText);
 		search.setForeground(searchAltColor);
 		search.addFocusListener(new FocusAdapter() {
