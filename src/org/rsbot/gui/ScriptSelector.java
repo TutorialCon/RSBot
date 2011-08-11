@@ -298,7 +298,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		toolBar.setFloatable(false);
 		search = new JTextField();
 		final Color searchDefaultColor = search.getForeground();
-		final String searchDefaultText = "Search";
+		final String searchDefaultText = "Search...";
 		search.setText(searchDefaultText);
 		search.setForeground(searchAltColor);
 		search.addFocusListener(new FocusAdapter() {
@@ -485,27 +485,26 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 
 		public void search(final String find, final String[] keys, final boolean likedOnly) {
 			matches.clear();
-			for (final ScriptDefinition def : scripts) {
+			outer: for (final ScriptDefinition def : scripts) {
 				if (likedOnly && !ScriptLikes.isLiked(def)) {
 					continue;
 				}
-				if (find.length() != 0 && !def.name.toLowerCase().contains(find)) {
+				if (find.length() != 0 && !def.name.toLowerCase().contains(find.toLowerCase())) {
 					continue;
+				}
+				if (!(keys.length > 0)) {
+					matches.add(def);
 				}
 				final List<String> keywords = def.getKeywords();
 				final ArrayList<String> list = new ArrayList<String>(keywords.size());
 				for (final String key : keywords) {
 					list.add(key.toLowerCase());
 				}
-				boolean hit = true;
 				for (final String key : keys) {
-					if (!list.contains(key)) {
-						hit = false;
-						break;
+					if (list.contains(key)) {
+						matches.add(def);
+						continue outer;
 					}
-				}
-				if (hit) {
-					matches.add(def);
 				}
 			}
 			fireTableDataChanged();
