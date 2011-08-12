@@ -3,11 +3,7 @@ package org.rsbot.gui;
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
-import org.rsbot.gui.component.BotMenuBar;
-import org.rsbot.gui.component.BotPanel;
-import org.rsbot.gui.component.BotToolBar;
-import org.rsbot.gui.component.BotKeyboardShortcuts;
-import org.rsbot.gui.component.SplashAd;
+import org.rsbot.gui.component.*;
 import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.TextAreaLogHandler;
@@ -19,7 +15,6 @@ import org.rsbot.script.provider.ScriptDownloader;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
 import org.rsbot.script.util.io.WebQueue;
-import org.rsbot.security.InfectionScanner;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
 import org.rsbot.util.UpdateChecker;
@@ -82,7 +77,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				if (Configuration.Twitter.ENABLED) {
 					new Thread(new TwitterUpdates()).start();
 				}
-				new Thread(new InfectionScanner()).start();
 			}
 		});
 		new java.util.Timer(true).schedule(new TimerTask() {
