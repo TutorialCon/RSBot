@@ -135,18 +135,6 @@ public class LoadScreen extends JDialog {
 			}
 		}));
 
-		if (Configuration.isSkinAvailable()) {
-			log.fine("Setting theme");
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						UIManager.setLookAndFeel(Configuration.SKIN);
-					} catch (final Exception ignored) {
-					}
-				}
-			});
-		}
-
 		if (error == null) {
 			log.info("Running tasks (may take a few minutes)");
 			final ExecutorService pool = Executors.newCachedThreadPool();
