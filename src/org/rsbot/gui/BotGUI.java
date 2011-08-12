@@ -14,7 +14,6 @@ import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.ScriptDownloader;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
-import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
 import org.rsbot.util.UpdateChecker;
@@ -84,19 +83,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				Win32.emptyWorkingSet();
 			}
 		}, 1000 * 25, 1000 * 60 * 3);
-		new java.util.Timer(true).schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (Web.isLoaded() && Web.isInActive()) {
-					Web.free();
-				}
-				if (!WebQueue.isEmpty()) {
-					WebQueue.Start();
-					return;
-				}
-				WebQueue.Destroy();
-			}
-		}, 0, 1000 * 30);
 	}
 
 	@Override
@@ -625,12 +611,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			}
 		}
 		if (doExit) {
-			Web.free();
 			setVisible(false);
-			try {
-				WebQueue.Destroy();
-			} catch (NoClassDefFoundError ignored) {
-			}
 			preferences.save();
 			System.exit(0);
 		}

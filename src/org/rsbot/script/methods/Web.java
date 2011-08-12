@@ -1,16 +1,11 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.Configuration.Paths;
 import org.rsbot.script.background.WebData;
 import org.rsbot.script.internal.ScriptHandler;
-import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.script.web.*;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWeb;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.*;
 
 /**
@@ -19,12 +14,8 @@ import java.util.*;
  * @author Timer
  */
 public class Web extends MethodProvider {
-	public static final String CACHE = Paths.getWebDatabase();
 	public static final HashMap<RSTile, Integer> rs_map = new HashMap<RSTile, Integer>();
-	public static boolean loaded = false;
 	public static boolean webScriptsLoaded = false;
-	private static final Object lock = new Object();
-	private static long lastAccess = 0;
 	private long lastLocalAccess = 0;
 	public int webDataId = 0;
 	private boolean forceLoad = false;
@@ -339,10 +330,6 @@ public class Web extends MethodProvider {
 	 * @return The nodes.
 	 */
 	private static List<Node> Successors(final Node t) {
-		if (!Web.isLoaded() && !Web.loadWeb()) {
-			return null;
-		}
-		Web.lastAccess = System.currentTimeMillis();
 		final LinkedList<Node> tiles = new LinkedList<Node>();
 		final int x = t.x, y = t.y;
 		final RSTile here = t.toRSTile();
@@ -396,10 +383,6 @@ public class Web extends MethodProvider {
 	 * @return The <code>TileFlags</code>.
 	 */
 	public static int GetTileFlag(final RSTile tile) {
-		if (!Web.isLoaded()) {
-			Web.loadWeb();
-		}
-		Web.lastAccess = System.currentTimeMillis();
 		return BypassFlags.getKey(tile);
 	}
 
@@ -411,10 +394,6 @@ public class Web extends MethodProvider {
 	 * @return <tt>true</tt> if the tile contains flags.
 	 */
 	public static boolean Flag(final RSTile tile, final int key) {
-		if (!Web.isLoaded()) {
-			Web.loadWeb();
-		}
-		Web.lastAccess = System.currentTimeMillis();
 		int theFlag = 0;
 		if ((theFlag = BypassFlags.getKey(tile)) != -1) {
 			return (theFlag & key) != 0;
@@ -433,93 +412,6 @@ public class Web extends MethodProvider {
 	 */
 	public static boolean Flag(final int x, final int y, final int z, final int key) {
 		return Flag(new RSTile(x, y, z), key);
-	}
-
-	/**
-	 * Checks if the web is loaded.
-	 *
-	 * @return <tt>true</tt> if the web is loaded; otherwise <tt>false</tt>.
-	 */
-	public static boolean isLoaded() {
-		return Web.loaded;
-	}
-
-	/**
-	 * Checks if the web is in use or not.
-	 *
-	 * @return <tt>true</tt> if in use; otherwise <tt>false</tt>.
-	 */
-	public static boolean isInActive() {
-		return isLoaded() && System.currentTimeMillis() - Web.lastAccess > (1000 * 60 * 5);
-	}
-
-	/**
-	 * Frees the web from memory.
-	 */
-	public static void free() {
-		if (isInActive()) {
-			Web.rs_map.clear();
-			Web.loaded = false;
-			System.gc();
-		}
-	}
-
-	/**
-	 * Loads the web into memory.
-	 *
-	 * @return <tt>true</tt> if the web was loaded; otherwise <tt>false</tt>.
-	 */
-	public static boolean loadWeb() {
-		if (!Web.loaded) {
-			Web.rs_map.clear();//Remove residue.
-			lastAccess = System.currentTimeMillis();
-			try {
-				if (!new File(CACHE).exists()) {
-					Web.loaded = true;
-					return true;
-				}
-				final BufferedReader bufferedReader = new BufferedReader(new FileReader(CACHE));
-				String dataLine;
-				final HashMap<RSTile, Integer> mapData = new HashMap<RSTile, Integer>();
-				while ((dataLine = bufferedReader.readLine()) != null) {
-					final String[] storeData = dataLine.split("k");
-					if (storeData.length == 2) {
-						final String[] tileData = storeData[0].split(",");
-						if (tileData.length == 3) {
-							try {
-								final RSTile tile = new RSTile(Integer.parseInt(tileData[0]), Integer.parseInt(tileData[1]), Integer.parseInt(tileData[2]));
-								final int tileFlag = Integer.parseInt(storeData[1]);
-								synchronized (lock) {
-									if (mapData.containsKey(tile)) {
-										WebQueue.Remove(dataLine);//Line is double, remove from file--bad collection!
-									} else {
-										mapData.put(tile, tileFlag);
-									}
-								}
-							} catch (final Exception ignored) {
-							}
-						} else {
-							synchronized (lock) {
-								WebQueue.Remove(dataLine);//Line is bad, remove from file.
-							}
-						}
-					} else {
-						synchronized (lock) {
-							WebQueue.Remove(dataLine);//Line is bad, remove from file.
-						}
-					}
-				}
-				synchronized (lock) {
-					Web.rs_map.putAll(mapData);
-					Web.loaded = true;
-				}
-			} catch (final Exception e) {
-				Web.loaded = false;
-				return false;
-			}
-		}
-		Web.loaded = true;
-		return true;
 	}
 
 	public boolean areScriptsLoaded() {

@@ -56,7 +56,6 @@ public class BotMenuBar extends JMenuBar {
 		DEBUG_MAP.put("Menu Actions", TMenuActions.class);
 		DEBUG_MAP.put("Menu", TMenu.class);
 		DEBUG_MAP.put("FPS", TFPS.class);
-		DEBUG_MAP.put("Cache", TWebStatus.class);
 
 		// Other
 		DEBUG_MAP.put("Log Messages", MessageLogger.class);

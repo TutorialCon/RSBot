@@ -3,23 +3,19 @@ package org.rsbot.script.background;
 import org.rsbot.script.BackgroundScript;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.methods.Web;
-import org.rsbot.script.util.io.WebQueue;
 import org.rsbot.script.wrappers.RSTile;
-
-import java.util.HashMap;
 
 @ScriptManifest(name = "Web Data Collector", authors = {"Timer"})
 public class WebData extends BackgroundScript {
 	private RSTile lastMapBase = null;
 	private int lastLevel = -1;
-	public final HashMap<RSTile, Integer> collectionMap = new HashMap<RSTile, Integer>();
 	private static final Object botCollectionLock = new Object();
 
 	@Override
 	public boolean activateCondition() {
 		final RSTile curr_base = game.getMapBase();
 		final int curr_plane = game.getPlane();
-		return Web.isLoaded() && game.isLoggedIn() && ((lastMapBase == null || !lastMapBase.equals(curr_base)) || (lastLevel == -1 || lastLevel != curr_plane));
+		return game.isLoggedIn() && ((lastMapBase == null || !lastMapBase.equals(curr_base)) || (lastLevel == -1 || lastLevel != curr_plane));
 	}
 
 	@Override
@@ -28,7 +24,6 @@ public class WebData extends BackgroundScript {
 			sleep(5000);
 			final RSTile currentMapBase = game.getMapBase();
 			final int currentLevel = game.getPlane();
-			collectionMap.clear();
 			if (!currentMapBase.equals(game.getMapBase())) {
 				return -1;
 			}
@@ -47,10 +42,10 @@ public class WebData extends BackgroundScript {
 					final int key = tileKeys[keyIndex_x][keyIndex_y];
 					synchronized (botCollectionLock) {
 						if (!Web.rs_map.containsKey(analysisTile) && (!RSTile.Walkable(key) || RSTile.Questionable(key))) {
-							collectionMap.put(analysisTile, key);
+							Web.rs_map.put(analysisTile, key);
 						} else {
 							if (Web.rs_map.containsKey(analysisTile) && Web.rs_map.get(analysisTile) != key) {
-								WebQueue.Remove(analysisTile);
+								Web.rs_map.remove(analysisTile);
 								lastMapBase = null;
 								lastLevel = -1;
 							}
@@ -58,7 +53,6 @@ public class WebData extends BackgroundScript {
 					}
 				}
 			}
-			WebQueue.Add(collectionMap);
 			return -1;
 		} catch (final Exception ignored) {
 		}
