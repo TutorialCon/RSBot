@@ -34,37 +34,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	public final static String DNSA = "8.8.8.8", DNSB = "8.8.4.4"; // Google Public DNS (http://code.google.com/speed/public-dns/)
 	private static HashSet<String> resolved = new HashSet<String>();
 	public static final String SCRIPTCLASS = "org.rsbot.script.Script";
-	public static boolean allowAllHosts = false;
-
-	// NOTE: if whitelist item starts with a dot "." then it is checked at the end of the host
-	public final static String[] ALLOWED_HOSTS = {
-			".runescape.com",
-			".powerbot.org",
-			".imageshack.us",
-			".tinypic.com",
-			".photobucket.com",
-			".imgur.com",
-			".deviantart.com",
-			".ipcounter.de",
-			".wikia.com",
-			".wikia.nocookie.net",
-
-			".glorb.nl", // SXForce - Swamp Lizzy Paid, Snake Killah
-			"scripts.johnkeech.com", // MrSneaky - SneakyFarmerPro
-			"jtryba.com", // jtryba - autoCook, monkR8per
-			"tehgamer.info", // TehGamer - iMiner
-			"www.dlolpics.com", // DlolPics
-			".logikmedia.co", // countvidal
-			"letthesmokeout.com", // MrByte
-			"zaszmedia.com", // zasz - Frost Dragons Pro, Enchanter Pro, Jars Pro
-			"massacrescripting.net", // Ramy Haddad ~ ShizZznit - Aviansie Massacre
-			".ownagebots.com", // Ownageful - OwnageGDK, OwnageBDK, OwnageFDK
-			"tablocks.com", // xCoder99 - xRedChin, xLeather, xWerewolf
-			".solarbots.org", // Wei Su
-			"www.darius.nl", // Dunnkers
-			"marneusscripts.com", // Marneus901
-			"aioscripts.com", // Ramy Haddad
-	};
 
 	private String getCallingClass() {
 		final String prefix = Application.class.getPackage().getName() + ".";
@@ -87,23 +56,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 		if (sm == null || !(sm instanceof RestrictedSecurityManager) || ((RestrictedSecurityManager) sm).isCallerScript()) {
 			throw new SecurityException();
 		}
-	}
-
-	public static boolean isHostAllowed(final String host) {
-		if (allowAllHosts) {
-			return true;
-		}
-		for (final String check : ALLOWED_HOSTS) {
-			if (check.startsWith(".")) {
-				if (host.endsWith(check) || check.equals("." + host)) {
-					return true;
-				}
-			} else if (host.equals(check)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	@Override
@@ -129,71 +81,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkConnect(final String host, final int port) {
-		if (host.equalsIgnoreCase("localhost") || host.startsWith("127.") || host.startsWith("192.168.") || host.startsWith("10.") || host.endsWith("::1")) {
-			throw new SecurityException();
-		}
-
-		switch (port) {
-			case PORT_UNKNOWN:
-			case PORT_DNS:
-				break;
-			case ClientLoader.PORT_CLIENT:
-				if (!getCallingClass().equals(ClientLoader.class.getName())) {
-					throw new SecurityException();
-				}
-				break;
-			case PORT_HTTP:
-			case PORT_HTTPS:
-				if (allowAllHosts) {
-					break;
-				}
-				boolean allowed = !isCallerScript();
-				if (!allowed) {
-					if (isIpAddress(host)) {
-						allowed = resolved.contains(host) || (getClassContext()[1].getName().equals(Socket.class.getName()) && !isCallerScript());
-					} else {
-						allowed = isHostAllowed(host);
-					}
-				}
-				if (!allowed) {
-					log.warning("Connection denied: " + host);
-					throw new SecurityException();
-				} else {
-					try {
-						for (final InetAddress a : InetAddress.getAllByName(host)) {
-							resolved.add(a.getHostAddress());
-						}
-					} catch (final UnknownHostException ignored) {
-					}
-				}
-				break;
-			default:
-				log.warning("Connection denied: " + host + ":" + port);
-				throw new SecurityException();
-		}
-
 		super.checkConnect(host, port);
-	}
-
-	private boolean isIpAddress(final String check) {
-		if (check.contains(":")) {
-			return true; // IPv6
-		}
-		final int l = check.length();
-		if (l < 7 || l > 15) {
-			return false;
-		}
-		final String[] parts = check.split("\\.", 4);
-		if (parts.length != 4) {
-			return false;
-		}
-		for (int i = 0; i < 4; i++) {
-			final int n = Integer.parseInt(parts[i]);
-			if (n < 0 || n > 255) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override
