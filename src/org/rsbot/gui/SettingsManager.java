@@ -55,14 +55,10 @@ public class SettingsManager extends JDialog {
 		checkShutdown.setEnabled(Configuration.getCurrentOperatingSystem() == OperatingSystem.WINDOWS);
 		valueShutdown.setEnabled(checkShutdown.isEnabled() && checkShutdown.isSelected());
 
-		final JCheckBox checkHosts = new JCheckBox(Messages.ALLOWALLHOSTS);
-		checkHosts.setToolTipText("Allow connections to all websites (NOT RECOMMENDED)");
-		checkHosts.setSelected(preferences.allowAllHosts);
-
 		panelOptions.add(checkAds);
 		panelOptions.add(checkConfirmations);
 		panelInternal.add(panelShutdown);
-		panelInternal.add(checkHosts);
+		panelInternal.add(new JLabel());
 
 		final GridLayout gridAction = new GridLayout(1, 2);
 		gridAction.setHgap(5);
@@ -80,7 +76,6 @@ public class SettingsManager extends JDialog {
 				preferences.confirmations = checkConfirmations.isSelected();
 				preferences.shutdown = checkShutdown.isSelected();
 				preferences.shutdownTime = modelShutdown.getNumber().intValue();
-				preferences.allowAllHosts = checkHosts.isSelected();
 				preferences.save();
 				dispose();
 			}
@@ -92,7 +87,6 @@ public class SettingsManager extends JDialog {
 				checkAds.setSelected(preferences.hideAds);
 				checkConfirmations.setSelected(preferences.confirmations);
 				checkShutdown.setSelected(preferences.shutdown);
-				checkHosts.setSelected(preferences.allowAllHosts);
 				modelShutdown.setValue(preferences.shutdownTime);
 				dispose();
 			}

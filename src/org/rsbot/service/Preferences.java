@@ -20,7 +20,6 @@ public class Preferences {
 	public boolean shutdown = false;
 	public int shutdownTime = 10;
 	public boolean sdnShow = true;
-	public boolean allowAllHosts = false;
 	public boolean likedScriptsOnly = false;
 
 	private Preferences(final File store) {
@@ -65,9 +64,6 @@ public class Preferences {
 		if (keys.containsKey("sdnShow")) {
 			sdnShow = IniParser.parseBool(keys.get("sdnShow"));
 		}
-		if (keys.containsKey("allowAllHosts")) {
-			allowAllHosts = IniParser.parseBool(keys.get("allowAllHosts"));
-		}
 		if (keys.containsKey("likedScriptsOnly")) {
 			likedScriptsOnly = IniParser.parseBool(keys.get("likedScriptsOnly"));
 		}
@@ -80,7 +76,6 @@ public class Preferences {
 		keys.put("shutdown", Boolean.toString(shutdown));
 		keys.put("shutdownTime", Integer.toString(shutdownTime));
 		keys.put("sdnShow", Boolean.toString(sdnShow));
-		keys.put("allowAllHosts", Boolean.toString(allowAllHosts));
 		keys.put("likedScriptsOnly", Boolean.toString(likedScriptsOnly));
 		final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>(1);
 		data.put(IniParser.EMPTYSECTION, keys);
