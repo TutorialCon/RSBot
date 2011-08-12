@@ -357,7 +357,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			while (idIterator.hasNext()) {
 				final int checkID = idIterator.next();
 				if (web.areScriptsLoaded()) {
-					if (checkID == web.bankCacheId || checkID == web.webDataId) {
+					if (checkID == web.webDataId) {
 						continue;
 					}
 				}

@@ -1,7 +1,6 @@
 package org.rsbot.script.methods;
 
 import org.rsbot.Configuration.Paths;
-import org.rsbot.script.background.BankMonitor;
 import org.rsbot.script.background.WebData;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.util.io.WebQueue;
@@ -27,9 +26,9 @@ public class Web extends MethodProvider {
 	private static final Object lock = new Object();
 	private static long lastAccess = 0;
 	private long lastLocalAccess = 0;
-	public int webDataId = 0, bankCacheId = 0;
+	public int webDataId = 0;
 	private boolean forceLoad = false;
-	public static final int WEB_SCRIPT_COUNT = 2;
+	public static final int WEB_SCRIPT_COUNT = 1;
 
 	Web(final MethodContext ctx) {
 		super(ctx);
@@ -535,7 +534,6 @@ public class Web extends MethodProvider {
 		if (!webScriptsLoaded) {
 			final ScriptHandler bsh = methods.bot.getScriptHandler();
 			webDataId = bsh.runDaemonScript(new WebData());
-			bankCacheId = bsh.runDaemonScript(new BankMonitor());
 			webScriptsLoaded = true;
 		}
 	}
@@ -544,7 +542,6 @@ public class Web extends MethodProvider {
 		if (webScriptsLoaded && !forceLoad) {
 			final ScriptHandler bsh = methods.bot.getScriptHandler();
 			bsh.stopDaemonScript(webDataId);
-			bsh.stopDaemonScript(bankCacheId);
 			webScriptsLoaded = false;
 		}
 	}
