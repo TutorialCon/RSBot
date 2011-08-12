@@ -107,7 +107,7 @@ public class BotMenuBar extends JMenuBar {
 				debugItems.add(key);
 			}
 		}
-		for (final ListIterator<String> it = debugItems.listIterator(); it.hasNext();) {
+		for (final ListIterator<String> it = debugItems.listIterator(); it.hasNext(); ) {
 			final String s = it.next();
 			if (!s.equals(Messages.MENUSEPERATOR)) {
 				it.set(Messages.TOGGLEFALSE + s);
@@ -133,9 +133,7 @@ public class BotMenuBar extends JMenuBar {
 		map.put(Messages.PROJECT, Configuration.Paths.Resources.ICON_GITHUB);
 		map.put(Messages.LICENSE, Configuration.Paths.Resources.ICON_LICENSE);
 		map.put(Messages.ABOUT, Configuration.Paths.Resources.ICON_INFO);
-		if (!Configuration.isSkinAvailable()) {
-			map.put(Messages.ACCOUNTS, Configuration.Paths.Resources.ICON_REPORTKEY);
-		}
+		map.put(Messages.ACCOUNTS, Configuration.Paths.Resources.ICON_REPORTKEY);
 		for (final Entry<String, String> item : map.entrySet()) {
 			final JMenuItem menu = commandMenuItem.get(item.getKey());
 			menu.setIcon(new ImageIcon(Configuration.getImage(item.getValue())));

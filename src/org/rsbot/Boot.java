@@ -52,11 +52,6 @@ public class Boot {
 		final List<String> cp = new ArrayList<String>(3);
 		cp.add(Configuration.Paths.URLs.JNA);
 
-		if (Configuration.SKINNED) {
-			cp.add(Configuration.Paths.URLs.TRIDENT);
-			cp.add(Configuration.Paths.URLs.SUBSTANCE);
-		}
-
 		for (final String path : cp) {
 			location += File.pathSeparatorChar + Configuration.Paths.getCachableResources().get(path).getAbsolutePath();
 		}

@@ -59,7 +59,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		settings = new SettingsManager(this);
 		preferences = settings.getPreferences();
 		preferences.load();
-		preferences.commit();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LoadScreen.quit();

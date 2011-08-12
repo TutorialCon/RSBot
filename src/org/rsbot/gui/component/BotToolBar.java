@@ -101,7 +101,6 @@ public class BotToolBar extends JToolBar {
 		final JButton home = new JButton("", ICON_HOME);
 		home.setFocusable(false);
 		home.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setSelection(getComponentIndex(home));
 			}
@@ -112,7 +111,6 @@ public class BotToolBar extends JToolBar {
 		addTabButton.setPressedIcon(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_ADD)));
 		addTabButton.setFocusable(false);
 		addTabButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(final ActionEvent e) {
 				listener.actionPerformed(new ActionEvent(this, e.getID(), Messages.FILE + "." + Messages.NEWBOT));
 			}
@@ -321,11 +319,10 @@ public class BotToolBar extends JToolBar {
 			final Color DARKER_GRAY = new Color(0x28, 0x28, 0x28), LIGHTER_GRAY = new Color(0xee, 0xee, 0xee);
 			final boolean selected = getComponentIndex(this) == idx;
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			final Color back = Configuration.isSkinAvailable() ? (hovered ? Color.BLACK : Color.DARK_GRAY) :
-					(hovered ? Color.WHITE : LIGHTER_GRAY);
+			final Color back = hovered ? Color.WHITE : LIGHTER_GRAY;
 			g.setColor(back);
 			g.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
-			g.setColor(Configuration.isSkinAvailable() ? (selected ? DARKER_GRAY : Color.DARK_GRAY) : (selected ? Color.GRAY : LIGHTER_GRAY));
+			g.setColor(selected ? Color.GRAY : LIGHTER_GRAY);
 			g.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
 			g.drawImage(hovered && close ? IMAGE_CLOSE_OVER : IMAGE_CLOSE, 90, 3, null);
 		}

@@ -90,8 +90,4 @@ public class Preferences {
 			log.severe("Could not save preferences");
 		}
 	}
-
-	public void commit() {
-		RestrictedSecurityManager.allowAllHosts = allowAllHosts;
-	}
 }

@@ -82,7 +82,6 @@ public class SettingsManager extends JDialog {
 				preferences.shutdownTime = modelShutdown.getNumber().intValue();
 				preferences.allowAllHosts = checkHosts.isSelected();
 				preferences.save();
-				preferences.commit();
 				dispose();
 			}
 		});

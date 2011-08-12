@@ -38,14 +38,7 @@ class ScriptClassLoader extends ClassLoader {
 		ps.add(new PropertyPermission("os.name", "read"));
 		ps.add(new PropertyPermission("os.arch", "read"));
 		ps.add(new PropertyPermission("os.version", "read"));
-		ps.add(new SocketPermission("*", "resolve"));
-		for (String host : RestrictedSecurityManager.ALLOWED_HOSTS) {
-			if (host.startsWith(".")) {
-				host = "*" + host;
-			}
-			ps.add(new SocketPermission(host + ":80", "connect,resolve"));
-			ps.add(new SocketPermission(host + ":443", "connect,resolve"));
-		}
+		ps.add(new SocketPermission("*", "connect,resolve"));
 		ps.add(new FilePermission(Configuration.Paths.getScriptCacheDirectory(), "read,write,delete"));
 		ps.setReadOnly();
 		return ps;
