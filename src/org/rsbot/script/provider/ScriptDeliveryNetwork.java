@@ -83,7 +83,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		final LinkedList<ScriptDefinition> defs = new LinkedList<ScriptDefinition>();
 		try {
 			if (!cache.exists() || IOHelper.crc32(cache) != def.crc32) {
-				log.info("Downloading script " + def.name + "...");
+				log.info("Downloading script " + def.getName() + "...");
 				HttpClient.download(new URL(base, def.path), cache);
 			}
 			FileScriptSource.load(cache, defs, null);

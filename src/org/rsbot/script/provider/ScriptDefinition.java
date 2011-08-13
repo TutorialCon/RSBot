@@ -14,6 +14,8 @@ public class ScriptDefinition implements Comparable<ScriptDefinition> {
 	public String getName() {
 		String txt = StringUtil.stripHtml(name);
 		txt = txt.replaceFirst("\\b[Vv]\\d+(?:\\.\\d+)?", "");
+		txt = txt.replaceFirst("^\\W+", "");
+		txt = txt.replaceFirst("\\W+$", "");
 		return txt.trim();
 	}
 
