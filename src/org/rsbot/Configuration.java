@@ -25,7 +25,6 @@ public class Configuration {
 
 	public static class Paths {
 		public static class Resources {
-			public static final String LICENSE = "license.txt";
 			public static final String ROOT = "resources";
 			public static final String SCRIPTS = Paths.SCRIPTS_NAME_SRC + "/";
 			public static final String COMPILE_SCRIPTS_BAT = ROOT + "/Compile-Scripts.bat";
@@ -77,6 +76,7 @@ public class Configuration {
 			public static final String HOST = "powerbot.org";
 			private static final String BASE = "http://links." + HOST + "/";
 			public static final String DOWNLOAD = BASE + "download";
+			public static final String LICENSE = BASE + "license";
 			public static final String CLIENTPATCH = BASE + "modscript";
 			public static final String VERSION = BASE + "version.txt";
 			public static final String PROJECT = BASE + "git-project";
