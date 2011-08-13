@@ -11,7 +11,6 @@ import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.task.Containable;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.task.executor.ScriptPool;
-import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.JavaCompiler;
 
 import java.io.File;
@@ -75,21 +74,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	}
 
 	@Override
-	public void checkConnect(final String host, final int port) {
-		super.checkConnect(host, port);
-	}
-
-	@Override
-	public void checkConnect(final String host, final int port, final Object context) {
-		checkConnect(host, port);
-	}
-
-	@Override
-	public void checkCreateClassLoader() {
-		super.checkCreateClassLoader();
-	}
-
-	@Override
 	public void checkDelete(final String file) {
 		checkFilePath(file, false);
 		super.checkDelete(file);
@@ -110,19 +94,11 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkExit(final int status) {
 		final String calling = getCallingClass();
-		if (calling.equals(BotGUI.class.getName())
-				|| calling.equals(Application.class.getName())
-				|| calling.startsWith(LoadScreen.class.getName())
-				|| calling.equals(UpdateChecker.class.getName())) {
+		if (calling.equals(BotGUI.class.getName()) || calling.equals(Application.class.getName()) || calling.startsWith(LoadScreen.class.getName())) {
 			super.checkExit(status);
 		} else {
 			throw new SecurityException();
 		}
-	}
-
-	@Override
-	public void checkLink(final String lib) {
-		super.checkLink(lib);
 	}
 
 	@Override
@@ -133,11 +109,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	}
 
 	@Override
-	public void checkMemberAccess(final Class<?> clazz, final int which) {
-		super.checkMemberAccess(clazz, which);
-	}
-
-	@Override
 	public void checkMulticast(final InetAddress maddr) {
 		throw new SecurityException();
 	}
@@ -145,16 +116,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkMulticast(final InetAddress maddr, final byte ttl) {
 		throw new SecurityException();
-	}
-
-	@Override
-	public void checkPackageAccess(final String pkg) {
-		super.checkPackageAccess(pkg);
-	}
-
-	@Override
-	public void checkPackageDefinition(final String pkg) {
-		super.checkPackageDefinition(pkg);
 	}
 
 	@Override
@@ -183,21 +144,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	}
 
 	@Override
-	public void checkPropertiesAccess() {
-		super.checkPropertiesAccess();
-	}
-
-	@Override
-	public void checkPropertyAccess(final String key) {
-		super.checkPropertyAccess(key);
-	}
-
-	@Override
-	public void checkRead(final FileDescriptor fd) {
-		super.checkRead(fd);
-	}
-
-	@Override
 	public void checkRead(final String file) {
 		checkFilePath(file, true);
 		super.checkRead(file);
@@ -206,16 +152,6 @@ public class RestrictedSecurityManager extends SecurityManager {
 	@Override
 	public void checkRead(final String file, final Object context) {
 		checkRead(file);
-	}
-
-	@Override
-	public void checkSecurityAccess(final String target) {
-		super.checkSecurityAccess(target);
-	}
-
-	@Override
-	public void checkSetFactory() {
-		super.checkSetFactory();
 	}
 
 	@Override
