@@ -4,6 +4,7 @@ import org.rsbot.Configuration;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.service.ServiceException;
+import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class FileScriptSource implements ScriptSource {
 					}
 				} catch (final IOException ignored) {
 				}
-			} else if (isJar(file)) {
+			} else if (IOHelper.isZip(file)) {
 				try {
 					final ClassLoader ldr = new ScriptClassLoader(getJarUrl(file));
 					load(ldr, defs, new JarFile(file));
@@ -80,7 +81,7 @@ public class FileScriptSource implements ScriptSource {
 	}
 
 	public static void load(final File file, final LinkedList<ScriptDefinition> defs, ClassLoader loader) throws IOException {
-		if (isJar(file)) {
+		if (IOHelper.isZip(file)) {
 			load(new ScriptClassLoader(getJarUrl(file)), defs, new JarFile(file));
 		} else {
 			if (loader == null) {
@@ -147,10 +148,6 @@ public class FileScriptSource implements ScriptSource {
 				scripts.add(def);
 			}
 		}
-	}
-
-	private static boolean isJar(final File file) {
-		return file.getName().endsWith(".jar") || file.getName().endsWith(".dat");
 	}
 
 	private static URL getJarUrl(final File file) throws IOException {
