@@ -26,8 +26,10 @@ public final class Monitoring extends TimerTask {
 	public void start() {
 		if (!running) {
 			final long p = getPeriod() * 1000;
-			timer.schedule(this, p, p);
-			running = true;
+			if (p > 0) {
+				timer.schedule(this, p, p);
+				running = true;
+			}
 		}
 	}
 
