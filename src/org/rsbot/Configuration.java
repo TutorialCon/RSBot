@@ -83,6 +83,7 @@ public class Configuration {
 			public static final String SITE = BASE + "site";
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
 			public static final String AD_INFO = BASE + "botad-info";
+			public static final String TRACK_HITS = BASE + "track-hits";
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
