@@ -4,7 +4,6 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
 import org.rsbot.gui.component.*;
-import org.rsbot.jna.win32.Kernel32;
 import org.rsbot.locale.Messages;
 import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.script.internal.ScriptHandler;
@@ -17,7 +16,6 @@ import org.rsbot.script.util.WindowUtil;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
 import org.rsbot.util.UpdateChecker;
-import org.rsbot.util.Win32;
 import org.rsbot.util.io.ScreenshotUtil;
 
 import javax.swing.*;
@@ -77,12 +75,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				}
 			}
 		});
-		new java.util.Timer(true).schedule(new TimerTask() {
-			@Override
-			public void run() {
-				Win32.emptyWorkingSet();
-			}
-		}, 1000 * 25, 1000 * 60 * 3);
 	}
 
 	@Override
@@ -403,7 +395,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			disableRendering(on || menuBar.isTicked(Messages.LESSCPU));
 			disableGraphics(on || menuBar.isTicked(Messages.DISABLECANVAS));
 		}
-		Win32.setProcessPriority(on ? Kernel32.BELOW_NORMAL_PRIORITY_CLASS : Kernel32.NORMAL_PRIORITY_CLASS);
 	}
 
 	public void disableRendering(final boolean mode) {
