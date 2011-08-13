@@ -83,7 +83,6 @@ public class Configuration {
 			public static final String SITE = BASE + "site";
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
 			public static final String AD_INFO = BASE + "botad-info";
-			public static final String JNA = BASE + "jna";
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
@@ -210,7 +209,6 @@ public class Configuration {
 				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
 				cachableResources.put(URLs.SDN_MANIFEST, new File(getCacheDirectory(), "sdn-manifests.txt"));
 				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));
-				cachableResources.put(URLs.JNA, new File(getCacheDirectory(), "jna.jar"));
 			}
 			return cachableResources;
 		}

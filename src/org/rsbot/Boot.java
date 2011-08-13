@@ -1,11 +1,7 @@
 package org.rsbot;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * @author Paris
@@ -47,13 +43,6 @@ public class Boot {
 				param.append(s);
 				param.append(flags);
 				break;
-		}
-
-		final List<String> cp = new ArrayList<String>(3);
-		cp.add(Configuration.Paths.URLs.JNA);
-
-		for (final String path : cp) {
-			location += File.pathSeparatorChar + Configuration.Paths.getCachableResources().get(path).getAbsolutePath();
 		}
 
 		param.append(s);
