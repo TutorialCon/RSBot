@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-import org.rsbot.locale.Messages;
 
 /**
  * @author Mothma

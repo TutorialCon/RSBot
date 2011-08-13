@@ -1,4 +1,4 @@
-package org.rsbot.locale;
+package org.rsbot.gui.component;
 
 public class Messages {
 	public static final String LANGUAGE = "English";

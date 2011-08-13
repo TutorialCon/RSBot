@@ -5,7 +5,6 @@ import org.rsbot.bot.Bot;
 import org.rsbot.event.impl.*;
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.event.listeners.TextPaintListener;
-import org.rsbot.locale.Messages;
 
 import javax.swing.*;
 import java.awt.*;

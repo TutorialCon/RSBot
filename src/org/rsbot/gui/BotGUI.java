@@ -4,7 +4,6 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
 import org.rsbot.gui.component.*;
-import org.rsbot.locale.Messages;
 import org.rsbot.log.TextAreaLogHandler;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;

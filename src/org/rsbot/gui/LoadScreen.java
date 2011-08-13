@@ -1,8 +1,8 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
+import org.rsbot.gui.component.Messages;
 import org.rsbot.loader.ClientLoader;
-import org.rsbot.locale.Messages;
 import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
 import org.rsbot.log.SystemConsoleHandler;

@@ -2,7 +2,7 @@ package org.rsbot.gui;
 
 import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
-import org.rsbot.locale.Messages;
+import org.rsbot.gui.component.Messages;
 import org.rsbot.service.Preferences;
 
 import javax.swing.*;
