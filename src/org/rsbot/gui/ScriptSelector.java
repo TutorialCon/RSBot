@@ -2,7 +2,6 @@ package org.rsbot.gui;
 
 import org.rsbot.Configuration;
 import org.rsbot.bot.Bot;
-import org.rsbot.gui.component.JComboCheckBox;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
@@ -41,13 +40,12 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JTextField search;
 	private final static Color searchAltColor = Color.GRAY;
 	private JComboBox accounts;
-	private final JComboCheckBox categories = new JComboCheckBox();
+	private JComboBox categories;
 	private final ScriptTableModel model;
 	private final List<ScriptDefinition> scripts;
 	private JButton submit;
 	private boolean connected = true;
 	private boolean likedOnly = false;
-	private static boolean FIXED_CATEGORIES = true;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -96,7 +94,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		scripts.addAll(SRC_SOURCES.list());
 		Collections.sort(scripts);
 
-		populateCategories();
 		filter();
 		table.revalidate();
 	}
@@ -104,53 +101,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private void unload() {
 		Preferences.getInstance().likedScriptsOnly = likedOnly;
 		ScriptLikes.save();
-	}
-
-	private void populateCategories() {
-		final List<String> list;
-		if (FIXED_CATEGORIES) {
-			list = new ArrayList<String>();
-			list.add("agility");
-			list.add("combat");
-			list.add("construction");
-			list.add("cooking");
-			list.add("crafting");
-			list.add("dungeoneering");
-			list.add("farming");
-			list.add("firemaking");
-			list.add("fishing");
-			list.add("fletching");
-			list.add("herblore");
-			list.add("hunter");
-			list.add("magic");
-			list.add("minigame");
-			list.add("mining");
-			list.add("other");
-			list.add("money making");
-			list.add("prayer");
-			list.add("ranged");
-			list.add("runecrafting");
-			list.add("slayer");
-			list.add("smithing");
-			list.add("summoning");
-			list.add("thieving");
-			list.add("woodcutting");
-		} else {
-			final LinkedHashSet<String> keywords = new LinkedHashSet<String>(scripts.size());
-			for (final ScriptDefinition def : scripts) {
-				for (final String item : def.getKeywords()) {
-					if (item.length() > 3 && item.matches("^[a-zA-Z]+")) {
-						keywords.add(item);
-					}
-				}
-			}
-			final String[] array = new String[keywords.size()];
-			keywords.toArray(array);
-			list = Arrays.asList(array);
-		}
-		Collections.sort(list);
-		categories.populate(list, false);
-		categories.setEnabled(list.size() != 0);
 	}
 
 	private void init() {
@@ -377,31 +327,13 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			}
 		});
 		accounts = new JComboBox(AccountManager.getAccountNames());
+		categories = new JComboBox(new String[] { "All", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
+				"Firemaking", "Fishing", "Fletching", "Herblore", "Hunter", "Magic", "Minigame", "Mining", "Other", "Money Making", "Prayer",
+				"Ranged", "Runecrafting", "Slayer", "Smithing", "Summoning", "Thieving", "Woodcutting" });
 		accounts.setPreferredSize(new Dimension(125, 20));
 		categories.setPreferredSize(new Dimension(150, 20));
 		categories.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent arg0) {
-				final String[] selected = categories.getSelectedItems();
-				final StringBuilder s = new StringBuilder(16);
-				switch (selected.length) {
-					case 0:
-						s.append("Showing all");
-						break;
-					case 1:
-						s.append(selected[0]);
-						break;
-					case 2:
-						s.append(selected[0]);
-						s.append(" & ");
-						s.append(selected[1]);
-						break;
-					default:
-						s.append("Showing ");
-						s.append(selected.length);
-						s.append(" types");
-						break;
-				}
-				categories.setText(s.toString());
 				filter();
 			}
 		});
@@ -433,7 +365,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	private void filter() {
-		model.search((search == null || search.getForeground() == searchAltColor) ? "" : search.getText(), categories.getSelectedItems(), likedOnly);
+		final String keys = ((String) categories.getSelectedItem()).toLowerCase();
+		model.search((search == null || search.getForeground() == searchAltColor) ? "" : search.getText(), keys.equals("all") ? null : keys, likedOnly);
 	}
 
 	private void setColumnWidths(final JTable table, final int... widths) {
@@ -483,28 +416,27 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			matches = new ArrayList<ScriptDefinition>();
 		}
 
-		public void search(final String find, final String[] keys, final boolean likedOnly) {
+		public void search(final String find, final String keys, final boolean likedOnly) {
 			matches.clear();
-			outer: for (final ScriptDefinition def : scripts) {
+			for (final ScriptDefinition def : scripts) {
 				if (likedOnly && !ScriptLikes.isLiked(def)) {
 					continue;
 				}
 				if (find.length() != 0 && !def.name.toLowerCase().contains(find.toLowerCase())) {
 					continue;
 				}
-				if (!(keys.length > 0)) {
+				if (keys == null || keys.length() == 0) {
 					matches.add(def);
+					continue;
 				}
 				final List<String> keywords = def.getKeywords();
 				final ArrayList<String> list = new ArrayList<String>(keywords.size());
 				for (final String key : keywords) {
 					list.add(key.toLowerCase());
 				}
-				for (final String key : keys) {
-					if (list.contains(key)) {
-						matches.add(def);
-						continue outer;
-					}
+				if (list.contains(keys)) {
+					matches.add(def);
+					continue;
 				}
 			}
 			fireTableDataChanged();
