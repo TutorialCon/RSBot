@@ -149,4 +149,24 @@ public class IOHelper {
 			return data;
 		}
 	}
+
+	public static boolean isZip(final File file) {
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			final byte[] m = new byte[4];
+			fis.read(m);
+			fis.close();
+			return (m[0] << 24 | m[1] << 16 | m[2] << 8 | m[3]) == 0x504b0304;
+		} catch (final IOException ignored) {
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (final IOException ignored) {
+				}
+			}
+		}
+		return false;
+	}
 }
