@@ -1,7 +1,6 @@
 package org.rsbot.service;
 
 import org.rsbot.Configuration;
-import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.io.IniParser;
 
 import java.io.File;

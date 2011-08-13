@@ -316,7 +316,7 @@ public class BotToolBar extends JToolBar {
 		@Override
 		public void paintComponent(final Graphics g) {
 			super.paintComponent(g);
-			final Color DARKER_GRAY = new Color(0x28, 0x28, 0x28), LIGHTER_GRAY = new Color(0xee, 0xee, 0xee);
+			final Color LIGHTER_GRAY = new Color(0xee, 0xee, 0xee);
 			final boolean selected = getComponentIndex(this) == idx;
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			final Color back = hovered ? Color.WHITE : LIGHTER_GRAY;

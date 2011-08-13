@@ -1,7 +1,6 @@
 package org.rsbot.script.provider;
 
 import org.rsbot.Configuration;
-import org.rsbot.security.RestrictedSecurityManager;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;

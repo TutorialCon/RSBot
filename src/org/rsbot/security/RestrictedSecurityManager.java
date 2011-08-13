@@ -5,7 +5,6 @@ import org.rsbot.Configuration;
 import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.gui.BotGUI;
 import org.rsbot.gui.LoadScreen;
-import org.rsbot.loader.ClientLoader;
 import org.rsbot.script.AccountStore;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
@@ -19,10 +18,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.Permission;
-import java.util.HashSet;
 import java.util.logging.Logger;
 
 /**
@@ -30,9 +26,8 @@ import java.util.logging.Logger;
  */
 public class RestrictedSecurityManager extends SecurityManager {
 	private static Logger log = Logger.getLogger("Security");
-	private final static int PORT_UNKNOWN = -1, PORT_HTTP = 80, PORT_HTTPS = 443, PORT_DNS = 53;
+	private final static int PORT_DNS = 53;
 	public final static String DNSA = "8.8.8.8", DNSB = "8.8.4.4"; // Google Public DNS (http://code.google.com/speed/public-dns/)
-	private static HashSet<String> resolved = new HashSet<String>();
 	public static final String SCRIPTCLASS = "org.rsbot.script.Script";
 
 	private String getCallingClass() {
