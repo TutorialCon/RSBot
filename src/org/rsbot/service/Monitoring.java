@@ -51,6 +51,13 @@ public final class Monitoring extends TimerTask {
 			result = HttpClient.downloadAsString(new URL(Configuration.Paths.URLs.TRACK_HITS));
 		} catch (final IOException ignored) {
 		}
-		return result == null || result.length() == 0 ? -1 : Integer.parseInt(result.trim());
+		if (result == null || result.length() == 0) {
+			return -1;
+		}
+		final int z = result.indexOf('\n');
+		if (z != -1) {
+			result = result.substring(0, z);
+		}
+		return Integer.parseInt(result.trim());
 	}
 }
