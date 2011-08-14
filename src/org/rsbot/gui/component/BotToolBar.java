@@ -157,7 +157,10 @@ public class BotToolBar extends JToolBar {
 	}
 
 	public void setTabLabel(final int idx, final String label) {
-		((BotButton) getComponentAtIndex(idx + TAB_INDEX)).setText(label);
+		final Component c = getComponentAtIndex(idx + TAB_INDEX);
+		if (c instanceof BotButton) {
+			((BotButton) c).setText(label);
+		}
 	}
 
 	public int getCurrentTab() {
