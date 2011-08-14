@@ -12,7 +12,7 @@ public class PreferenceData {
 
 	public PreferenceData(final int type) {
 		this.type = type;
-		file = new File(Configuration.Paths.getSettingsDirectory() + File.separator + "pref" + type + ".dat");
+		file = new File(Configuration.Paths.getSettingsDirectory() + File.separator + "pref2-" + type + ".dat");
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
