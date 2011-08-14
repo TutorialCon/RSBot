@@ -3,7 +3,6 @@ package org.rsbot.script.provider;
 import org.rsbot.Configuration;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
-import org.rsbot.service.ServiceException;
 import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
@@ -65,15 +64,11 @@ public class FileScriptSource implements ScriptSource {
 		}
 	}
 
-	public Script load(final ScriptDefinition def) throws ServiceException {
+	public Script load(final ScriptDefinition def) throws InstantiationException, IllegalAccessException  {
 		if (!(def instanceof FileScriptDefinition)) {
 			throw new IllegalArgumentException("Invalid definition!");
 		}
-		try {
-			return load((FileScriptDefinition) def);
-		} catch (final Exception ex) {
-			throw new ServiceException(ex.toString());
-		}
+		return load((FileScriptDefinition) def);
 	}
 
 	public static Script load(final FileScriptDefinition def) throws InstantiationException, IllegalAccessException {

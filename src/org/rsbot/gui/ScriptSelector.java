@@ -8,7 +8,6 @@ import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.*;
 import org.rsbot.service.Preferences;
-import org.rsbot.service.ServiceException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -307,7 +306,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				Script script = null;
 				try {
 					script = def.source.load(def);
-				} catch (final ServiceException e) {
+				} catch (final Exception e) {
 					log.severe(e.getMessage());
 				}
 				if (script != null) {
