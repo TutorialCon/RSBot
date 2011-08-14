@@ -50,6 +50,9 @@ public class RandomAccessFile {
 		if (uidData != null) {
 			if (client == null) {
 				final Bot b = Application.getBot(this);
+				if (b == null) {
+					return;
+				}
 				client = b.getClient();
 			}
 			final String accountName = client != null ? client.getCurrentUsername() : "";
@@ -104,7 +107,9 @@ public class RandomAccessFile {
 				return 0xFF & data[offset++];
 			}
 
-			return raf.read();
+			if (raf != null) {
+				return raf.read();
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

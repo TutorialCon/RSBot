@@ -349,7 +349,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 	private Bot getCurrentBot() {
 		final int idx = toolBar.getCurrentTab();
-		if (idx >= 0) {
+		if (idx > -1 && idx < bots.size()) {
 			return bots.get(idx);
 		}
 		return null;
