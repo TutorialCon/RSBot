@@ -25,7 +25,7 @@ public class BotToolBar extends JToolBar {
 	private static final Image IMAGE_CLOSE_OVER;
 
 	private static final int TAB_INDEX = 1;
-	private static final int BUTTON_COUNT = 6;
+	private static final int BUTTON_COUNT = 7;
 	private static final int OPTION_BUTTONS = 4;
 
 	static {
@@ -40,6 +40,7 @@ public class BotToolBar extends JToolBar {
 	private final JButton userInputButton;
 	private final JButton runScriptButton;
 	private final JButton stopScriptButton;
+	private final JButton toggleLogButton;
 
 	private final ActionListener listener;
 	private int idx;
@@ -97,6 +98,19 @@ public class BotToolBar extends JToolBar {
 		runScriptButton.setToolTipText(runScriptButton.getText());
 		runScriptButton.setText("");
 
+		toggleLogButton = new JButton(Messages.HIDELOGPANE, new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_APPGET)));
+		toggleLogButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				toggleLogButton.setIcon(new ImageIcon(Configuration.getImage(menu.isTicked(Messages.HIDELOGPANE) ?
+						Configuration.Paths.Resources.ICON_APPGET : Configuration.Paths.Resources.ICON_APPPUT)));
+				menu.doTick(Messages.HIDELOGPANE);
+			}
+		});
+		toggleLogButton.setFocusable(false);
+		toggleLogButton.setToolTipText(toggleLogButton.getText());
+		toggleLogButton.setText("");
+
 		final JButton home = new JButton("", ICON_HOME);
 		home.setFocusable(false);
 		home.addActionListener(new ActionListener() {
@@ -121,6 +135,7 @@ public class BotToolBar extends JToolBar {
 		add(addTabButton);
 		add(Box.createHorizontalGlue());
 		add(screenshotButton);
+		add(toggleLogButton);
 		add(runScriptButton);
 		add(stopScriptButton);
 		add(userInputButton);
