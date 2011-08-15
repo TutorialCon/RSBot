@@ -622,7 +622,7 @@ public class Magic extends MethodProvider {
 	 *         otherwise <tt>false</tt>.
 	 */
 	public boolean autoCastSpell(final int spell) {
-		if (methods.game.openTab(Game.Tab.MAGIC)) {
+		if (methods.settings.getSetting(43) != 4 && methods.game.openTab(Game.Tab.MAGIC)) {
 			final RSInterface inter = getInterface();
 			if (inter != null) {
 				RSComponent comp = inter.getComponent(spell);
