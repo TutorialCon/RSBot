@@ -2,6 +2,7 @@ package org.rsbot.script.wrappers;
 
 import org.rsbot.client.Model;
 import org.rsbot.client.Node;
+import org.rsbot.client.RSMessageData;
 import org.rsbot.client.RSNPCNode;
 import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
@@ -145,7 +146,8 @@ public abstract class RSCharacter extends MethodProvider implements RSTarget {
 	}
 
 	public String getMessage() {
-		return getAccessor().getMessageData().getMessage();
+		final RSMessageData messageData = getAccessor().getMessageData();
+		return messageData != null ? messageData.getMessage() : null;
 	}
 
 	/**
