@@ -254,7 +254,7 @@ public class Menu extends MethodProvider {
 			}
 		}
 
-		if (output.size() > 1 && output.get(0).equals("Cancel")) {
+		if (output.size() > 1 && output.get(0).equals("Cancel") && !methods.menu.isCollapsed()) {
 			Collections.reverse(output);
 		}
 
@@ -307,7 +307,7 @@ public class Menu extends MethodProvider {
 			}
 		}
 		action = action == null ? "" : stripFormatting(action);
-		if (output.size() > 1 && action != null && action.equals("Cancel")) {
+		if (output.size() > 1 && action != null && action.equals("Cancel") && !methods.menu.isCollapsed()) {
 			Collections.reverse(output);
 		}
 		return output.toArray(new String[output.size()]);
