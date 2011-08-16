@@ -296,15 +296,9 @@ public class Menu extends MethodProvider {
 		}
 		final String[] items = itemsList.toArray(new String[itemsList.size()]);
 		final LinkedList<String> output = new LinkedList<String>();
-		if (isCollapsed()) {
-			for (final String item : items) {
-				output.add(item == null ? "" : stripFormatting(item));
-			}
-		} else {
-			for (int i = items.length - 1; i >= 0; i--) {
-				final String item = items[i];
-				output.add(item == null ? "" : stripFormatting(item));
-			}
+		for (int i = items.length - 1; i >= 0; i--) {
+			final String item = items[i];
+			output.add(item == null ? "" : stripFormatting(item));
 		}
 		action = action == null ? "" : stripFormatting(action);
 		if (output.size() > 1 && action != null && action.equals("Cancel") && !methods.menu.isCollapsed()) {
