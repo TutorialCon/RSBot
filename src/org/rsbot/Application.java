@@ -29,6 +29,10 @@ public class Application {
 		}
 	}
 
+	public static BotGUI getUI() {
+		return gui;
+	}
+
 	public static Bot getBot(final Object o) {
 		return gui.getBot(o);
 	}
