@@ -1,13 +1,6 @@
 package org.rsbot.script.methods;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import org.rsbot.script.wrappers.RSCharacter;
-import org.rsbot.script.wrappers.RSComponent;
-import org.rsbot.script.wrappers.RSGroundItem;
-import org.rsbot.script.wrappers.RSInterface;
-import org.rsbot.script.wrappers.RSObject;
+import org.rsbot.script.wrappers.*;
 
 /**
  * Magic tab and spell related operations.
@@ -555,30 +548,11 @@ public class Magic extends MethodProvider {
 		if (methods.game.openTab(Game.Tab.MAGIC)) {
 			final RSInterface inter = getInterface();
 			if (inter != null) {
-				RSComponent comp = inter.getComponent(spell);
-				if(comp == null)
-					return false;
-				Rectangle spellArea = methods.interfaces.getComponent(192, 0).getArea();
-				Rectangle intersection = spellArea.intersection(comp.getArea());
-				if(intersection.height < 10){
-					final RSComponent scrollBar = methods.interfaces.getComponent(192, 94).getComponent(1);
-					final Point p = randomPoint(scrollBar.getArea());
-					methods.mouse.move(p);
-					Point target = new Point(p.x + random(-5, 6), p.y + (spellArea.y >= comp.getAbsoluteY() ? -45 : 45));
-					methods.mouse.drag(target);
-					comp = inter.getComponent(spell);
-					if(comp == null)
-						return false;
-				}
-				return comp.interact("Cast");
+				final RSComponent comp = inter.getComponent(spell);
+				return comp != null && comp.interact("Cast");
 			}
 		}
 		return false;
-	}
-	
-
-	private Point randomPoint(Rectangle r){
-		return new Point(random(r.x, r.x + r.width), random(r.y, r.y + r.height));
 	}
 
 	/**
@@ -593,22 +567,8 @@ public class Magic extends MethodProvider {
 		if (methods.game.openTab(Game.Tab.MAGIC)) {
 			final RSInterface inter = getInterface();
 			if (inter != null) {
-				RSComponent comp = inter.getComponent(spell);
-				if(comp == null)
-					return false;
-				Rectangle spellArea = methods.interfaces.getComponent(192, 0).getArea();
-				Rectangle intersection = spellArea.intersection(comp.getArea());
-				if(intersection.height < 10){
-					final RSComponent scrollBar = methods.interfaces.getComponent(192, 94).getComponent(1);
-					final Point p = randomPoint(scrollBar.getArea());
-					methods.mouse.move(p);
-					Point target = new Point(p.x + random(-5, 6), p.y + (spellArea.y >= comp.getAbsoluteY() ? -45 : 45));
-					methods.mouse.drag(target);
-					comp = inter.getComponent(spell);
-					if(comp == null)
-						return false;
-				}
-				return comp.doHover();
+				final RSComponent comp = inter.getComponent(spell);
+				return comp != null && comp.doHover();
 			}
 		}
 		return false;
@@ -625,22 +585,8 @@ public class Magic extends MethodProvider {
 		if (methods.settings.getSetting(43) != 4 && methods.game.openTab(Game.Tab.MAGIC)) {
 			final RSInterface inter = getInterface();
 			if (inter != null) {
-				RSComponent comp = inter.getComponent(spell);
-				if(comp == null)
-					return false;
-				Rectangle spellArea = methods.interfaces.getComponent(192, 0).getArea();
-				Rectangle intersection = spellArea.intersection(comp.getArea());
-				if(intersection.height < 10){
-					final RSComponent scrollBar = methods.interfaces.getComponent(192, 94).getComponent(1);
-					final Point p = randomPoint(scrollBar.getArea());
-					methods.mouse.move(p);
-					Point target = new Point(p.x + random(-5, 6), p.y + (spellArea.y >= comp.getAbsoluteY() ? -45 : 45));
-					methods.mouse.drag(target);
-					comp = inter.getComponent(spell);
-					if(comp == null)
-						return false;
-				}
-				return comp.interact("Autocast");
+				final RSComponent comp = inter.getComponent(spell);
+				return comp != null && comp.interact("Autocast");
 			}
 		}
 		return false;
