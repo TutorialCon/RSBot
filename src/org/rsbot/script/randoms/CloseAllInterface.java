@@ -47,6 +47,7 @@ public class CloseAllInterface extends Random {
 		addChild(764, 18); // Objectives
 		addChild(895, 19); // Advisor
 		//addChild(109, 14); // Grand exchange collection
+		addChild(18, 37); // "Get Ready to Respawn" Confirm button.
 		addChild(667, 74); // Equipment Bonus
 		addChild(742, 18); // Graphic
 		addChild(917, 73); // Task List
