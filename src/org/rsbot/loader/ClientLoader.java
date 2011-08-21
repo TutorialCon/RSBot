@@ -28,7 +28,8 @@ import java.util.zip.ZipOutputStream;
  */
 public class ClientLoader {
 	private final static ClientLoader instance = new ClientLoader();
-	private final Logger log = Logger.getLogger(ClientLoader.class.getName());
+	private final String id = ClientLoader.class.getName();
+	private final Logger log = Logger.getLogger(id);
 	private final File manifest, cache, localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
 	public final static int PORT_CLIENT = 43594;
 	private int[] version = {-1, -1, -1};
@@ -49,7 +50,7 @@ public class ClientLoader {
 		}
 		final Map<String, String> info;
 		try {
-			info = IniParser.deserialise(manifest).get(IniParser.EMPTYSECTION);
+			info = IniParser.deserialise(manifest).get(id);
 		} catch (final IOException ignored) {
 			ignored.printStackTrace();
 			return false;
@@ -156,7 +157,7 @@ public class ClientLoader {
 			final Map<String, String> info = new HashMap<String, String>();
 			info.put("v1", Integer.toString(version[1]));
 			info.put("t", Long.toString(System.currentTimeMillis() / 1000L));
-			data.put(IniParser.EMPTYSECTION, info);
+			data.put(id, info);
 			IniParser.serialise(data, manifest);
 		}
 	}
