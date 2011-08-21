@@ -62,6 +62,9 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 				SwingUtilities.updateComponentTreeUI(BotGUI.this);
+				if (Configuration.RUNNING_FROM_JAR) {
+					toolBar.toggleLogPane();
+				}
 				setVisible(true);
 				addBot();
 				updateScriptControls();

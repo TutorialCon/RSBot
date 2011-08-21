@@ -150,6 +150,10 @@ public class BotToolBar extends JToolBar {
 		userInputButton.setVisible(visible);
 	}
 
+	public void toggleLogPane() {
+		toggleLogButton.doClick();
+	}
+
 	public void addTab() {
 		final int idx = getComponentCount() - BUTTON_COUNT - TAB_INDEX + 1;
 		add(new BotButton(Messages.TABDEFAULTTEXT, ICON_BOT), idx);
