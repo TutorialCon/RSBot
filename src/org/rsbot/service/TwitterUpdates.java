@@ -1,6 +1,7 @@
 package org.rsbot.service;
 
 import org.rsbot.Configuration;
+import org.rsbot.util.StringUtil;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -50,6 +51,7 @@ public class TwitterUpdates implements Runnable {
 				if (msg.endsWith(Configuration.Twitter.HASHTAG)) {
 					msg = msg.substring(0, msg.length() - Configuration.Twitter.HASHTAG.length()).trim();
 				}
+				msg = StringUtil.unescapeXmlEntities(msg);
 				if (msg.isEmpty()) {
 					continue;
 				}
