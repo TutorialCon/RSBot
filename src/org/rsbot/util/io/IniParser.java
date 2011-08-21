@@ -25,17 +25,21 @@ public class IniParser {
 	}
 
 	public static void serialise(final Map<String, Map<String, String>> data, final BufferedWriter out) throws IOException {
+		int c = 0;
 		if (data.containsKey(EMPTYSECTION)) {
 			writeSection(EMPTYSECTION, data.get(EMPTYSECTION), out);
-			out.newLine();
+			c++;
 		}
 		for (final Entry<String, Map<String, String>> entry : data.entrySet()) {
+			if (c != 0) {
+				out.newLine();
+			};
 			final String section = entry.getKey();
 			if (section.equals(EMPTYSECTION)) {
 				continue;
 			}
 			writeSection(section, entry.getValue(), out);
-			out.newLine();
+			c++;
 		}
 	}
 
