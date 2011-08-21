@@ -17,12 +17,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,7 +24,6 @@ public class LoadScreen extends JDialog {
 	private final static Logger log = Logger.getLogger(LoadScreen.class.getName());
 	private static final long serialVersionUID = 5520543482560560389L;
 	private final boolean error;
-	private String taskError;
 	private static LoadScreen instance = null;
 
 	private LoadScreen() {
@@ -70,7 +63,6 @@ public class LoadScreen extends JDialog {
 		setVisible(true);
 		setModal(true);
 		setAlwaysOnTop(true);
-		final List<Callable<Object>> tasks = new ArrayList<Callable<Object>>(8);
 
 		log.info("Language: " + Messages.LANGUAGE);
 
@@ -81,14 +73,10 @@ public class LoadScreen extends JDialog {
 		Configuration.createDirectories();
 
 		log.info("Extracting resources");
-		tasks.add(Executors.callable(new Runnable() {
-			public void run() {
-				try {
-					extractResources();
-				} catch (final IOException ignored) {
-				}
-			}
-		}));
+		try {
+			extractResources();
+		} catch (final IOException ignored) {
+		}
 
 		log.fine("Enforcing security policy");
 		if (Configuration.GOOGLEDNS) {
@@ -106,35 +94,15 @@ public class LoadScreen extends JDialog {
 		}
 
 		log.info("Starting game client");
-		tasks.add(Executors.callable(new Runnable() {
-			public void run() {
-				try {
-					ClientLoader.getInstance().load();
-				} catch (final Exception e) {
-					taskError = "Client error: " + e.getMessage();
-				}
-			}
-		}));
-
-		if (error == null) {
-			log.info("Running tasks (may take a few minutes)");
-			final ExecutorService pool = Executors.newCachedThreadPool();
-			try {
-				pool.invokeAll(tasks);
-				pool.shutdown();
-				if (!pool.awaitTermination(5, TimeUnit.MINUTES)) {
-					error = "Could not complete tasks";
-				}
-			} catch (final InterruptedException ignored) {
-			}
-
-			log.info("Checking for client updates");
-			if (ClientLoader.getInstance().isOutdated()) {
-				error = "Bot is outdated, please wait and try again later";
-			}
+		try {
+			ClientLoader.getInstance().load();
+		} catch (final Exception e) {
+			error = "Client error: " + e.getMessage();
 		}
 
-		error = error == null ? taskError : error;
+		if (ClientLoader.getInstance().isOutdated()) {
+			error = "Bot is outdated, please wait and try again later";
+		}
 
 		if (error == null) {
 			this.error = false;
