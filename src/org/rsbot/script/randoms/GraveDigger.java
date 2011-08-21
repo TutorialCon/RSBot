@@ -33,7 +33,7 @@ public class GraveDigger extends Random {
 			INTERFACE_GRAVE_ID = 2,
 			INTERFACE_GRAVE_CLOSE = 3,
 
-			INTERFACE_COFFIN = 141,
+	INTERFACE_COFFIN = 141,
 			INTERFACE_COFFIN_CLOSE = 12;
 	private static final int[]
 			INTERFACE_COFFIN_IDS = {3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -73,6 +73,7 @@ public class GraveDigger extends Random {
 
 	@Override
 	public int loop() {
+		camera.setPitch(true);
 		if (interfaces.get(INTERFACE_GRAVE).isValid()) {
 			atCloseInterface(INTERFACE_GRAVE, INTERFACE_GRAVE_CLOSE);
 			sleep(random(500, 800));
@@ -364,7 +365,13 @@ public class GraveDigger extends Random {
 			if (object.isOnScreen()) {
 				break;
 			}
-			tiles.interact(calc.getTileOnScreen(object.getLocation()), "Walk here");
+			walking.walkTileMM(object.getLocation());
+			if (i > 3) {
+				tiles.interact(calc.getTileOnScreen(object.getLocation()), "Walk here");
+			}
+			if (i > 1) {
+				camera.setAngle(random(0, 360));
+			}
 			sleep(random(500, 800));
 			while (getMyPlayer().isMoving()) {
 				sleep(random(50, 120));
@@ -380,10 +387,12 @@ public class GraveDigger extends Random {
 				break;
 			}
 			if (i > 1) {
-				camera.setPitch(true);
 				camera.setAngle(random(0, 360));
 			}
-			tiles.interact(calc.getTileOnScreen(theNpc.getLocation()), "Walk here");
+			walking.walkTileMM(theNpc.getLocation());
+			if (i > 3) {
+				tiles.interact(calc.getTileOnScreen(theNpc.getLocation()), "Walk here");
+			}
 			sleep(random(500, 800));
 			while (getMyPlayer().isMoving()) {
 				sleep(random(50, 120));
