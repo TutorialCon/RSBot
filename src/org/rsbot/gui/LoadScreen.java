@@ -8,7 +8,6 @@ import org.rsbot.log.LogOutputStream;
 import org.rsbot.log.SystemConsoleHandler;
 import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.UpdateChecker;
-import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;
@@ -18,10 +17,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -106,19 +103,6 @@ public class LoadScreen extends JDialog {
 
 		if (Configuration.RUNNING_FROM_JAR && UpdateChecker.getLatestVersion() > Configuration.getVersion()) {
 			error = "Please update at " + Configuration.Paths.URLs.HOST;
-		}
-
-		log.info("Queueing resources for download");
-		for (final Entry<String, File> item : Configuration.Paths.getCachableResources().entrySet()) {
-			tasks.add(Executors.callable(new Runnable() {
-				public void run() {
-					try {
-						log.fine("Downloading " + item.getValue().getName());
-						HttpClient.download(new URL(item.getKey()), item.getValue());
-					} catch (final IOException ignored) {
-					}
-				}
-			}));
 		}
 
 		log.info("Starting game client");

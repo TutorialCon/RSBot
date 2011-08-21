@@ -12,8 +12,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
@@ -201,18 +199,6 @@ public class Configuration {
 		public static String getUnixHome() {
 			final String home = System.getProperty("user.home");
 			return home == null ? "~" : home;
-		}
-
-		private static Map<String, File> cachableResources;
-
-		public static Map<String, File> getCachableResources() {
-			if (cachableResources == null) {
-				cachableResources = new HashMap<String, File>(6);
-				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
-				cachableResources.put(URLs.SDN_MANIFEST, new File(getCacheDirectory(), "sdn-manifests.txt"));
-				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));
-			}
-			return cachableResources;
 		}
 	}
 

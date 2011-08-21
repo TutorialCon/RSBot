@@ -1,9 +1,12 @@
 package org.rsbot.util;
 
 import org.rsbot.Configuration;
+import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author Paris
@@ -17,8 +20,10 @@ public final class UpdateChecker {
 		}
 		latest = Configuration.getVersion();
 		try {
-			final File cache = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.VERSION);
+			final File cache = new File(Configuration.Paths.getCacheDirectory(), "version-latest.txt");
+			HttpClient.download(new URL(Configuration.Paths.URLs.VERSION), cache);
 			latest = Integer.parseInt(IOHelper.readString(cache).trim());
+		} catch (final IOException ignored) {
 		} catch (final NumberFormatException ignored) {
 		} catch (final NullPointerException ignored) {
 		}

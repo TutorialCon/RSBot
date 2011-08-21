@@ -24,10 +24,9 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 	private static final Logger log = Logger.getLogger("ScriptDelivery");
 	private static ScriptDeliveryNetwork instance;
 	private URL base;
-	private final File manifest;
+	private final File manifest = new File(Configuration.Paths.getCacheDirectory(), "sdn-manifests.txt");
 
 	private ScriptDeliveryNetwork() {
-		manifest = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.SDN_MANIFEST);
 	}
 
 	public static ScriptDeliveryNetwork getInstance() {

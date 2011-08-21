@@ -1,6 +1,7 @@
 package org.rsbot.gui.component;
 
 import org.rsbot.Configuration;
+import org.rsbot.Configuration.Paths.URLs;
 import org.rsbot.gui.BotGUI;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IniParser;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class SplashAd extends JDialog implements MouseListener, Runnable {
 	private static final Logger log = Logger.getLogger(SplashAd.class.getName());
-
+	private static final File cache = new File(Configuration.Paths.getCacheDirectory(), "ads.txt");
 	private static final long serialVersionUID = 1L;
 
 	private static final String CACHED_IMAGE = "advert.png";
@@ -80,7 +81,7 @@ public class SplashAd extends JDialog implements MouseListener, Runnable {
 		Map<String, String> keys;
 
 		try {
-			final File cache = Configuration.Paths.getCachableResources().get(Configuration.Paths.URLs.AD_INFO);
+			HttpClient.download(new URL(URLs.AD_INFO), cache);
 			keys = IniParser.deserialise(cache).get(IniParser.EMPTYSECTION);
 		} catch (final IOException ignored) {
 			return false;
