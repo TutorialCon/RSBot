@@ -52,7 +52,7 @@ public class TwitterUpdates implements Runnable {
 					msg = msg.substring(0, msg.length() - Configuration.Twitter.HASHTAG.length()).trim();
 				}
 				msg = StringUtil.unescapeXmlEntities(msg);
-				if (msg.isEmpty()) {
+				if (msg.length() == 0) {
 					continue;
 				}
 				log.log(level, msg, param);
