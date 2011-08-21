@@ -79,10 +79,6 @@ public class LoadScreen extends JDialog {
 		}
 
 		log.fine("Enforcing security policy");
-		if (Configuration.GOOGLEDNS) {
-			System.setProperty("sun.net.spi.nameservice.nameservers", RestrictedSecurityManager.DNSA + "," + RestrictedSecurityManager.DNSB);
-			System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
-		}
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
 

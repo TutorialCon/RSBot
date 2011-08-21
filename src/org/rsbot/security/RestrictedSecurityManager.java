@@ -25,8 +25,6 @@ import java.util.logging.Logger;
  */
 public class RestrictedSecurityManager extends SecurityManager {
 	private static Logger log = Logger.getLogger("Security");
-	private final static int PORT_DNS = 53;
-	public final static String DNSA = "8.8.8.8", DNSB = "8.8.4.4"; // Google Public DNS (http://code.google.com/speed/public-dns/)
 	public static final String SCRIPTCLASS = "org.rsbot.script.Script";
 
 	private String getCallingClass() {
@@ -54,9 +52,7 @@ public class RestrictedSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkAccept(final String host, final int port) {
-		if (port != PORT_DNS) {
-			throw new SecurityException();
-		}
+		throw new SecurityException();
 	}
 
 	@Override
