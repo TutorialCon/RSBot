@@ -72,7 +72,7 @@ public class Walking extends MethodProvider {
 		lastDestination = destination;
 		lastPath = getPath(destination);
 		if (!lastPath.isValid()) {
-			return false;
+			lastPath = getPath(destination);
 		}
 		lastStep = lastPath.getNext();
 		return lastPath.traverse();

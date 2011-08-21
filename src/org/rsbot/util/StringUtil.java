@@ -111,6 +111,15 @@ public class StringUtil {
 		}
 	}
 
+	public static String unescapeXmlEntities(String text) {
+		text = text.replaceAll("&amp;", "&");
+		text = text.replaceAll("&lt;", "<");
+		text = text.replaceAll("&gt;", ">");
+		text = text.replaceAll("&quot;", "\"");
+		text = text.replaceAll("&apos;", "'");
+		return text;
+	}
+
 	public static String throwableToString(final Throwable t) {
 		if (t != null) {
 			final Writer exception = new StringWriter();

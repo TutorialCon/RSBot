@@ -63,7 +63,7 @@ public class BotMenuBar extends JMenuBar {
 						Messages.RUNSCRIPT, Messages.STOPSCRIPT,
 						Messages.PAUSESCRIPT, Messages.MENUSEPERATOR,
 						Messages.SAVESCREENSHOT, Messages.MENUSEPERATOR,
-						Messages.HIDEBOT, Messages.EXIT},
+						Messages.HIDE, Messages.EXIT},
 				{Messages.ACCOUNTS, Messages.MENUSEPERATOR,
 						Messages.TOGGLEFALSE + Messages.FORCEINPUT,
 						Messages.TOGGLEFALSE + Messages.LESSCPU,
@@ -119,7 +119,7 @@ public class BotMenuBar extends JMenuBar {
 		map.put(Messages.STOPSCRIPT, Configuration.Paths.Resources.ICON_DELETE);
 		map.put(Messages.PAUSESCRIPT, Configuration.Paths.Resources.ICON_PAUSE);
 		map.put(Messages.SAVESCREENSHOT, Configuration.Paths.Resources.ICON_PHOTO);
-		map.put(Messages.HIDEBOT, Configuration.Paths.Resources.ICON_ARROWIN);
+		map.put(Messages.HIDE, Configuration.Paths.Resources.ICON_ARROWIN);
 		map.put(Messages.EXIT, Configuration.Paths.Resources.ICON_CLOSE);
 		map.put(Messages.OPTIONS, Configuration.Paths.Resources.ICON_WRENCH);
 		map.put(Messages.LICENSES, Configuration.Paths.Resources.ICON_KEY);
@@ -148,7 +148,7 @@ public class BotMenuBar extends JMenuBar {
 		}
 		commandMenuItem.get(Messages.LICENSES).setVisible(false);
 		constructItemIcons();
-		commandMenuItem.get(Messages.HIDEBOT).setVisible(SystemTray.isSupported());
+		commandMenuItem.get(Messages.HIDE).setVisible(SystemTray.isSupported());
 		setExtendedView(EXTENDED_VIEW_INITIAL);
 	}
 

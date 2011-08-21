@@ -268,6 +268,7 @@ public class AccountManager extends JDialog implements ActionListener {
 		removeButton.setText("");
 		bar.add(removeButton);
 		bar.add(Box.createHorizontalGlue());
+		doneButton.setToolTipText(doneButton.getText());
 		bar.add(doneButton);
 		newButton.addActionListener(this);
 		removeButton.addActionListener(this);

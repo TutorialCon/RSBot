@@ -12,7 +12,6 @@ import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.ScriptDownloader;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
-import org.rsbot.service.Monitoring;
 import org.rsbot.service.Preferences;
 import org.rsbot.service.TwitterUpdates;
 import org.rsbot.util.UpdateChecker;
@@ -63,17 +62,19 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 				SwingUtilities.updateComponentTreeUI(BotGUI.this);
+				if (Configuration.RUNNING_FROM_JAR) {
+					toolBar.toggleLogPane();
+				}
 				setVisible(true);
 				addBot();
 				updateScriptControls();
 				setShutdownTimer(preferences.shutdown);
-				if (!preferences.hideAds) {
-					new SplashAd(BotGUI.this).display();
-				}
 				if (Configuration.Twitter.ENABLED) {
 					new Thread(new TwitterUpdates()).start();
 				}
-				Monitoring.getInstance().start();
+				if (!preferences.hideAds) {
+					new Thread(new SplashAd(BotGUI.this)).start();
+				}
 			}
 		});
 	}
@@ -103,17 +104,13 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			option = action.substring(z + 1);
 		}
 		if (menu.equals(Messages.CLOSEBOT)) {
-			if (confirmRemoveBot()) {
-				final int idx = Integer.parseInt(option);
-				removeBot(bots.get(idx));
-			}
+			final int idx = Integer.parseInt(option);
+			removeBot(bots.get(idx));
 		} else if (menu.equals(Messages.FILE)) {
 			if (option.equals(Messages.NEWBOT)) {
 				addBot();
 			} else if (option.equals(Messages.CLOSEBOT)) {
-				if (confirmRemoveBot()) {
-					removeBot(getCurrentBot());
-				}
+				removeBot(getCurrentBot());
 			} else if (option.equals(Messages.ADDSCRIPT)) {
 				final String pretext = "";
 				final String key = (String) JOptionPane.showInputDialog(this, "Enter the script URL e.g. pastebin link or direct compiled file:",
@@ -141,10 +138,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				if (current != null && current.getMethodContext() != null) {
 					ScreenshotUtil.saveScreenshot(current, current.getMethodContext().game.isLoggedIn());
 				}
-			} else if (option.equals(Messages.HIDEBOT)) {
+			} else if (option.equals(Messages.HIDE)) {
 				setTray();
 			} else if (option.equals(Messages.EXIT)) {
-				cleanExit(false);
+				cleanExit();
 			}
 		} else if (menu.equals(Messages.EDIT)) {
 			if (option.equals(Messages.ACCOUNTS)) {
@@ -415,9 +412,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(final WindowEvent e) {
-				if (cleanExit(false)) {
-					dispose();
-				}
+				cleanExit();
 			}
 		});
 		addWindowStateListener(new WindowStateListener() {
@@ -528,15 +523,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		}
 	}
 
-	private boolean confirmRemoveBot() {
-		if (!preferences.confirmations) {
-			final int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to close this bot?", Messages.CLOSEBOT, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-			return result == JOptionPane.OK_OPTION;
-		} else {
-			return true;
-		}
-	}
-
 	public void setShutdownTimer(final boolean enabled) {
 		if (!enabled) {
 			if (shutdown != null) {
@@ -571,7 +557,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 					} else if (Configuration.getCurrentOperatingSystem() == OperatingSystem.WINDOWS) {
 						try {
 							Runtime.getRuntime().exec("shutdown.exe", new String[]{"-s"});
-							cleanExit(true);
+							cleanExit();
 						} catch (IOException ignored) {
 							log.severe("Could not shutdown system");
 						}
@@ -581,33 +567,11 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		}
 	}
 
-	public boolean cleanExit(final boolean silent) {
-		if (silent) {
-			preferences.confirmations = true;
-		}
-		if (!preferences.confirmations) {
-			preferences.confirmations = true;
-			for (final Bot bot : bots) {
-				if (bot.getAccountName() != null) {
-					preferences.confirmations = true;
-					break;
-				}
-			}
-		}
-		boolean doExit = true;
-		if (!preferences.confirmations) {
-			final String message = "Are you sure you want to exit?";
-			final int result = JOptionPane.showConfirmDialog(this, message, Messages.EXIT, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (result != JOptionPane.OK_OPTION) {
-				doExit = false;
-			}
-		}
-		if (doExit) {
-			setVisible(false);
-			preferences.save();
-			System.exit(0);
-		}
-		return doExit;
+	public void cleanExit() {
+		setVisible(false);
+		dispose();
+		preferences.save();
+		System.exit(0);
 	}
 
 	public void setTray() {

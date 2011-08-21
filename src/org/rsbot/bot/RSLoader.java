@@ -81,7 +81,7 @@ public class RSLoader extends Applet implements Runnable, Loader {
 	public void load() {
 		try {
 			final ClientLoader cl = ClientLoader.getInstance();
-			targetName = cl.getTargetName();
+			targetName = ClientLoader.getTargetName();
 			classLoader = new RSClassLoader(cl.getClasses(), new URL("http://" + targetName + ".com/"));
 		} catch (final IOException ex) {
 			log.severe("Unable to load client: " + ex.getMessage());

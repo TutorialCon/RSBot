@@ -37,6 +37,8 @@ public class Boot {
 				param.append(q);
 				param.append(Configuration.Paths.Resources.ICON);
 				param.append(q);
+				param.append(s);
+				param.append("-Dapple.laf.useScreenMenuBar=true");
 				break;
 			default:
 				param.append("java");

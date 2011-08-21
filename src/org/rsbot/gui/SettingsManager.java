@@ -27,17 +27,11 @@ public class SettingsManager extends JDialog {
 		setIconImage(Configuration.getImage(Configuration.Paths.Resources.ICON_WRENCH));
 
 		final JPanel panelOptions = new JPanel(new GridLayout(0, 1));
-		panelOptions.setBorder(BorderFactory.createTitledBorder("Display"));
-		final JPanel panelInternal = new JPanel(new GridLayout(0, 1));
-		panelInternal.setBorder(BorderFactory.createTitledBorder("Internal"));
+		panelOptions.setBorder(BorderFactory.createTitledBorder("Controls"));
 
 		final JCheckBox checkAds = new JCheckBox(Messages.DISABLEADS);
 		checkAds.setToolTipText("Show advertisement on startup");
 		checkAds.setSelected(preferences.hideAds);
-
-		final JCheckBox checkConfirmations = new JCheckBox(Messages.DISABLECONFIRMATIONS);
-		checkConfirmations.setToolTipText("Suppress confirmation messages");
-		checkConfirmations.setSelected(preferences.confirmations);
 
 		final JPanel panelShutdown = new JPanel(new GridLayout(1, 2));
 		final JCheckBox checkShutdown = new JCheckBox(Messages.AUTOSHUTDOWN);
@@ -56,9 +50,7 @@ public class SettingsManager extends JDialog {
 		valueShutdown.setEnabled(checkShutdown.isEnabled() && checkShutdown.isSelected());
 
 		panelOptions.add(checkAds);
-		panelOptions.add(checkConfirmations);
-		panelInternal.add(panelShutdown);
-		panelInternal.add(new JLabel());
+		panelOptions.add(panelShutdown);
 
 		final GridLayout gridAction = new GridLayout(1, 2);
 		gridAction.setHgap(5);
@@ -73,7 +65,6 @@ public class SettingsManager extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				preferences.hideAds = checkAds.isSelected();
-				preferences.confirmations = checkConfirmations.isSelected();
 				preferences.shutdown = checkShutdown.isSelected();
 				preferences.shutdownTime = modelShutdown.getNumber().intValue();
 				preferences.save();
@@ -85,7 +76,6 @@ public class SettingsManager extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				checkAds.setSelected(preferences.hideAds);
-				checkConfirmations.setSelected(preferences.confirmations);
 				checkShutdown.setSelected(preferences.shutdown);
 				modelShutdown.setValue(preferences.shutdownTime);
 				dispose();
@@ -98,7 +88,6 @@ public class SettingsManager extends JDialog {
 		final JPanel panel = new JPanel(new GridLayout(0, 1));
 		panel.setBorder(panelAction.getBorder());
 		panel.add(panelOptions);
-		panel.add(panelInternal);
 
 		add(panel);
 		add(panelAction, BorderLayout.SOUTH);

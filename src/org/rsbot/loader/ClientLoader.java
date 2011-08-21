@@ -28,20 +28,24 @@ import java.util.zip.ZipOutputStream;
  */
 public class ClientLoader {
 	private final static ClientLoader instance = new ClientLoader();
-	private final Logger log = Logger.getLogger(ClientLoader.class.getName());
-	private final File manifest, cache, localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
-	private final static String TARGET = "runescape";
+	private final String id = ClientLoader.class.getName();
+	private final Logger log = Logger.getLogger(id);
+	private static final File manifest = new File(Configuration.Paths.getCacheDirectory(), "client.ini");
+	private static final File cache = new File(Configuration.Paths.getCacheDirectory(), "client.jar");
+	private static final File localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
 	public final static int PORT_CLIENT = 43594;
 	private int[] version = {-1, -1, -1};
 	private Map<String, byte[]> classes;
 
 	private ClientLoader() {
-		manifest = new File(Configuration.Paths.getCacheDirectory(), "client.ini");
-		cache = new File(Configuration.Paths.getCacheDirectory(), "client.jar");
 	}
 
 	public static ClientLoader getInstance() {
 		return instance;
+	}
+
+	public static File getClientManifest() {
+		return manifest;
 	}
 
 	private boolean isCacheClean() {
@@ -50,7 +54,7 @@ public class ClientLoader {
 		}
 		final Map<String, String> info;
 		try {
-			info = IniParser.deserialise(manifest).get(IniParser.EMPTYSECTION);
+			info = IniParser.deserialise(manifest).get(id);
 		} catch (final IOException ignored) {
 			ignored.printStackTrace();
 			return false;
@@ -78,7 +82,10 @@ public class ClientLoader {
 		}
 	}
 
-	public void load() throws IOException, ParseException {
+	public synchronized void load() throws IOException, ParseException {
+		if (classes != null) {
+			return;
+		}
 		classes = new HashMap<String, byte[]>();
 
 		if (isCacheClean()) {
@@ -107,7 +114,7 @@ public class ClientLoader {
 			if (version[2] > version[0]) {
 				throw new ParseException("Patch outdated (" + version[2] + " > " + version[0] + ")");
 			}
-			final JarFile loader = getJar(TARGET, true), client = getJar(TARGET, false);
+			final JarFile loader = getJar(true), client = getJar(false);
 			final List<String> replace = Arrays.asList(script.getAttribute("replace").split(" "));
 
 			for (final JarFile jar : new JarFile[]{loader, client}) {
@@ -154,7 +161,7 @@ public class ClientLoader {
 			final Map<String, String> info = new HashMap<String, String>();
 			info.put("v1", Integer.toString(version[1]));
 			info.put("t", Long.toString(System.currentTimeMillis() / 1000L));
-			data.put(IniParser.EMPTYSECTION, info);
+			data.put(id, info);
 			IniParser.serialise(data, manifest);
 		}
 	}
@@ -167,17 +174,18 @@ public class ClientLoader {
 		return copy;
 	}
 
-	public String getTargetName() {
-		return TARGET;
+	public static String getTargetName() {
+		return "runescape";
 	}
 
 	public boolean isOutdated() {
 		return version[2] > version[1];
 	}
 
-	public int getRemoteVersion(final int start) throws IOException {
+	public static int getRemoteVersion(final int start) throws IOException {
+		final String host = getTargetHost();
 		for (int i = start; i < start + 50; i++) {
-			final Socket sock = new Socket("world53." + getTargetName() + ".com", PORT_CLIENT);
+			final Socket sock = new Socket(host, PORT_CLIENT);
 			final byte[] payload = new byte[]{15, 0, 0, (byte) (i >> 8), (byte) i};
 			sock.getOutputStream().write(payload, 0, payload.length);
 			if (sock.getInputStream().read() == 0) {
@@ -190,13 +198,11 @@ public class ClientLoader {
 		return -1;
 	}
 
-	private JarFile getJar(final String target, final boolean loader) {
+	private static JarFile getJar(final boolean loader) {
 		while (true) {
-			final int world = 1 + new Random().nextInt(169);
 			try {
 				final StringBuilder sb = new StringBuilder(50);
-				sb.append("jar:http://world").append(world).append(".").append(target).append(".com/");
-				sb.append(loader ? "loader" : target).append(".jar!/");
+				sb.append("jar:http://").append(getTargetHost()).append("/").append(loader ? "loader" : getTargetName()).append(".jar!/");
 				final JarURLConnection juc = (JarURLConnection) new URL(sb.toString()).openConnection();
 				juc.setConnectTimeout(5000);
 				return juc.getJarFile();
@@ -204,5 +210,8 @@ public class ClientLoader {
 			}
 		}
 	}
-}
 
+	private static String getTargetHost() {
+		return "world" + (1 + new Random().nextInt(169)) + "." + getTargetName() + ".com";
+	}
+}

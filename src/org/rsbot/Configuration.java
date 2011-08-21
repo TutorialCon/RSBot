@@ -12,8 +12,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
@@ -85,7 +83,6 @@ public class Configuration {
 			public static final String SITE = BASE + "site";
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
 			public static final String AD_INFO = BASE + "botad-info";
-			public static final String TRACK_HITS = BASE + "track-hits";
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
@@ -203,26 +200,12 @@ public class Configuration {
 			final String home = System.getProperty("user.home");
 			return home == null ? "~" : home;
 		}
-
-		private static Map<String, File> cachableResources;
-
-		public static Map<String, File> getCachableResources() {
-			if (cachableResources == null) {
-				cachableResources = new HashMap<String, File>(6);
-				cachableResources.put(URLs.VERSION, new File(getCacheDirectory(), "version-latest.txt"));
-				cachableResources.put(URLs.SDN_MANIFEST, new File(getCacheDirectory(), "sdn-manifests.txt"));
-				cachableResources.put(URLs.AD_INFO, new File(getCacheDirectory(), "ads.txt"));
-			}
-			return cachableResources;
-		}
 	}
 
 	public static final String NAME = "RSBot";
 	public static final String NAME_LOWERCASE = NAME.toLowerCase();
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
-	public static final String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel";
-	public static final boolean GOOGLEDNS = false;
 
 	public static class Twitter {
 		public static final boolean ENABLED = true;
