@@ -66,11 +66,11 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				addBot();
 				updateScriptControls();
 				setShutdownTimer(preferences.shutdown);
-				if (!preferences.hideAds) {
-					new SplashAd(BotGUI.this).display();
-				}
 				if (Configuration.Twitter.ENABLED) {
 					new Thread(new TwitterUpdates()).start();
+				}
+				if (!preferences.hideAds) {
+					new Thread(new SplashAd(BotGUI.this)).start();
 				}
 			}
 		});
