@@ -30,18 +30,22 @@ public class ClientLoader {
 	private final static ClientLoader instance = new ClientLoader();
 	private final String id = ClientLoader.class.getName();
 	private final Logger log = Logger.getLogger(id);
-	private final File manifest, cache, localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
+	private static final File manifest = new File(Configuration.Paths.getCacheDirectory(), "client.ini");
+	private static final File cache = new File(Configuration.Paths.getCacheDirectory(), "client.jar");
+	private static final File localms = new File(Configuration.Paths.getCacheDirectory(), "modscript");
 	public final static int PORT_CLIENT = 43594;
 	private int[] version = {-1, -1, -1};
 	private Map<String, byte[]> classes;
 
 	private ClientLoader() {
-		manifest = new File(Configuration.Paths.getCacheDirectory(), "client.ini");
-		cache = new File(Configuration.Paths.getCacheDirectory(), "client.jar");
 	}
 
 	public static ClientLoader getInstance() {
 		return instance;
+	}
+
+	public static File getClientManifest() {
+		return manifest;
 	}
 
 	private boolean isCacheClean() {
