@@ -528,4 +528,13 @@ public class Skills extends MethodProvider {
 	public SkillData getSkillDataInstance() {
 		return new SkillData(methods, null);
 	}
+
+	/**
+	 * Gets the current experience for all skills.
+	 *
+	 * @return int array of all skill experiences
+	 */
+	public int[] getCurrentExp() {
+		return methods.client.getSkillExperiences();
+	}
 }
