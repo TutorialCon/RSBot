@@ -22,7 +22,7 @@ public class BotKeyboardShortcuts {
 		SHORTCUT_MAP.put(KeyEvent.VK_S, Messages.FILE + "." + Messages.STOPSCRIPT);
 		SHORTCUT_MAP.put(KeyEvent.VK_P, Messages.FILE + "." + Messages.PAUSESCRIPT);
 		SHORTCUT_MAP.put(KeyEvent.VK_I, Messages.FILE + "." + Messages.SAVESCREENSHOT);
-		SHORTCUT_MAP.put(KeyEvent.VK_H, Messages.FILE + "." + Messages.HIDEBOT);
+		SHORTCUT_MAP.put(KeyEvent.VK_H, Messages.FILE + "." + Messages.HIDE);
 		SHORTCUT_MAP.put(KeyEvent.VK_Q, Messages.FILE + "." + Messages.EXIT);
 		SHORTCUT_MAP.put(KeyEvent.VK_U, Messages.EDIT + "." + Messages.ACCOUNTS);
 		SHORTCUT_MAP.put(KeyEvent.VK_O, Messages.TOOLS + "." + Messages.OPTIONS);
