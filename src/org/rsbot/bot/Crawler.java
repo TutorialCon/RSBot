@@ -1,29 +1,47 @@
 package org.rsbot.bot;
 
+import org.rsbot.loader.ClientLoader;
 import org.rsbot.util.io.HttpClient;
+import org.rsbot.util.io.IniParser;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Logger;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Crawler {
-	private static final Logger log = Logger.getLogger(Crawler.class.getName());
-
-	private static HashMap<String, String> parameters;
-	private final String world_prefix;
+	private static final String id = Crawler.class.getName(), idm = id + "#misc";
+	private static Map<String, String> parameters;
+	private String world;
 
 	public Crawler(final String root) {
+		final File manifest = ClientLoader.getClientManifest();
+		Map<String, Map<String, String>> data = null;
+
+		if (manifest.exists()) {
+			try {
+				data = IniParser.deserialise(manifest);
+				if (data.containsKey(id)) {
+					parameters = data.get(id);
+					world = data.get(idm).get("world");
+					return;
+				}
+			} catch (final IOException ignored) {
+			}
+		}
+
+		if (data == null) {
+			data = new HashMap<String, Map<String, String>>(1);
+		}
+
 		final String index = firstMatch("<a id=\"continue\" class=\"barItem\" href=\"([^\"]+)\"\\s+onclick=\"[^\"]+\">Continue to Full Site for News and Game Help", downloadPage(root, null));
-
 		final String frame = root + "game.ws";
-
 		final String game = firstMatch("<frame id=\"[^\"]+\" style=\"[^\"]+\" src=\"([^\"]+)\"", downloadPage(frame, index));
-
-		world_prefix = game.substring(12, game.indexOf(".runescape"));
+		world = game.substring(12, game.indexOf(".runescape"));
 
 		final Pattern pattern = Pattern.compile("<param name=\"?([^\\s]+)\"?\\s+value=\"?([^>]*)\"?>", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 		final Matcher matcher = pattern.matcher(downloadPage(game, frame));
@@ -42,7 +60,14 @@ class Crawler {
 		}
 		parameters.put("haveie6", "0");
 
-		log.fine("Parameters: " + parameters);
+		try {
+			data.put(id, parameters);
+			final Map<String, String> misc = new HashMap<String, String>(1);
+			misc.put("world", world);
+			data.put(idm, misc);
+			IniParser.serialise(data, manifest);
+		} catch (final IOException ignored) {
+		}
 	}
 
 	private String downloadPage(final String url, final String referer) {
@@ -67,12 +92,12 @@ class Crawler {
 		return null;
 	}
 
-	public HashMap<String, String> getParameters() {
+	public Map<String, String> getParameters() {
 		return parameters;
 	}
 
 	public String getWorldPrefix() {
-		return world_prefix;
+		return world;
 	}
 
 	private String removeTrailingChar(final String str, final char ch) {
