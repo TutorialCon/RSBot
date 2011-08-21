@@ -5,6 +5,16 @@ SVN: https://svn.github.com/powerbot/RSBot
 Java JDK: http://www.oracle.com/technetwork/java/javase/downloads/
 
 
+v2.61
+Download: http://services.powerbot.org/rsbot/releases/RSBot-261.jar
+MD5: b0c5e67699e515d8bd606b0f4e6c917b
+SHA1: 277bd5677f77711bf5d9f03007a1f8b4e0e99308
+VirusTotal: http://www.virustotal.com/file-scan/report.html?id=8cacdb755c0925e87c8d93977b69b97446609a773152418951e843670b8a0749-1313951675
+
+- Maintenance release with bug fixes
+- Improved performance of client loader with further caching techniques
+
+
 v2.60
 Download: http://services.powerbot.org/rsbot/releases/RSBot-260.jar
 MD5: cc547f01a766962b9443d36a87b53f55
