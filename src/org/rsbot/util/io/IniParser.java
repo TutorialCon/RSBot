@@ -33,7 +33,7 @@ public class IniParser {
 		for (final Entry<String, Map<String, String>> entry : data.entrySet()) {
 			if (c != 0) {
 				out.newLine();
-			};
+			}
 			final String section = entry.getKey();
 			if (section.equals(EMPTYSECTION)) {
 				continue;
