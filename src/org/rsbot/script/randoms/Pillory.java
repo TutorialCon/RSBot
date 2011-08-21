@@ -4,7 +4,6 @@ import org.rsbot.event.events.MessageEvent;
 import org.rsbot.event.listeners.MessageListener;
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.wrappers.RSObject;
 import org.rsbot.script.wrappers.RSTile;
 
 import java.awt.*;
@@ -54,41 +53,6 @@ public class Pillory extends Random implements MessageListener {
 					"swinging");
 		}
 		return inCage;
-	}
-
-	public RSObject findMYObject(final int... ids) {
-		// Changed to find the nearest, reachable!
-		// fixed, lol, objects.getAt want a real xy not this one
-		RSObject cur = null;
-		int dist = -1;
-		for (int x = 0; x < 104; x++) {
-			for (int y = 0; y < 104; y++) {
-				final RSObject[] objs = objects.getAllAt(new RSTile(x + game.getBaseX(), y + game.getBaseY()));
-				if (objs.length > 0) {
-					final RSObject o = objs[0];
-					boolean isObject = false;
-					for (final int id : ids) {
-						if (o.getID() == id) {
-							isObject = true;
-							break;
-						}
-					}
-					if (isObject) {
-						final int distTmp = calc.distanceTo(o.getLocation());
-						if (distTmp != -1) {
-							if (cur == null) {
-								dist = distTmp;
-								cur = o;
-							} else if (distTmp < dist) {
-								cur = o;
-								dist = distTmp;
-							}
-						}
-					}
-				}
-			}
-		}
-		return cur;
 	}
 
 	private int getKey() {

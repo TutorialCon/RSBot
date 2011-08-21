@@ -61,18 +61,6 @@ public class Base64 {
 	 */
 	public static final int MIME_CHUNK_SIZE = 76;
 
-	/**
-	 * PEM chunk size per RFC 1421 section 4.3.2.4.
-	 * <p/>
-	 * <p>
-	 * The {@value} character limit does not count the trailing CRLF, but counts all other characters, including any
-	 * equal signs.
-	 * </p>
-	 *
-	 * @see <a href="http://tools.ietf.org/html/rfc1421">RFC 1421 section 4.3.2.4</a>
-	 */
-	public static final int PEM_CHUNK_SIZE = 64;
-
 	private static final int DEFAULT_BUFFER_RESIZE_FACTOR = 2;
 
 	/**
@@ -388,15 +376,6 @@ public class Base64 {
 	}
 
 	/**
-	 * Returns true if this object has buffered data for reading.
-	 *
-	 * @return true if there is data still available for reading.
-	 */
-	boolean hasData() {  // package protected for access from I/O streams
-		return buffer != null;
-	}
-
-	/**
 	 * Returns the amount of buffered data available for reading.
 	 *
 	 * @return The amount of buffered data available for reading.
@@ -494,49 +473,6 @@ public class Base64 {
 	}
 
 	/**
-	 * Encodes an Object using the Base-N algorithm. This method is provided in order to satisfy the requirements of the
-	 * Encoder interface, and will throw an EncoderException if the supplied object is not of type byte[].
-	 *
-	 * @param pObject Object to encode
-	 * @return An object (of type byte[]) containing the Base-N encoded data which corresponds to the byte[] supplied.
-	 * @throws IllegalArgumentException if the parameter supplied is not of type byte[]
-	 */
-	public Object encode(final Object pObject) {
-		if (!(pObject instanceof byte[])) {
-			throw new IllegalArgumentException("Parameter supplied to Base-N encode is not a byte[]");
-		}
-		return encode((byte[]) pObject);
-	}
-
-	/**
-	 * Encodes a byte[] containing binary data, into a String containing characters in the Base-N alphabet.
-	 *
-	 * @param pArray a byte array containing binary data
-	 * @return A String containing only Base-N character data
-	 */
-	public String encodeToString(final byte[] pArray) {
-		return StringUtil.newStringUtf8(encode(pArray));
-	}
-
-	/**
-	 * Decodes an Object using the Base-N algorithm. This method is provided in order to satisfy the requirements of the
-	 * Decoder interface, and will throw a DecoderException if the supplied object is not of type byte[] or String.
-	 *
-	 * @param pObject Object to decode
-	 * @return An object (of type byte[]) containing the binary data which corresponds to the byte[] or String supplied.
-	 * @throws IllegalArgumentException if the parameter supplied is not of type byte[]
-	 */
-	public Object decode(final Object pObject) throws IllegalArgumentException {
-		if (pObject instanceof byte[]) {
-			return decode((byte[]) pObject);
-		} else if (pObject instanceof String) {
-			return decode((String) pObject);
-		} else {
-			throw new IllegalArgumentException("Parameter supplied to Base-N decode is not a byte[] or a String");
-		}
-	}
-
-	/**
 	 * Decodes a String containing characters in the Base-N alphabet.
 	 *
 	 * @param pArray A String containing Base-N character data
@@ -583,17 +519,6 @@ public class Base64 {
 	}
 
 	/**
-	 * Encodes a byte[] containing binary data, into a String containing characters in the appropriate alphabet.
-	 * Uses UTF8 encoding.
-	 *
-	 * @param pArray a byte array containing binary data
-	 * @return String containing only character data in the appropriate alphabet.
-	 */
-	public String encodeAsString(final byte[] pArray) {
-		return StringUtil.newStringUtf8(encode(pArray));
-	}
-
-	/**
 	 * Returns whether or not the <code>octet</code> is in the current alphabet.
 	 * Does not allow whitespace or pad.
 	 *
@@ -621,19 +546,6 @@ public class Base64 {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Tests a given String to see if it contains only valid characters within the alphabet.
-	 * The method treats whitespace and PAD as valid.
-	 *
-	 * @param basen String to test
-	 * @return <code>true</code> if all characters in the String are valid characters in the alphabet or if
-	 *         the String is empty; <code>false</code>, otherwise
-	 * @see #isInAlphabet(byte[], boolean)
-	 */
-	public boolean isInAlphabet(final String basen) {
-		return isInAlphabet(StringUtil.getBytesUtf8(basen), true);
 	}
 
 	/**
@@ -850,19 +762,6 @@ public class Base64 {
 	}
 
 	/**
-	 * Tests a given String to see if it contains only valid characters within the Base64 alphabet. Currently the
-	 * method treats whitespace as valid.
-	 *
-	 * @param base64 String to test
-	 * @return <code>true</code> if all characters in the String are valid characters in the Base64 alphabet or if
-	 *         the String is empty; <code>false</code>, otherwise
-	 * @since 1.5
-	 */
-	public static boolean isBase64(final String base64) {
-		return isBase64(StringUtil.getBytesUtf8(base64));
-	}
-
-	/**
 	 * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet. Currently the
 	 * method treats whitespace as valid.
 	 *
@@ -888,54 +787,6 @@ public class Base64 {
 	 */
 	public static byte[] encodeBase64(final byte[] binaryData) {
 		return encodeBase64(binaryData, false);
-	}
-
-	/**
-	 * Encodes binary data using the base64 algorithm but does not chunk the output.
-	 * <p/>
-	 * NOTE:  We changed the behaviour of this method from multi-line chunking (commons-codec-1.4) to
-	 * single-line non-chunking (commons-codec-1.5).
-	 *
-	 * @param binaryData binary data to encode
-	 * @return String containing Base64 characters.
-	 * @since 1.4 (NOTE:  1.4 chunked the output, whereas 1.5 does not).
-	 */
-	public static String encodeBase64String(final byte[] binaryData) {
-		return StringUtil.newStringUtf8(encodeBase64(binaryData, false));
-	}
-
-	/**
-	 * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the output. The
-	 * url-safe variation emits - and _ instead of + and / characters.
-	 *
-	 * @param binaryData binary data to encode
-	 * @return byte[] containing Base64 characters in their UTF-8 representation.
-	 * @since 1.4
-	 */
-	public static byte[] encodeBase64URLSafe(final byte[] binaryData) {
-		return encodeBase64(binaryData, false, true);
-	}
-
-	/**
-	 * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the output. The
-	 * url-safe variation emits - and _ instead of + and / characters.
-	 *
-	 * @param binaryData binary data to encode
-	 * @return String containing Base64 characters
-	 * @since 1.4
-	 */
-	public static String encodeBase64URLSafeString(final byte[] binaryData) {
-		return StringUtil.newStringUtf8(encodeBase64(binaryData, false, true));
-	}
-
-	/**
-	 * Encodes binary data using the base64 algorithm and chunks the encoded output into 76 character blocks
-	 *
-	 * @param binaryData binary data to encode
-	 * @return Base64 characters chunked in 76 character blocks
-	 */
-	public static byte[] encodeBase64Chunked(final byte[] binaryData) {
-		return encodeBase64(binaryData, true);
 	}
 
 	/**
@@ -1013,36 +864,6 @@ public class Base64 {
 	 */
 	public static byte[] decodeBase64(final byte[] base64Data) {
 		return new Base64().decode(base64Data);
-	}
-
-	// Implementation of the Encoder Interface
-
-	// Implementation of integer encoding used for crypto
-
-	/**
-	 * Decodes a byte64-encoded integer according to crypto standards such as W3C's XML-Signature
-	 *
-	 * @param pArray a byte array containing base64 character data
-	 * @return A BigInteger
-	 * @since 1.4
-	 */
-	public static BigInteger decodeInteger(final byte[] pArray) {
-		return new BigInteger(1, decodeBase64(pArray));
-	}
-
-	/**
-	 * Encodes to a byte64-encoded integer according to crypto standards such as W3C's XML-Signature
-	 *
-	 * @param bigInt a BigInteger
-	 * @return A byte array containing base64 character data
-	 * @throws NullPointerException if null is passed in
-	 * @since 1.4
-	 */
-	public static byte[] encodeInteger(final BigInteger bigInt) {
-		if (bigInt == null) {
-			throw new NullPointerException("encodeInteger called with null parameter");
-		}
-		return encodeBase64(toIntegerBytes(bigInt), false);
 	}
 
 	/**

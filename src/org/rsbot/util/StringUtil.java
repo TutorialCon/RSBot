@@ -7,8 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,34 +31,6 @@ public class StringUtil {
 			}
 		}
 		return s;
-	}
-
-	public static String join(final String[] s) {
-		final int l = s.length;
-		switch (l) {
-			case 0:
-				return "";
-			case 1:
-				return s[0];
-		}
-		final String d = ", ";
-		final int x = d.length();
-		int n = 0, i;
-		for (i = 0; i < l; i++) {
-			n += s[i].length() + x;
-		}
-		final StringBuffer buf = new StringBuffer(n - x);
-		i = 0;
-		boolean c = true;
-		while (c) {
-			buf.append(s[i]);
-			i++;
-			c = i < l;
-			if (c) {
-				buf.append(d);
-			}
-		}
-		return buf.toString();
 	}
 
 	/**
@@ -147,16 +117,6 @@ public class StringUtil {
 		} catch (final UnsupportedEncodingException e) {
 			throw new IllegalStateException(e);
 		}
-	}
-
-	public static String sha1sum(final String data) {
-		final MessageDigest md;
-		try {
-			md = MessageDigest.getInstance("SHA-1");
-		} catch (final NoSuchAlgorithmException ignored) {
-			return data;
-		}
-		return byteArrayToHexString(md.digest(getBytesUtf8(data)));
 	}
 
 	public static String byteArrayToHexString(byte[] b) {

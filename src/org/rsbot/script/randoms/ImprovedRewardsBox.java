@@ -55,8 +55,6 @@ public class ImprovedRewardsBox extends Random {
 	private int endofselection = 0;
 	private int XPSelection;
 
-	public Random Rand;
-
 	@Override
 	public boolean activateCondition() {
 		return game.isLoggedIn() && !getMyPlayer().isInCombat() && !bank.isOpen()

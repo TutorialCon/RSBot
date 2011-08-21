@@ -69,7 +69,6 @@ public class Configuration {
 			public static final String ICON_UNLIKE = ROOT_IMG + "/unlike.png";
 
 			public static final String VERSION = ROOT + "/version.txt";
-			public static final String MESSAGES = ROOT + "/messages/";
 		}
 
 		public static class URLs {
@@ -157,10 +156,6 @@ public class Configuration {
 
 		public static String getSettingsDirectory() {
 			return Paths.getHomeDirectory() + File.separator + "Settings";
-		}
-
-		public static String getLicenseAcceptance() {
-			return getSettingsDirectory() + File.separator + "license-accept.txt";
 		}
 
 		public static String getBankCache() {

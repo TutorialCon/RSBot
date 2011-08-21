@@ -30,7 +30,6 @@ public class Molly extends Random {
 	private static final int CONTROLS_DOWN = 30;
 	private static final int CONTROLS_LEFT = 31;
 	private static final int CONTROLS_RIGHT = 32;
-	static final int CONTROLS_EXIT = 33;
 
 	private RSNPC molly;
 	private RSObject controlPanel;

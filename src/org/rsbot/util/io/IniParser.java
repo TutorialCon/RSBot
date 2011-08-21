@@ -65,13 +65,6 @@ public class IniParser {
 		return data;
 	}
 
-	public static Map<String, Map<String, String>> deserialise(final InputStream in) throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		final Map<String, Map<String, String>> data = deserialise(reader);
-		reader.close();
-		return data;
-	}
-
 	public static Map<String, Map<String, String>> deserialise(final BufferedReader input) throws IOException {
 		final Map<String, Map<String, String>> data = new HashMap<String, Map<String, String>>();
 		String line, section = EMPTYSECTION;

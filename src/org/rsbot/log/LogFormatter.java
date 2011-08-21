@@ -2,7 +2,6 @@ package org.rsbot.log;
 
 import org.rsbot.util.StringUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
@@ -34,26 +33,5 @@ public class LogFormatter extends Formatter {
 	@Override
 	public String formatMessage(final LogRecord record) {
 		return String.format(record.getMessage());
-	}
-
-	public String formatTimestamp(final LogRecord record) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-		return "[" + dateFormat.format(record.getMillis()) + "]";
-	}
-
-	public String formatClass(final LogRecord record) {
-		final String append = "...";
-		final String[] className = record.getLoggerName().split("\\.");
-		final String name = className[className.length - 1];
-		final int maxLen = 16;
-
-		return String.format(
-				name.length() > maxLen ? name.substring(0,
-						maxLen - append.length())
-						+ append : name);
-	}
-
-	public String formatError(final LogRecord record) {
-		return StringUtil.throwableToString(record.getThrown());
 	}
 }

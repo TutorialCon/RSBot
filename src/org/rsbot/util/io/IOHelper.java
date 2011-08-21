@@ -94,22 +94,6 @@ public class IOHelper {
 		write(in, out);
 	}
 
-	public static void recursiveDelete(final File path, final boolean deleteParent) {
-		if (!path.exists()) {
-			return;
-		}
-		for (final File file : path.listFiles()) {
-			if (file.isDirectory()) {
-				recursiveDelete(file, true);
-			} else {
-				file.delete();
-			}
-		}
-		if (deleteParent) {
-			path.delete();
-		}
-	}
-
 	public static long crc32(final InputStream in) throws IOException {
 		final CheckedInputStream cis = new CheckedInputStream(in, new CRC32());
 		final byte[] buf = new byte[128];
