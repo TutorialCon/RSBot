@@ -35,6 +35,11 @@ public class ScriptDownloader {
 		}
 		url = normalisePastebin(url);
 
+		if (url == null || url.length() == 0) {
+			log.warning("Uknown pastebin");
+			return;
+		}
+
 		// download the file
 		log.info("Downloading script: " + url);
 		final byte[] data;
@@ -189,6 +194,10 @@ public class ScriptDownloader {
 			return gistURL;
 		}
 		final String file = m.group(1);
-		return "http://gist.github.com/raw/" + id + "/" + file;
+		try {
+			return HttpClient.getFinalURL(new URL("http://gist.github.com/raw/" + id + "/" + file)).toString();
+		} catch (final IOException ignored) {
+			return null;
+		}
 	}
 }
