@@ -155,6 +155,7 @@ public class LogTextArea extends JList {
 			result.setComponentOrientation(list.getComponentOrientation());
 			result.setFont(list.getFont());
 			result.setBorder(cellHasFocus || isSelected ? SELECTED_BORDER : EMPTY_BORDER);
+			result.setForeground(Color.DARK_GRAY);
 
 			if (wlr.record.getLevel() == Level.SEVERE) {
 				result.setBackground(DARK_RED);
