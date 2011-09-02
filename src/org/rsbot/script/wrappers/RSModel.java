@@ -107,14 +107,14 @@ public abstract class RSModel extends MethodProvider implements RSTarget {
 	}
         
         /**
-         * @return the height of this model
+         * @return the height of this model normal to the ground
          */
         public int getHeight(){
-            int[] zPointsClone = zPoints.clone();
-            Arrays.sort(zPointsClone);
-            if(zPointsClone.length == 0)
+            if(yPoints.length == 0)
             return 0;
-            return zPointsClone[zPointsClone.length-1] * -2;
+            int[] yPointsClone = yPoints.clone();
+            Arrays.sort(yPointsClone);
+            return yPointsClone[0];
         }
 
 	/**
