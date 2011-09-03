@@ -36,7 +36,7 @@ public class ScriptDownloader {
 		url = normalisePastebin(url);
 
 		if (url == null || url.length() == 0) {
-			log.warning("Uknown pastebin");
+			log.warning("Unknown pastebin");
 			return;
 		}
 
