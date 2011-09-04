@@ -44,6 +44,9 @@ public class Messages {
 
 	public static final String TABDEFAULTTEXT = "Bot";
 
+	public static final String SDNALL = "Showing all network scripts";
+	public static final String SDNUSER = "Showing custom list by %s";
+
 	public static final String TOGGLE = "Toggle";
 	public static final String TOGGLEFALSE = TOGGLE + "F ";
 	public static final String TOGGLETRUE = TOGGLE + "T ";

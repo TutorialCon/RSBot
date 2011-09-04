@@ -79,6 +79,7 @@ public class Configuration {
 			public static final String PROJECT = BASE + "git-project";
 			public static final String SITE = BASE + "site";
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
+			public static final String SDN_USER = BASE  + "sdn-user";
 			public static final String AD_INFO = BASE + "botad-info";
 		}
 

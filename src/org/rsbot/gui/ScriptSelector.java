@@ -2,6 +2,7 @@ package org.rsbot.gui;
 
 import org.rsbot.Configuration;
 import org.rsbot.bot.Bot;
+import org.rsbot.gui.component.Messages;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
@@ -42,7 +43,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private final ScriptTableModel model;
 	private final List<ScriptDefinition> scripts;
 	private JButton submit;
-	private boolean connected = true;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -55,7 +55,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		this.frame = frame;
 		this.bot = bot;
 		scripts = new ArrayList<ScriptDefinition>();
-		connected = Preferences.getInstance().sdnShow;
 		model = new ScriptTableModel(scripts);
 	}
 
@@ -78,13 +77,10 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 
 	private void load() {
 		scripts.clear();
-		if (connected) {
-			final List<ScriptDefinition> net = SRC_NETWORK.list();
-			if (net != null) {
-				scripts.addAll(net);
-			}
+		final List<ScriptDefinition> net = SRC_NETWORK.list();
+		if (net != null) {
+			scripts.addAll(net);
 		}
-		Preferences.getInstance().sdnShow = connected;
 		scripts.addAll(SRC_PRE_COMPILED.list());
 		scripts.addAll(SRC_SOURCES.list());
 		Collections.sort(scripts);
@@ -106,19 +102,23 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				dispose();
 			}
 		});
+		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_DISCONNECT)));
 		final JButton refresh = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_REFRESH)));
 		refresh.setToolTipText("Refresh");
 		refresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				refresh.setEnabled(false);
+				connect.setEnabled(false);
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						new Thread() {
 							@Override
 							public void run() {
 								ScriptDeliveryNetwork.getInstance().refresh(true);
+								ScriptUserList.getInstance().update();
 								load();
 								refresh.setEnabled(true);
+								connect.setEnabled(true);
 							}
 						}.start();
 					}
@@ -251,8 +251,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		submit = new JButton("Start", new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_PLAY)));
 		submit.setToolTipText(submit.getText());
 		submit.setText("");
-		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT)));
-		connect.setToolTipText("Show network scripts");
+		connect.setToolTipText(Messages.SDNALL);
+		connect.setEnabled(ScriptUserList.getInstance().isAvailable());
 		submit.setEnabled(false);
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent evt) {
@@ -274,15 +274,23 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				}
 			}
 		});
+		final Component parent = this;
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent arg0) {
-				final String icon = connected ? Configuration.Paths.Resources.ICON_DISCONNECT : Configuration.Paths.Resources.ICON_CONNECT;
-				connect.setIcon(new ImageIcon(Configuration.getImage(icon)));
-				connect.repaint();
-				connected = !connected;
+				String user = null;
+				if (connect.getToolTipText().equals(Messages.SDNALL)) {
+					user = (String) JOptionPane.showInputDialog(parent, "Load script list from " + Configuration.Paths.URLs.HOST + " account:",
+							"Custom list", JOptionPane.QUESTION_MESSAGE, null, null, "");
+				}
+				if (user == null || user.length() == 0 || user.length() > 15 || user.length() < 3) {
+					user = "";
+				}
+				Preferences.getInstance().sdnUser = user;
+				connectUpdate(connect);
 				load();
 			}
 		});
+		connectUpdate(connect);
 		accounts = new JComboBox(AccountManager.getAccountNames());
 		categories = new JComboBox(new String[] { "All", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
 				"Firemaking", "Fishing", "Fletching", "Herblore", "Hunter", "Magic", "Minigame", "Mining", "Other", "Money Making", "Prayer",
@@ -350,6 +358,16 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	public void inputChanged(final Bot bot, final int mask) {
 	}
 
+	private void connectUpdate(final JButton connect) {
+		final String user = Preferences.getInstance().sdnUser;
+		final boolean connected = user != null && user.length() != 0 && ScriptUserList.getInstance().update();
+		ScriptUserList.getInstance().enabled = connected;
+		connect.setToolTipText(connected ? String.format(Messages.SDNUSER, user) : Messages.SDNALL);
+		final String icon = connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT;
+		connect.setIcon(new ImageIcon(Configuration.getImage(icon)));
+		connect.repaint();
+	}
+
 	private class TableSelectionListener implements ListSelectionListener {
 		public void valueChanged(final ListSelectionEvent evt) {
 			if (!evt.getValueIsAdjusting()) {
@@ -374,6 +392,9 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		public void search(final String find, final String keys) {
 			matches.clear();
 			for (final ScriptDefinition def : scripts) {
+				if (ScriptUserList.getInstance().isSelected() && !ScriptUserList.getInstance().isListed(def)) {
+					continue;
+				}
 				if (find.length() != 0 && !def.name.toLowerCase().contains(find.toLowerCase())) {
 					continue;
 				}
