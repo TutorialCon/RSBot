@@ -99,6 +99,22 @@ public class StringUtil {
 		}
 	}
 
+	public static String fileNameWithoutExtension(String path) {
+		int z = path.lastIndexOf('/');
+		if (z != -1) {
+			if (++z == path.length()) {
+				return "";
+			} else {
+				path = path.substring(z);
+			}
+		}
+		z = path.indexOf('.');
+		if (z != -1) {
+			path = path.substring(0, z);
+		}
+		return path;
+	}
+
 	public static String throwableToString(final Throwable t) {
 		if (t != null) {
 			final Writer exception = new StringWriter();
