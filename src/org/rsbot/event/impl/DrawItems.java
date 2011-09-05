@@ -32,21 +32,18 @@ public class DrawItems implements PaintListener {
 		final int tHeight = metrics.getHeight();
 		for (int x = locX - 25; x < locX + 25; x++) {
 			for (int y = locY - 25; y < locY + 25; y++) {
-				final Point screen = ctx.calc.tileToScreen(new RSTile(x, y));
-				if (!ctx.calc.pointOnScreen(screen)) {
-					continue;
-				}
 				final RSGroundItem[] items = ctx.groundItems.getAllAt(x, y);
-				if (items.length > 0) {
+                                	if (items.length > 0) {
 					final RSModel model = items[0].getModel();
 					if (model != null) {
 						render.setColor(Color.BLUE);
-						for (final Polygon polygon : model.getTriangles()) {
-							render.drawPolygon(polygon);
-						}
+                                                model.drawWireFrame(render);
 					}
 				}
 				for (int i = 0; i < items.length; i++) {
+                                final Point screen = ctx.calc.tileToScreen(new RSTile(x, y), items[i].getHeight());
+                                        if (!ctx.calc.pointOnScreen(screen))
+					continue;
 					render.setColor(Color.RED);
 					render.fillRect((int) screen.getX() - 1, (int) screen.getY() - 1, 2, 2);
 					final String s = "" + items[i].getItem().getID();

@@ -6,6 +6,7 @@ import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
 
 import java.awt.*;
+import org.rsbot.script.methods.Objects;
 
 /**
  * Represents an item on a tile.
@@ -36,7 +37,7 @@ public class RSGroundItem extends MethodProvider implements RSTarget {
 			if (obj != null) {
 				final org.rsbot.client.Model model = ((RSGroundObject) rsGround.getGroundObject()).getModel();
 				if (model != null) {
-					return new RSAnimableModel(methods, model, obj);
+					return new RSGroundItemModel(methods, model, obj, this);
 				}
 			}
 		}
@@ -77,7 +78,7 @@ public class RSGroundItem extends MethodProvider implements RSTarget {
 		if (model != null) {
 			return model.interact(action, option);
 		}
-		return methods.tiles.interact(getLocation(), random(0.45, 0.55), random(0.45, 0.55), 0,
+		return methods.tiles.interact(getLocation(), random(0.45, 0.55), random(0.45, 0.55), getHeight(),
 				action, option);
 	}
 
@@ -113,11 +114,21 @@ public class RSGroundItem extends MethodProvider implements RSTarget {
 
 	public Point getPoint() {
 		RSModel model = getModel();
-		if (model != null) {
-			return model.getPoint();
-		}
-		return methods.calc.tileToScreen(getLocation());
+		if (model != null)
+                return model.getPoint();
+		return methods.calc.tileToScreen(getLocation(), getHeight());
 	}
+        
+        /**
+         * @return the height of the object this item is on or 0 if on ground.
+         */
+        public int getHeight() {
+            RSObject object = methods.objects.getTopAt(location, Objects.TYPE_INTERACTABLE);
+            RSModel object_model;
+            if(object != null && (object_model = object.getModel()) != null)
+            return object_model.getHeight();
+            return 0;
+        }
 
 	public boolean contains(int x, int y) {
 		RSModel model = getModel();
