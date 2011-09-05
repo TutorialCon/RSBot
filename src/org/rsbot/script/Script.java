@@ -3,7 +3,6 @@ package org.rsbot.script;
 import org.rsbot.Configuration;
 import org.rsbot.gui.AccountManager;
 import org.rsbot.script.internal.BreakHandler;
-import org.rsbot.script.methods.Environment;
 import org.rsbot.script.randoms.ImprovedLoginBot;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.Timer;
@@ -117,7 +116,6 @@ public abstract class Script extends LoopTask {
 	@Override
 	public void run() {
 		boolean start = false;
-		ctx.env.setLoginMask(Environment.LOGIN_LOBBY | Environment.LOGIN_GAME);
 		try {
 			start = onStart();
 		} catch (final ThreadDeath ignored) {

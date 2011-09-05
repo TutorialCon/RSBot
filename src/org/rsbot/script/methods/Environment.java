@@ -137,25 +137,4 @@ public class Environment extends MethodProvider {
 			log.info("Client is not yet loaded.");
 		}
 	}
-
-	/**
-	 * Sets the login mask.
-	 * Only lobby:
-	 * env.setLoginFlags(Environment.LOGIN_LOBBY);
-	 * <p/>
-	 * Only game from lobby:
-	 * env.setLoginFlags(Environment.LOGIN_GAME);
-	 * <p/>
-	 * Login to lobby and game:
-	 * env.setLoginFlags(Environment.LOGIN_LOBBY | Environment.LOGIN_GAME);
-	 *
-	 * @param mask The mask
-	 */
-	public void setLoginMask(final int mask) {
-		try {
-			methods.bot.getLoginBot().setMask(mask);
-		} catch (NullPointerException ignored) {
-			log.info("Client is not yet loaded.");
-		}
-	}
 }
