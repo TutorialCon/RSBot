@@ -34,6 +34,28 @@ class RSGroundItemModel extends RSModel {
 	protected int getLocalY() {
 		return animable.getY();
 	}
+
+        @Override
+        public Point getPointOnScreen() {
+        Point screen = super.getPointOnScreen();
+        if(screen.x == -1)
+        return new Point();
+        screen.y += getYAdjustment();
+        if (methods.calc.pointOnScreen(screen))
+        return screen;
+        return new Point();
+        }
+
+        @Override
+        public Point getCentralPoint() {
+        Point screen = super.getCentralPoint();
+        if(screen.x == -1)
+        return new Point(-1, -1);
+        screen.y += getYAdjustment();
+        if (methods.calc.pointOnScreen(screen))
+        return screen;
+        return new Point(-1, -1);
+        }
         
         @Override
         public Point getPoint() {
