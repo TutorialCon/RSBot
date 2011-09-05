@@ -1,25 +1,18 @@
 package org.rsbot.script.randoms;
 
-import org.rsbot.Configuration;
 import org.rsbot.gui.AccountManager;
 import org.rsbot.script.Random;
-import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.Environment;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Lobby;
 import org.rsbot.script.wrappers.RSComponent;
 
 import java.awt.*;
 
-import static org.rsbot.script.methods.Environment.LOGIN_GAME;
-import static org.rsbot.script.methods.Environment.LOGIN_LOBBY;
-
 /**
- * A simple script to login to the game.
+ * A task to login to the game of Runescape.
  *
  * @author Timer
  */
-@ScriptManifest(authors = {"Timer"}, name = "Improved Login", version = 0.1)
 public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOGIN_SCREEN = 596;
 	public static final int INTERFACE_LOGIN_SCREEN_ENTER_GAME = 60;
@@ -30,187 +23,41 @@ public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_GRAPHICS_NOTICE = 976;
 	public static final int INTERFACE_GRAPHICS_LEAVE_ALONE = 6;
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT = 98;
+
+	public static int world = -1;
+
 	public static final int INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON = 104;
-	private int world = -1;
-	private String cachePassword = "";
-	private int stageFlags = LOGIN_LOBBY | LOGIN_GAME;
-	private final solution[] loginSolutions = {new solution() {
-		private int invalidCount = 0;
 
-		public boolean canApply(String message) {
-			return message.contains("no reply from login server");
-		}
+	private enum LoginEvent {
+		NO_REPLY("no reply from login server", 1500),
+		GAME_UPDATE("update", -1),
+		BANNED("disable", -1),
+		SERVER_LAG_1("your account has not logged out", 5000),
+		INVALID_LOGIN_1("invalid", 0),
+		INVALID_LOGIN_2("incorrect", 0),
+		ERROR("error connecting", 0),
+		LIMIT_1("login limit exceeded", 0),
 
-		public int apply() {
-			if (invalidCount > 10) {
-				log.severe("It seems the login server is down.");
-				stopScript(false);
-			}
-			invalidCount++;
-			return random(500, 2000);
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("update");
-		}
+		BAD_WORLD("total skill level of", -1),
+		LIMIT_2("login limit exceeded", 0),
+		SERVER_LAG_2("your account has not logged out", 5000),
+		NON_MEMBER("member", -1),
 
-		public int apply() {
-			log("The game has been updated, please reload " + Configuration.NAME);
-			stopScript(false);
-			return 0;
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("disable");
-		}
+		WAIT_1("world", 1500),
+		WAIT_2("performing login", 1500);
 
-		public int apply() {
-			log.severe("It seems that your account has been disabled, that's unfortunate.");
-			stopScript(false);
-			return 0;
-		}
-	}, new solution() {
-		private int invalidCount = 0;
+		public final String message;
+		public final int sleep;
 
-		public boolean canApply(String message) {
-			return message.contains("your account has not logged out");
+		LoginEvent(final String message, final int sleep) {
+			this.message = message;
+			this.sleep = sleep;
 		}
-
-		public int apply() {
-			if (invalidCount > 10) {
-				log.severe("Your account is already logged in, change your password!");
-				stopScript(false);
-			}
-			invalidCount++;
-			log.warning("Waiting for logout..");
-			return random(5000, 15000);
-		}
-	}, new solution() {
-		private int fails = 0;
-
-		public boolean canApply(String message) {
-			return message.contains("invalid") || message.contains("incorrect");
-		}
-
-		public int apply() {
-			fails++;
-			if (fails > 3) {
-				stopScript(false);
-				return 0;
-			}
-			log.info("Login information incorrect, attempting again.");
-			return random(1200, 3000);
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("error connecting");
-		}
-
-		public int apply() {
-			log.severe("No internet connection.");
-			stopScript(false);
-			return 0;
-		}
-	}, new solution() {
-		private int invalidCount = 0;
-
-		public boolean canApply(String message) {
-			return message.contains("login limit exceeded");
-		}
-
-		public int apply() {
-			if (invalidCount > 10) {
-				log.warning("Unable to login after 10 attempts. Stopping script.");
-				log.severe("It seems you are actually already logged in?");
-				stopScript(false);
-			}
-			invalidCount++;
-			return random(5000, 15000);
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("world") || message.contains("performing login");
-		}
-
-		public int apply() {
-			return random(4000, 5000);
-		}
-	}};
-	private final solution[] lobbySolutions = {new solution() {
-		public boolean canApply(String message) {
-			return message.contains("total skill level of");
-		}
-
-		public int apply() {
-			log.severe("Your combat level does not meet this world's requirements, run a skilling bot!");
-			stopScript(true);
-			return 0;
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("login limit exceeded");
-		}
-
-		public int apply() {
-			return random(3000, 8000);
-		}
-	}, new solution() {
-		private int invalidCount = 0;
-
-		public boolean canApply(String message) {
-			return message.contains("your account has not logged out");
-		}
-
-		public int apply() {
-			if (invalidCount > 10) {
-				log.severe("You're already logged in!  Change your password!");
-				stopScript(false);
-			}
-			invalidCount++;
-			log.warning("Waiting for logout..");
-			return random(5000, 15000);
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return message.contains("member");
-		}
-
-		public int apply() {
-			log.severe("Please run on a non-members world.");
-			stopScript(false);
-			return 0;
-		}
-	}, new solution() {
-		public boolean canApply(String message) {
-			return interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT).getText().toLowerCase().trim().contains("high-risk wilderness world");
-		}
-
-		public int apply() {
-			interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON).doClick();
-			return 500;
-		}
-	}};
-
-	private interface solution {
-		boolean canApply(final String message);
-
-		int apply();
 	}
 
 	@Override
-	public boolean activateCondition() {
-		final int idx = game.getClientState();
-		return (((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) ||
-				(idx == Game.INDEX_LOBBY_SCREEN && (stageFlags & Environment.LOGIN_GAME) != 0)) &&
-				!switchingWorlds() && account.getName() != null) || (idx == Game.INDEX_LOBBY_SCREEN && (cachePassword.isEmpty() || cachePassword == null));
-	}
-
-	@Override
-	public int loop() {
-		if ((cachePassword.isEmpty() || cachePassword == null) && lobby.inLobby()) {
-			cachePassword = ctx.client.getCurrentPassword();
-		}
-		if (lobby.inLobby() && (stageFlags & Environment.LOGIN_GAME) != 0) {
+	protected int loop() {
+		if (lobby.inLobby()) {
 			if (lobby.getSelectedTab() != Lobby.TAB_PLAYERS) {
 				lobby.open(Lobby.TAB_PLAYERS);
 				return random(500, 800);
@@ -227,14 +74,19 @@ public class ImprovedLoginBot extends Random {
 				if (interfaces.getComponent(Lobby.INTERFACE_LOBBY, Lobby.INTERFACE_LOBBY_ALERT_CLOSE).isValid()) {
 					interfaces.getComponent(Lobby.INTERFACE_LOBBY, Lobby.INTERFACE_LOBBY_ALERT_CLOSE).doClick();
 				}
-				for (solution subSolution : lobbySolutions) {
-					if (subSolution.canApply(returnText)) {
-						return subSolution.apply();
+				for (final LoginEvent event : LoginEvent.values()) {
+					if (returnText.contains(event.message.toLowerCase())) {
+						log("Handling login event: " + event.name());
+						if (event.sleep == -1) {
+							stopScript(false);
+							return -1;
+						}
+						return event.sleep;
 					}
 				}
 			}
 		}
-		if (game.getClientState() == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) != 0) {
+		if (game.getClientState() == Game.INDEX_LOGIN_SCREEN) {
 			if (interfaces.getComponent(INTERFACE_GRAPHICS_NOTICE, INTERFACE_GRAPHICS_LEAVE_ALONE).isValid()) {
 				interfaces.getComponent(INTERFACE_GRAPHICS_NOTICE, INTERFACE_GRAPHICS_LEAVE_ALONE).doClick();
 				return random(500, 600);
@@ -243,9 +95,17 @@ public class ImprovedLoginBot extends Random {
 			if (interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_ALERT_BACK).isValid()) {
 				interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_ALERT_BACK).doClick();
 			}
-			for (solution subSolution : loginSolutions) {
-				if (subSolution.canApply(returnText)) {
-					return subSolution.apply();
+			if (interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_TEXT).getText().toLowerCase().trim().contains("high-risk wilderness world")) {
+				return interfaces.getComponent(Lobby.INTERFACE_LOBBY, INTERFACE_LOBBY_HIGH_RISK_WORLD_LOGIN_BUTTON).doClick() ? 500 : 0;
+			}
+			for (final LoginEvent event : LoginEvent.values()) {
+				if (returnText.contains(event.message.toLowerCase())) {
+					log("Handling login event: " + event.name());
+					if (event.sleep == -1) {
+						stopScript(false);
+						return -1;
+					}
+					return event.sleep;
 				}
 			}
 			if (isUsernameCorrect() && isPasswordValid()) {
@@ -283,22 +143,11 @@ public class ImprovedLoginBot extends Random {
 					return random(500, 600);
 				}
 				String passWord = AccountManager.getPassword(account.getName());
-				if (passWord.isEmpty()) {
-					passWord = cachePassword;
-				}
 				keyboard.sendText(passWord, false);
 				return random(500, 600);
 			}
 		}
-		final int idx = game.getClientState();
-		return ((idx == Game.INDEX_LOGIN_SCREEN && (stageFlags & Environment.LOGIN_LOBBY) == 0) ||
-				(idx == Game.INDEX_LOBBY_SCREEN && (stageFlags & Environment.LOGIN_GAME) == 0) ||
-				(game.isLoggedIn())) ? -1 : random(100, 500);
-	}
-
-	private boolean switchingWorlds() {
-		return interfaces.getComponent(Lobby.INTERFACE_LOBBY, Lobby.INTERFACE_LOBBY_ALERT_TEXT).isValid() &&
-				interfaces.getComponent(Lobby.INTERFACE_LOBBY, Lobby.INTERFACE_LOBBY_ALERT_TEXT).containsText("just left another world");
+		return game.isLoggedIn() ? -1 : random(100, 500);
 	}
 
 	private boolean atLoginInterface(final RSComponent i) {
@@ -354,43 +203,12 @@ public class ImprovedLoginBot extends Random {
 
 	private boolean isPasswordValid() {
 		String passWord = AccountManager.getPassword(account.getName());
-		if (passWord.isEmpty()) {
-			passWord = cachePassword;
-		}
 		return interfaces.getComponent(INTERFACE_LOGIN_SCREEN, INTERFACE_LOGIN_SCREEN_PASSWORD_TEXT).getText().length() == (passWord == null ? 0 : passWord.length());
 	}
 
-	/**
-	 * Sets the world to login to.
-	 *
-	 * @param world The world.
-	 */
-	public void setWorld(final int world) {
-		this.world = world;
-	}
-
-	/**
-	 * Gets the current set world.
-	 *
-	 * @return The world currently designated to login to.
-	 */
-	public int getWorld() {
-		return this.world;
-	}
-
-	/**
-	 * Sets login mask.
-	 */
-	public void setMask(final int mask) {
-		this.stageFlags = mask;
-	}
-
-	/**
-	 * The current login mask.
-	 *
-	 * @return The bytes of the mask.
-	 */
-	public int getMask() {
-		return this.stageFlags;
+	@Override
+	public boolean activateCondition() {
+		final int idx = game.getClientState();
+		return (idx == Game.INDEX_LOGIN_SCREEN || idx == Game.INDEX_LOBBY_SCREEN) && account.getName() != null;
 	}
 }
