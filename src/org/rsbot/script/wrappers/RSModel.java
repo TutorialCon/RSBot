@@ -443,7 +443,7 @@ public abstract class RSModel extends MethodProvider implements RSTarget {
 	 *         posY = result[vertexIndex][1]
 	 *         visibleOnScreen = (result[vertexIndex][2] == 1);
 	 */
-	private int[][] projectVertices() {
+	protected int[][] projectVertices() {
 		Calculations.RenderData renderData = methods.calc.renderData;
 		Calculations.Render render = methods.calc.render;
 
