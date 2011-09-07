@@ -206,6 +206,7 @@ public class FreakyForester extends Random implements MessageListener {
 				game.openTab(Game.Tab.EQUIPMENT);
 				sleep(random(1000, 1500));
 				interfaces.get(Equipment.INTERFACE_EQUIPMENT).getComponent(17).doClick();
+				unequip = false;
 				return random(1000, 1500);
 			}
 			return random(100, 500);
