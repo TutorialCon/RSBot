@@ -47,15 +47,15 @@ public class DrawWeb implements PaintListener {
 		}
 		final RSTile oT = player.getLocation();
 		final int plane = ctx.game.getPlane();
-		final Iterator<Map.Entry<RSTile, Integer>> rs = Web.rs_map.entrySet().iterator();
+		final Iterator<Map.Entry<RSTile, Integer>> rs = Web.getTileFlags().entrySet().iterator();
 		while (rs.hasNext()) {
 			final Map.Entry<RSTile, Integer> e = rs.next();
 			final RSTile tile = e.getKey();
 			final int key = e.getValue();
-			if (tile.getZ() == plane && ctx.calc.distanceBetween(tile, oT) < 105) {
+			if (tile.getZ() == plane && ctx.calc.distanceBetween(tile, oT) < 105 && ctx.calc.tileOnMap(tile)) {
 				render.setColor(RSTile.Questionable(key) ? Color.yellow : RSTile.Special(key) ? Color.cyan : Color.red);
 				final Point p = tileToMap(tile, oT);
-				render.drawLine(p.x, p.y, p.x, p.y);
+                                render.fillRect(p.x - 2, p.y - 2, 2, 2);
 			}
 		}
 	}

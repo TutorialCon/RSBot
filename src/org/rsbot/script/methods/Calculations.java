@@ -263,7 +263,7 @@ public class Calculations extends MethodProvider {
 	 * @see #tileToMinimap(RSTile)
 	 */
 	public boolean tileOnMap(final RSTile t) {
-		return distanceTo(t) < 15;
+		return tileToMinimap(t).x != -1;
 	}
 
 	/**
