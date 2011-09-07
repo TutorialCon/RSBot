@@ -339,7 +339,7 @@ public class BotToolBar extends JToolBar {
 			super.paintComponent(g);
 			final boolean selected = getComponentIndex(this) == idx;
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(selected ? Color.GRAY : new Color(0xcc, 0xcc, 0xcc));
+			g.setColor(selected ? Color.GRAY : (Configuration.isSkinAvailable() ? Color.DARK_GRAY : new Color(0xcc, 0xcc, 0xcc)));
 			g.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 1, 4, 4);
 			g.drawImage(hovered && close ? IMAGE_CLOSE_OVER : IMAGE_CLOSE, 90, 3, null);
 		}
