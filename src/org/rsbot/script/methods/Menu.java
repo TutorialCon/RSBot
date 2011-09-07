@@ -257,6 +257,9 @@ public class Menu extends MethodProvider {
 		if (output.size() > 1 && output.get(0).equals("Cancel") && !methods.menu.isCollapsed()) {
 			Collections.reverse(output);
 		}
+		if (output.size() > 1 && output.get(output.size() - 1).equals("Cancel") && isCollapsed()) {
+			Collections.reverse(output);
+		}
 
 		return output.toArray(new String[output.size()]);
 	}
@@ -275,23 +278,27 @@ public class Menu extends MethodProvider {
 
 	private String[] getMenuItemPart(final boolean firstPart) {
 		final LinkedList<String> itemsList = new LinkedList<String>();
-		String action = null;
+		String action = null, lAction = null;
 		if (isCollapsed()) {
 			final Queue<MenuGroupNode> menu = new Queue<MenuGroupNode>(methods.client.getCollapsedMenuItems());
 			for (MenuGroupNode mgn = menu.getHead(); mgn != null; mgn = menu.getNext()) {
 				final Queue<MenuItemNode> submenu = new Queue<MenuItemNode>(mgn.getItems());
 				for (MenuItemNode min = submenu.getHead(); min != null; min = submenu.getNext()) {
-					itemsList.add(firstPart ? min.getAction() : min.getOption());
+					itemsList.addLast(firstPart ? min.getAction() : min.getOption());
+					lAction = min.getAction();
 					if (action == null) {
-						action = min.getAction();
+						action = lAction;
 					}
 				}
 			}
 		} else {
 			final Deque<MenuItemNode> menu = new Deque<MenuItemNode>(methods.client.getMenuItems());
 			for (MenuItemNode min = menu.getHead(); min != null; min = menu.getNext()) {
-				itemsList.add(firstPart ? min.getAction() : min.getOption());
-				action = min.getAction();
+				itemsList.addLast(firstPart ? min.getAction() : min.getOption());
+				lAction = min.getAction();
+				if (action == null) {
+					action = lAction;
+				}
 			}
 		}
 		final String[] items = itemsList.toArray(new String[itemsList.size()]);
@@ -302,6 +309,9 @@ public class Menu extends MethodProvider {
 		}
 		action = action == null ? "" : stripFormatting(action);
 		if (output.size() > 1 && action != null && action.equals("Cancel") && !methods.menu.isCollapsed()) {
+			Collections.reverse(output);
+		}
+		if (output.size() > 1 && lAction != null && lAction.equals("Cancel") && isCollapsed()) {
 			Collections.reverse(output);
 		}
 		return output.toArray(new String[output.size()]);
