@@ -7,6 +7,7 @@ import org.rsbot.log.LabelLogHandler;
 import org.rsbot.log.LogOutputStream;
 import org.rsbot.log.SystemConsoleHandler;
 import org.rsbot.security.RestrictedSecurityManager;
+import org.rsbot.service.Preferences;
 import org.rsbot.util.UpdateChecker;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
@@ -80,6 +81,9 @@ public class LoadScreen extends JDialog {
 		log.fine("Enforcing security policy");
 		System.setProperty("java.io.tmpdir", Configuration.Paths.getGarbageDirectory());
 		System.setSecurityManager(new RestrictedSecurityManager());
+
+		log.info("Reading preferences");
+		Preferences.getInstance().load();
 
 		log.info("Checking for updates");
 		String error = null;
