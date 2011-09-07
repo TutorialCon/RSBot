@@ -178,7 +178,7 @@ public class GroundItems extends MethodProvider {
 
 		final Deque<org.rsbot.client.RSItem> itemNL = new Deque<org.rsbot.client.RSItem>(itemNLC.getNodeList());
 		for (org.rsbot.client.RSItem item = itemNL.getHead(); item != null; item = itemNL.getNext()) {
-			list.add(new RSGroundItem(methods, new RSTile(x, y), new RSItem(methods, item)));
+			list.add(new RSGroundItem(methods, new RSTile(x, y, methods.game.getPlane()), new RSItem(methods, item)));
 		}
 
 		return list.toArray(new RSGroundItem[list.size()]);
