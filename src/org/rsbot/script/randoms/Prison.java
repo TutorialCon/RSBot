@@ -168,7 +168,7 @@ public class Prison extends Random {
 								sleep(random(700, 1200));
 								interfaces.get(11).getComponent(17)
 										.getComponent(random(16, 17))
-										.interact("Dep");
+										.interact("All");
 								sleep(random(700, 1200));
 								interfaces.getComponent(11, 15).doClick();
 							}
