@@ -42,7 +42,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JComboBox categories;
 	private final ScriptTableModel model;
 	private final List<ScriptDefinition> scripts;
-	private JButton submit;
+	private JButton submit, connect;
+	public static boolean connectPrompted = false;
 
 	static {
 		SRC_SOURCES = new FileScriptSource(new File(Configuration.Paths.getScriptsSourcesDirectory()));
@@ -62,6 +63,13 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		init();
 		update();
 		load();
+		if (!connectPrompted && Preferences.getInstance().sdnUser.length() == 0) {
+			 log.info("Visit " + Configuration.Paths.URLs.HOST + "/scripts to create your custom script list!");
+			 connect.doClick();
+		}
+		if (!connectPrompted) {
+			connectPrompted = true;
+		}
 		setVisible(true);
 	}
 
@@ -102,7 +110,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				dispose();
 			}
 		});
-		final JButton connect = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_DISCONNECT)));
+		connect = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_DISCONNECT)));
 		final JButton refresh = new JButton(new ImageIcon(Configuration.getImage(Configuration.Paths.Resources.ICON_REFRESH)));
 		refresh.setToolTipText("Refresh");
 		refresh.addActionListener(new ActionListener() {
@@ -279,18 +287,19 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			public void actionPerformed(final ActionEvent arg0) {
 				String user = null;
 				if (connect.getToolTipText().equals(Messages.SDNALL)) {
-					user = (String) JOptionPane.showInputDialog(parent, "Load script list from " + Configuration.Paths.URLs.HOST + " account:",
+					user = (String) JOptionPane.showInputDialog(parent,
+							"Load script list from " + Configuration.Paths.URLs.HOST + " account (leave blank to show all scripts):",
 							"Custom list", JOptionPane.QUESTION_MESSAGE, null, null, "");
 				}
 				if (user == null || user.length() == 0 || user.length() > 15 || user.length() < 3) {
 					user = "";
 				}
 				Preferences.getInstance().sdnUser = user;
-				connectUpdate(connect);
+				connectUpdate();
 				load();
 			}
 		});
-		connectUpdate(connect);
+		connectUpdate();
 		accounts = new JComboBox(AccountManager.getAccountNames());
 		categories = new JComboBox(new String[] { "All", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
 				"Firemaking", "Fishing", "Fletching", "Herblore", "Hunter", "Magic", "Minigame", "Mining", "Other", "Money Making", "Prayer",
@@ -358,7 +367,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	public void inputChanged(final Bot bot, final int mask) {
 	}
 
-	private void connectUpdate(final JButton connect) {
+	private void connectUpdate() {
 		final String user = Preferences.getInstance().sdnUser;
 		final boolean connected = user != null && user.length() != 0 && ScriptUserList.getInstance().update();
 		ScriptUserList.getInstance().enabled = connected;
