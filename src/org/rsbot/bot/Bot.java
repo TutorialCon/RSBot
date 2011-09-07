@@ -7,6 +7,7 @@ import org.rsbot.event.EventManager;
 import org.rsbot.event.events.PaintEvent;
 import org.rsbot.event.events.TextPaintEvent;
 import org.rsbot.gui.AccountManager;
+import org.rsbot.script.Script;
 import org.rsbot.script.internal.InputManager;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.Environment;
@@ -240,6 +241,7 @@ public class Bot {
 		client.setCallback(new CallbackImpl(this));
 		methods = new MethodContext(this);
 		sh.init();
+		new Thread(new SafeMode(this)).start();//Put client into safemode.
 	}
 
 	private EventListener instantiateListener(final Class<?> clazz) {
@@ -263,5 +265,27 @@ public class Bot {
 
 	public ImprovedLoginBot getLoginBot() {
 		return this.loginBot;
+	}
+
+	/**
+	 * @author Timer
+	 */
+	class SafeMode implements Runnable {
+		private final Bot bot;
+
+		SafeMode(final Bot bot) {
+			this.bot = bot;
+		}
+
+		public void run() {
+			while (true) {
+				if (bot.client.getKeyboard() == null) {
+					Script.sleep(500);
+					continue;
+				}
+				bot.getInputManager().sendKey('s');
+				break;
+			}
+		}
 	}
 }
