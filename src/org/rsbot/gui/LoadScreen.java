@@ -8,6 +8,7 @@ import org.rsbot.log.LogOutputStream;
 import org.rsbot.log.SystemConsoleHandler;
 import org.rsbot.security.RestrictedSecurityManager;
 import org.rsbot.util.UpdateChecker;
+import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,6 +97,27 @@ public class LoadScreen extends JDialog {
 
 		if (ClientLoader.getInstance().isOutdated()) {
 			error = "Bot is outdated, please wait and try again later";
+		}
+
+		if (Configuration.isSkinAvailable()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						UIManager.setLookAndFeel(Configuration.SKIN);
+					} catch (final Exception ignored) {
+					}
+				}
+			});
+		} else {
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						HttpClient.download(new URL(Configuration.Paths.URLs.TRIDENT), new File(Configuration.Paths.getCacheDirectory(), "trident.jar"));
+						HttpClient.download(new URL(Configuration.Paths.URLs.SUBSTANCE), new File(Configuration.Paths.getCacheDirectory(), "substance.jar"));
+					} catch (final IOException ignored) {
+					}
+				}
+			}).start();
 		}
 
 		if (error == null) {

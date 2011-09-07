@@ -1,7 +1,10 @@
 package org.rsbot;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Paris
@@ -45,6 +48,23 @@ public class Boot {
 				param.append(s);
 				param.append(flags);
 				break;
+		}
+
+		final List<File> cp = new ArrayList<File>(3);
+
+		if (Configuration.SKINNED) {
+			cp.add(new File(Configuration.Paths.getCacheDirectory(), "trident.jar"));
+			cp.add(new File(Configuration.Paths.getCacheDirectory(), "substance.jar"));
+		}
+
+		for (final File file : cp) {
+			final String absolute;
+			try {
+				absolute = file.getCanonicalPath();
+			} catch (final IOException ignored) {
+				continue;
+			}
+			location += File.pathSeparatorChar + absolute;
 		}
 
 		param.append(s);

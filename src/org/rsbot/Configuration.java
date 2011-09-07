@@ -80,6 +80,8 @@ public class Configuration {
 			public static final String SDN_MANIFEST = BASE + "sdn-manifest";
 			public static final String SDN_USER = BASE  + "sdn-user";
 			public static final String AD_INFO = BASE + "botad-info";
+			public static final String TRIDENT = BASE + "trident";
+			public static final String SUBSTANCE = BASE + "substance";
 		}
 
 		public static final String ROOT = new File(".").getAbsolutePath();
@@ -199,12 +201,26 @@ public class Configuration {
 	public static final String NAME_LOWERCASE = NAME.toLowerCase();
 	private static final OperatingSystem CURRENT_OS;
 	public static boolean RUNNING_FROM_JAR = false;
+	public final static boolean SKINNED = true;
+	public static final String SKIN = "org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel";
 
 	public static class Twitter {
 		public static final boolean ENABLED = true;
 		public static final String NAME = "rsbotorg";
 		public static final String HASHTAG = "#" + NAME_LOWERCASE;
 		public static final int MESSAGES = 3;
+	}
+
+	public static boolean isSkinAvailable() {
+		if (!SKINNED) {
+			return false;
+		}
+		Class<?> substance = null;
+		try {
+			substance = Class.forName(SKIN);
+		} catch (final ClassNotFoundException ignored) {
+		}
+		return substance != null;
 	}
 
 	static final URL resource;
