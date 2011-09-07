@@ -122,7 +122,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean closeGe() {
 		if (isOpen()) {
-			RSComponent exit = methods.interfaces.get(105).getComponent(18);
+			RSComponent exit = methods.interfaces.get(105).getComponent(14);
 			return exit.doClick();
 		}
 		return true;
