@@ -19,7 +19,7 @@ public class ImprovedRewardsBox extends Random {
 	private static final int BOX_CONFIRM_IF = 28;
 	private static final int BOX_SELECTION_IF = 15;
 	private static final int BOX_SCROLLBAR_IF = 24;
-	private static final int XP_IF = 134;
+	private static final int XP_IF = 1139;
 
 	private static final int ATT_ID = 4;
 	private static final int AGILITY_ID = 5;
