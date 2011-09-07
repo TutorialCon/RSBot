@@ -63,7 +63,6 @@ public class Configuration {
 			public static final String ICON_SCRIPT_GEAR = ROOT_IMG + "/script_gear.png";
 			public static final String ICON_SCRIPT_CODE = ROOT_IMG + "/script_code.png";
 			public static final String ICON_WEBLINK = ROOT_IMG + "/world_link.png";
-			public static final String ICON_WRENCH = ROOT_IMG + "/wrench.png";
 			public static final String ICON_LICENSE = ROOT_IMG + "/page_white_text.png";
 
 			public static final String VERSION = ROOT + "/version.txt";

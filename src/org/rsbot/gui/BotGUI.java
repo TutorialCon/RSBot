@@ -1,7 +1,6 @@
 package org.rsbot.gui;
 
 import org.rsbot.Configuration;
-import org.rsbot.Configuration.OperatingSystem;
 import org.rsbot.bot.Bot;
 import org.rsbot.gui.component.*;
 import org.rsbot.log.TextAreaLogHandler;
@@ -21,7 +20,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.*;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
@@ -35,15 +33,12 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 	public static final int MAX_BOTS = 6;
 	private static final long serialVersionUID = -5411033752001988794L;
 	private static final Logger log = Logger.getLogger(BotGUI.class.getName());
-	private SettingsManager settings;
-	private Preferences preferences;
 	private BotPanel panel;
 	private BotToolBar toolBar;
 	private BotMenuBar menuBar;
 	private JScrollPane textScroll;
 	protected static final List<Bot> bots = new ArrayList<Bot>();
 	private TrayIcon tray = null;
-	private java.util.Timer shutdown = null;
 
 	public BotGUI() {
 		init();
@@ -52,9 +47,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		setLocationRelativeTo(getOwner());
 		setMinimumSize(new Dimension((int) (getSize().width * .8), (int) (getSize().height * .8)));
 		setResizable(true);
-		settings = new SettingsManager(this);
-		preferences = settings.getPreferences();
-		preferences.load();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LoadScreen.quit();
@@ -68,11 +60,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				setVisible(true);
 				addBot();
 				updateScriptControls();
-				setShutdownTimer(preferences.shutdown);
 				if (Configuration.Twitter.ENABLED) {
 					new Thread(new TwitterUpdates()).start();
 				}
-				if (!preferences.hideAds) {
+				if (!Preferences.getInstance().hideAds) {
 					new Thread(new SplashAd(BotGUI.this)).start();
 				}
 			}
@@ -204,8 +195,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		} else if (menu.equals(Messages.TOOLS)) {
 			if (option.equals(Messages.LICENSES)) {
 				log.warning("License manager coming soon");
-			} else if (option.equals(Messages.OPTIONS)) {
-				settings.display();
 			}
 		} else if (menu.equals(Messages.HELP)) {
 			if (option.equals(Messages.SITE)) {
@@ -523,54 +512,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		}
 	}
 
-	public void setShutdownTimer(final boolean enabled) {
-		if (!enabled) {
-			if (shutdown != null) {
-				shutdown.cancel();
-				shutdown.purge();
-			}
-			shutdown = null;
-		} else {
-			final long interval = preferences.shutdownTime * 60 * 1000;
-			shutdown = new java.util.Timer(true);
-			shutdown.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					for (final Bot bot : bots) {
-						Web web = bot.getMethodContext().web;
-						if (bot.getScriptHandler().getRunningScripts().size() != 0 || (web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() > Web.WEB_SCRIPT_COUNT)) {
-							return;
-						}
-					}
-					final int delay = 3;
-					log.info("Shutdown pending in " + delay + " minutes...");
-					final Point[] mouse = new Point[]{MouseInfo.getPointerInfo().getLocation(), null};
-					try {
-						Thread.sleep(delay * 60 * 1000);
-					} catch (InterruptedException ignored) {
-					}
-					mouse[1] = MouseInfo.getPointerInfo().getLocation();
-					if (mouse[0].x != mouse[1].x || mouse[0].y != mouse[1].y) {
-						log.info("Mouse activity detected, delaying shutdown");
-					} else if (!preferences.shutdown) {
-						log.info("Shutdown cancelled");
-					} else if (Configuration.getCurrentOperatingSystem() == OperatingSystem.WINDOWS) {
-						try {
-							Runtime.getRuntime().exec("shutdown.exe", new String[]{"-s"});
-							cleanExit();
-						} catch (IOException ignored) {
-							log.severe("Could not shutdown system");
-						}
-					}
-				}
-			}, interval, interval);
-		}
-	}
-
 	public void cleanExit() {
 		setVisible(false);
 		dispose();
-		preferences.save();
+		Preferences.getInstance().save();
 		System.exit(0);
 	}
 

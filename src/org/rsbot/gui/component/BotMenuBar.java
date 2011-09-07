@@ -72,7 +72,7 @@ public class BotMenuBar extends JMenuBar {
 						Messages.MENUSEPERATOR,
 						Messages.TOGGLEFALSE + Messages.DISABLEANTIRANDOMS,
 						Messages.TOGGLEFALSE + Messages.DISABLEAUTOLOGIN},
-				constructDebugs(), {Messages.LICENSES, Messages.OPTIONS}, {Messages.SITE, Messages.PROJECT, Messages.LICENSE, Messages.ABOUT}};
+				constructDebugs(), {Messages.LICENSES}, {Messages.SITE, Messages.PROJECT, Messages.LICENSE, Messages.ABOUT}};
 	}
 
 	private static String[] constructDebugs() {
@@ -121,7 +121,6 @@ public class BotMenuBar extends JMenuBar {
 		map.put(Messages.SAVESCREENSHOT, Configuration.Paths.Resources.ICON_PHOTO);
 		map.put(Messages.HIDE, Configuration.Paths.Resources.ICON_ARROWIN);
 		map.put(Messages.EXIT, Configuration.Paths.Resources.ICON_CLOSE);
-		map.put(Messages.OPTIONS, Configuration.Paths.Resources.ICON_WRENCH);
 		map.put(Messages.LICENSES, Configuration.Paths.Resources.ICON_KEY);
 		map.put(Messages.SITE, Configuration.Paths.Resources.ICON_WEBLINK);
 		map.put(Messages.PROJECT, Configuration.Paths.Resources.ICON_GITHUB);
@@ -146,7 +145,6 @@ public class BotMenuBar extends JMenuBar {
 			final String[] elements = ELEMENTS[i];
 			add(constructMenu(title, elements));
 		}
-		commandMenuItem.get(Messages.LICENSES).setVisible(false);
 		constructItemIcons();
 		commandMenuItem.get(Messages.HIDE).setVisible(SystemTray.isSupported());
 		setExtendedView(EXTENDED_VIEW_INITIAL);
