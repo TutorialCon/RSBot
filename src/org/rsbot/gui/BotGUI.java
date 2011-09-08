@@ -25,6 +25,9 @@ import java.awt.event.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -59,14 +62,22 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				setVisible(true);
 				addBot();
 				updateScriptControls();
+				ExecutorService pool = Executors.newCachedThreadPool();
 				if (Configuration.Twitter.ENABLED) {
-					new Thread(new TwitterUpdates()).start();
+					pool.execute(new TwitterUpdates());
 				}
 				if (!Preferences.getInstance().hideAds) {
-					new Thread(new SplashAd(BotGUI.this)).start();
+					pool.execute(new SplashAd(BotGUI.this));
 				}
-				new Thread(ScriptDeliveryNetwork.getInstance()).start();
-				new Thread(ScriptUserList.getInstance()).start();
+				pool.execute(ScriptDeliveryNetwork.getInstance());
+				pool.execute(ScriptUserList.getInstance());
+				pool.shutdown();
+				try {
+					pool.awaitTermination(15, TimeUnit.SECONDS);
+				} catch (final InterruptedException ignored) {
+					log.warning("Unable to complete startup tasks");
+				}
+				System.gc();
 			}
 		});
 	}
