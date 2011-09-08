@@ -56,12 +56,10 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		menuBar.getMenuItem(Messages.RUNSCRIPT).setEnabled(false);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				LoadScreen.quit();
 				JFrame.setDefaultLookAndFeelDecorated(true);
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 				SwingUtilities.updateComponentTreeUI(BotGUI.this);
-				setVisible(true);
 				addBot();
 				updateScriptControls();
 				ExecutorService pool = Executors.newCachedThreadPool();
@@ -81,6 +79,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				}
 				menuBar.getMenuItem(Messages.RUNSCRIPT).setEnabled(true);
 				toolBar.runScriptButton.setEnabled(true);
+				setVisible(true);
+				LoadScreen.quit();
 				System.gc();
 			}
 		});
