@@ -212,7 +212,6 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			}
 		});
 		table.setFocusable(false);
-		//table.setAutoCreateRowSorter(true);
 		table.setRowHeight(20);
 		table.setIntercellSpacing(new Dimension(1, 1));
 		table.setShowGrid(false);
