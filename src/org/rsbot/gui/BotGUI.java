@@ -8,7 +8,9 @@ import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
 import org.rsbot.script.methods.Environment;
 import org.rsbot.script.methods.Web;
+import org.rsbot.script.provider.ScriptDeliveryNetwork;
 import org.rsbot.script.provider.ScriptDownloader;
+import org.rsbot.script.provider.ScriptUserList;
 import org.rsbot.script.task.LoopTask;
 import org.rsbot.script.util.WindowUtil;
 import org.rsbot.service.Preferences;
@@ -63,6 +65,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				if (!Preferences.getInstance().hideAds) {
 					new Thread(new SplashAd(BotGUI.this)).start();
 				}
+				new Thread(ScriptDeliveryNetwork.getInstance()).start();
+				new Thread(ScriptUserList.getInstance()).start();
 			}
 		});
 	}
