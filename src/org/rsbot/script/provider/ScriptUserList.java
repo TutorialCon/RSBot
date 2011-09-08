@@ -34,7 +34,6 @@ public final class ScriptUserList implements Runnable {
 			available = true;
 		} catch (final IOException ignored) {
 		}
-		lastUser = Preferences.getInstance().sdnUser;
 		run();
 	}
 
@@ -55,6 +54,8 @@ public final class ScriptUserList implements Runnable {
 			if (cache.exists()) {
 				cache.delete();
 			}
+		} else {
+			return;
 		}
 		try {
 			lastUser = Preferences.getInstance().sdnUser;
