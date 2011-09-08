@@ -117,20 +117,20 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			public void actionPerformed(ActionEvent arg0) {
 				refresh.setEnabled(false);
 				connect.setEnabled(false);
-				SwingUtilities.invokeLater(new Runnable() {
+				new Thread() {
+					@Override
 					public void run() {
-						new Thread() {
-							@Override
+						ScriptDeliveryNetwork.getInstance().refresh(true);
+						ScriptUserList.getInstance().update();
+						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
-								ScriptDeliveryNetwork.getInstance().refresh(true);
-								ScriptUserList.getInstance().update();
 								load();
 								refresh.setEnabled(true);
 								connect.setEnabled(true);
 							}
-						}.start();
+						});
 					}
-				});
+				}.start();
 			}
 		});
 		table = new JTable(model) {
