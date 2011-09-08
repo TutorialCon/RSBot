@@ -52,6 +52,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 		setLocationRelativeTo(getOwner());
 		setMinimumSize(new Dimension((int) (getSize().width * .8), (int) (getSize().height * .8)));
 		setResizable(true);
+		toolBar.runScriptButton.setEnabled(false);
+		menuBar.getMenuItem(Messages.RUNSCRIPT).setEnabled(false);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LoadScreen.quit();
@@ -77,6 +79,8 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 				} catch (final InterruptedException ignored) {
 					log.warning("Unable to complete startup tasks");
 				}
+				menuBar.getMenuItem(Messages.RUNSCRIPT).setEnabled(true);
+				toolBar.runScriptButton.setEnabled(true);
 				System.gc();
 			}
 		});

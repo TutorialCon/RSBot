@@ -38,7 +38,7 @@ public class BotToolBar extends JToolBar {
 	private final JButton addTabButton;
 	private final JButton screenshotButton;
 	private final JButton userInputButton;
-	private final JButton runScriptButton;
+	public final JButton runScriptButton;
 	private final JButton stopScriptButton;
 	private final JButton toggleLogButton;
 
