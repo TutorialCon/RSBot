@@ -1,9 +1,9 @@
 package org.rsbot.script.provider;
 
 import org.rsbot.Configuration;
+import org.rsbot.util.io.IOHelper;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,13 +51,7 @@ class ScriptClassLoader extends ClassLoader {
 		if (clazz == null) {
 			try {
 				final InputStream in = getResourceAsStream(name.replace('.', '/') + ".class");
-				final byte[] buffer = new byte[4096];
-				final ByteArrayOutputStream out = new ByteArrayOutputStream();
-				int n;
-				while ((n = in.read(buffer, 0, 4096)) != -1) {
-					out.write(buffer, 0, n);
-				}
-				final byte[] bytes = out.toByteArray();
+				final byte[] bytes = IOHelper.read(in);
 				clazz = defineClass(name, bytes, 0, bytes.length, domain);
 				if (resolve) {
 					resolveClass(clazz);
