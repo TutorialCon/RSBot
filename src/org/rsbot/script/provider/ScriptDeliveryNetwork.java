@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 /**
  * @author Paris
  */
-public class ScriptDeliveryNetwork implements ScriptSource {
+public class ScriptDeliveryNetwork implements ScriptSource, Runnable {
 	private static final Logger log = Logger.getLogger("ScriptDelivery");
 	private static ScriptDeliveryNetwork instance;
 	private URL base;
@@ -56,7 +56,7 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 		}
 	}
 
-	public void refresh(final boolean force) {
+	public synchronized void refresh(final boolean force) {
 		if (force || !manifest.exists() || base == null) {
 			try {
 				base = HttpClient.download(new URL(Configuration.Paths.URLs.SDN_MANIFEST), manifest).getURL();
@@ -94,5 +94,10 @@ public class ScriptDeliveryNetwork implements ScriptSource {
 			log.severe("Unable to load script");
 		}
 		return null;
+	}
+
+	@Override
+	public void run() {
+		refresh(true);
 	}
 }

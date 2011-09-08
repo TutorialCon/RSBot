@@ -12,7 +12,7 @@ import org.rsbot.util.StringUtil;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
 
-public final class ScriptUserList {
+public final class ScriptUserList implements Runnable {
 	private static ScriptUserList instance = null;
 	private boolean available = false;
 	private URL base;
@@ -35,14 +35,22 @@ public final class ScriptUserList {
 		} catch (final IOException ignored) {
 		}
 		lastUser = Preferences.getInstance().sdnUser;
-		update();
+		run();
 	}
 
 	public boolean isAvailable() {
 		return available;
 	}
 
-	public boolean update() {
+	public boolean isReady() {
+		return available && list != null;
+	}
+
+	public boolean isSelected() {
+		return enabled && list != null;
+	}
+
+	public synchronized void run() {
 		if (lastUser == null || !lastUser.equalsIgnoreCase(Preferences.getInstance().sdnUser)) {
 			if (cache.exists()) {
 				cache.delete();
@@ -51,7 +59,7 @@ public final class ScriptUserList {
 		try {
 			lastUser = Preferences.getInstance().sdnUser;
 			if (lastUser == null || lastUser.length() == 0) {
-				return false;
+				return;
 			}
 			final URL url = new URL(base, "?u=" + StringUtil.urlEncode(lastUser.toLowerCase()));
 			HttpClient.download(url, cache);
@@ -59,7 +67,6 @@ public final class ScriptUserList {
 			available = false;
 		}
 		loadList();
-		return available && list != null;
 	}
 
 	private void loadList() {
@@ -73,10 +80,6 @@ public final class ScriptUserList {
 		for (final String item : items) {
 			list.add(item);
 		}
-	}
-
-	public boolean isSelected() {
-		return enabled && list != null;
 	}
 
 	public boolean isListed(final ScriptDefinition item) {

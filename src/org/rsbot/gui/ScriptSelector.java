@@ -120,8 +120,14 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				new Thread() {
 					@Override
 					public void run() {
-						ScriptDeliveryNetwork.getInstance().refresh(true);
-						ScriptUserList.getInstance().update();
+						final Thread[] tasks = { new Thread(ScriptDeliveryNetwork.getInstance()), new Thread(ScriptUserList.getInstance()) };
+						tasks[0].start();
+						tasks[1].start();
+						try {
+							tasks[0].join();
+							tasks[1].join();
+						} catch (final InterruptedException ignored) {
+						}
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 								load();
@@ -369,7 +375,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 
 	private void connectUpdate() {
 		final String user = Preferences.getInstance().sdnUser;
-		final boolean connected = user != null && user.length() != 0 && ScriptUserList.getInstance().update();
+		ScriptUserList.getInstance().run();
+		final boolean connected = user != null && user.length() != 0 && ScriptUserList.getInstance().isReady();
 		ScriptUserList.getInstance().enabled = connected;
 		connect.setToolTipText(connected ? String.format(Messages.SDNUSER, user) : Messages.SDNALL);
 		final String icon = connected ? Configuration.Paths.Resources.ICON_CONNECT : Configuration.Paths.Resources.ICON_DISCONNECT;
