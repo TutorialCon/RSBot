@@ -241,7 +241,7 @@ public class Prayer extends MethodProvider {
 	 * @return The percentage of prayer points left.
 	 */
 	public int getPrayerPercentLeft() {
-		return 100 * getPrayerLeft() / methods.skills.getCurrentLevel(Skills.PRAYER);
+		return 100 * getPrayerLeft() / (methods.skills.getRealLevel(Skills.PRAYER) * 10);
 	}
 
 	/**
