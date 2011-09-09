@@ -50,9 +50,9 @@ public class Bank extends MethodProvider {
 
 	public static final int INTERFACE_DEPOSIT_BOX = 11;
 	public static final int INTERFACE_DEPOSIT_BOX_BUTTON_CLOSE = 15;
-	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_BEAST_INVENTORY = 22;
-	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_CARRIED_ITEMS = 18;
-	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_WORN_ITEMS = 20;
+	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_BEAST_INVENTORY = 23;
+	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_CARRIED_ITEMS = 19;
+	public static final int INTERFACE_DEPOSIT_BUTTON_DEPOSIT_WORN_ITEMS = 21;
 
 
 	Bank(final MethodContext ctx) {
