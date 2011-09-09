@@ -14,11 +14,11 @@ public class BypassFlags {
 	}
 
 	public static int getKey(final RSTile tile) {
-		if (BypassFlags.bypass.containsKey(tile) || Web.rs_map.containsKey(tile)) {
+		if (BypassFlags.bypass.containsKey(tile) || Web.getTileFlags().containsKey(tile)) {
 			if (BypassFlags.bypass.containsKey(tile)) {
 				return BypassFlags.bypass.get(tile);
 			}
-			return Web.rs_map.get(tile);
+			return Web.getTileFlags().get(tile);
 		}
 		return -1;
 	}

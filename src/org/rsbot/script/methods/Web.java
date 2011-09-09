@@ -1,12 +1,12 @@
 package org.rsbot.script.methods;
 
-import org.rsbot.script.background.WebData;
-import org.rsbot.script.internal.ScriptHandler;
+
 import org.rsbot.script.web.*;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWeb;
 
 import java.util.*;
+import org.rsbot.script.internal.ScriptHandler;
 
 /**
  * The web class.
@@ -14,16 +14,34 @@ import java.util.*;
  * @author Timer
  */
 public class Web extends MethodProvider {
-	public static final HashMap<RSTile, Integer> rs_map = new HashMap<RSTile, Integer>();
-	public static boolean webScriptsLoaded = false;
-	private long lastLocalAccess = 0;
-	public int webDataId = 0;
+        private static WebData data;
+        public static boolean webScriptsLoaded = false;
+        public int webDataId = -1;
 	private boolean forceLoad = false;
-	public static final int WEB_SCRIPT_COUNT = 1;
+        public static final int WEB_SCRIPT_COUNT = 0;
+        private long lastLocalAccess = 0;
 
 	Web(final MethodContext ctx) {
 		super(ctx);
+                data = new WebData(ctx);
 	}
+        
+        public static WebData getWebData(){
+            return data;
+        }
+        
+        public static HashMap<RSTile, Integer> getTileFlags(){
+            update();
+            return data.getTileFlags();
+        }
+        
+        public static void update(){
+            data.update();
+        }
+        
+        public static void update(boolean forced){
+            data.update(forced);
+        }
 
 	/**
 	 * Gets the closest supported bank that is usable.
@@ -86,10 +104,10 @@ public class Web extends MethodProvider {
 		if (start.equals(end)) {
 			return new RSTile[]{};
 		}
-		if (!areScriptsLoaded()) {
+                if (!areScriptsLoaded()) {
 			loadWebScripts();
 		}
-		lastLocalAccess = System.currentTimeMillis();
+                lastLocalAccess = System.currentTimeMillis();
 		final HashSet<Node> open = new HashSet<Node>();
 		final HashSet<Node> closed = new HashSet<Node>();
 		Node curr = new Node(start.getX(), start.getY(), start.getZ());
@@ -172,7 +190,7 @@ public class Web extends MethodProvider {
 	}
 
 	public Route planeRoute(final RSTile start, final RSTile end, final PlaneTraverse transfer) {
-		if (!areScriptsLoaded()) {
+            	if (!areScriptsLoaded()) {
 			loadWebScripts();
 		}
 		lastLocalAccess = System.currentTimeMillis();
@@ -413,8 +431,8 @@ public class Web extends MethodProvider {
 	public static boolean Flag(final int x, final int y, final int z, final int key) {
 		return Flag(new RSTile(x, y, z), key);
 	}
-
-	public boolean areScriptsLoaded() {
+        
+        	public boolean areScriptsLoaded() {
 		return webScriptsLoaded;
 	}
 
@@ -425,7 +443,7 @@ public class Web extends MethodProvider {
 	public void loadWebScripts() {
 		if (!webScriptsLoaded) {
 			final ScriptHandler bsh = methods.bot.getScriptHandler();
-			webDataId = bsh.runDaemonScript(new WebData());
+			//webDataId = bsh.runDaemonScript(new WebData());
 			webScriptsLoaded = true;
 		}
 	}
