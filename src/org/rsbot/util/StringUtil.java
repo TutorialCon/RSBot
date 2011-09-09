@@ -20,18 +20,31 @@ public class StringUtil {
 	}
 
 	public static String formatVersion(final int version) {
-		final float v = (float) version / 100;
-		String s = Float.toString(v);
-		final int z = s.indexOf('.');
-		if (z == -1) {
-			s += ".00";
-		} else {
-			final String exp = s.substring(z + 1);
-			if (exp.length() == 1) {
-				s += "0";
-			}
+		final String v = Integer.toString(version), x;
+		final char d = '.';
+		final StringBuilder s = new StringBuilder(6);
+		s.append(v, 0, 1);
+		s.append(d);
+		switch (v.length()) {
+		case 1:
+			s.append('0');
+			break;
+		case 2:
+			s.append(v, 1, 2);
+			s.append('0');
+			break;
+		case 3:
+			x = v.substring(1, 3);
+			s.append(x.equals("00") ? "0" : x);
+			break;
+		default:
+			s.append(v, 1, 2);
+			s.append(d);
+			x = v.substring(2, 4);
+			s.append(x.equals("00") ? "0" : x);
+			break;
 		}
-		return s;
+		return s.toString();
 	}
 
 	/**

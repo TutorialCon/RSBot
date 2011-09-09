@@ -17,7 +17,7 @@ public @interface ScriptManifest {
 
 	String website() default "";
 
-	int requiresVersion() default 200;
+	int requiresVersion() default 2700;
 
 	/**
 	 * Whether or not to obfuscate scripts on the server.
