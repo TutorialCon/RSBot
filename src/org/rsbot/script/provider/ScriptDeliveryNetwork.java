@@ -49,9 +49,6 @@ public class ScriptDeliveryNetwork implements ScriptSource, Runnable {
 			def.authors = values.get("authors").split(ScriptList.DELIMITER);
 			def.keywords = values.get("keywords").split(ScriptList.DELIMITER);
 			def.website = values.get("website");
-			if (values.containsKey("licenseTokens")) {
-				def.licenseTokens = values.get("licenseTokens").split(ScriptList.DELIMITER);
-			}
 			defs.add(def);
 		}
 	}

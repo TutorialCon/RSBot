@@ -140,7 +140,6 @@ public class FileScriptSource implements ScriptSource {
 			def.clazz = clazz;
 			def.path = path;
 			def.obfuscated = manifest.obfuscated();
-			def.licenseTokens = manifest.licenseTokens();
 			if (manifest.requiresVersion() <= Configuration.getVersion()) {
 				scripts.add(def);
 			}

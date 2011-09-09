@@ -37,7 +37,6 @@ public class ScriptList {
 			printValue(out, "keywords", item.keywords);
 			printValue(out, "website", item.website);
 			printValue(out, "obfuscated", item.obfuscated ? "1" : "0");
-			printValue(out, "licenseTokens", item.licenseTokens);
 		}
 	}
 

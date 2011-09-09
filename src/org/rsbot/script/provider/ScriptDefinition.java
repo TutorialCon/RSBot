@@ -72,8 +72,6 @@ public class ScriptDefinition implements Comparable<ScriptDefinition> {
 
 	public boolean obfuscated;
 
-	public String[] licenseTokens;
-
 	public int compareTo(final ScriptDefinition def) {
 		final int c = getName().compareToIgnoreCase(def.getName());
 		return c == 0 ? Double.compare(version, def.version) : c;
