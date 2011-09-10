@@ -9,6 +9,9 @@ import org.rsbot.script.wrappers.RSTile;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Game state and GUI operations.
@@ -203,10 +206,14 @@ public class Game extends MethodProvider {
 	public static final int[] INTERFACE_TALKS = {211, 241, 251, 101, 242,
 			102, 161, 249, 243, 64, 65, 244, 255, 249, 230, 372, 421};
 	public static final int[] INTERFACE_OPTIONS = {230, 228};
-	
-        public static int[] GERMAN_WORLDS = new int[]{122, 139, 140, 146, 147};
-        public static int[] FRENCH_WORLDS = new int[]{128, 150};
-        public static int[] PORTUGUESE_WORLDS = new int[]{94, 101, 125, 126, 127, 133};	
+
+	public static int[] GERMAN_WORLDS = { 122, 139, 140, 146, 147 };
+	public static int[] FRENCH_WORLDS = { 128, 150 };
+	public static int[] PORTUGUESE_WORLDS = { 94, 101, 125, 126, 127, 133 };
+
+	public enum Language {
+		ENGLISH, GERMAN, FRENCH, PORTUGESE
+	};
 
 	@Deprecated
 	public static final String[] TAB_NAMES = new String[]{"Combat Styles", "Task System", "Stats",
@@ -772,57 +779,24 @@ public class Game extends MethodProvider {
 		return Tab.NONE;
 	}
 
-        /**
-         * Determines if the world is English
-         * 
-         * @return <tt>true</tt> if it is; otherwise <tt>false</tt>
-         */
-        public boolean worldIsEnglish() {
-            return !worldIsPortuguese() && !worldIsGerman() && !worldIsFrench();
-        }
-
-        /**
-         * Determines if the world is Portuguese
-         * 
-         * @return <tt>true</tt> if it is; otherwise <tt>false</tt>
-         */        
-        public boolean worldIsPortuguese() {
-            for (int i = 0; i < PORTUGUESE_WORLDS.length;) {
-                if (getCurrentWorld() == PORTUGUESE_WORLDS[i]) {
-                    return true;
-                }                 
-                i++;
-            }
-            return false;
-        } 
-        
-        /**
-         * Determines if the world is German
-         * 
-         * @return <tt>true</tt> if it is; otherwise <tt>false</tt>
-         */         
-        public boolean worldIsGerman() {
-            for (int i = 0; i < GERMAN_WORLDS.length;) {
-                if (getCurrentWorld() == GERMAN_WORLDS[i]) {
-                    return true;
-                }                 
-                i++;
-            }
-            return false;
-        }
-
-        /**
-         * Determines if the world is French
-         * 
-         * @return <tt>true</tt> if it is; otherwise <tt>false</tt>
-         */         
-        public boolean worldIsFrench() {
-            for (int i = 0; i < FRENCH_WORLDS.length;) {
-                if (getCurrentWorld() == FRENCH_WORLDS[i]) {
-                    return true;
-                }                 
-                i++;
-            }
-            return false;
-        }
+	/**
+	 * Get the current world language.
+	 *
+	 * @return The language of the current world, currently only English, German, French or Portugese.
+	 */
+	public Language getWorldLanguage() {
+		final Map<Language, int[]> map = new HashMap<Language, int[]>(3);
+		map.put(Language.GERMAN, GERMAN_WORLDS);
+		map.put(Language.FRENCH, FRENCH_WORLDS);
+		map.put(Language.PORTUGESE, PORTUGUESE_WORLDS);
+		final int w = getCurrentWorld();
+		for (final Entry<Language, int[]> entry : map.entrySet()) {
+			for (int i = 0; i < entry.getValue().length; i++) {
+				if (w == entry.getValue()[i]) {
+					return entry.getKey();
+				}
+			}
+		}
+		return Language.ENGLISH;
+	}
 }
