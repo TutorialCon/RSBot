@@ -107,6 +107,9 @@ public abstract class Mouse extends Focus implements MouseListener,
 		clientPressed = true;
 		clientX = e.getX();
 		clientY = e.getY();
+		clientPressX = e.getX();
+		clientPressY = e.getY();
+		clientPressTime = System.currentTimeMillis();
 		_mousePressed(e);
 		e.consume();
 	}
@@ -114,9 +117,6 @@ public abstract class Mouse extends Focus implements MouseListener,
 	public final void mouseReleased(final MouseEvent e) {
 		clientX = e.getX();
 		clientY = e.getY();
-		clientPressX = e.getX();
-		clientPressY = e.getY();
-		clientPressTime = System.currentTimeMillis();
 		clientPressed = false;
 
 		_mouseReleased(e);
@@ -149,12 +149,12 @@ public abstract class Mouse extends Focus implements MouseListener,
 			} else if (e.getID() == MouseEvent.MOUSE_MOVED) {
 				_mouseMoved(e);
 			} else if (e.getID() == MouseEvent.MOUSE_PRESSED) {
-				clientPressed = true;
-				_mousePressed(e);
-			} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 				clientPressX = e.getX();
 				clientPressY = e.getY();
 				clientPressTime = System.currentTimeMillis();
+				clientPressed = true;
+				_mousePressed(e);
+			} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 				clientPressed = false;
 				_mouseReleased(e);
 			} else if (e.getID() == MouseEvent.MOUSE_WHEEL) {
