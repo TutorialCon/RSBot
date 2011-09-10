@@ -788,7 +788,7 @@ public class Game extends MethodProvider {
          */        
         public boolean worldIsPortuguese() {
             for (int i = 0; i < PORTUGUESE_WORLDS.length;) {
-                if (game.getCurrentWorld() == PORTUGUESE_WORLDS[i]) {
+                if (getCurrentWorld() == PORTUGUESE_WORLDS[i]) {
                     return true;
                 }                 
                 i++;
@@ -803,7 +803,7 @@ public class Game extends MethodProvider {
          */         
         public boolean worldIsGerman() {
             for (int i = 0; i < GERMAN_WORLDS.length;) {
-                if (game.getCurrentWorld() == GERMAN_WORLDS[i]) {
+                if (getCurrentWorld() == GERMAN_WORLDS[i]) {
                     return true;
                 }                 
                 i++;
@@ -818,7 +818,7 @@ public class Game extends MethodProvider {
          */         
         public boolean worldIsFrench() {
             for (int i = 0; i < FRENCH_WORLDS.length;) {
-                if (game.getCurrentWorld() == FRENCH_WORLDS[i]) {
+                if (getCurrentWorld() == FRENCH_WORLDS[i]) {
                     return true;
                 }                 
                 i++;
