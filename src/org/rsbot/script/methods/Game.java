@@ -806,4 +806,19 @@ public class Game extends MethodProvider {
 		}
 		return Language.ENGLISH;
 	}
+
+	/**
+	 * Determines whether the current world is members or free to play.
+	 *
+	 * @return true if the current world is a members world, false otherwise.
+	 */
+	public boolean isWorldMembers() {
+		final int w = getCurrentWorld();
+		for (final int n : MEMBER_WORLDS) {
+			if (w == n) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
