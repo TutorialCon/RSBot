@@ -57,6 +57,7 @@ public class CloseAllInterface extends Random {
 		addChild(732, 208); // Fist of Guthx Reward Shop
 		addChild(1083, 181); // Livid Farm Rewards
 		addChild(149, 226); //Level 10 membership solicitation
+		addChild(1127, 16); //Hybrid Gloves selection ( Fist of Guthix )
 	}
 
 	private void addChild(final int parent, final int idx) {
