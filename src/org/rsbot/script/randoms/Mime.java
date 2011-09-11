@@ -12,8 +12,11 @@ public class Mime extends Random {
 		click, findMime, findAnimation, clickAnimation, wait
 	}
 
-	private int animation;
-	private RSNPC mime;
+	private static int animation;
+	private static RSNPC mime;
+	private final static int[] animations = {857, 860, 861, 866, 1128, 1129, 1130, 1131};
+	private final static String[] names = {"Think", "Cry", "Laugh", "Dance", "Glass Wall",
+			"Lean", "Rope", "Glass Box"};
 
 	@Override
 	public void onFinish() {
@@ -34,18 +37,18 @@ public class Mime extends Random {
 		for (int a = 0; a < interfaces.get(188).getChildCount(); a++) {
 			if (interfaces.get(188).getComponent(a).getText().contains(find)) {
 				log("Clicked on: " + find);
-				sleep(random(500, 1000));
-				interfaces.get(188).getComponent(a).doClick();
-				sleep(random(1000, 1200));
+				sleep(500, 1000);
+				interfaces.getComponent(188, a).doClick();
+				sleep(1000, 1200);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private RSNPC getNPCAt(final RSTile t) {
+	private RSNPC getMimeFromTile() {
 		for (final RSNPC npc : npcs.getAll()) {
-			if (npc.getLocation().equals(t)) {
+			if (npc.getLocation().equals(new RSTile(2011, 4762))) {
 				return npc;
 			}
 		}
@@ -75,11 +78,11 @@ public class Mime extends Random {
 		switch (getStage()) {
 			case click:
 				interfaces.clickContinue();
-				sleep(random(1500, 2000));
+				sleep(1500, 2000);
 				return random(200, 400);
 
 			case findMime:
-				if ((mime = npcs.getNearest(1056)) == null && (mime = getNPCAt(new RSTile(2011, 4762))) == null) {
+				if ((mime = npcs.getNearest(1056)) == null && (mime = getMimeFromTile()) == null) {
 					log.warning("ERROR: Mime not found!");
 					return -1;
 				}
@@ -90,49 +93,28 @@ public class Mime extends Random {
 				log.info("Found Mime animation: " + animation);
 				sleep(1000);
 				if (interfaces.get(188).isValid()) {
-					return random(400, 800);
+					return random(4000, 4500);
 				}
 				final long start = System.currentTimeMillis();
 				while (System.currentTimeMillis() - start >= 5000) {
 					if (interfaces.get(188).isValid()) {
 						return random(1000, 1600);
 					}
-					sleep(random(1000, 1500));
+					sleep(400, 500);
 				}
-				return random(200, 400);
+				return random(700, 1000);
 
 			case clickAnimation:
-				log.info("Clicking text according to animation: " + animation);
 				if (animation != -1 && animation != 858) {
-					switch (animation) {
-						case 857:
-							clickAnimation("Think");
-							break;
-						case 860:
-							clickAnimation("Cry");
-							break;
-						case 861:
-							clickAnimation("Laugh");
-							break;
-						case 866:
-							clickAnimation("Dance");
-							break;
-						case 1128:
-							clickAnimation("Glass Wall");
-							break;
-						case 1129:
-							clickAnimation("Lean");
-							break;
-						case 1130:
-							clickAnimation("Rope");
-							break;
-						case 1131:
-							clickAnimation("Glass Box");
-							break;
-						default:
-							log.info("Unknown Animation: " + animation + " Please inform a developer at RSBot.org!");
-							return random(2000, 3000);
+					for (int i = 0; i < animations.length; i++) {
+						if (animations[i] == animation) {
+							log.info("Clicking text according to animation: " + animation);
+							clickAnimation(names[i]);
+							return random(1200, 1800);
+						}
 					}
+					log.info("Unknown Animation: " + animation + " Please inform a developer at powerbot.org!");
+					return random(4000, 4500);
 				}
 			case wait:
 				return random(200, 400);

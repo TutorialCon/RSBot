@@ -12,24 +12,23 @@ import org.rsbot.script.wrappers.*;
 /**
  * @version 2.5 - 12/31/10 Fix by NoEffex (Models)
  */
+
 @ScriptManifest(authors = {"Pwnaz0r", "Taha", "zqqou", "Zach"}, name = "FreakyForester", version = 2.6)
 public class FreakyForester extends Random implements MessageListener {
+
 	private RSNPC forester;
-	private static final int FORESTER_ID = 2458;
-	private static final int SEARCH_INTERFACE_ID = 242;
-	private static final int PORTAL_ID = 15645;
+	private static final int FORESTER_ID = 2458, SEARCH_INTERFACE_ID = 242, PORTAL_ID = 15645;
 	private static final RSTile WALK_TO_TILE = new RSTile(2610, 4775);
-	private boolean unequip = false;
-	private short[] phe = {};
-	private final Filter<RSNPC> pheasantFilter = new Filter<RSNPC>() {
+	private final String numbers[] = {" one", " two", " three", " four"};
+	private static boolean unequip, done;
+	private static short[] phe = {};
+	private static final Filter<RSNPC> pheasantFilter = new Filter<RSNPC>() {
 		public boolean accept(final RSNPC npc) {
 			// log("phe.length = " + phe.length);
 			final Filter<RSModel> modelFilter = RSModel.newVertexFilter(phe);
 			return modelFilter.accept(npc.getModel());
 		}
 	};
-
-	private boolean done = false;
 
 	@Override
 	public void onFinish() {
@@ -145,6 +144,7 @@ public class FreakyForester extends Random implements MessageListener {
 				189, 189, 189, 189, 208, 208, 210, 210, 208, 208, 192, 192,
 				211, 211, 213, 213, 211, 211, 214, 214, 215, 215, 160, 160,
 				160, 160, 193, 193, 218, 218, 219, 219, 157, 157,};
+		static final short[][] all = {oneTail, twoTail, threeTail, fourTail};
 	}
 
 	@Override
@@ -225,7 +225,8 @@ public class FreakyForester extends Random implements MessageListener {
 				return random(1000, 1500);
 			}
 			final RSObject box = objects.getNearest(32931);
-			if (!calc.tileOnScreen(box.getLocation()) && calc.distanceTo(walking.getDestination()) < 8 || calc.distanceTo(walking.getDestination()) > 40) {
+			if (!calc.tileOnScreen(box.getLocation()) && calc.distanceTo(walking.getDestination()) < 8
+					|| calc.distanceTo(walking.getDestination()) > 40) {
 				if (!walking.walkTileMM(box.getLocation().randomize(3, 3))) {
 					walking.getPath(box.getLocation().randomize(3, 3)).traverse();
 				}
@@ -237,26 +238,19 @@ public class FreakyForester extends Random implements MessageListener {
 		}
 		switch (getState()) {
 			case 0: // Talk to forester
-				if (calc.tileOnScreen(forester.getLocation())
-						&& calc.distanceTo(forester.getLocation()) <= 5) {
+				if (calc.tileOnScreen(forester.getLocation()) && calc.distanceTo(forester.getLocation()) <= 5) {
 					forester.interact("Talk");
 				} else if (calc.distanceTo(forester.getLocation()) >= 5) {
-					walking.walkTileMM(walking.getClosestTileOnMap(forester
-							.getLocation().randomize(3, 3)));
+					walking.walkTileMM(walking.getClosestTileOnMap(forester.getLocation().randomize(3, 3)));
 					camera.turnTo(forester.getLocation().randomize(3, 3));
 				}
 				return random(500, 800);
 			case 1: // Talking
 				// log("Talking"); //debug REMOVEME
-				if (searchText(SEARCH_INTERFACE_ID, " one")) {
-					phe = Models.oneTail;
-				} else if (searchText(SEARCH_INTERFACE_ID, " two")) {
-					phe = Models.twoTail;
-				} else if (searchText(SEARCH_INTERFACE_ID, " three")) {
-					phe = Models.threeTail;
-				}
-				if (searchText(SEARCH_INTERFACE_ID, " four")) {
-					phe = Models.fourTail;
+				for (int i = 0; i < numbers.length; i++) {
+					if (searchText(SEARCH_INTERFACE_ID, numbers[i])) {
+						phe = Models.all[i];
+					}
 				}
 				if (interfaces.clickContinue()) {
 					return random(500, 800);
@@ -273,7 +267,8 @@ public class FreakyForester extends Random implements MessageListener {
 					return random(600, 900);
 				} else if (pheasant != null) {
 					// log("Pheasant ID = " + pheasant.getID());
-					if (calc.tileOnScreen(pheasant.getLocation()) && calc.distanceTo(pheasant.getLocation()) <= 5) {
+					if (calc.tileOnScreen(pheasant.getLocation())
+							&& calc.distanceTo(pheasant.getLocation()) <= 5) {
 						pheasant.interact("Attack");
 						return random(1000, 1500);
 					} else if (calc.distanceTo(pheasant.getLocation()) >= 5) {
@@ -306,8 +301,8 @@ public class FreakyForester extends Random implements MessageListener {
 		return random(1000, 1500);
 	}
 
-	boolean searchText(final int interfac, final String text) {
-		final RSInterface talkFace = interfaces.get(interfac);
+	boolean searchText(final int parent, final String text) {
+		final RSInterface talkFace = interfaces.get(parent);
 		if (!talkFace.isValid()) {
 			return false;
 		}
@@ -316,7 +311,6 @@ public class FreakyForester extends Random implements MessageListener {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
