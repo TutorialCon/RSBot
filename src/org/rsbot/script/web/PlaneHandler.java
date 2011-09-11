@@ -4,7 +4,6 @@ import org.rsbot.script.methods.MethodContext;
 import org.rsbot.script.methods.MethodProvider;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class PlaneHandler extends MethodProvider {
@@ -22,9 +21,7 @@ public class PlaneHandler extends MethodProvider {
 
 	public PlaneTraverse[] get(final int plane) {
 		List<PlaneTraverse> collectedTraverseList = new ArrayList<PlaneTraverse>();
-		Iterator<PlaneTraverse> planeTraverseIterator = traverseList.listIterator();
-		while (planeTraverseIterator.hasNext()) {
-			final PlaneTraverse planeTraverse = planeTraverseIterator.next();
+		for (PlaneTraverse planeTraverse : traverseList) {
 			if (planeTraverse.plane() == plane) {
 				collectedTraverseList.add(planeTraverse);
 			}

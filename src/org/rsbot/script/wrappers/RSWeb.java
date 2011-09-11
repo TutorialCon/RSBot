@@ -19,7 +19,7 @@ public class RSWeb {
 		for (Route route : routes) {
 			this.routes.addLast(route);
 		}
-		oldCount = Web.getTileFlags().size();
+		oldCount = Web.rs_map.size();
 		this.start = start;
 		this.end = end;
 	}
@@ -30,8 +30,8 @@ public class RSWeb {
 
 	public boolean step() {
 		if (routes.size() > 0) {
-			if (Web.getTileFlags().size() != oldCount) {
-				oldCount = Web.getTileFlags().size();
+			if (Web.rs_map.size() != oldCount) {
+				oldCount = Web.rs_map.size();
 				update();
 			}
 			Route route = routes.poll();
