@@ -1,36 +1,41 @@
 package org.rsbot.script.background;
 
-import org.rsbot.script.BackgroundScript;
+import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.MethodContext;
+import org.rsbot.script.methods.MethodProvider;
 import org.rsbot.script.methods.Web;
 import org.rsbot.script.wrappers.RSTile;
 
 @ScriptManifest(name = "Web Data Collector", authors = {"Timer"})
-public class WebData extends BackgroundScript {
+public class WebData extends MethodProvider implements Runnable {
 	private RSTile lastMapBase = null;
 	private int lastLevel = -1;
 	private static final Object botCollectionLock = new Object();
+	public volatile boolean running = false;
 
-	@Override
-	public boolean activateCondition() {
-		final RSTile curr_base = game.getMapBase();
-		final int curr_plane = game.getPlane();
-		return game.isLoggedIn() && ((lastMapBase == null || !lastMapBase.equals(curr_base)) || (lastLevel == -1 || lastLevel != curr_plane));
+	public WebData(final MethodContext ctx) {
+		super(ctx);
 	}
 
-	@Override
+	public boolean activateCondition() {
+		final RSTile curr_base = methods.game.getMapBase();
+		final int curr_plane = methods.game.getPlane();
+		return methods.game.isLoggedIn() && ((lastMapBase == null || !lastMapBase.equals(curr_base)) || (lastLevel == -1 || lastLevel != curr_plane));
+	}
+
 	public int loop() {
 		try {
 			sleep(5000);
-			final RSTile currentMapBase = game.getMapBase();
-			final int currentLevel = game.getPlane();
-			if (!currentMapBase.equals(game.getMapBase())) {
+			final RSTile currentMapBase = methods.game.getMapBase();
+			final int currentLevel = methods.game.getPlane();
+			if (!currentMapBase.equals(methods.game.getMapBase())) {
 				return -1;
 			}
 			lastMapBase = currentMapBase;
 			lastLevel = currentLevel;
-			final int tileKeys[][] = walking.getCollisionFlags(currentLevel).clone();
-			final RSTile collisionOffset = walking.getCollisionOffset(currentLevel);
+			final int tileKeys[][] = methods.walking.getCollisionFlags(currentLevel).clone();
+			final RSTile collisionOffset = methods.walking.getCollisionOffset(currentLevel);
 			final int xOffset = collisionOffset.getX();
 			final int yOffset = collisionOffset.getY();
 			final int xBase = currentMapBase.getX(), yBase = currentMapBase.getY();
@@ -59,8 +64,16 @@ public class WebData extends BackgroundScript {
 		return -1;
 	}
 
-	@Override
-	public int pausedIterationDelay() {
-		return 2000;
+	public void run() {
+		while (running) {
+			if (activateCondition()) {
+				int w;
+				while ((w = loop()) != -1) {
+					Script.sleep(w);
+				}
+			} else {
+				Script.sleep(2000);
+			}
+		}
 	}
 }

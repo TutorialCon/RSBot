@@ -98,27 +98,16 @@ public class ScriptHandler extends TaskContainer {
 	}
 
 	public void stopScript(final int id) {
-		if (stopDaemonScript(id)) {
-			notifyStop();
-		}
-	}
-
-	public boolean stopDaemonScript(final int id) {
 		final LoopTask script = getTasks().get(id);
 		if (script != null) {
 			script.stop();
 			remove(id);
-			return true;
+			notifyStop();
 		}
-		return false;
 	}
 
 	public int runScript(final Script script) {
 		notifyStart();
-		return runDaemonScript(script);
-	}
-
-	public int runDaemonScript(final Script script) {
 		final int id = pool(script);
 		invoke(id);
 		return id;

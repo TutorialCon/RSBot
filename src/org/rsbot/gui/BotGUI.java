@@ -248,8 +248,7 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 
 		if (bot != null) {
 			final Map<Integer, LoopTask> scriptMap = bot.getScriptHandler().getRunningScripts();
-			if ((bot.getMethodContext() == null || !bot.getMethodContext().web.areScriptsLoaded() || scriptMap.size() > Web.WEB_SCRIPT_COUNT) &&
-					scriptMap.size() > 0) {
+			if (scriptMap.size() > 0) {
 				idle = false;
 				paused = scriptMap.values().iterator().next().isPaused();
 			} else {
@@ -337,11 +336,6 @@ public class BotGUI extends JFrame implements ActionListener, ScriptListener {
 			Web web = bot.getMethodContext().web;
 			while (idIterator.hasNext()) {
 				final int checkID = idIterator.next();
-				if (web.areScriptsLoaded()) {
-					if (checkID == web.webDataId) {
-						continue;
-					}
-				}
 				id = checkID;
 				break;
 			}

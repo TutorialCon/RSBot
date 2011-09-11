@@ -6,7 +6,6 @@ import org.rsbot.gui.component.Messages;
 import org.rsbot.script.Script;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.internal.event.ScriptListener;
-import org.rsbot.script.methods.Web;
 import org.rsbot.script.provider.*;
 import org.rsbot.service.Preferences;
 
@@ -18,7 +17,8 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -64,8 +64,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		update();
 		load();
 		if (!connectPrompted && Preferences.getInstance().sdnUser.length() == 0) {
-			 log.info("Visit " + Configuration.Paths.URLs.HOST + "/scripts to create your custom script list!");
-			 connect.doClick();
+			log.info("Visit " + Configuration.Paths.URLs.HOST + "/scripts to create your custom script list!");
+			connect.doClick();
 		}
 		if (!connectPrompted) {
 			connectPrompted = true;
@@ -74,8 +74,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	}
 
 	void update() {
-		final boolean available = bot.getScriptHandler().getRunningScripts().size() == 0 ||
-				(bot.getMethodContext() != null && bot.getMethodContext().web.areScriptsLoaded() && bot.getScriptHandler().getRunningScripts().size() == Web.WEB_SCRIPT_COUNT);
+		final boolean available = bot.getScriptHandler().getRunningScripts().size() == 0;
 		submit.setEnabled(available && table.getSelectedRow() != -1);
 		table.setEnabled(available);
 		search.setEnabled(available);
@@ -120,7 +119,7 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 				new Thread() {
 					@Override
 					public void run() {
-						final Thread[] tasks = { new Thread(ScriptDeliveryNetwork.getInstance()), new Thread(ScriptUserList.getInstance()) };
+						final Thread[] tasks = {new Thread(ScriptDeliveryNetwork.getInstance()), new Thread(ScriptUserList.getInstance())};
 						tasks[0].start();
 						tasks[1].start();
 						try {
@@ -307,9 +306,9 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 		});
 		connectUpdate();
 		accounts = new JComboBox(AccountManager.getAccountNames());
-		categories = new JComboBox(new String[] { "All", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
+		categories = new JComboBox(new String[]{"All", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
 				"Firemaking", "Fishing", "Fletching", "Herblore", "Hunter", "Magic", "Minigame", "Mining", "Other", "Money Making", "Prayer",
-				"Ranged", "Runecrafting", "Slayer", "Smithing", "Summoning", "Thieving", "Woodcutting" });
+				"Ranged", "Runecrafting", "Slayer", "Smithing", "Summoning", "Thieving", "Woodcutting"});
 		accounts.setPreferredSize(new Dimension(125, 20));
 		categories.setPreferredSize(new Dimension(150, 20));
 		categories.addActionListener(new ActionListener() {

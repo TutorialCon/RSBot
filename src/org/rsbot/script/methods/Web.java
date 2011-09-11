@@ -1,7 +1,6 @@
 package org.rsbot.script.methods;
 
 import org.rsbot.script.background.WebData;
-import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.web.*;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWeb;
@@ -15,11 +14,9 @@ import java.util.*;
  */
 public class Web extends MethodProvider {
 	public static final HashMap<RSTile, Integer> rs_map = new HashMap<RSTile, Integer>();
-	public static boolean webScriptsLoaded = false;
+	public boolean webScriptsLoaded = false;
 	private long lastLocalAccess = 0;
-	public int webDataId = 0;
-	private boolean forceLoad = false;
-	public static final int WEB_SCRIPT_COUNT = 1;
+	private WebData webData = new WebData(methods);
 
 	Web(final MethodContext ctx) {
 		super(ctx);
@@ -394,11 +391,8 @@ public class Web extends MethodProvider {
 	 * @return <tt>true</tt> if the tile contains flags.
 	 */
 	public static boolean Flag(final RSTile tile, final int key) {
-		int theFlag = 0;
-		if ((theFlag = BypassFlags.getKey(tile)) != -1) {
-			return (theFlag & key) != 0;
-		}
-		return false;
+		int theFlag;
+		return (theFlag = BypassFlags.getKey(tile)) != -1 && (theFlag & key) != 0;
 	}
 
 	/**
@@ -419,29 +413,25 @@ public class Web extends MethodProvider {
 	}
 
 	public boolean areScriptsInActive() {
-		return webScriptsLoaded && System.currentTimeMillis() - lastLocalAccess > (1000 * 60 * 5) && !forceLoad;
+		return webScriptsLoaded && System.currentTimeMillis() - lastLocalAccess > (1000 * 60 * 5);
 	}
 
 	public void loadWebScripts() {
 		if (!webScriptsLoaded) {
-			final ScriptHandler bsh = methods.bot.getScriptHandler();
-			webDataId = bsh.runDaemonScript(new WebData());
+			webData.running = true;
+			final Thread t = new Thread(webData);
+			t.setPriority(Thread.MIN_PRIORITY);
+			t.setDaemon(true);
+			t.setName("Web data handler");
+			t.start();
 			webScriptsLoaded = true;
 		}
 	}
 
 	public void unloadWebScripts() {
-		if (webScriptsLoaded && !forceLoad) {
-			final ScriptHandler bsh = methods.bot.getScriptHandler();
-			bsh.stopDaemonScript(webDataId);
+		if (webScriptsLoaded) {
+			webData.running = false;
 			webScriptsLoaded = false;
-		}
-	}
-
-	public void setForceLoad(final boolean forceLoad) {
-		this.forceLoad = forceLoad;
-		if (forceLoad) {
-			loadWebScripts();
 		}
 	}
 }
