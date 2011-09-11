@@ -35,7 +35,7 @@ public class RSGroundItem extends MethodProvider implements RSTarget {
 		if (rsGround != null) {
 			final RSGroundEntity obj = rsGround.getGroundObject();
 			if (obj != null) {
-				final org.rsbot.client.Model model = ((RSGroundObject) rsGround.getGroundObject()).getModel();
+				final org.rsbot.client.Model model = ((RSGroundObject) obj).getModel();
 				if (model != null) {
 					return new RSGroundItemModel(methods, model, obj, this);
 				}
@@ -135,6 +135,6 @@ public class RSGroundItem extends MethodProvider implements RSTarget {
 		if (model != null) {
 			return model.contains(x, y);
 		}
-		return methods.calc.tileToScreen(getLocation()).distance(x, y) < random(4, 9);
+		return methods.calc.tileToScreen(getLocation(), getHeight()).distance(x, y) < random(4, 9);
 	}
 }
