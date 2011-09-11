@@ -2,6 +2,7 @@ package org.rsbot.script.randoms;
 
 import org.rsbot.gui.AccountManager;
 import org.rsbot.script.Random;
+import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Lobby;
 import org.rsbot.script.wrappers.RSComponent;
@@ -13,6 +14,7 @@ import java.awt.*;
  *
  * @author Timer
  */
+@ScriptManifest(authors = {"Timer"}, name = "Improved Login", version = 0.2)
 public class ImprovedLoginBot extends Random {
 	public static final int INTERFACE_LOGIN_SCREEN = 596;
 	public static final int INTERFACE_LOGIN_SCREEN_ENTER_GAME = 60;
