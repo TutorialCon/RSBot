@@ -126,7 +126,7 @@ public class LoadScreen extends JDialog {
 
 		if (error == null) {
 			this.error = false;
-			log.info("Loading RSBot");
+			log.info("Loading");
 			Configuration.registerLogging();
 			Logger.getLogger("").removeHandler(handler);
 		} else {
