@@ -4,55 +4,55 @@ import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.wrappers.RSObject;
 
-@ScriptManifest(authors = {"Poxer"}, name = "FirstTimeDeath", version = 1.0)
-public class FirstTimeDeath extends Random {
-
-	final int portalID = 45803;
-	boolean exit = false;
-	private RSObject reaperChair;
-
-	@Override
-	public boolean activateCondition() {
-		return (reaperChair = objects.getNearest(45802)) != null;
-	}
-
-	@Override
-	protected int loop() {
-		if (!activateCondition()) {
-			return -1;
-		} else {
-			camera.setPitch(true);
-			if (!exit && calc.distanceTo(reaperChair) > 4) {
-				walking.walkTileOnScreen(reaperChair.getLocation());
-				return random(1000, 1300);
-			} else if (!exit && calc.distanceTo(reaperChair) < 4) {
-				reaperChair.interact("Talk-to");
-				return random(1200, 1500);
-			} else if (interfaces.canContinue()) {
-				interfaces.clickContinue();
-				return random(400, 650);
-			} else if (interfaces.getComponent(236, 2).getText().contains("No")) {
-				exit = interfaces.getComponent(236, 2).doClick();
-				return random(400, 650);
-			} else if (exit) {
-				final RSObject portal = objects.getNearest(portalID);
-				camera.turnTo(portal);
-				if (calc.distanceTo(portal) < 4) {
-					portal.interact("Enter");
-					return random(1000, 1300);
-				} else {
-					walking.walkTileOnScreen(portal.getLocation());
-					return random(1000, 1300);
-				}
-			}
-		}
-
-		return 0;
-	}
-
-	public void onFinish() {
-		exit = false;
-		reaperChair = null;
-	}
-
+@ScriptManifest(authors = {"Swipe, Poxer"}, name = "GrimReaper", version = 1.1)
+public class FirstTimeDeath extends Random{
+boolean talkDone;
+    @Override
+    public boolean activateCondition() {
+         if (!game.isLoggedIn()) {
+                 return false;
+         } else if (objects.getNearest(45802) != null && npcs.getNearest(8868) != null) {
+                 sleep(random(2000, 3000));
+                 return (objects.getNearest(45802) != null && npcs.getNearest(8868) != null);
+         }
+         return false;
+    }
+    private boolean canContinue() {
+         return interfaces.canContinue() || interfaces.getComponent(65, 6).isValid();
+    }
+    @Override
+    protected int loop() {
+         if (!activateCondition()) {
+                 return -1;
+         }
+         if (canContinue()) {
+                 interfaces.clickContinue();
+                 sleep(random(200,600));
+         }
+         if(!talkDone && !interfaces.canContinue()){
+                 if(objects.getNearest(45802)!=null){
+                 camera.turnTo(objects.getNearest(45802));
+                 objects.getNearest(45802).doClick();
+                 sleep(random(500,900));
+                 }
+         }
+         if (interfaces.getComponent(236, 2).getText().contains("No")) {
+                 interfaces.getComponent(236, 2).doClick();
+                 talkDone=true;
+                 return random(200, 650);
+         }
+         else if (talkDone) {//We have finished talking to reaper
+                 final RSObject portal = objects.getNearest(45803);//get portal
+                 camera.turnTo(portal);//turn
+                 if (calc.distanceTo(portal) <= 4) {
+                         portal.interact("Enter");//Leave
+                         return random(1200, 1400);
+                 }
+                 else {
+                         walking.walkTileMM(portal.getLocation()); //walk portal
+                         return random(1000, 1300);
+                 }
+         }
+         return random(200, 400);
+    }
 }
