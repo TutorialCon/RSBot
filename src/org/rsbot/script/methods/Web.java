@@ -1,6 +1,7 @@
 package org.rsbot.script.methods;
 
 import org.rsbot.script.background.WebData;
+import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.web.*;
 import org.rsbot.script.wrappers.RSTile;
 import org.rsbot.script.wrappers.RSWeb;
@@ -419,7 +420,7 @@ public class Web extends MethodProvider {
 	public void loadWebScripts() {
 		if (!webScriptsLoaded) {
 			webData.running = true;
-			final Thread t = new Thread(webData);
+			final Thread t = new Thread(ScriptHandler.THREAD_GROUP, webData, ScriptHandler.THREAD_GROUP_NAME + "-Web Data handler");
 			t.setPriority(Thread.MIN_PRIORITY);
 			t.setDaemon(true);
 			t.setName("Web data handler");
