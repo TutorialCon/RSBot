@@ -219,7 +219,7 @@ public class Game extends MethodProvider {
 	113, 118, 120, 122, 123, 125, 126, 134, 135, 136, 139, 141, 146, 149 152, 153, 154, 155, 161, 165, 167, 169 };	
 
 	public enum Language {
-		ENGLISH, GERMAN, FRENCH, PORTUGESE
+		ENGLISH, GERMAN, FRENCH, PORTUGUESE
 	};
 
 	@Deprecated
@@ -798,13 +798,13 @@ public class Game extends MethodProvider {
 	/**
 	 * Get the current world language.
 	 *
-	 * @return The language of the current world, currently only English, German, French or Portugese.
+	 * @return The language of the current world, currently only English, German, French or Portuguese.
 	 */
 	public Language getWorldLanguage() {
 		final Map<Language, int[]> map = new HashMap<Language, int[]>(3);
 		map.put(Language.GERMAN, GERMAN_WORLDS);
 		map.put(Language.FRENCH, FRENCH_WORLDS);
-		map.put(Language.PORTUGESE, PORTUGUESE_WORLDS);
+		map.put(Language.PORTUGUESE, PORTUGUESE_WORLDS);
 		final int w = getCurrentWorld();
 		for (final Entry<Language, int[]> entry : map.entrySet()) {
 			for (int i = 0; i < entry.getValue().length; i++) {
