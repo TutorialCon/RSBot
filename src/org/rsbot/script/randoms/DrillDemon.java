@@ -2,324 +2,97 @@ package org.rsbot.script.randoms;
 
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSNPC;
 import org.rsbot.script.wrappers.RSObject;
-import org.rsbot.script.wrappers.RSTile;
 
 @ScriptManifest(authors = {"Keilgo"}, name = "DrillDemon", version = 0.2)
 public class DrillDemon extends Random {
 
-	private final int demonID = 2790;
-	private int sign1;
-	private int sign2;
-	private int sign3;
-	private int sign4;
+	private final static int demonID = 2790;
+	private final static int[] signs = {-1, -1, -1, -1};
+	private final static String[] exercises = {"jumps", "push ups", "sit ups", "jog"};
+	private final static int[][] settingArrays = {
+			{668, 1, 2, 3, 4}, {675, 2, 1, 3, 4}, {724, 1, 3, 2, 4},
+			{738, 3, 1, 2, 4}, {787, 2, 3, 1, 4}, {794, 3, 2, 1, 4},
+			{1116, 1, 2, 4, 3}, {1123, 2, 1, 4, 3}, {1128, 1, 4, 2, 3},
+			{1249, 4, 1, 2, 3}, {1291, 2, 4, 1, 3}, {1305, 4, 2, 1, 3},
+			{1620, 1, 3, 4, 2}, {1634, 3, 1, 4, 2}, {1676, 1, 4, 3, 2},
+			{1697, 4, 1, 3, 2}, {1802, 3, 4, 1, 2}, {1809, 4, 3, 1, 2},
+			{2131, 2, 3, 4, 1}, {2138, 3, 2, 4, 1}, {2187, 2, 4, 3, 1},
+			{2201, 4, 2, 3, 1}, {2250, 3, 4, 2, 1}, {2257, 4, 3, 2, 1}
+	};
 
 	@Override
 	public void onFinish() {
-		sign1 = -1;
-		sign2 = -1;
-		sign3 = -1;
-		sign4 = -1;
+		for(int i = 0; i < signs.length; i++) {
+			signs[i] = -1;
+		}
 	}
-
 
 	@Override
 	public boolean activateCondition() {
-		return playerInArea(3167, 4822, 3159, 4818);
+		return new RSArea(3159, 4818, 3167, 4822).contains(getMyPlayer().getLocation());
 	}
 
 	@Override
 	public int loop() {
 		camera.setPitch(true);
 		camera.setCompass('N');
-
-		if (getMyPlayer().isMoving() || getMyPlayer().getAnimation() != -1) {
-			return random(1900, 2400);
-		}
-
 		final RSNPC demon = npcs.getNearest(demonID);
 		final RSObject mat1 = objects.getNearest(10076);
 		final RSObject mat2 = objects.getNearest(10077);
 		final RSObject mat3 = objects.getNearest(10078);
 		final RSObject mat4 = objects.getNearest(10079);
-
+		final RSObject[] mats = {mat1, mat2, mat3, mat4};
+		if (getMyPlayer().isMoving() || getMyPlayer().getAnimation() != -1) {
+			return random(2000, 2400);
+		}
 		if (demon == null) {
 			return -1;
 		}
-
-		myClickContinue();
-		sleep(random(750, 1000));
-
+		if (interfaces.clickContinue()) {
+			return random(1000, 1500);
+		}
 		if (interfaces.get(148).isValid()) {
-			switch (settings.getSetting(531)) {
-				case 668:
-					sign1 = 1;
-					sign2 = 2;
-					sign3 = 3;
-					sign4 = 4;
+			final int compare = settings.getSetting(531);
+			for (final int[] settingArray : settingArrays) {
+				if (settingArray[0] == compare) {
+					signs[0] = settingArray[1];
+					signs[1] = settingArray[2];
+					signs[2] = settingArray[3];
+					signs[3] = settingArray[4];
 					break;
-				case 675:
-					sign1 = 2;
-					sign2 = 1;
-					sign3 = 3;
-					sign4 = 4;
-					break;
-				case 724:
-					sign1 = 1;
-					sign2 = 3;
-					sign3 = 2;
-					sign4 = 4;
-					break;
-				case 738:
-					sign1 = 3;
-					sign2 = 1;
-					sign3 = 2;
-					sign4 = 4;
-					break;
-				case 787:
-					sign1 = 2;
-					sign2 = 3;
-					sign3 = 1;
-					sign4 = 4;
-					break;
-				case 794:
-					sign1 = 3;
-					sign2 = 2;
-					sign3 = 1;
-					sign4 = 4;
-					break;
-				case 1116:
-					sign1 = 1;
-					sign2 = 2;
-					sign3 = 4;
-					sign4 = 3;
-					break;
-				case 1123:
-					sign1 = 2;
-					sign2 = 1;
-					sign3 = 4;
-					sign4 = 3;
-					break;
-				case 1228:
-					sign1 = 1;
-					sign2 = 4;
-					sign3 = 2;
-					sign4 = 3;
-					break;
-				case 1249:
-					sign1 = 4;
-					sign2 = 1;
-					sign3 = 2;
-					sign4 = 3;
-					break;
-				case 1291:
-					sign1 = 2;
-					sign2 = 4;
-					sign3 = 1;
-					sign4 = 3;
-					break;
-				case 1305:
-					sign1 = 4;
-					sign2 = 2;
-					sign3 = 1;
-					sign4 = 3;
-					break;
-				case 1620:
-					sign1 = 1;
-					sign2 = 3;
-					sign3 = 4;
-					sign4 = 2;
-					break;
-				case 1634:
-					sign1 = 3;
-					sign2 = 1;
-					sign3 = 4;
-					sign4 = 2;
-					break;
-				case 1676:
-					sign1 = 1;
-					sign2 = 4;
-					sign3 = 3;
-					sign4 = 2;
-					break;
-				case 1697:
-					sign1 = 4;
-					sign2 = 1;
-					sign3 = 3;
-					sign4 = 2;
-					break;
-				case 1802:
-					sign1 = 3;
-					sign2 = 4;
-					sign3 = 1;
-					sign4 = 2;
-					break;
-				case 1809:
-					sign1 = 4;
-					sign2 = 3;
-					sign3 = 1;
-					sign4 = 2;
-					break;
-				case 2131:
-					sign1 = 2;
-					sign2 = 3;
-					sign3 = 4;
-					sign4 = 1;
-					break;
-				case 2138:
-					sign1 = 3;
-					sign2 = 2;
-					sign3 = 4;
-					sign4 = 1;
-					break;
-				case 2187:
-					sign1 = 2;
-					sign2 = 4;
-					sign3 = 3;
-					sign4 = 1;
-					break;
-				case 2201:
-					sign1 = 4;
-					sign2 = 2;
-					sign3 = 3;
-					sign4 = 1;
-					break;
-				case 2250:
-					sign1 = 3;
-					sign2 = 4;
-					sign3 = 2;
-					sign4 = 1;
-					break;
-				case 2257:
-					sign1 = 4;
-					sign2 = 3;
-					sign3 = 2;
-					sign4 = 1;
-					break;
+				}
 			}
 		}
-
-		if (interfaces.getComponent(148, 1).getText().contains("jumps")) {
-			if (sign1 == 1) {
-				if (calc.distanceTo(new RSTile(3167, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3160, 4820));
-					mat1.interact("Use");
-				} else {
-					mat1.interact("Use");
+		for (int i = 0; i < exercises.length; i++) {
+			if (interfaces.getComponent(148, 1).getText().contains(exercises[i])) {
+				if (findAndUseMat((i + 1), mats)) {
+					return random(3500, 4500);
 				}
-				return random(2000, 2500);
-			} else if (sign2 == 1) {
-				mat2.interact("Use");
-				return random(2000, 2500);
-			} else if (sign3 == 1) {
-				mat3.interact("Use");
-				return random(2000, 2500);
-			} else if (sign4 == 1) {
-				if (calc.distanceTo(new RSTile(3159, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3166, 4820));
-					mat4.interact("Use");
-				} else {
-					mat4.interact("Use");
-				}
-				return random(2000, 2500);
-			}
-		} else if (interfaces.getComponent(148, 1).getText()
-				.contains("push ups")) {
-			if (sign1 == 2) {
-				if (calc.distanceTo(new RSTile(3167, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3160, 4820));
-					mat1.interact("Use");
-				} else {
-					mat1.interact("Use");
-				}
-				return random(2000, 2500);
-			} else if (sign2 == 2) {
-				mat2.interact("Use");
-				return random(2000, 2500);
-			} else if (sign3 == 2) {
-				mat3.interact("Use");
-				return random(2000, 2500);
-			} else if (sign4 == 2) {
-				if (calc.distanceTo(new RSTile(3159, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3166, 4820));
-					mat4.interact("Use");
-				} else {
-					mat4.interact("Use");
-				}
-				return random(2000, 2500);
-			}
-		} else if (interfaces.getComponent(148, 1).getText()
-				.contains("sit ups")) {
-			if (sign1 == 3) {
-				if (calc.distanceTo(new RSTile(3167, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3160, 4820));
-					mat1.interact("Use");
-				} else {
-					mat1.interact("Use");
-				}
-				return random(1000, 1500);
-			} else if (sign2 == 3) {
-				mat2.interact("Use");
-				return random(2000, 2500);
-			} else if (sign3 == 3) {
-				mat3.interact("Use");
-				return random(2000, 2500);
-			} else if (sign4 == 3) {
-				if (calc.distanceTo(new RSTile(3159, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3166, 4820));
-					mat4.interact("Use");
-				} else {
-					mat4.interact("Use");
-				}
-				return random(2000, 2500);
-			}
-		} else if (interfaces.getComponent(148, 1).getText().contains("jog on")) {
-			if (sign1 == 4) {
-				if (calc.distanceTo(new RSTile(3167, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3160, 4820));
-					mat1.interact("Use");
-				} else {
-					mat1.interact("Use");
-				}
-				return random(2000, 2500);
-			} else if (sign2 == 4) {
-				mat2.interact("Use");
-				return random(2000, 2500);
-			} else if (sign3 == 4) {
-				mat3.interact("Use");
-				return random(2000, 2500);
-			} else if (sign4 == 4) {
-				if (calc.distanceTo(new RSTile(3159, 4820)) < 2) {
-					walking.walkTileMM(new RSTile(3166, 4820));
-					mat4.interact("Use");
-				} else {
-					mat4.interact("Use");
-				}
-				return random(2000, 2500);
 			}
 		}
-
-		if (!myClickContinue() && getMyPlayer().getAnimation() == -1) {
+		if (!interfaces.clickContinue() && getMyPlayer().getAnimation() == -1) {
 			demon.interact("Talk-to");
 		}
-
 		return random(2000, 2500);
 	}
 
-	boolean myClickContinue() {
-		sleep(random(800, 1000));
-		return interfaces.getComponent(243, 7).doClick()
-				|| interfaces.getComponent(241, 5).doClick()
-				|| interfaces.getComponent(242, 6).doClick()
-				|| interfaces.getComponent(244, 8).doClick()
-				|| interfaces.getComponent(64, 5).doClick();
-	}
-
-	boolean playerInArea(final int maxX, final int maxY, final int minX,
-	                     final int minY) {
-		final int x = getMyPlayer().getLocation().getX();
-		final int y = getMyPlayer().getLocation().getY();
-		return x >= minX && x <= maxX && y >= minY && y <= maxY;
+	public boolean findAndUseMat(final int signID, final RSObject[] mats) {
+		for (int i = 0; i < signs.length; i++) {
+			if (signs[i] == signID) {
+				if (calc.distanceTo(mats[i].getLocation()) > 5) {
+					walking.walkTileMM(mats[i].getLocation());
+				} else {
+					if (getMyPlayer().getAnimation() == -1) {
+						if (mats[i].interact("Use")) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
