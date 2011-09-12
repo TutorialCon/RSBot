@@ -15,20 +15,13 @@ import org.rsbot.script.wrappers.RSTile;
 @ScriptManifest(authors = {"joku.rules"}, name = "Certer", version = 1.0)
 public class Certer extends Random {
 
-	private final int[] MODEL_IDS = {2807, 8828, 8829, 8832, 8833, 8834, 8835,
-			8836, 8837};
-	private final int[] bookPiles = {42352, 42354};
-	private final String[] ITEM_NAMES = {"bowl", "battleaxe", "fish",
+	private static int failCount;
+	private static final int PORTAL_ID = 11368;
+	private static final int[] MODEL_IDS = {2807, 8828, 8829, 8832, 8833, 8834, 8835, 8836, 8837};
+	private static final int[] bookPiles = {42352, 42354};
+	private static final String[] ITEM_NAMES = {"bowl", "battleaxe", "fish",
 			"shield", "helmet", "ring", "shears", "sword", "spade"};
-
-	private boolean readyToLeave = false;
-	private int failCount = 0;
-
-	@Override
-	public void onFinish() {
-		failCount = 0;
-		readyToLeave = false;
-	}
+	private static boolean readyToLeave;
 
 	@Override
 	public boolean activateCondition() {
@@ -37,26 +30,14 @@ public class Certer extends Random {
 
 	@Override
 	public int loop() {
+		RSComponent talkComponent = interfaces.getComponent(241, 4);
 		if (!activateCondition() && readyToLeave) {
-			readyToLeave = false;
-			failCount = 0;
 			return -1;
 		}
 		if (getMyPlayer().getAnimation() != -1 || getMyPlayer().isMoving()) {
 			return random(500, 1000);
 		}
-		if (interfaces.getComponent(241, 4).containsText("Ahem, ")) {
-			readyToLeave = false;
-		}
-
-		if (interfaces.getComponent(241, 4).containsText("Correct.")
-				|| interfaces.getComponent(241, 4).containsText(
-				"You can go now.")) {
-			readyToLeave = true;
-		}
-
 		if (readyToLeave) {
-			final int PORTAL_ID = 11368;
 			final RSObject portal = objects.getNearest(PORTAL_ID);
 			if (portal != null) {
 				final RSTile portalLocation = portal.getLocation();
@@ -64,64 +45,66 @@ public class Certer extends Random {
 					portal.interact("Enter");
 					return random(3000, 4000);
 				} else {
-					walking.walkTileMM(new RSTile(portalLocation.getX() - 1, portalLocation.getY()).randomize(1, 1));
+					walking.walkTileMM(portalLocation.randomize(2, 2));
 					return random(1500, 2000);
 				}
 			}
 		}
-
+		if (talkComponent.containsText("Ahem, ")) {
+			readyToLeave = false;
+		}
+		if (talkComponent.containsText("Correct.") || talkComponent.containsText("You can go now.")) {
+			readyToLeave = true;
+		}
 		if (interfaces.getComponent(184, 0).isValid()) {
-			final int modelID = interfaces.getComponent(184, 8).getComponents()[3]
-					.getModelID();
+			final int modelID = interfaces.getComponent(184, 8).getComponent(3).getModelID();
 			String itemName = null;
 			for (int i = 0; i < MODEL_IDS.length; i++) {
 				if (MODEL_IDS[i] == modelID) {
 					itemName = ITEM_NAMES[i];
 				}
 			}
-
 			if (itemName == null) {
 				log("The object couldn't be identified! ID: " + modelID);
-				failCount++;
-				if (failCount > 10) {
+				if (failCount++ > 10) {
 					stopScript(false);
 					return -1;
 				}
 				return random(1000, 2000);
 			}
-
 			for (int j = 0; j < 3; j++) {
-				final RSComponent iface = interfaces.getComponent(184, 8)
-						.getComponents()[j];
+				final RSComponent iface = interfaces.getComponent(184, 8).getComponent(j);
 				if (iface.containsText(itemName)) {
 					iface.doClick();
 					return random(1000, 1200);
 				}
 			}
 		}
-
 		if (interfaces.canContinue()) {
 			interfaces.clickContinue();
 			return random(1000, 1200);
 		}
-
-		final RSNPC certer = npcs.getNearest("Niles", "Miles", "Giles");
+		final RSNPC certer = npcs.getNearest("Giles", "Miles", "Niles");
 		if (certer != null) {
 			if (calc.distanceTo(certer) < 4) {
 				certer.interact("Talk-to");
 				return random(2500, 3000);
 			} else {
 				final RSTile certerLocation = certer.getLocation();
-				walking.walkTileMM(new RSTile(certerLocation.getX() + 2, certerLocation.getY()).randomize(1, 1));
+				walking.walkTileMM(certerLocation.randomize(2, 1));
 				return random(3000, 3500);
 			}
 		}
-
-		failCount++;
-		if (failCount > 10) {
+		if (failCount++ > 10) {
 			stopScript(false);
 			return -1;
 		}
 		return random(400, 600);
+	}
+
+	@Override
+	public void onFinish() {
+		failCount = 0;
+		readyToLeave = false;
 	}
 }
