@@ -80,13 +80,13 @@ public class QuizSolver extends Random {
 		}
 	}
 
-	private final int quizInterface = 191;
-	private final int[] Fish = {6190, 6189};
-	private final int[] Jewelry = {6198, 6197};
-	private final int[] Weapons = {6192, 6194};
-	private final int[] Farming = {6195, 6196};
-	private final int[][] items = {Fish, Jewelry, Weapons, Farming};
-	private final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
+	private static final int quizInterface = 191;
+	private static final int[] Fish = {6190, 6189};
+	private static final int[] Jewelry = {6198, 6197};
+	private static final int[] Weapons = {6192, 6194};
+	private static final int[] Farming = {6195, 6196};
+	private static final int[][] items = {Fish, Jewelry, Weapons, Farming};
+	private static final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
 
 	@Override
 	public boolean activateCondition() {
