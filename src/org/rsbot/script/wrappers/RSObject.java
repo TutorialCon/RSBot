@@ -182,6 +182,15 @@ public class RSObject extends MethodProvider implements RSTarget {
 	public int getID() {
 		return obj.getID();
 	}
+	
+	/**
+	 * Draws RSObject model
+	 */
+	public void draw(final Graphics g) {
+		if (getModel() != null) {
+			getModel().drawWireFrame(g);
+		}
+	}
 
 	/**
 	 * Gets the RSTile on which this object is centered. An RSObject may cover
