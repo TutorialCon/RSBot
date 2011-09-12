@@ -2,7 +2,6 @@ package org.rsbot.script.randoms;
 
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.wrappers.RSComponent;
 
 @ScriptManifest(authors = {"Holo", "Gnarly", "Salty_Fish", "Pervy Shuya", "Doout"}, name = "BankPin", version = 3.0)
 public class BankPins extends Random {
@@ -13,17 +12,14 @@ public class BankPins extends Random {
 	}
 
 	void enterPin(String pin) {
+		final int[] pinComponents = {6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 		int state = settings.getSetting(563);
 		if (!interfaces.get(13).isValid() || !interfaces.get(759).isValid() || state == 4) {
 			return;
 		}
-		final RSComponent[] pinNumbers = interfaces.get(759).getComponents();
-		for (final RSComponent pinNumber : pinNumbers) {
-			if (pinNumber.containsText(String.valueOf(pin.charAt(state)))) {
-				pinNumber.doClick();
-				sleep(800, 1200);
-				break;
-			}
+		String pinNumber = String.valueOf(pin.charAt(state));
+		if (interfaces.getComponent(13, pinComponents[Integer.valueOf(pinNumber)]).doClick()) {
+			sleep(800, 1200);
 		}
 	}
 
