@@ -14,135 +14,84 @@ import org.rsbot.script.wrappers.RSNPC;
 public class QuizSolver extends Random {
 
 	public class QuizQuestion {
-		final int ID_One;
-		final int ID_Two;
-		final int ID_Three;
+		int[] IDS = {-1, -1, -1};
 		int answer;
 
 		public QuizQuestion(final int One, final int Two, final int Three) {
-			ID_One = One;
-			ID_Two = Two;
-			ID_Three = Three;
+			IDS = new int[]{One, Two, Three};
 		}
 
 		public boolean activateCondition() {
-			if (ID_to_Slot(ID_One) != -1) {
-				if (ID_to_Slot(ID_Two) != -1) {
-					if (ID_to_Slot(ID_Three) != -1) {
-						return true;
-					}
+			for (int ID : IDS) {
+				if (getSlot(ID) == -1) {
+					return false;
 				}
 			}
-
-			return false;
+			return true;
 		}
 
 		public boolean arrayContains(final int[] arr, final int i) {
-			boolean returnt = false;
 			for (final int num : arr) {
 				if (num == i) {
-					returnt = true;
+					return true;
 				}
 			}
-
-			return returnt;
+			return false;
 		}
 
 		public boolean clickAnswer() {
 			answer = -1;
 			int count = 0;
-			sleep(random(1000, 1700));
+			sleep(1000, 1700);
 			for (int j = 0; j < items.length; j++) {
-				if (arrayContains(items[j], ID_One)) {
-					log.info("Slot 1: " + names[j]);
-					count++;
+				for (int i = 0; i < IDS.length; i++) {
+					if (arrayContains(items[j], IDS[i])) {
+						log.info("Slot "+ (i + 1) + ": " + names[j]);
+						count++;
+					}
 				}
-				if (arrayContains(items[j], ID_Two)) {
-					log.info("Slot 2: " + names[j]);
-					count++;
-				}
-				if (arrayContains(items[j], ID_Three)) {
-					log.info("Slot 3: " + names[j]);
-					count++;
-				}
-
 				if (count >= 2) {
 					log.info("Type Found: " + names[j]);
 					answer = j;
 					break;
 				}
 			}
-
 			if (answer != -1) {
 				int slot;
 				if ((slot = findNotInAnswerArray()) != -1) {
 					return atSlot(slot);
 				} else {
-					log.info("findNotInAnswerArray() fail.");
+					log.info("findNotInAnswerArray() failed.");
 					return false;
 				}
 			} else {
 				log.info("answer fail.");
 				return false;
 			}
-
 		}
 
 		public int findNotInAnswerArray() {
-			if (!arrayContains(items[answer], ID_One)) {
-				return 1;
-			} else if (!arrayContains(items[answer], ID_Two)) {
-				return 2;
-			} else if (!arrayContains(items[answer], ID_Three)) {
-				return 3;
-			} else {
-				return -1;
+			for (int i = 0; i < IDS.length; i++) {
+				if (!arrayContains(items[answer], IDS[i])) {
+					return i + 1;
+				}
 			}
+			return -1;
 		}
 	}
 
-	private final int quizInterface = 191;
-	private final int[] Fish = {6190, 6189};
-	private final int[] Jewelry = {6198, 6197};
-	private final int[] Weapons = {6192, 6194};
-	private final int[] Farming = {6195, 6196};
-	private final int[][] items = {Fish, Jewelry, Weapons, Farming};
-
-	private final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
+	private static final int quizInterface = 191;
+	private static final int[] Fish = {6190, 6189};
+	private static final int[] Jewelry = {6198, 6197};
+	private static final int[] Weapons = {6192, 6194};
+	private static final int[] Farming = {6195, 6196};
+	private static final int[][] items = {Fish, Jewelry, Weapons, Farming};
+	private static final String[] names = {"Fish", "Jewelry", "Weapons", "Farming"};
 
 	@Override
 	public boolean activateCondition() {
 		final RSNPC quizMaster = npcs.getNearest("Quiz Master");
 		return quizMaster != null;
-	}
-
-	void atRandom() {
-		atSlot(random(1, 3));
-	}
-
-	boolean atSlot(final int slot) {
-		switch (slot) {
-			case 1:
-				return interfaces.getComponent(quizInterface, 3).doClick();
-			case 2:
-				return interfaces.getComponent(quizInterface, 4).doClick();
-			case 3:
-				return interfaces.getComponent(quizInterface, 5).doClick();
-			default:
-				return false;
-		}
-	}
-
-	int ID_to_Slot(final int id) {
-		if (Slot_to_ID(1) == id) {
-			return 1;
-		} else if (Slot_to_ID(2) == id) {
-			return 2;
-		} else if (Slot_to_ID(3) == id) {
-			return 3;
-		} else {
-			return -1;
-		}
 	}
 
 	@Override
@@ -151,38 +100,38 @@ public class QuizSolver extends Random {
 		if (quizMaster == null) {
 			return -1;
 		}
-
-		if (Slot_to_ID(1) != -1) {
+		if (getSlotID(1) != -1) {
 			log.info("Question detected.");
-			final QuizQuestion question = new QuizQuestion(Slot_to_ID(1), Slot_to_ID(2), Slot_to_ID(3));
+			final QuizQuestion question = new QuizQuestion(getSlotID(1), getSlotID(2), getSlotID(3));
 			if (question.clickAnswer()) {
-				return random(2200, 3000);
+				return random(1000, 1500);
 			} else {
 				log.info("Trying Random Answer");
-				atRandom();
-				return random(1200, 2200);
+				atSlot(random(1, 4));
+				return random(1000, 1500);
 			}
 		} else {
 			if (interfaces.clickContinue()) {
-				return random(800, 1200);
+				return random(800, 1000);
 			}
 		}
 		return random(1200, 2000);
 	}
 
-	int Slot_to_ID(final int slot) {
-		switch (slot) {
-			case 1:
-				//System.out.println(interfaces.get(quizInterface).getComponent(6).getComponentID());
-				return interfaces.get(quizInterface).getComponent(6).getComponentID();
-			case 2:
-				//System.out.println(interfaces.get(quizInterface).getComponent(7).getComponentID());
-				return interfaces.get(quizInterface).getComponent(7).getComponentID();
-			case 3:
-				//System.out.println(interfaces.get(quizInterface).getComponent(8).getComponentID());
-				return interfaces.get(quizInterface).getComponent(8).getComponentID();
-			default:
-				return -1;
+	int getSlot(final int id) {
+		for (int i = 1; i < 3; i++) {
+			if (getSlotID(i) == id) {
+				return i;
+			}
 		}
+		return -1;
+	}
+
+	int getSlotID(final int slot) {
+		return interfaces.getComponent(quizInterface, (slot + 5)).getComponentID();
+	}
+
+	boolean atSlot(final int slot) {
+		return interfaces.getComponent(quizInterface, (slot + 2)).doClick();
 	}
 }
