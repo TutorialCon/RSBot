@@ -135,6 +135,19 @@ public class RSArea {
 		}
 		return currTile;
 	}
+	
+	/**
+	 * @return A random tile to the given distance.
+	 */
+	 public RSTile getRandomTile(final int dest) {
+		RSTile curTile = getCentralTile();
+		for (RSTile aTile : getTileArray()) { 
+			if(distanceBetween(curTile, aTile) > dest) {
+				return aTile;
+			}
+		}
+		return curTile;
+	}
 
 	/**
 	 * @return The plane of the <b>RSArea</b>.

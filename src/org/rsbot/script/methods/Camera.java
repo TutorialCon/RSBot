@@ -90,9 +90,8 @@ public class Camera extends MethodProvider {
 	public boolean setPitch(final boolean up) {
 		if (up) {
 			return setPitch(100);
-		} else {
-			return setPitch(0);
 		}
+		return setPitch(0);
 	}
 
 	/**

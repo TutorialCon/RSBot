@@ -371,6 +371,15 @@ public class Game extends MethodProvider {
 		final RSInterface logout = methods.interfaces.get(INTERFACE_LOGOUT);
 		return logout != null && logout.isValid() ? Tab.LOGOUT : Tab.NONE;
 	}
+	
+	/**
+	 * Determines if quick chat is open
+	 *
+	 * @return true if quickchat is open
+	 */
+	public boolean isQuickChatOpen() {
+		return methods.interfaces.getComponent(137, 4).isValid() && !new Color(186, 170, 139).equals(getColorAtPoint(19, 352));
+	}
 
 	/**
 	 * Returns the valid chat component.
