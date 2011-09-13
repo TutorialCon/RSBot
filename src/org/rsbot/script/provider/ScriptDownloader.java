@@ -33,6 +33,9 @@ public class ScriptDownloader {
 			log.warning("Invalid URL");
 			return;
 		}
+		if (url.contains("pastie") && url.endsWith("/text")) {
+			url = url.substring(url.length - 5, url.length);
+		}
 		url = normalisePastebin(url);
 
 		if (url == null || url.length() == 0) {
