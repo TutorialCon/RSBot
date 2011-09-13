@@ -1,5 +1,11 @@
 package org.rsbot.script.provider;
 
+import org.rsbot.Configuration;
+import org.rsbot.util.StringUtil;
+import org.rsbot.util.io.HttpClient;
+import org.rsbot.util.io.IOHelper;
+import org.rsbot.util.io.JavaCompiler;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +16,6 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.rsbot.Configuration;
-import org.rsbot.util.StringUtil;
-import org.rsbot.util.io.HttpClient;
-import org.rsbot.util.io.IOHelper;
-import org.rsbot.util.io.JavaCompiler;
 
 /**
  * @author Paris

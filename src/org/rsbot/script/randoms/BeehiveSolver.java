@@ -29,9 +29,9 @@ public class BeehiveSolver extends Random {
 	private static final int LOWERMID = 16022, UPPERMID = 16025, BOTTOM = 16034, TOP = 16036;
 	private static final int[][] MODELS = //ModelID, Component for un-built hive, Hive slot
 			{{TOP, -1, LID},
-			{UPPERMID, -1, UP_MID},
-			{LOWERMID, -1, LOW_MID},
-			{BOTTOM, -1, LEGS}};
+					{UPPERMID, -1, UP_MID},
+					{LOWERMID, -1, LOW_MID},
+					{BOTTOM, -1, LEGS}};
 
 	@Override
 	public boolean activateCondition() {

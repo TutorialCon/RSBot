@@ -1,8 +1,8 @@
 package org.rsbot.script.methods;
 
-import java.util.regex.Pattern;
-
 import org.rsbot.script.wrappers.RSComponent;
+
+import java.util.regex.Pattern;
 
 /**
  * Friend chat related operations.
@@ -135,10 +135,12 @@ public class FriendChat extends MethodProvider {
 	public boolean join(final String channel) {
 		methods.game.openTab(Game.Tab.FRIENDS_CHAT);
 		if (isInChannel()) {
-			if (getName().equals(channel))
+			if (getName().equals(channel)) {
 				return true;
-			if (!leave())
+			}
+			if (!leave()) {
 				return false;
+			}
 		}
 		methods.interfaces.getComponent(INTERFACE_FRIEND_CHAT, INTERFACE_FRIEND_CHAT_JOIN_BUTTON).doClick();
 		sleep(random(500, 800));
@@ -148,8 +150,9 @@ public class FriendChat extends MethodProvider {
 			lastCachedChannel = lastChatCompText.substring(lastChatCompText.indexOf(": ") + 2);
 			methods.keyboard.sendText(channel, true);
 			sleep(random(1550, 1800));
-			if (isInChannel())
+			if (isInChannel()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -163,8 +166,9 @@ public class FriendChat extends MethodProvider {
 	 */
 	public boolean joinLastChannel() {
 		methods.game.openTab(Game.Tab.FRIENDS_CHAT);
-		if (isInChannel())
+		if (isInChannel()) {
 			return true;
+		}
 		methods.interfaces.getComponent(INTERFACE_FRIEND_CHAT, INTERFACE_FRIEND_CHAT_JOIN_BUTTON).doClick();
 		sleep(random(500, 800));
 		if (methods.interfaces.get(INTERFACE_JOIN_FRIEND_CHAT).isValid()) {
@@ -174,8 +178,9 @@ public class FriendChat extends MethodProvider {
 			methods.interfaces.getComponent(INTERFACE_JOIN_FRIEND_CHAT,
 					INTERFACE_JOIN_FRIEND_CHAT_LAST_CHANNEL).doClick();
 			sleep(random(1550, 1800));
-			if (isInChannel())
+			if (isInChannel()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -220,8 +225,9 @@ public class FriendChat extends MethodProvider {
 			final User[] users = getUsers();
 			for (final String name : names) {
 				for (final User user : users) {
-					if (name.equalsIgnoreCase(user.getName()))
+					if (name.equalsIgnoreCase(user.getName())) {
 						return user;
+					}
 				}
 			}
 		}
@@ -422,8 +428,9 @@ public class FriendChat extends MethodProvider {
 		public boolean add(final FriendChat.Friend user) {
 			if (user != null) {
 				final Friend friend = getFriend(user.getName());
-				if (friend == null)
+				if (friend == null) {
 					return add(user.getName());
+				}
 			}
 			return false;
 		}
@@ -459,8 +466,9 @@ public class FriendChat extends MethodProvider {
 			final Friend[] friends = getFriends();
 			for (final String name : names) {
 				for (final Friend friend : friends) {
-					if (name.equalsIgnoreCase(friend.getName()))
+					if (name.equalsIgnoreCase(friend.getName())) {
 						return friend;
+					}
 				}
 			}
 			return null;
@@ -545,8 +553,9 @@ public class FriendChat extends MethodProvider {
 		public boolean remove(final FriendChat.Friend user) {
 			if (user != null) {
 				final Friend friend = getFriend(user.getName());
-				if (friend != null)
+				if (friend != null) {
 					return remove(friend.getName());
+				}
 			}
 			return false;
 		}

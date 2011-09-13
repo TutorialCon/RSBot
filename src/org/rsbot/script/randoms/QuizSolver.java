@@ -46,7 +46,7 @@ public class QuizSolver extends Random {
 			for (int j = 0; j < items.length; j++) {
 				for (int i = 0; i < IDS.length; i++) {
 					if (arrayContains(items[j], IDS[i])) {
-						log.info("Slot "+ (i + 1) + ": " + names[j]);
+						log.info("Slot " + (i + 1) + ": " + names[j]);
 						count++;
 					}
 				}

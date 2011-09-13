@@ -26,7 +26,7 @@ public class LostAndFound extends Random {
 	private final static int[] answerW = {105571, 37921, 131204, 235751, 1024, 165029, 168101, 68674, 203974, 2048, 100451, 6144,
 			39969, 69698, 32801, 136324};
 	private final static int[][] allAnswers = {
-		answerN, answerE, answerS, answerW
+			answerN, answerE, answerS, answerW
 	};
 
 	@Override

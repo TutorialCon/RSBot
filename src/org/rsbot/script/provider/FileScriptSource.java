@@ -64,7 +64,7 @@ public class FileScriptSource implements ScriptSource {
 		}
 	}
 
-	public Script load(final ScriptDefinition def) throws InstantiationException, IllegalAccessException  {
+	public Script load(final ScriptDefinition def) throws InstantiationException, IllegalAccessException {
 		if (!(def instanceof FileScriptDefinition)) {
 			throw new IllegalArgumentException("Invalid definition!");
 		}

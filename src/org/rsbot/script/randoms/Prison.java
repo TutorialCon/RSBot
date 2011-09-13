@@ -4,7 +4,10 @@ import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.methods.Bank;
 import org.rsbot.script.util.Filter;
-import org.rsbot.script.wrappers.*;
+import org.rsbot.script.wrappers.RSModel;
+import org.rsbot.script.wrappers.RSNPC;
+import org.rsbot.script.wrappers.RSObject;
+import org.rsbot.script.wrappers.RSTile;
 
 /*
  * Written by Iscream(Feb 4, 2010)
@@ -131,7 +134,7 @@ public class Prison extends Random {
 				if (anInterfaceContains("Lucky you!")) {
 					if (interfaces.canContinue()) {
 						interfaces.clickContinue();
-						sleep(random(150,325));
+						sleep(random(150, 325));
 					}
 					state = 4;
 					taskDone = true;

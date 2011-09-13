@@ -25,7 +25,7 @@ public class DrillDemon extends Random {
 
 	@Override
 	public void onFinish() {
-		for(int i = 0; i < signs.length; i++) {
+		for (int i = 0; i < signs.length; i++) {
 			signs[i] = -1;
 		}
 	}

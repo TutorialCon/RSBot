@@ -33,8 +33,8 @@ public class GrandExchange extends MethodProvider {
 	public static final int GRAND_EXCHANGE_COLLECT_BOX_ONE = 206;
 	public static final int GRAND_EXCHANGE_COLLECT_BOX_TWO = 208;
 
-	public static final int[] GRAND_EXCHANGE_CLERK = {6528, 6529, 
-		1419, 2240, 2241, 2593};
+	public static final int[] GRAND_EXCHANGE_CLERK = {6528, 6529,
+			1419, 2240, 2241, 2593};
 
 	private static final Pattern PATTERN = Pattern.compile("(?i)<td><img src=\".+obj_sprite\\.gif\\?id=(\\d+)\" alt=\"(.+)\"");
 

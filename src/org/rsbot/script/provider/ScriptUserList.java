@@ -1,16 +1,16 @@
 package org.rsbot.script.provider;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.rsbot.Configuration;
 import org.rsbot.service.Preferences;
 import org.rsbot.util.StringUtil;
 import org.rsbot.util.io.HttpClient;
 import org.rsbot.util.io.IOHelper;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ScriptUserList implements Runnable {
 	private static ScriptUserList instance = null;

@@ -4,7 +4,7 @@ import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.wrappers.RSComponent;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class CloseAllInterface extends Random {
 					return true;
 				}
 			}
-			if (interfaces.get(109).getComponent(14).isValid()){
+			if (interfaces.get(109).getComponent(14).isValid()) {
 				return true;
 			}
 			for (final ComponentDef c : components) {
@@ -96,20 +96,20 @@ public class CloseAllInterface extends Random {
 			interfaces.getComponent(755, 44).doClick();
 			return random(500, 900);
 		}
-		if (interfaces.get(109).getComponent(14).isValid()){
+		if (interfaces.get(109).getComponent(14).isValid()) {
 			boolean xpIsOpen = false;
-			if (game.getColorAtPoint(432, 70).equals(new Color(99, 120, 118)) || 
-					game.getColorAtPoint(432, 70).equals(new Color(144, 129, 91))){
+			if (game.getColorAtPoint(432, 70).equals(new Color(99, 120, 118)) ||
+					game.getColorAtPoint(432, 70).equals(new Color(144, 129, 91))) {
 				xpIsOpen = true;
-				if (interfaces.get(548).getComponent(0).isValid()){
+				if (interfaces.get(548).getComponent(0).isValid()) {
 					interfaces.get(548).getComponent(0).doClick();
 				}
 				sleep(random(500, 900));
 			}
 			interfaces.get(109).getComponent(14).doClick();
 			sleep(random(500, 900));
-			if (xpIsOpen){
-				if (interfaces.get(548).getComponent(0).isValid()){
+			if (xpIsOpen) {
+				if (interfaces.get(548).getComponent(0).isValid()) {
 					interfaces.get(548).getComponent(0).doClick();
 				}
 				sleep(random(500, 900));

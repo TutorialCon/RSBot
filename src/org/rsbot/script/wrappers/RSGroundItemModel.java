@@ -1,22 +1,21 @@
 package org.rsbot.script.wrappers;
 
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
 import org.rsbot.client.Model;
 import org.rsbot.client.RSAnimable;
 import org.rsbot.script.methods.MethodContext;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  */
 class RSGroundItemModel extends RSModel {
 	private final RSAnimable animable;
-        private final RSGroundItem item;
+	private final RSGroundItem item;
 
 	RSGroundItemModel(final MethodContext ctx, final Model model, final RSAnimable animable, final RSGroundItem item) {
 		super(ctx, model);
-                this.item = item;
+		this.item = item;
 		this.animable = animable;
 	}
 
@@ -35,49 +34,53 @@ class RSGroundItemModel extends RSModel {
 		return animable.getY();
 	}
 
-        @Override
-        public Point getPointOnScreen() {
-        Point screen = super.getPointOnScreen();
-        if(screen.x == -1)
-        return new Point();
-        screen.y += getYAdjustment();
-        if (methods.calc.pointOnScreen(screen))
-        return screen;
-        return new Point();
-        }
+	@Override
+	public Point getPointOnScreen() {
+		Point screen = super.getPointOnScreen();
+		if (screen.x == -1) {
+			return new Point();
+		}
+		screen.y += getYAdjustment();
+		if (methods.calc.pointOnScreen(screen)) {
+			return screen;
+		}
+		return new Point();
+	}
 
-        @Override
-        public Point getCentralPoint() {
-        Point screen = super.getCentralPoint();
-        if(screen.x == -1)
-        return new Point(-1, -1);
-        screen.y += getYAdjustment();
-        if (methods.calc.pointOnScreen(screen))
-        return screen;
-        return new Point(-1, -1);
-        }
-        
-        @Override
-        public Point getPoint() {
-            Point modelPoint = super.getPoint();
-            modelPoint.y += getYAdjustment();
-            return modelPoint;
-        }
-        
-        /**
-         * @return the difference between the point at the center of the tile
-         * and the real height.
-         */
-        public int getYAdjustment() {
-            Point tilePoint = methods.calc.tileToScreen(item.getLocation());
-            Point realPoint = methods.calc.tileToScreen(item.getLocation(), item.getHeight());
-            return realPoint.y - tilePoint.y;
-        }
-        
-        @Override
-        public Polygon[] getTriangles() {
+	@Override
+	public Point getCentralPoint() {
+		Point screen = super.getCentralPoint();
+		if (screen.x == -1) {
+			return new Point(-1, -1);
+		}
+		screen.y += getYAdjustment();
+		if (methods.calc.pointOnScreen(screen)) {
+			return screen;
+		}
+		return new Point(-1, -1);
+	}
+
+	@Override
+	public Point getPoint() {
+		Point modelPoint = super.getPoint();
+		modelPoint.y += getYAdjustment();
+		return modelPoint;
+	}
+
+	/**
+	 * @return the difference between the point at the center of the tile
+	 *         and the real height.
+	 */
+	public int getYAdjustment() {
+		Point tilePoint = methods.calc.tileToScreen(item.getLocation());
+		Point realPoint = methods.calc.tileToScreen(item.getLocation(), item.getHeight());
+		return realPoint.y - tilePoint.y;
+	}
+
+	@Override
+	public Polygon[] getTriangles() {
 		int[][] points = projectVertices();
-                final int adjustment = getYAdjustment();
+		final int adjustment = getYAdjustment();
 		ArrayList<Polygon> polys = new ArrayList<Polygon>(numFaces);
 		for (int index = 0; index < numFaces; index++) {
 			int index1 = indices1[index];
@@ -100,11 +103,11 @@ class RSGroundItemModel extends RSModel {
 		}
 		return polys.toArray(new Polygon[polys.size()]);
 	}
-        
-        @Override
-        public void drawWireFrame(Graphics graphics) {
+
+	@Override
+	public void drawWireFrame(Graphics graphics) {
 		int[][] screen = super.projectVertices();
-                final int adjustment = getYAdjustment();
+		final int adjustment = getYAdjustment();
 
 		// That was it for the projection part
 		for (int index = 0; index < numFaces; index++) {

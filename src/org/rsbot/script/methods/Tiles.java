@@ -139,7 +139,7 @@ public class Tiles extends MethodProvider {
 	 */
 	public boolean interact(final RSTile tile, final String action, final String option) {
 		try {
-			for (int i = 0; i++ < 5;) {
+			for (int i = 0; i++ < 5; ) {
 				final Point location = methods.calc.tileToScreen(tile);
 				if (location.x == -1 || location.y == -1) {
 					return false;

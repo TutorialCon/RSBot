@@ -99,108 +99,108 @@ public class ModScript {
 			int count = 0, ptr = 0;
 			final int op = scan.readByte();
 			switch (op) {
-			case Opcodes.ATTRIBUTE:
-				final String key = scan.readString();
-				final String value = scan.readString();
-				attributes.put(key, new StringBuilder(value).reverse().toString());
-				break;
-			case Opcodes.GET_STATIC:
-			case Opcodes.GET_FIELD:
-				clazz = scan.readString();
-				count = scan.readShort();
-				final AddGetterAdapter.Field[] fieldsGet = new AddGetterAdapter.Field[count];
-				while (ptr < count) {
-					final AddGetterAdapter.Field f = new AddGetterAdapter.Field();
-					f.getter_access = scan.readInt();
-					f.getter_name = scan.readString();
-					f.getter_desc = scan.readString();
-					f.owner = scan.readString();
-					f.name = scan.readString();
-					f.desc = scan.readString();
-					fieldsGet[ptr++] = f;
-				}
-				adapters.put(clazz, new AddGetterAdapter(delegate(clazz), op == Opcodes.GET_FIELD, fieldsGet));
-				break;
-			case Opcodes.ADD_FIELD:
-				clazz = scan.readString();
-				count = scan.readShort();
-				final AddFieldAdapter.Field[] fieldsAdd = new AddFieldAdapter.Field[count];
-				while (ptr < count) {
-					final AddFieldAdapter.Field f = new AddFieldAdapter.Field();
-					f.access = scan.readInt();
-					f.name = scan.readString();
-					f.desc = scan.readString();
-					fieldsAdd[ptr++] = f;
-				}
-				adapters.put(clazz, new AddFieldAdapter(delegate(clazz), fieldsAdd));
-				break;
-			case Opcodes.ADD_METHOD:
-				clazz = scan.readString();
-				count = scan.readShort();
-				final AddMethodAdapter.Method[] methods = new AddMethodAdapter.Method[count];
-				while (ptr < count) {
-					final AddMethodAdapter.Method m = new AddMethodAdapter.Method();
-					m.access = scan.readInt();
-					m.name = scan.readString();
-					m.desc = scan.readString();
-					final byte[] code = new byte[scan.readInt()];
-					scan.readSegment(code, code.length, 0);
-					m.code = code;
-					m.max_locals = scan.readByte();
-					m.max_stack = scan.readByte();
-					methods[ptr++] = m;
-				}
-				adapters.put(clazz, new AddMethodAdapter(delegate(clazz), methods));
-				break;
-			case Opcodes.ADD_INTERFACE:
-				clazz = scan.readString();
-				final String inter = scan.readString();
-				adapters.put(clazz, new AddInterfaceAdapter(delegate(clazz), inter));
-				break;
-			case Opcodes.SET_SUPER:
-				clazz = scan.readString();
-				final String superName = scan.readString();
-				adapters.put(clazz, new SetSuperAdapter(delegate(clazz), superName));
-				break;
-			case Opcodes.SET_SIGNATURE:
-				clazz = scan.readString();
-				count = scan.readShort();
-				final SetSignatureAdapter.Signature[] signatures = new SetSignatureAdapter.Signature[count];
-				while (ptr < count) {
-					final SetSignatureAdapter.Signature s = new SetSignatureAdapter.Signature();
-					s.name = scan.readString();
-					s.desc = scan.readString();
-					s.new_access = scan.readInt();
-					s.new_name = scan.readString();
-					s.new_desc = scan.readString();
-					signatures[ptr++] = s;
-				}
-				adapters.put(clazz, new SetSignatureAdapter(delegate(clazz), signatures));
-				break;
-			case Opcodes.INSERT_CODE:
-				clazz = scan.readString();
-				final String name = scan.readString();
-				final String desc = scan.readString();
-				count = scan.readByte();
-				final Map<Integer, byte[]> fragments = new HashMap<Integer, byte[]>();
-				while (count-- > 0) {
-					final int off = scan.readShort();
-					final byte[] code = new byte[scan.readInt()];
-					scan.readSegment(code, code.length, 0);
-					fragments.put(off, code);
-				}
-				adapters.put(clazz, new InsertCodeAdapter(delegate(clazz),
-						name, desc, fragments, scan.readByte(), scan.readByte()));
-				break;
-			case Opcodes.OVERRIDE_CLASS:
-				final String old_clazz = scan.readString();
-				final String new_clazz = scan.readString();
-				count = scan.readByte();
-				while (count-- > 0) {
-					final String current_clazz = scan.readString();
-					adapters.put(current_clazz, new OverrideClassAdapter(delegate(current_clazz), old_clazz, new_clazz));
-				}
-				break;
+				case Opcodes.ATTRIBUTE:
+					final String key = scan.readString();
+					final String value = scan.readString();
+					attributes.put(key, new StringBuilder(value).reverse().toString());
+					break;
+				case Opcodes.GET_STATIC:
+				case Opcodes.GET_FIELD:
+					clazz = scan.readString();
+					count = scan.readShort();
+					final AddGetterAdapter.Field[] fieldsGet = new AddGetterAdapter.Field[count];
+					while (ptr < count) {
+						final AddGetterAdapter.Field f = new AddGetterAdapter.Field();
+						f.getter_access = scan.readInt();
+						f.getter_name = scan.readString();
+						f.getter_desc = scan.readString();
+						f.owner = scan.readString();
+						f.name = scan.readString();
+						f.desc = scan.readString();
+						fieldsGet[ptr++] = f;
+					}
+					adapters.put(clazz, new AddGetterAdapter(delegate(clazz), op == Opcodes.GET_FIELD, fieldsGet));
+					break;
+				case Opcodes.ADD_FIELD:
+					clazz = scan.readString();
+					count = scan.readShort();
+					final AddFieldAdapter.Field[] fieldsAdd = new AddFieldAdapter.Field[count];
+					while (ptr < count) {
+						final AddFieldAdapter.Field f = new AddFieldAdapter.Field();
+						f.access = scan.readInt();
+						f.name = scan.readString();
+						f.desc = scan.readString();
+						fieldsAdd[ptr++] = f;
+					}
+					adapters.put(clazz, new AddFieldAdapter(delegate(clazz), fieldsAdd));
+					break;
+				case Opcodes.ADD_METHOD:
+					clazz = scan.readString();
+					count = scan.readShort();
+					final AddMethodAdapter.Method[] methods = new AddMethodAdapter.Method[count];
+					while (ptr < count) {
+						final AddMethodAdapter.Method m = new AddMethodAdapter.Method();
+						m.access = scan.readInt();
+						m.name = scan.readString();
+						m.desc = scan.readString();
+						final byte[] code = new byte[scan.readInt()];
+						scan.readSegment(code, code.length, 0);
+						m.code = code;
+						m.max_locals = scan.readByte();
+						m.max_stack = scan.readByte();
+						methods[ptr++] = m;
+					}
+					adapters.put(clazz, new AddMethodAdapter(delegate(clazz), methods));
+					break;
+				case Opcodes.ADD_INTERFACE:
+					clazz = scan.readString();
+					final String inter = scan.readString();
+					adapters.put(clazz, new AddInterfaceAdapter(delegate(clazz), inter));
+					break;
+				case Opcodes.SET_SUPER:
+					clazz = scan.readString();
+					final String superName = scan.readString();
+					adapters.put(clazz, new SetSuperAdapter(delegate(clazz), superName));
+					break;
+				case Opcodes.SET_SIGNATURE:
+					clazz = scan.readString();
+					count = scan.readShort();
+					final SetSignatureAdapter.Signature[] signatures = new SetSignatureAdapter.Signature[count];
+					while (ptr < count) {
+						final SetSignatureAdapter.Signature s = new SetSignatureAdapter.Signature();
+						s.name = scan.readString();
+						s.desc = scan.readString();
+						s.new_access = scan.readInt();
+						s.new_name = scan.readString();
+						s.new_desc = scan.readString();
+						signatures[ptr++] = s;
+					}
+					adapters.put(clazz, new SetSignatureAdapter(delegate(clazz), signatures));
+					break;
+				case Opcodes.INSERT_CODE:
+					clazz = scan.readString();
+					final String name = scan.readString();
+					final String desc = scan.readString();
+					count = scan.readByte();
+					final Map<Integer, byte[]> fragments = new HashMap<Integer, byte[]>();
+					while (count-- > 0) {
+						final int off = scan.readShort();
+						final byte[] code = new byte[scan.readInt()];
+						scan.readSegment(code, code.length, 0);
+						fragments.put(off, code);
+					}
+					adapters.put(clazz, new InsertCodeAdapter(delegate(clazz),
+							name, desc, fragments, scan.readByte(), scan.readByte()));
+					break;
+				case Opcodes.OVERRIDE_CLASS:
+					final String old_clazz = scan.readString();
+					final String new_clazz = scan.readString();
+					count = scan.readByte();
+					while (count-- > 0) {
+						final String current_clazz = scan.readString();
+						adapters.put(current_clazz, new OverrideClassAdapter(delegate(current_clazz), old_clazz, new_clazz));
+					}
+					break;
 			}
 		}
 	}

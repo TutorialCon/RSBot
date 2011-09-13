@@ -156,32 +156,34 @@ public class Camera extends MethodProvider {
 	 */
 	public void moveRandomly(final int timeOut) {
 		final Timer timeToHold = new Timer(timeOut);
-                final int highest = random(75, 100);
-                final int lowest = random(0, 25);
+		final int highest = random(75, 100);
+		final int lowest = random(0, 25);
 		final int vertical = Math.random() < Math.random() ? KeyEvent.VK_UP : KeyEvent.VK_DOWN;
 		final int horizontal = Math.random() < Math.random() ? KeyEvent.VK_LEFT : KeyEvent.VK_RIGHT;
-                boolean verticalKeyDown = false;
-                boolean horizontalKeyDown = false;
+		boolean verticalKeyDown = false;
+		boolean horizontalKeyDown = false;
 		if (random(0, 10) < 8) {
 			methods.inputManager.pressKey((char) vertical);
-                        verticalKeyDown = true;
+			verticalKeyDown = true;
 		}
 		if (random(0, 10) < 8) {
 			methods.inputManager.pressKey((char) horizontal);
-                        horizontalKeyDown = true;
+			horizontalKeyDown = true;
 		}
 		while (timeToHold.isRunning() && (verticalKeyDown || horizontalKeyDown)) {
-                    if(getPitch() >= highest && vertical == KeyEvent.VK_UP ||
-                       getPitch() <= lowest && vertical == KeyEvent.VK_DOWN){
-                        methods.inputManager.releaseKey((char) vertical);
-                        verticalKeyDown = false;
-                        }
-		sleep(10);
+			if (getPitch() >= highest && vertical == KeyEvent.VK_UP ||
+					getPitch() <= lowest && vertical == KeyEvent.VK_DOWN) {
+				methods.inputManager.releaseKey((char) vertical);
+				verticalKeyDown = false;
+			}
+			sleep(10);
 		}
-                if(verticalKeyDown)
-		methods.inputManager.releaseKey((char) vertical);
-                if(horizontalKeyDown)
-		methods.inputManager.releaseKey((char) horizontal);
+		if (verticalKeyDown) {
+			methods.inputManager.releaseKey((char) vertical);
+		}
+		if (horizontalKeyDown) {
+			methods.inputManager.releaseKey((char) horizontal);
+		}
 	}
 
 	/**

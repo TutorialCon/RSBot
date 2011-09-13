@@ -112,7 +112,7 @@ public class AccountStore {
 		}
 		accounts.clear();
 		Account current = null;
-		for (; ;) {
+		for (; ; ) {
 			final String line = br.readLine();
 			if (line == null) {
 				break;

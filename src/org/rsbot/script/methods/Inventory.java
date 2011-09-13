@@ -194,37 +194,43 @@ public class Inventory extends MethodProvider {
 		}
 		return getCount() < startCount;
 	}
-        /**
-         * Drops all items matching the given ids
-         * @param ids item ids to drop
-         * @return <tt>true</tt> if all items were dropped; otherwise <tt>false</tt>
-         */
-        public boolean dropAll(final int... ids){
-            for(final RSItem i : getItems(ids)){
-               if(i != null){
-                    dropItem(i);
-                 }
-             }
-           return !containsOneOf(ids);
-        }
 
-        /**
-         * Empties the inventory (Drops all items)
-         * @param leftToRight leftToRight <tt>true</tt> to drop items from left to right.
-         * @return <tt>true</tt> if items were dropped from the inventory;
+	/**
+	 * Drops all items matching the given ids
+	 *
+	 * @param ids item ids to drop
+	 * @return <tt>true</tt> if all items were dropped; otherwise <tt>false</tt>
+	 */
+	public boolean dropAll(final int... ids) {
+		for (final RSItem i : getItems(ids)) {
+			if (i != null) {
+				dropItem(i);
+			}
+		}
+		return !containsOneOf(ids);
+	}
+
+	/**
+	 * Empties the inventory (Drops all items)
+	 *
+	 * @param leftToRight leftToRight <tt>true</tt> to drop items from left to right.
+	 * @return <tt>true</tt> if items were dropped from the inventory;
 	 *         otherwise <tt>false</tt>.
-         */
-        public boolean empty(boolean leftToRight){
-            return dropAllExcept(leftToRight,new int[]{});
-        }
-        /**
-         *  Empties the inventory (Drops all items)
-         * @return <tt>true</tt> if items were dropped from the inventory;
+	 */
+	public boolean empty(boolean leftToRight) {
+		return dropAllExcept(leftToRight, new int[]{});
+	}
+
+	/**
+	 * Empties the inventory (Drops all items)
+	 *
+	 * @return <tt>true</tt> if items were dropped from the inventory;
 	 *         otherwise <tt>false</tt>.
-         */
-        public boolean empty(){
-            return empty(false);
-        }
+	 */
+	public boolean empty() {
+		return empty(false);
+	}
+
 	/**
 	 * Drops the item in the specified column and row.
 	 *
@@ -250,14 +256,15 @@ public class Inventory extends MethodProvider {
 		return item != null && item.getID() != -1 && item.interact("Drop");
 	}
 
-        /**
-         * Drops the given RSItem
-         * @param item RSItem to drop.
-         * @return <tt>true</tt> if we tried to drop the item,
-         *         <tt>false</tt> if not (e.g., if item is undroppable)
-         */
-        public boolean dropItem(final RSItem item){
-                if (methods.interfaces.canContinue()) {
+	/**
+	 * Drops the given RSItem
+	 *
+	 * @param item RSItem to drop.
+	 * @return <tt>true</tt> if we tried to drop the item,
+	 *         <tt>false</tt> if not (e.g., if item is undroppable)
+	 */
+	public boolean dropItem(final RSItem item) {
+		if (methods.interfaces.canContinue()) {
 			methods.interfaces.clickContinue();
 			sleep(random(800, 1300));
 		}
@@ -266,17 +273,18 @@ public class Inventory extends MethodProvider {
 				&& !methods.interfaces.get(Store.INTERFACE_STORE).isValid()) {
 			methods.game.openTab(Game.Tab.INVENTORY);
 		}
-            return item != null && item.getID() != -1 && item.interact("Drop");
-        }
+		return item != null && item.getID() != -1 && item.interact("Drop");
+	}
 
-        /**
-         * Drops the first item that matches the given id
-         * @param id id of the item.
-         @return <tt>true</tt> if we tried to drop the item,
-         *         <tt>false</tt> if not (e.g., if item is undroppable)
-         */
-        public boolean dropItem(final int id){
-                if (methods.interfaces.canContinue()) {
+	/**
+	 * Drops the first item that matches the given id
+	 *
+	 * @param id id of the item.
+	 * @return <tt>true</tt> if we tried to drop the item,
+	 *         <tt>false</tt> if not (e.g., if item is undroppable)
+	 */
+	public boolean dropItem(final int id) {
+		if (methods.interfaces.canContinue()) {
 			methods.interfaces.clickContinue();
 			sleep(random(800, 1300));
 		}
@@ -285,9 +293,9 @@ public class Inventory extends MethodProvider {
 				&& !methods.interfaces.get(Store.INTERFACE_STORE).isValid()) {
 			methods.game.openTab(Game.Tab.INVENTORY);
 		}
-                RSItem item = getItem(id);
-                return item != null && item.getID() != -1 && item.interact("Drop");
-        }
+		RSItem item = getItem(id);
+		return item != null && item.getID() != -1 && item.interact("Drop");
+	}
 
 	/**
 	 * Gets the count of all items in your inventory, ignoring stack sizes.

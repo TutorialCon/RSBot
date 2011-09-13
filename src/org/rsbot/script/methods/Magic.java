@@ -517,7 +517,7 @@ public class Magic extends MethodProvider {
 	 *
 	 * @return <tt>spell ID</tt> if a spell is selected; otherwise <tt>null</tt>.
 	 */
-        public int getSelectedSpell() {
+	public int getSelectedSpell() {
 		RSInterface book = getInterface();
 		for (RSComponent c : book.getComponents()) {
 			if (c.getBorderThickness() == 2) {

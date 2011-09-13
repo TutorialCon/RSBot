@@ -210,15 +210,15 @@ public class RestrictedSecurityManager extends SecurityManager {
 				if (fail && readOnly) {
 					final String[] fonts;
 					switch (Configuration.getCurrentOperatingSystem()) {
-					case WINDOWS:
-						fonts = new String[] { System.getenv("SystemRoot") + "\\Fonts" };
-						break;
-					case MAC:
-						fonts = new String[] { "/Library/Fonts", "/System/Library/Fonts", System.getenv("HOME") + "/Library/Fonts" };
-						break;
-					default:
-						fonts = new String[] { "/usr/share/fonts/", "/usr/local/share/fonts", System.getenv("HOME") + "/.fonts" };
-						break;
+						case WINDOWS:
+							fonts = new String[]{System.getenv("SystemRoot") + "\\Fonts"};
+							break;
+						case MAC:
+							fonts = new String[]{"/Library/Fonts", "/System/Library/Fonts", System.getenv("HOME") + "/Library/Fonts"};
+							break;
+						default:
+							fonts = new String[]{"/usr/share/fonts/", "/usr/local/share/fonts", System.getenv("HOME") + "/.fonts"};
+							break;
 					}
 					for (int i = 0; i < fonts.length; i++) {
 						if (path.startsWith(fonts[i])) {
