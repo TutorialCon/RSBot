@@ -34,7 +34,7 @@ public class ScriptDownloader {
 			return;
 		}
 		if (url.contains("pastie") && url.endsWith("/text")) {
-			url = url.substring(url.length - 5, url.length);
+			url = url.substring(0, url.toCharArray().length - 5);
 		}
 		url = normalisePastebin(url);
 
