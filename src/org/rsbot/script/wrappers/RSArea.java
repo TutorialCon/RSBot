@@ -1,7 +1,6 @@
 package org.rsbot.script.wrappers;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -90,8 +89,9 @@ public class RSArea {
 		final RSTile[] areaTiles = getTileArray();
 		for (final RSTile check : tiles) {
 			for (final RSTile space : areaTiles) {
-				if (check.equals(space))
+				if (check.equals(space)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -101,23 +101,22 @@ public class RSArea {
 	 * @return The bounding box of the <b>RSArea</b>.
 	 */
 	public Rectangle getBounds() {
-		return new Rectangle(area.getBounds().x + 1,
-				area.getBounds().y + 1, getWidth(), getHeight());
+		return new Rectangle(area.getBounds().x + 1, area.getBounds().y + 1, getWidth(), getHeight());
 	}
 
 	/**
 	 * @return The central <b>RSTile</b> of the <b>RSArea</b>.
 	 */
 	public RSTile getCentralTile() {
-		if (area.npoints < 1)
+		if (area.npoints < 1) {
 			return null;
+		}
 		int totalX = 0, totalY = 0;
 		for (int i = 0; i < area.npoints; i++) {
 			totalX += area.xpoints[i];
 			totalY += area.ypoints[i];
 		}
-		return new RSTile(Math.round(totalX / area.npoints),
-				Math.round(totalY / area.npoints));
+		return new RSTile(Math.round(totalX / area.npoints), Math.round(totalY / area.npoints));
 	}
 
 	/**
@@ -134,19 +133,6 @@ public class RSArea {
 			}
 		}
 		return currTile;
-	}
-	
-	/**
-	 * @return A random tile to the given distance.
-	 */
-	 public RSTile getRandomTile(final int dest) {
-		RSTile curTile = getCentralTile();
-		for (RSTile aTile : getTileArray()) { 
-			if(distanceBetween(curTile, aTile) > dest) {
-				return aTile;
-			}
-		}
-		return curTile;
 	}
 
 	/**
