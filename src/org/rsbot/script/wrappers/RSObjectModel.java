@@ -14,7 +14,6 @@ class RSObjectModel extends RSModel {
 
 	@Override
 	protected void update() {
-
 	}
 
 	@Override

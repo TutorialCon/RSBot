@@ -182,15 +182,6 @@ public class RSObject extends MethodProvider implements RSTarget {
 	public int getID() {
 		return obj.getID();
 	}
-	
-	/**
-	 * Draws RSObject model
-	 */
-	public void draw(final Graphics g) {
-		if (getModel() != null) {
-			getModel().drawWireFrame(g);
-		}
-	}
 
 	/**
 	 * Gets the RSTile on which this object is centered. An RSObject may cover
@@ -284,12 +275,12 @@ public class RSObject extends MethodProvider implements RSTarget {
 	}
 
 	/**
-	* Determines if this object contains the desired action
-	*
-	* @param action The object menu action to check.
-	* @return <tt>true</tt> if the object has the action; otherwise
-	*         <tt>false</tt>.
-	*/
+	 * Determines if this object contains the desired action
+	 *
+	 * @param action The object menu action to check.
+	 * @return <tt>true</tt> if the object has the action; otherwise
+	 *         <tt>false</tt>.
+	 */
 	public boolean hasAction(final String action) {
 		final RSObjectDef objectDef = getDef();
 		if (objectDef != null) {
@@ -300,7 +291,7 @@ public class RSObject extends MethodProvider implements RSTarget {
 			}
 		}
 		return false;
-	} 
+	}
 
 	@Override
 	public boolean equals(final Object o) {
