@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Obtains information on tradeable items from the Grand Exchange website and
  * Grand Exchange in-game interaction.
@@ -30,13 +27,12 @@ public class GrandExchange extends MethodProvider {
 	public static final int[] INTERFACE_GRAND_EXCHANGE_SELL_BUTTON = {32, 48, 64, 83, 102, 121};
 	public static final int[] INTERFACE_GRAND_EXCHANGE_OFFER_BOXES = {19, 35, 51, 67, 83, 99};
 
-	public static final int GRAND_EXCHANGE_COLLECT_BOX_ONE = 206;
-	public static final int GRAND_EXCHANGE_COLLECT_BOX_TWO = 208;
+	public static final int GRAND_EXCHANGE_COLLECT_BOX_ONE = 209;
+	public static final int GRAND_EXCHANGE_COLLECT_BOX_TWO = 211;
 
-	public static final int[] GRAND_EXCHANGE_CLERK = {6528, 6529,
-			1419, 2240, 2241, 2593};
+	public static final int[] GRAND_EXCHANGE_CLERK = {6528, 6529, 
+		1419, 2240, 2241, 2593};
 
-	private static final Pattern PATTERN = Pattern.compile("(?i)<td><img src=\".+obj_sprite\\.gif\\?id=(\\d+)\" alt=\"(.+)\"");
 
 	GrandExchange(final MethodContext ctx) {
 		super(ctx);
@@ -122,7 +118,7 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public boolean closeGe() {
 		if (isOpen()) {
-			RSComponent exit = methods.interfaces.get(105).getComponent(14);
+			RSComponent exit = methods.interfaces.get(105).getComponent(18);
 			return exit.doClick();
 		}
 		return true;
@@ -1133,22 +1129,14 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public GEItem lookup(final String itemName) {
 		try {
-			final URL url = new URL(GrandExchange.HOST + "/m=itemdb_rs/results.ws?query=" + itemName + "&price=all&members=");
+			final URL url = new URL("http://search.yahoo.com/search;_ylt=?p=" + itemName.replace(" ", "+") + "+runescape+grand+exchange");
 			final BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String input;
 			while ((input = br.readLine()) != null) {
-				if (input.contains("<div id=\"search_results_text\">")) {
-					input = br.readLine();
-					if (input.contains("Your search for")) {
-						return null;
-					}
-				} else if (input.startsWith("<td><img src=")) {
-					final Matcher matcher = GrandExchange.PATTERN.matcher(input);
-					if (matcher.find()) {
-						if (matcher.group(2).contains(itemName)) {
-							return lookup(Integer.parseInt(matcher.group(1)));
-						}
-					}
+				if(input.contains("viewitem.ws")) {
+					final int startIndex = input.indexOf("viewitem.ws") + 16;
+					final int endIndex = input.contains("&scale=") ? input.indexOf("&scale=", startIndex) : input.indexOf('"', startIndex);
+					return lookup(Integer.parseInt(input.substring(startIndex, endIndex)));					
 				}
 			}
 		} catch (final IOException ignored) {
