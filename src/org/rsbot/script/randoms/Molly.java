@@ -31,13 +31,14 @@ public class Molly extends Random {
 	private static final int CONTROLS_LEFT = 31;
 	private static final int CONTROLS_RIGHT = 32;
 
-	private RSNPC molly;
-	private RSObject controlPanel;
-	private int mollyID = -1;
-	private boolean cameraSet;
-	private boolean talkedToMolly;
-	private boolean finished;
-	private long delayTime;
+	private static RSNPC molly;
+	private static RSObject controlPanel;
+	private static RSTile cpTile = new RSTile(10893, 2575);
+	private static int mollyID = -1;
+	private static boolean cameraSet;
+	private static boolean talkedToMolly;
+	private static boolean finished;
+	private static long delayTime;
 
 	@Override
 	public void onFinish() {
@@ -155,13 +156,15 @@ public class Molly extends Random {
 				sleep(random(800, 1200));
 			} else {
 				if (!inControlInterface()) {
-					if (calc.tileOnScreen(controlPanel.getLocation())) {
-						controlPanel.interact("Use");
-						sleep(random(1200, 2000));
+					if (calc.tileOnScreen(cpTile)) {
+						if (controlPanel != null) {
+							controlPanel.interact("Use");
+							sleep(1200, 2000);
+						}
 					} else {
-						walking.walkTileOnScreen(controlPanel.getLocation());
+						walking.walkTileOnScreen(cpTile);
 						camera.setPitch(true);
-						camera.turnTo(controlPanel);
+						camera.turnTo(cpTile);
 					}
 				} else {
 					navigateClaw();
