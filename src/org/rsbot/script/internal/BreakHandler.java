@@ -27,7 +27,11 @@ public class BreakHandler {
 			return result;
 		} else {
 			checked = true;
-			result = script.onBreakStart();
+			try {
+				result = script.onBreakStart();
+			} catch (final Throwable ignored) {
+				result = true;
+			}
 			return result;
 		}
 	}
@@ -36,7 +40,10 @@ public class BreakHandler {
 		++ticks;
 		if (checked) {
 			checked = false;
-			script.onBreakFinish();
+			try {
+				script.onBreakFinish();
+			} catch (final Throwable ignored) {
+			}
 		}
 		if (nextBreak < 0 || nextBreak - System.currentTimeMillis() < -30000) {
 			ticks = 0;
