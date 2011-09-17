@@ -342,7 +342,7 @@ public class RSComponent extends MethodProvider implements RSTarget {
 	 * @return the area or new Rectangle(-1, -1, -1, -1) if null
 	 */
 	public Rectangle getArea() {
-		return new Rectangle(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
+		return new Rectangle(getAbsoluteX() + 1, getAbsoluteY() + 1, getWidth() - 2, getHeight() - 2);
 	}
 
 	/**
