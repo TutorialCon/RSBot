@@ -1133,22 +1133,12 @@ public class GrandExchange extends MethodProvider {
 	 */
 	public GEItem lookup(final String itemName) {
 		try {
-			final URL url = new URL(GrandExchange.HOST + "/m=itemdb_rs/results.ws?query=" + itemName + "&price=all&members=");
+			final URL url = new URL("http://services.runescape.com/m=itemdb_rs/results.ws?query=" + itemName);
 			final BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String input;
 			while ((input = br.readLine()) != null) {
-				if (input.contains("<div id=\"search_results_text\">")) {
-					input = br.readLine();
-					if (input.contains("Your search for")) {
-						return null;
-					}
-				} else if (input.startsWith("<td><img src=")) {
-					final Matcher matcher = GrandExchange.PATTERN.matcher(input);
-					if (matcher.find()) {
-						if (matcher.group(2).contains(itemName)) {
-							return lookup(Integer.parseInt(matcher.group(1)));
-						}
-					}
+				if(input.toLowerCase().contains("alt=\"" + itemName.toLowerCase().trim())) {													
+					return lookup(Integer.parseInt(input.substring(input.indexOf("id=") + 3, input.lastIndexOf("\" alt"))));			
 				}
 			}
 		} catch (final IOException ignored) {
