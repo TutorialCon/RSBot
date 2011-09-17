@@ -38,8 +38,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 	private JTable table;
 	private JTextField search;
 	private final static Color searchAltColor = Color.GRAY;
-	private JComboBox<String> accounts;
-	private JComboBox<String> categories;
+	private JComboBox accounts;
+	private JComboBox categories;
 	private final ScriptTableModel model;
 	private final List<ScriptDefinition> scripts;
 	private JButton submit, connect;
@@ -305,8 +305,8 @@ public class ScriptSelector extends JDialog implements ScriptListener {
 			}
 		});
 		connectUpdate();
-		accounts = new JComboBox<String>(AccountManager.getAccountNames());
-		categories = new JComboBox<String>(new String[]{"All", "Local", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
+		accounts = new JComboBox(AccountManager.getAccountNames());
+		categories = new JComboBox(new String[]{"All", "Local", "Agility", "Combat", "Construction", "Cooking", "Crafting", "Dungeoneering", "Farming",
 				"Firemaking", "Fishing", "Fletching", "Herblore", "Hunter", "Magic", "Minigame", "Mining", "Other", "Money Making", "Prayer",
 				"Ranged", "Runecrafting", "Slayer", "Smithing", "Summoning", "Thieving", "Woodcutting"});
 		accounts.setPreferredSize(new Dimension(125, 20));
