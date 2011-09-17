@@ -135,6 +135,10 @@ public class IOHelper {
 	}
 
 	public static boolean isZip(final File file) {
+		final String name = file.getName().toLowerCase();
+		if (name.endsWith(".jar") || name.endsWith(".zip")) {
+			return true;
+		}
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
