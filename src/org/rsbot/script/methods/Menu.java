@@ -292,13 +292,17 @@ public class Menu extends MethodProvider {
 				}
 			}
 		} else {
-			final Deque<MenuItemNode> menu = new Deque<MenuItemNode>(methods.client.getMenuItems());
-			for (MenuItemNode min = menu.getHead(); min != null; min = menu.getNext()) {
-				itemsList.addLast(firstPart ? min.getAction() : min.getOption());
-				lAction = min.getAction();
-				if (action == null) {
-					action = lAction;
+			try {
+				final Deque<MenuItemNode> menu = new Deque<MenuItemNode>(methods.client.getMenuItems());
+				for (MenuItemNode min = menu.getHead(); min != null; min = menu.getNext()) {
+					itemsList.addLast(firstPart ? min.getAction() : min.getOption());
+					lAction = min.getAction();
+					if (action == null) {
+						action = lAction;
+					}
 				}
+			} catch (final NullPointerException ignored) {
+				return getMenuItemPart(firstPart);
 			}
 		}
 		final String[] items = itemsList.toArray(new String[itemsList.size()]);
