@@ -3,24 +3,18 @@ package org.rsbot.script.randoms;
 import org.rsbot.script.Random;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.wrappers.RSComponent;
-import org.rsbot.script.wrappers.RSModel;
 import org.rsbot.script.wrappers.RSObject;
-
-import java.awt.*;
-
 
 @ScriptManifest(authors = {"Iscream", "Aelin", "LM3", "IceCandle", "Taha"}, name = "Pinball", version = 2.7)
 public class Pinball extends Random {
 
-	private static final int[] OBJ_PILLARS = {15000, 15002, 15004, 15006, 15008};
-
-	private static final int[] OBJ_ACTIVATE = {15000, 15002, 15004, 15006, 15007, 15008};
-
+	private static final int[] INACTIVE_PILLARS = {15001, 15003, 15005, 15007, 15009};
+	private static final int[] ACTIVE_PILLARS = {15000, 15002, 15004, 15006, 15008};
 	private static final int INTERFACE_PINBALL = 263;
 
 	@Override
 	public boolean activateCondition() {
-		return game.isLoggedIn() && objects.getNearest(OBJ_ACTIVATE) != null;
+		return game.isLoggedIn() && objects.getNearest(INACTIVE_PILLARS) != null;
 	}
 
 	private int getScore() {
@@ -28,7 +22,7 @@ public class Pinball extends Random {
 		try {
 			return Integer.parseInt(score.getText().split(" ")[1]);
 		} catch (final java.lang.ArrayIndexOutOfBoundsException t) {
-			return 10;
+			return -1;
 		}
 	}
 
@@ -41,53 +35,35 @@ public class Pinball extends Random {
 			return random(300, 500);
 		}
 		if (getScore() >= 10) {
-			final int OBJ_EXIT = 15010;
-			final RSObject exit = objects.getNearest(OBJ_EXIT);
+			final RSObject exit = objects.getNearest(15010);
 			if (exit != null) {
-				if (calc.tileOnScreen(exit.getLocation()) && exit.interact("Exit")) {
-					sleep(random(2000, 2200));
-					exit.interact("Exit");
-					return random(2000, 2100);
+				if (calc.tileOnScreen(exit.getLocation())) {
+					if (exit.interact("Exit")) {
+						return random(4000, 4200);
+					}
 				} else {
 					camera.setCompass('s');
 					walking.walkTileOnScreen(exit.getLocation());
 					return random(1400, 1500);
 				}
-
 			}
 		}
-		final RSObject pillar = objects.getNearest(OBJ_PILLARS);
+		final RSObject pillar = objects.getNearest(ACTIVE_PILLARS);
 		if (pillar != null) {
 			if (calc.distanceTo(pillar) > 2 && !pillar.isOnScreen()) {
 				walking.walkTileOnScreen(pillar.getLocation());
 				return random(500, 600);
 			}
-			if (pillar != null) {
-				doClick(pillar);
-			}
-			final int before = getScore();
-			for (int i = 0; i < 50; i++) {
-				if (getScore() > before) {
-					return random(50, 100);
+			if (pillar.interact("Tag")) {
+				final int before = getScore();
+				for (int i = 0; i < 50; i++) {
+					if (getScore() > before) {
+						return random(50, 100);
+					}
+					sleep(70, 100);
 				}
-				sleep(100, 200);
 			}
 		}
 		return random(50, 100);
 	}
-
-	private void doClick(final RSObject pillar) {
-		final RSModel model = pillar.getModel();
-		if (model != null) {
-			final Point central = model.getCentralPoint();
-			mouse.click(central.x, central.y, 4, 4, true);
-		} else {
-			final Point p = calc.tileToScreen(pillar.getLocation());
-			if (calc.pointOnScreen(p)) {
-				mouse.click(p.x, p.y - 25, 4, 20, true);
-			}
-		}
-	}
-
-
 }
