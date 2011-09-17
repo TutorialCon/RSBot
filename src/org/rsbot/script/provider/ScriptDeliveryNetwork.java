@@ -41,10 +41,10 @@ public class ScriptDeliveryNetwork implements ScriptSource, Runnable {
 			final ScriptDefinition def = new ScriptDefinition();
 			def.path = entry.getKey();
 			final Map<String, String> values = entry.getValue();
-			def.id = Integer.parseInt(values.get("id"));
+			def.id = values.containsKey("id") ? Integer.parseInt(values.get("id")) : 0;
 			def.crc32 = values.containsKey("crc32") ? Long.parseLong(values.get("crc32")) : 0;
 			def.name = values.get("name");
-			def.version = Double.parseDouble(values.get("version"));
+			def.version = values.containsKey("version") ? Double.parseDouble(values.get("version")) : 1.0;
 			def.description = values.get("description");
 			def.authors = values.get("authors").split(ScriptList.DELIMITER);
 			def.keywords = values.get("keywords").split(ScriptList.DELIMITER);
